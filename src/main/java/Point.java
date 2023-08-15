@@ -1,5 +1,5 @@
-//import org.javatuples.Triplet;
-
+import javafx.util.*;
+import kotlin.TuplesKt;
 class Point {
 
     private int objectID;
@@ -80,11 +80,52 @@ class Point {
         return weather;
     }
 
-
-
-
-
-    public static void main(String[] args) {
-
+    public Pair<Float, Float> getLongitudeAndLatitude(){
+        Pair geoLocation = new Pair<>(longitude,latitude);
+        return geoLocation;
     }
+    public boolean isBicycleInvolved(){
+        return bicycleInvolved;
+    }
+
+    public boolean isBusInvolved(){
+        return busInvolved;
+    }
+
+    public  boolean isCarInvolved(){
+        return carInvolved;
+    }
+
+    public boolean isHoliday(){
+        return holiday;
+    }
+
+    public boolean isMopedInvolved(){
+        return mopedInvolved;
+    }
+
+    public boolean isMotorcycleInvolved() {
+        return motorcycleInvolved;
+    }
+
+    public boolean isParkedVehicleInvolved() {
+        return parkedVehicleInvolved;
+    }
+
+    public boolean isPedestrianInvolved() {
+        return pedestrianInvolved;
+    }
+
+    public boolean isTrainInvolved() {
+        return trainInvolved;
+    }
+
+    public boolean isTruckInvolved() {
+        return truckInvolved;
+    }
+
+    public boolean isSchoolBusInvolved() {
+        return schoolBusInvolved;
+    }
+
 }
