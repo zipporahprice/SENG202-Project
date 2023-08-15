@@ -1,6 +1,6 @@
-//import org.javatuples.Triplet;
+package seng202.team0.models;
 
-class Point {
+public class Point {
 
     private int objectID;
     private int speedLimit;
@@ -27,7 +27,7 @@ class Point {
     private boolean trainInvolved;
     private boolean truckInvolved;
 
-    public void Point(int id, int speedLimit,int year, String location1, String location2, String region, String weather, float longitude, float lat,
+    public Point(int id, int speedLimit,int year, String location1, String location2, String region, String weather, float longitude, float lat,
                       boolean bicycleInvolved, boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved, boolean motorcycleInvolved,
                       boolean parkedVehicleInvolved, boolean pedestrianInvolved, boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved){
         this.objectID = id;
