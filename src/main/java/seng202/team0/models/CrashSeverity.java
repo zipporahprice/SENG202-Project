@@ -1,7 +1,7 @@
 package seng202.team0.models;
 
 public enum CrashSeverity {
-    NONINJURY, MINOR, SERIOUS, FATAL;
+    NONINJURY, MINOR, SERIOUS, FATAL
 
     public static CrashSeverity stringToCrashSeverity(String stringSeverity) {
         switch(stringSeverity) {
