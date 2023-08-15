@@ -1,5 +1,7 @@
 package seng202.team0.models;
 
+import javafx.util.Pair;
+
 public class Point {
 
     private int objectID;
@@ -80,9 +82,54 @@ public class Point {
         return weather;
     }
 
+    public Pair<Float,Float> getLongitudeAndLatitude(){
+        Pair geoLocation = new Pair(longitude, latitude);
+        return geoLocation;
+    }
 
+    public boolean isBicycleInvolved(){
+        return bicycleInvolved;
+    }
 
+    public boolean isTruckInvolved() {
+        return truckInvolved;
+    }
 
+    public boolean isSchoolBusInvolved() {
+        return schoolBusInvolved;
+    }
+
+    public boolean isBusInvolved() {
+        return busInvolved;
+    }
+
+    public boolean isTrainInvolved() {
+        return trainInvolved;
+    }
+
+    public boolean isCarInvolved() {
+        return carInvolved;
+    }
+
+    public boolean isMotorcycleInvolved() {
+        return motorcycleInvolved;
+    }
+
+    public boolean isHoliday() {
+        return holiday;
+    }
+
+    public boolean isPedestrianInvolved() {
+        return pedestrianInvolved;
+    }
+
+    public boolean isParkedVehicleInvolved() {
+        return parkedVehicleInvolved;
+    }
+
+    public boolean isMopedInvolved() {
+        return mopedInvolved;
+    }
 
     public static void main(String[] args) {
 
