@@ -1,7 +1,6 @@
 
 class Point {
 
-
     private int objectID;
     private int speedLimit;
     private int crashYear;
