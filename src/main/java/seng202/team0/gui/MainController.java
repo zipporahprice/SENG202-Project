@@ -30,6 +30,7 @@ public class MainController {
      * @param stage Top level container for this window
      */
     public void init(Stage stage) {
+        stage.setMaximized(true);
         counterService = new CounterService();
     }
 
