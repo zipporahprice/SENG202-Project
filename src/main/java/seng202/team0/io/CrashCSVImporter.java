@@ -6,7 +6,6 @@ import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Point;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
