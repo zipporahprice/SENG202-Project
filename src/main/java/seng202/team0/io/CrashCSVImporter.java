@@ -12,8 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class handling the importing of crash data from CSV files.
+ * @author Neil Alombro
+ * @author Zipporah Price
+ * @author Angelica Silva
+ */
+
 public class CrashCSVImporter {
 
+    /**
+     * List of all the crashes as Point objects from the given file object
+     * @param file
+     * @return points list of all crashes from the given file
+     * @throws IOException
+     */
     public List<Point> pointListFromFile(File file) throws IOException {
         List<Point> pointList = new ArrayList<Point>();
         try (FileReader reader = new FileReader(file)) {
@@ -36,6 +49,12 @@ public class CrashCSVImporter {
         }
     }
 
+    /**
+     * Takes a list of strings representing variables
+     * from the crash data CSV file and returns a Point object
+     * @param crashVariables
+     * @return Point object initialised with given crashVariables
+     */
     public Point pointFromString(String[] crashVariables) {
         // TODO think about numbers not existing, ie empty string instead of check 0
 
@@ -68,9 +87,10 @@ public class CrashCSVImporter {
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);
 
-            return new Point(objectId, speedLimit, crashYear, crashLocation1, crashLocation2, region, weather,
-                    longitude, latitude, bicycleInvolved, busInvolved, carInvolved, holiday, mopedInvolved,
-                    motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
+            return new Point(objectId, speedLimit, crashYear, crashLocation1, crashLocation2,
+                    region, weather, longitude, latitude, bicycleInvolved, busInvolved,
+                    carInvolved, holiday, mopedInvolved, motorcycleInvolved, parkedVehicleInvolved,
+                    pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
         } catch (NumberFormatException e) {
             // TODO replace with something actually useful like a log
             System.out.println(e);

@@ -82,6 +82,14 @@ public class Point {
         return weather;
     }
 
+    public Float getLongitude(){
+        return longitude;
+    }
+
+    public Float getLatitude(){
+        return latitude;
+    }
+
     public Pair<Float,Float> getLongitudeAndLatitude(){
         Pair geoLocation = new Pair(longitude, latitude);
         return geoLocation;
