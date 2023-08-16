@@ -80,7 +80,8 @@ public class DatabaseManager {
             }
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
-        }
+        } 
+
     }
 
     public Connection getConnection() {

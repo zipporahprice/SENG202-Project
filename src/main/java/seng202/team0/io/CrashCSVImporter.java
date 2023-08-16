@@ -3,7 +3,7 @@ package seng202.team0.io;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import seng202.team0.models.CrashSeverity;
-import seng202.team0.models.Point;
+import seng202.team0.models.Crash;
 
 import java.io.File;
 import java.io.FileReader;
@@ -27,14 +27,14 @@ public class CrashCSVImporter {
      * @return points list of all crashes from the given file
      * @throws IOException
      */
-    public List<Point> pointListFromFile(File file) throws IOException {
-        List<Point> pointList = new ArrayList<Point>();
+    public List<Crash> pointListFromFile(File file) throws IOException {
+        List<Crash> pointList = new ArrayList<Crash>();
         try (FileReader reader = new FileReader(file)) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 csvReader.skip(1);
                 String[] line = null;
                 while ((line = csvReader.readNext()) != null) {
-                    Point currentPoint = pointFromString(line);
+                    Crash currentPoint = pointFromString(line);
                     if (currentPoint != null) {
                         pointList.add(currentPoint);
 
@@ -55,7 +55,7 @@ public class CrashCSVImporter {
      * @param crashVariables
      * @return Point object initialised with given crashVariables
      */
-    public Point pointFromString(String[] crashVariables) {
+    public Crash pointFromString(String[] crashVariables) {
         // TODO think about numbers not existing, ie empty string instead of check 0
 
         try {
@@ -87,10 +87,9 @@ public class CrashCSVImporter {
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);
 
-            return new Point(objectId, speedLimit, crashYear, crashLocation1, crashLocation2,
-                    region, weather, longitude, latitude, bicycleInvolved, busInvolved,
-                    carInvolved, holiday, mopedInvolved, motorcycleInvolved, parkedVehicleInvolved,
-                    pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
+            return new Crash(objectId, speedLimit, crashYear, crashLocation1, crashLocation2, region, weather,
+                    longitude, latitude, bicycleInvolved, busInvolved, carInvolved, holiday, mopedInvolved,
+                    motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
         } catch (NumberFormatException e) {
             // TODO replace with something actually useful like a log
             System.out.println(e);

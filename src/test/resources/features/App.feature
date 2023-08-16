@@ -8,3 +8,10 @@ Feature: Basic demo feature
     Given I have two numbers 5 and 10
     When I add the two numbers
     Then The result is 15
+
+
+
+Feature: Basic Geolocation feature
+  Scenario: Getting the Correct Location
+    Given I have the longitude and latitude
+
