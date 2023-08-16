@@ -1,7 +1,7 @@
 package seng202.team0.repository;
 
 import org.apache.commons.lang3.NotImplementedException;
-import seng202.team0.models.Point;
+import seng202.team0.models.Crash;
 import seng202.team0.io.CrashCSVImporter;
 
 import java.io.File;
@@ -28,18 +28,18 @@ public class CrashDAO {
     }
 
     // TODO implement this
-    public List<Point> getAll() {
-        List<Point> pointsList = new ArrayList<Point>();
+    public List<Crash> getAll() {
+        List<Crash> pointsList = new ArrayList<Crash>();
 
         return pointsList;
     }
 
     // TODO implement this
-    public Point getOne() {
+    public Crash getOne() {
         throw new NotImplementedException();
     }
 
-    private void addPointToPreparedStatement(PreparedStatement ps, Point pointToAdd) throws SQLException {
+    private void addPointToPreparedStatement(PreparedStatement ps, Crash pointToAdd) throws SQLException {
         ps.setInt(1, pointToAdd.getObjectId());
         ps.setInt(2, pointToAdd.getSpeedLimit());
         ps.setInt(3, pointToAdd.getCrashYear());
@@ -63,7 +63,7 @@ public class CrashDAO {
     }
 
     // TODO implement this
-    public void addOne(Point pointToAdd) throws SQLException {
+    public void addOne(Crash pointToAdd) throws SQLException {
         String sql = "INSERT INTO crashes (object_id, speed_limit, crash_year, " +
                 "crash_location1, crash_location2, region, weather, " +
                 "longitude, latitude, bicycle_involved, bus_involved, " +
@@ -80,7 +80,7 @@ public class CrashDAO {
     }
 
     // TODO implement this
-    public void addMultiple(List<Point> toAdd) throws SQLException {
+    public void addMultiple(List<Crash> toAdd) throws SQLException {
         String sql = "INSERT OR IGNORE INTO crashes (object_id, speed_limit, crash_year, " +
                 "crash_location1, crash_location2, region, weather, " +
                 "longitude, latitude, bicycle_involved, bus_involved, " +
@@ -91,7 +91,7 @@ public class CrashDAO {
         PreparedStatement ps = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
 
-        for (Point pointToAdd : toAdd) {
+        for (Crash pointToAdd : toAdd) {
             addPointToPreparedStatement(ps, pointToAdd);
             ps.addBatch();
         }
@@ -104,7 +104,7 @@ public class CrashDAO {
     }
 
     // TODO implement this
-    public void update(Point toUpdate) {
+    public void update(Crash toUpdate) {
         throw new NotImplementedException();
     }
 
@@ -114,7 +114,7 @@ public class CrashDAO {
         URL url = Thread.currentThread().getContextClassLoader().getResource("manual_testing_files/test_crash.csv");
         File file = new File(url.getPath());
         CrashCSVImporter importer = new CrashCSVImporter();
-        List<Point> pointList = importer.pointListFromFile(file);
+        List<Crash> pointList = importer.pointListFromFile(file);
         crashDAO.addOne(pointList.get(0));
     }
 }
