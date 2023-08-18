@@ -1,11 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-      <Label fx:id="defaultLabel" text="Welcome To TRUST!" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="100.0" />
-      <Button fx:id="defaultButton" text="Click Me" onMouseClicked="#onButtonClicked" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="120.0" />
+      <Label fx:id="defaultLabel" layoutX="320.0" layoutY="122.0" text="SafeTrip" textFill="WHITE" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="122.0">
+         <font>
+            <Font name="System Bold" size="29.0" />
+         </font></Label>
+      <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="374.0" prefWidth="59.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Button layoutX="7.0" layoutY="261.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/car_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button layoutX="7.0" layoutY="317.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/bike_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button layoutX="7.0" layoutY="205.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/bus_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button layoutX="7.0" layoutY="149.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/walking_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button layoutX="7.0" layoutY="93.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/helicopter_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button layoutX="7.0" layoutY="37.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@button_icons/motorbike_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
