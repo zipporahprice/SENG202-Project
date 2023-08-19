@@ -8,6 +8,7 @@ public class User {
     private int id;
     private final String username; //final means can only be assigned once
     private final String password;
+    // TODO think about making usernames unique, and passwords encrypted text
 
     /**
      * constructor, creates new User object
