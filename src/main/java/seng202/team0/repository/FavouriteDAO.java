@@ -14,12 +14,8 @@ import java.util.List;
  */
 public class FavouriteDAO implements DAOInterface<Favourite> {
     private final DatabaseManager databaseManager;
-    private final Connection connection;
 
-    public FavouriteDAO() {
-        databaseManager = new DatabaseManager();
-        connection = databaseManager.getConnection();
-    }
+    public FavouriteDAO() { this.databaseManager = DatabaseManager.getInstance(); }
 
     @Override
     public List<Favourite> getAll() {
@@ -45,7 +41,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     public void addOne(Favourite toAdd) throws SQLException {
         String sql = "INSERT INTO crashes (id, start_lat, start_long," +
                 "end_lat, end_long, filters) values (?,?,?,?,?,?);";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sql);
         addToPreparedStatement(ps, toAdd);
         ps.executeUpdate();
     }
@@ -53,8 +50,9 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     public void addMultiple(List<Favourite> toAdd) throws SQLException {
         String sql = "INSERT OR IGNORE INTO crashes (id, start_lat, start_long" +
                 "end_lat, end_long, filters) values (?,?,?,?,?,?);";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        connection.setAutoCommit(false);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        conn.setAutoCommit(false);
         for (Favourite favToAdd : toAdd) {
             addToPreparedStatement(ps, favToAdd);
             ps.addBatch();

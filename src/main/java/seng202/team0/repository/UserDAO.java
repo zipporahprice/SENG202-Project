@@ -17,18 +17,13 @@ import java.util.List;
 public class UserDAO implements DAOInterface<User> {
     private final DatabaseManager databaseManager;
 
-    private final Connection connection;
-
     private List<User> tempUsers = new ArrayList<>(); //just temporary list to get an idea of things
     // TODO delete tempUsers after database implemented and this class is refactored.
 
     /**
      * Creates a new userDAO object
      */
-    public UserDAO() {
-        databaseManager = new DatabaseManager();
-        connection = databaseManager.getConnection();
-    }
+    public UserDAO() { databaseManager = DatabaseManager.getInstance(); }
 
     /**
      * Gets all users in a database
@@ -63,7 +58,8 @@ public class UserDAO implements DAOInterface<User> {
     public void addOne(User userToAdd) throws SQLException { //TODO create new DuplicateEntryException
         String sqlCommand = "INSERT INTO Users (username, password) VALUES (?, ?)";
 
-        PreparedStatement ps = connection.prepareStatement(sqlCommand);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sqlCommand);
         ps.setString(1, userToAdd.getUsername());
         ps.setString(2, userToAdd.getPassword());
         ps.executeUpdate();
@@ -72,7 +68,7 @@ public class UserDAO implements DAOInterface<User> {
 
     }
 
-    //do we actually need an addMultiple function for users?
+    // TODO do we actually need an addMultiple function for users?
 
     /**
      * Deletes the user with the given userID from the database
@@ -83,7 +79,8 @@ public class UserDAO implements DAOInterface<User> {
     public void delete(int userId) throws SQLException {
         String sqlCommand = "DELETE FROM Users WHERE id = ?";
 
-        PreparedStatement ps = connection.prepareStatement(sqlCommand);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sqlCommand);
         ps.setInt(1, userId);
         ps.executeUpdate();
         //TODO add try/catch for deleting from database
