@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Concrete class communicating with user table through SQL queries
+ * @author Morgan English
  * @author Angelica Silva
  */
 public class UserDAO {
