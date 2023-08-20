@@ -12,7 +12,7 @@ import java.util.List;
 /** Class that communicates with the favourites table in the database through SQL queries.
  * @author Zipporah Price
  */
-public class FavouriteDAO {
+public class FavouriteDAO implements DAOInterface<Favourite> {
     private final DatabaseManager databaseManager;
     private final Connection connection;
 
@@ -21,12 +21,14 @@ public class FavouriteDAO {
         connection = databaseManager.getConnection();
     }
 
+    @Override
     public List<Favourite> getAll() {
         List<Favourite> favouriteList = new ArrayList<Favourite>();
         return favouriteList;
     }
 
-    public Favourite getOne() {
+    @Override
+    public Favourite getOne(int id) {
         throw new NotImplementedException();
     }
 
@@ -39,6 +41,7 @@ public class FavouriteDAO {
         ps.setString(6, toAdd.getFilters());
     }
 
+    @Override
     public void addOne(Favourite toAdd) throws SQLException {
         String sql = "INSERT INTO crashes (id, start_lat, start_long," +
                 "end_lat, end_long, filters) values (?,?,?,?,?,?);";
@@ -59,10 +62,12 @@ public class FavouriteDAO {
         ps.executeBatch();
     }
 
+    @Override
     public void delete(int objectId) {
         throw new NotImplementedException();
     }
 
+    @Override
     public void update(Favourite toUpdate) {
         throw new NotImplementedException();
     }
