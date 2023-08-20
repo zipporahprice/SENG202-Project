@@ -27,14 +27,14 @@ public class CrashCSVImporter {
      * @return points list of all crashes from the given file
      * @throws IOException
      */
-    public List<Crash> pointListFromFile(File file) throws IOException {
+    public List<Crash> crashListFromFile(File file) {
         List<Crash> pointList = new ArrayList<Crash>();
         try (FileReader reader = new FileReader(file)) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 csvReader.skip(1);
                 String[] line = null;
                 while ((line = csvReader.readNext()) != null) {
-                    Crash currentPoint = pointFromString(line);
+                    Crash currentPoint = crashFromString(line);
                     if (currentPoint != null) {
                         pointList.add(currentPoint);
 
@@ -44,9 +44,12 @@ public class CrashCSVImporter {
                 }
                 return pointList;
             } catch (CsvValidationException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -55,7 +58,7 @@ public class CrashCSVImporter {
      * @param crashVariables
      * @return Point object initialised with given crashVariables
      */
-    public Crash pointFromString(String[] crashVariables) {
+    public Crash crashFromString(String[] crashVariables) {
         // TODO think about numbers not existing, ie empty string instead of check 0
 
         try {
