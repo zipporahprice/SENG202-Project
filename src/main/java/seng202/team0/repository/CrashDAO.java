@@ -17,7 +17,7 @@ import java.util.List;
  * Class that communicates with database's crashes table through SQL queries.
  * @author Neil Alombro
  */
-public class CrashDAO {
+public class CrashDAO implements DAOInterface<Crash> {
     private final DatabaseManager databaseManager;
     private final Connection connection;
 
@@ -28,6 +28,7 @@ public class CrashDAO {
     }
 
     // TODO implement this
+    @Override
     public List<Crash> getAll() {
         List<Crash> pointsList = new ArrayList<Crash>();
 
@@ -35,7 +36,8 @@ public class CrashDAO {
     }
 
     // TODO implement this
-    public Crash getOne() {
+    @Override
+    public Crash getOne(int id) {
         throw new NotImplementedException();
     }
 
@@ -63,6 +65,8 @@ public class CrashDAO {
     }
 
     // TODO implement this
+
+    @Override
     public void addOne(Crash pointToAdd) throws SQLException {
         String sql = "INSERT INTO crashes (object_id, speed_limit, crash_year, " +
                 "crash_location1, crash_location2, region, weather, " +
@@ -99,11 +103,13 @@ public class CrashDAO {
         ps.executeBatch();
     }
     // TODO implement this
+    @Override
     public void delete(int objectId) {
         throw new NotImplementedException();
     }
 
     // TODO implement this
+    @Override
     public void update(Crash toUpdate) {
         throw new NotImplementedException();
     }
