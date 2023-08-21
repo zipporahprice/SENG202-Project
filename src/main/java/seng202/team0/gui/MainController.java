@@ -3,6 +3,7 @@ package seng202.team0.gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,8 +22,14 @@ public class MainController {
 
     @FXML
     private Button defaultButton;
+    @FXML
+    private Button hamburgerButton;
+    @FXML
+    private ToolBar filterDataPane;
 
     private CounterService counterService;
+
+
 
     /**
      * Initialize the window
@@ -45,5 +52,9 @@ public class MainController {
 
         int count = counterService.getCurrentCount();
         defaultLabel.setText(Integer.toString(count));
+    }
+
+    public void toggleHamburger() {
+        filterDataPane.setVisible(!filterDataPane.isVisible());
     }
 }
