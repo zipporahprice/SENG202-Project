@@ -11,7 +11,3 @@ Feature: Basic demo feature
 
 
 
-Feature: Basic Geolocation feature
-  Scenario: Getting the Correct Location
-    Given I have the longitude and latitude
-

@@ -24,7 +24,7 @@ public class MapController {
 
 
 
-    public void initialize(Stage stage) {
+    public void init(Stage stage) {
         javaScriptBridge = new seng202.JavaScriptBridge();
         initMap(stage);
     }
@@ -36,7 +36,7 @@ public class MapController {
     private void initMap(Stage stage) {
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        webEngine.load(MapController.class.getResource("/map.html").toExternalForm());
+        webEngine.load(MapController.class.getResource("html/map.html").toExternalForm());
         // Forwards console.log() output from any javascript to info log
         WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
                 System.out.println(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
