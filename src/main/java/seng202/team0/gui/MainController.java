@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -77,6 +78,7 @@ public class MainController {
             mapViewController.init(stage);
 
             mainWindow.getChildren().add(mapViewParent);
+            AnchorPane.setRightAnchor(mapViewParent,0d);
 
 
 

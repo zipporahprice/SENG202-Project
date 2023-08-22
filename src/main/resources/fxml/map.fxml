@@ -3,8 +3,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<BorderPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
-    <right>
-        <WebView fx:id="webView" layoutX="1000.0" prefHeight="800.0" prefWidth="1200.0" />
-    </right>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
+   <right>
+      <AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
+      
+              <WebView fx:id="webView" prefHeight="1000.0" prefWidth="1200.0" />
+      
+      </AnchorPane>
+   </right>
 </BorderPane>
