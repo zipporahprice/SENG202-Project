@@ -28,6 +28,8 @@ public class MainController {
     public WebView webView;
 
     @FXML
+    private BorderPane mainWindow;
+    @FXML
     private Label defaultLabel;
 
     @FXML
@@ -74,6 +76,7 @@ public class MainController {
             MapController mapViewController = webViewLoader.getController();
             mapViewController.init(stage);
 
+            mainWindow.setCenter(mapViewParent);
 
 
         } catch (IOException e) {
