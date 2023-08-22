@@ -12,7 +12,7 @@ import java.sql.*;
  * @author Neil Alombro
  */
 
-// TODO add loggin with exceptions. currently do not know how it works so left out
+// TODO add logging with exceptions. currently do not know how it works so left out
 
 public class DatabaseManager {
     private static DatabaseManager manager = null;
@@ -25,6 +25,7 @@ public class DatabaseManager {
     public DatabaseManager(String url) {
         if (url==null || url.isEmpty()) {
             this.url = this.getDatabasePath();
+            System.out.println(this.url);
         } else {
             this.url = url;
         }

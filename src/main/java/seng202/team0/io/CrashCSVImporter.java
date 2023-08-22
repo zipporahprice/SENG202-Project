@@ -32,14 +32,17 @@ public class CrashCSVImporter {
         try (FileReader reader = new FileReader(file)) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 csvReader.skip(1);
-                String[] line = null;
+                String[] line;
                 while ((line = csvReader.readNext()) != null) {
-                    Crash currentPoint = crashFromString(line);
-                    if (currentPoint != null) {
-                        pointList.add(currentPoint);
+                    System.out.println(line[0]);
+                    if (!Objects.equals(line[0], "")) {
+                        Crash currentPoint = crashFromString(line);
+                        if (currentPoint != null) {
+                            pointList.add(currentPoint);
 
-                        // TODO manual testing to see if it works
-                        System.out.println(currentPoint.getWeather());
+                            // TODO manual testing to see if it works
+                            System.out.println(currentPoint.getWeather());
+                        }
                     }
                 }
                 return pointList;
@@ -71,7 +74,10 @@ public class CrashCSVImporter {
             int crashYear = Integer.parseInt(crashVariables[14]);
             String crashLocation1 = crashVariables[9];
             String crashLocation2 = crashVariables[10];
+
+            // TODO add severity as a variable to crash
             CrashSeverity severity = CrashSeverity.stringToCrashSeverity(crashVariables[12]);
+
             boolean holiday = !Objects.equals(crashVariables[22], "");
             boolean mopedInvolved = Integer.parseInt(crashVariables[28]) > 0;
             boolean motorcycleInvolved = Integer.parseInt(crashVariables[29]) > 0;
@@ -96,11 +102,9 @@ public class CrashCSVImporter {
         } catch (NumberFormatException e) {
             // TODO replace with something actually useful like a log
             System.out.println(e);
-            throw new RuntimeException(e);
-
         }
         // TODO uncomment once logging done on catch
-//        return null;
+        return null;
     }
 
 }

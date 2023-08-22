@@ -1,7 +1,7 @@
-package unitttests;
+package seng202.team0.unitttests;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.models.Crash;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class ImportCrashesTest {
 
     @Test
-    void radCrashesFromCSVFile() {
+    void roadCrashesFromCSVFile() {
         CrashCSVImporter crashCSVImporter = new CrashCSVImporter();
         URL url = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File file = new File(url.getPath());
