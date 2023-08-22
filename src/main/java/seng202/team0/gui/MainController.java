@@ -26,7 +26,6 @@ public class MainController {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
     public WebView webView;
-    private BorderPane mainWindow;
 
     @FXML
     private Label defaultLabel;
@@ -75,7 +74,6 @@ public class MainController {
             MapController mapViewController = webViewLoader.getController();
             mapViewController.init(stage);
 
-            mainWindow.setCenter(mapViewParent);
 
 
         } catch (IOException e) {
