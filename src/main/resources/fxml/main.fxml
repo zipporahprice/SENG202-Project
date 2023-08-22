@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-
-   <BorderPane>
-         <right>
-            <fx:include source="map.fxml" />
-         </right>
-   </BorderPane>
-      <Label fx:id="defaultLabel" alignment="CENTER" text="SafeTrip" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font name="System Bold" size="29.0" />
-         </font>
-      </Label>
       <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
             <Button layoutX="14.0" layoutY="451.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
@@ -76,7 +69,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="65.0" styleClass="menuButtonColor" stylesheets="@style.css" onAction="#toggleHamburger">
+            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="65.0" prefWidth="65.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
                      <image>
@@ -133,10 +126,33 @@
                   <CheckBox mnemonicParsing="false" text="Death" textFill="WHITE" />
                </children>
             </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="datePane" layoutX="347.0" layoutY="14.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+         <children>
+            <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
 
+            <!-- Add a Slider for selecting the date between 2000 - 2023 -->
+            <Slider layoutX="14.0" layoutY="75.0" max="2023" min="2000" prefWidth="222.0" value="2010" />
+            <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
+            <Label layoutX="198.0" layoutY="59.0" text="2023" textFill="WHITE" />
 
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="boundariesPane" layoutX="347.0" layoutY="142.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+         <children>
+            <Label layoutX="88.0" layoutY="14.0" text="Boundaries" textFill="WHITE" />
+            <TextField layoutX="40.0" layoutY="43.0" promptText="Point 1" />
+            <TextField layoutX="40.0" layoutY="78.0" promptText="Point 2" />
+            <Button layoutX="90.0" layoutY="121.0" mnemonicParsing="false" text="Confirm" />
+         </children>
+      </AnchorPane>
+
+   <BorderPane AnchorPane.leftAnchor="1000">
+         <right>
+            <fx:include source="map.fxml" />
+         </right>
+   </BorderPane>
 
 
    </children>
