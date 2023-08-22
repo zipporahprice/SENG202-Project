@@ -19,63 +19,67 @@
             <Font name="System Bold" size="29.0" />
          </font>
       </Label>
-      <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="790.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
+      <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
-            <Button fx:id="hamburgerButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#toggleHamburger" styleClass="hamburgerButton" stylesheets="@style.css" text="hamburger" textAlignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button layoutX="14.0" layoutY="431.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="451.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/car_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="669.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="689.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/bike_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="550.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="570.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/bus_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="312.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="332.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/walking_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="193.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="213.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/helicopter_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="74.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button layoutX="14.0" layoutY="94.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/motorbike_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="hamburgerButton" layoutX="23.0" layoutY="14.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" styleClass="menuButtonColor" stylesheets="@style.css" onAction="#toggleHamburger">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0">
+                     <image>
+                        <Image url="@button_icons/menu_emoji.png" />
                      </image>
                   </ImageView>
                </graphic>
