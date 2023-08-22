@@ -13,6 +13,9 @@ import seng202.team0.services.CounterService;
  * Controller for the main.fxml window
  * @author seng202 teaching team
  */
+
+// TODO hacked date picker with traslate x and y to get it to the places it needs to be
+
 public class MainController {
 
     private static final Logger log = LogManager.getLogger(MainController.class);

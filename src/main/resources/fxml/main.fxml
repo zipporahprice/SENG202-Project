@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <Label fx:id="defaultLabel" layoutX="320.0" layoutY="122.0" text="SafeTrip" textFill="WHITE" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="122.0">
          <font>
@@ -68,11 +75,57 @@
                </graphic></Button>
          </children>
       </AnchorPane>
-      <ToolBar fx:id="filterDataPane" layoutX="80.0" layoutY="13.0" orientation="VERTICAL" prefHeight="250.0" prefWidth="250.0" visible="false">
+      <ToolBar fx:id="filterDataPane" layoutX="80.0" layoutY="13.0" orientation="VERTICAL" prefHeight="250.0" prefWidth="250.0">
         <items>
             <Label text="Filter Data" />
-            <DatePicker promptText="Date From" />
-            <DatePicker promptText="Date To" />
+            <DatePicker prefHeight="26.0" prefWidth="114.0" promptText="Date From" />
+            <DatePicker prefHeight="26.0" prefWidth="114.0" promptText="Date To" translateX="120.0" translateY="-30.0" />
+            <MenuButton mnemonicParsing="false" text="Severity">
+              <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Non Injury" />
+                  <CheckMenuItem mnemonicParsing="false" text="Minor" />
+                  <CheckMenuItem mnemonicParsing="false" text="Major" />
+                  <CheckMenuItem mnemonicParsing="false" text="Fatal" />
+              </items>
+            </MenuButton>
+            <MenuButton mnemonicParsing="false" text="Modes of Transport">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Bicycle" />
+                  <CheckMenuItem mnemonicParsing="false" text="Bus" />
+                  <CheckMenuItem mnemonicParsing="false" text="Car" />
+                  <CheckMenuItem mnemonicParsing="false" text="Moped" />
+                  <CheckMenuItem mnemonicParsing="false" text="Motorcycle" />
+                  <CheckMenuItem mnemonicParsing="false" text="Parked Vehicle" />
+                  <CheckMenuItem mnemonicParsing="false" text="Pedestrian" />
+                  <CheckMenuItem mnemonicParsing="false" text="School Bus" />
+                  <CheckMenuItem mnemonicParsing="false" text="Train" />
+                  <CheckMenuItem mnemonicParsing="false" text="Truck" />
+               </items>
+            </MenuButton>
+            <CheckBox mnemonicParsing="false" text="Holiday" />
+            <MenuButton mnemonicParsing="false" text="Region">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Auckland" />
+                  <CheckMenuItem mnemonicParsing="false" text="Wellington" />
+                  <CheckMenuItem mnemonicParsing="false" text="Christchurch" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+               </items>
+            </MenuButton>
+            <MenuButton mnemonicParsing="false" text="Weather">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Rain" />
+                  <CheckMenuItem mnemonicParsing="false" text="Sun" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+                  <CheckMenuItem mnemonicParsing="false" text="Blah" />
+               </items>
+            </MenuButton>
         </items>
       </ToolBar>
    </children>
