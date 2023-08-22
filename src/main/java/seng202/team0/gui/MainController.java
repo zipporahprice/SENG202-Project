@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,15 @@ public class MainController {
     @FXML
     private Button hamburgerButton;
     @FXML
-    private ToolBar filterDataPane;
+    private AnchorPane transportModePane;
+    @FXML
+    private AnchorPane weatherPane;
+    @FXML
+    private AnchorPane datePane;
+    @FXML
+    private AnchorPane boundariesPane;
+    @FXML
+    private AnchorPane severityPane;
 
     private CounterService counterService;
 
@@ -59,6 +68,10 @@ public class MainController {
     }
 
     public void toggleHamburger() {
-        filterDataPane.setVisible(!filterDataPane.isVisible());
+        transportModePane.setVisible(!transportModePane.isVisible());
+        weatherPane.setVisible(!weatherPane.isVisible());
+        datePane.setVisible(!datePane.isVisible());
+        boundariesPane.setVisible(!boundariesPane.isVisible());
+        severityPane.setVisible(!severityPane.isVisible());
     }
 }
