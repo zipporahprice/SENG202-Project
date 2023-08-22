@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.web.WebView?>
-<BorderPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
-    <center>
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" />
-            <ListView fx:id="selectedSalesListView" maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.7" prefHeight="350.0" prefWidth="250.0" StackPane.alignment="BOTTOM_RIGHT" />
-        </StackPane>
-    </center>
-    <top>
-        <HBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-        </HBox>
-    </top>
+<?import javafx.scene.web.*?>
+
+<BorderPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
+    <right>
+        <WebView fx:id="webView" layoutX="1000.0" prefHeight="800.0" prefWidth="1200.0" />
+    </right>
 </BorderPane>
