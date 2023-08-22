@@ -1,13 +1,18 @@
 package seng202.team0.gui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.MapController;
 import seng202.team0.services.CounterService;
+
+import java.io.IOException;
 
 /**
  * Controller for the main.fxml window
@@ -32,6 +37,8 @@ public class MainController {
 
     private CounterService counterService;
 
+    private Stage stage;
+
 
 
     /**
@@ -44,18 +51,22 @@ public class MainController {
         counterService = new CounterService();
     }
 
-    /**
-     * Method to call when our counter button is clicked
-     *
-     */
-    @FXML
-    public void onButtonClicked() {
-        log.info("Button has been clicked");
-        counterService.incrementCounter();
 
-        int count = counterService.getCurrentCount();
-        defaultLabel.setText(Integer.toString(count));
+
+    public void loadMap() {
+        try {
+            FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/leaflet_osm_map.fxml"));
+            Parent mapViewParent = webViewLoader.load();
+
+            MapController mapViewController = webViewLoader.getController();
+            mapViewController.initialize(Stage stage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
 
     public void toggleHamburger() {
         filterDataPane.setVisible(!filterDataPane.isVisible());
