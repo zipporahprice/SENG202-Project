@@ -1,7 +1,7 @@
 package seng202.team0.unittests;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.models.Crash;
 
@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class ImportCrashesTest {
 
