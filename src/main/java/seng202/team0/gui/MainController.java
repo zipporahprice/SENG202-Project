@@ -12,8 +12,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.MapController;
-import seng202.team0.services.CounterService;
+import seng202.team0.gui.MapController;
 
 import java.io.IOException;
 
@@ -22,11 +21,11 @@ import java.io.IOException;
  * @author seng202 teaching team
  */
 
-// TODO hacked date picker with traslate x and y to get it to the places it needs to be
 
 public class MainController {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
+    public WebView webView;
     private BorderPane mainWindow;
 
     @FXML
@@ -47,9 +46,11 @@ public class MainController {
     @FXML
     private AnchorPane severityPane;
 
-    private CounterService counterService;
 
     private Stage stage;
+
+
+
 
 
 
@@ -58,21 +59,21 @@ public class MainController {
      *
      * @param stage Top level container for this window
      */
-    public void init(Stage stage) {
+    void init(Stage stage) {
         stage.setMaximized(true);
-        counterService = new CounterService();
         loadMap(stage);
+        stage.sizeToScene();
     }
 
 
 
     public void loadMap(Stage stage) {
         try {
-            FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/"));
+            FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/map.fxml"));
             Parent mapViewParent = webViewLoader.load();
 
             MapController mapViewController = webViewLoader.getController();
-            mapViewController.initialize(stage);
+            mapViewController.init(stage);
 
             mainWindow.setCenter(mapViewParent);
 
