@@ -138,6 +138,8 @@
          </children>
       </AnchorPane>
 
-
+   <Pane>
+      <WebView fx:id="webView" prefHeight="400" prefWidth="507"/>
+   </Pane>
    </children>
 </AnchorPane>

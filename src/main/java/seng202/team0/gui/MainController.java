@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,17 +59,18 @@ public class MainController {
     public void init(Stage stage) {
         stage.setMaximized(true);
         counterService = new CounterService();
+        loadMap(stage);
     }
 
 
 
-    public void loadMap() {
+    public void loadMap(Stage stage) {
         try {
             FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/leaflet_osm_map.fxml"));
             Parent mapViewParent = webViewLoader.load();
 
             MapController mapViewController = webViewLoader.getController();
-            mapViewController.initialize(Stage stage);
+            mapViewController.initialize(stage);
 
         } catch (IOException e) {
             e.printStackTrace();
