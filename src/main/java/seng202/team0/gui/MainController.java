@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.services.CounterService;
 
+
 /**
  * Controller for the main.fxml window
  * @author seng202 teaching team
