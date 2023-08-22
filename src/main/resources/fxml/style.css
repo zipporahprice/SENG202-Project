@@ -1,0 +1,14 @@
+.backgroundColor{
+    -fx-background-color: linear-gradient(to right,rgba(0,36,102,1) 0%, rgba(34,153,255,1) 66%);
+}
+
+.sideBarColor{
+    -fx-background-color: #1e1e1e;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
+}
+
+.buttonColor{
+    -fx-background-color: #2c2c2c;
+    -fx-background-radius: 16px;
+}
