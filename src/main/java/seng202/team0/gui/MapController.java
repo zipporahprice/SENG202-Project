@@ -7,6 +7,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import seng202.team0.models.Crash;
 
 public class MapController {
 
@@ -17,8 +18,6 @@ public class MapController {
     private WebEngine webEngine;
     private seng202.JavaScriptBridge javaScriptBridge;
     JSObject javaScriptConnector;
-
-
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -52,5 +51,13 @@ public class MapController {
                         javaScriptConnector.call("initMap");
                     }
                 });
+    }
+
+    /**
+     * Adds a location with given crash
+     */
+    private void addLocation(Crash crash) {
+        javaScriptConnector.call("addMarker", crash.getCrashLocation1() + "-" + crash.getCrashLocation2(),
+                crash.getLatitude(), crash.getLongitude());
     }
 }
