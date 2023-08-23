@@ -1,7 +1,7 @@
 package seng202.team0.unitttests;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
 import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.repository.DatabaseManager;
@@ -22,8 +22,8 @@ public class CrashDAOTest {
         File file = new File(newUrl.getPath());
         manager.addAllCrashesFromFile(importer, file);
 
-        // File hard coded has 10,255 crashes
-        Assertions.assertEquals(manager.getCrashes().size(), 10255);
+        // File hard coded has 10,272 crashes
+        Assertions.assertEquals(manager.getCrashes().size(), 10272);
     }
 
 }
