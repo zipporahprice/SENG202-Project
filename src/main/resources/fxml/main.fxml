@@ -15,7 +15,7 @@
    <children>
       <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
-            <Button layoutX="14.0" layoutY="451.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="0" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -24,7 +24,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="689.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="bikeButton" layoutX="14.0" layoutY="689.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="1" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -33,7 +33,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="570.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="busButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="2" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -42,7 +42,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="332.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="walkingButton" layoutX="14.0" layoutY="332.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="3" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -51,7 +51,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="213.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="helicopterButton" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="4" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -60,7 +60,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="14.0" layoutY="94.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="motorbikeButton" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" onAction="#handleEmojiButtonClick" userData="5" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
@@ -80,7 +80,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="transportModePane" layoutX="85.0" layoutY="13.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+      <AnchorPane fx:id="transportModePane" layoutX="145.0" layoutY="19.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
          <children>
             <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
             <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
@@ -98,7 +98,7 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="weatherPane" layoutX="85.0" layoutY="302.0" prefHeight="235.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+      <AnchorPane fx:id="weatherPane" layoutX="145.0" layoutY="308.0" prefHeight="235.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
@@ -115,7 +115,7 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="severityPane" layoutX="85.0" layoutY="549.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+      <AnchorPane fx:id="severityPane" layoutX="145.0" layoutY="555.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
@@ -128,7 +128,7 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="datePane" layoutX="347.0" layoutY="14.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+      <AnchorPane fx:id="datePane" layoutX="407.0" layoutY="19.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
          <children>
             <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
 
@@ -139,7 +139,7 @@
 
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="boundariesPane" layoutX="347.0" layoutY="142.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+      <AnchorPane fx:id="boundariesPane" layoutX="407.0" layoutY="148.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
          <children>
             <Label layoutX="88.0" layoutY="14.0" text="Boundaries" textFill="WHITE" />
             <TextField layoutX="40.0" layoutY="43.0" promptText="Point 1" />
