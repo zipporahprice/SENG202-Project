@@ -157,7 +157,7 @@ public class MainController {
         emojiButtonTransitions[index] = new FadeTransition(Duration.millis(300));
         emojiButtonTransitions[index].setNode(button);
         emojiButtonTransitions[index].setFromValue(1.0);  // Fully visible
-        emojiButtonTransitions[index].setToValue(0.5);    // Semi-transparent
+        emojiButtonTransitions[index].setToValue(1.0);    // Semi-transparent
         emojiButtonTransitions[index].setOnFinished(event -> {
             if (emojiButtonClicked[index]) {
                 button.getStyleClass().remove("clickedButtonColor");
@@ -167,6 +167,7 @@ public class MainController {
             emojiButtonClicked[index] = !emojiButtonClicked[index];
         });
     }
+
 
     public void handleEmojiButtonClick(ActionEvent event) {
         Button button = (Button) event.getSource();
