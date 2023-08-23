@@ -106,13 +106,24 @@ public class MainController {
 
             mainWindow.getChildren().add(mapViewParent);
             AnchorPane.setRightAnchor(mapViewParent,0d);
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public void loadHelp() {
+        try {
+            FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
+            Parent helpViewParent = helpLoader.load();
+
+            // TODO maybe take out of function and put into something you can call for all loaders
+            mainWindow.getChildren().clear();
+
+            mainWindow.getChildren().add(helpViewParent);
+            AnchorPane.setRightAnchor(helpViewParent,0d);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void toggleHamburger() {
