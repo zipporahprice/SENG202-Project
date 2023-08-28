@@ -24,7 +24,7 @@ import java.io.IOException;
 
 /**
  * Controller for the main.fxml window
- * @author seng202 teaching team
+ * @author seng202 teaching team & Willy T
  */
 
 
@@ -59,6 +59,7 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
+    private FadeTransition[] fadeTransitions = new FadeTransition[5]; // Array to store individual fade transitions
 
     @FXML
     private Button carButton;
@@ -125,7 +126,9 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Toggles the visibility of various panes with fade animations.
+     */
     public void toggleHamburger() {
         if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
             fadeTransition.stop(); // Stop the animation if it's currently running
@@ -143,8 +146,12 @@ public class MainController {
         }
     }
 
-    private FadeTransition[] fadeTransitions = new FadeTransition[5]; // Array to store individual fade transitions
-
+    /**
+     * Toggles the visibility of a given pane with a fade animation.
+     *
+     * @param pane The pane to toggle.
+     * @param index The index of the fade transition in the array.
+     */
     private void togglePaneWithFade(AnchorPane pane, int index) {
         if (fadeTransitions[index] == null) {
             fadeTransitions[index] = new FadeTransition(Duration.millis(500), pane);
@@ -163,7 +170,12 @@ public class MainController {
             fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
-
+    /**
+     * Sets up a fade animation for an emoji button.
+     *
+     * @param button The emoji button to set up the animation for.
+     * @param index The index of the emoji button in the array.
+     */
     private void setupEmojiButtonTransition(Button button, int index) {
         emojiButtonTransitions[index] = new FadeTransition(Duration.millis(300));
         emojiButtonTransitions[index].setNode(button);
@@ -178,8 +190,11 @@ public class MainController {
             emojiButtonClicked[index] = !emojiButtonClicked[index];
         });
     }
-
-
+    /**
+     * Handles the click event of an emoji button.
+     *
+     * @param event The action event triggered by the emoji button click.
+     */
     public void handleEmojiButtonClick(ActionEvent event) {
         Button button = (Button) event.getSource();
         System.out.println(button);
@@ -194,10 +209,4 @@ public class MainController {
         }
         emojiButtonTransitions[buttonIndex].play();
     }
-
-
-
-
-
-
 }
