@@ -197,10 +197,7 @@ public class MainController {
      */
     public void handleEmojiButtonClick(ActionEvent event) {
         Button button = (Button) event.getSource();
-        System.out.println(button);
         int buttonIndex = Integer.parseInt(button.getUserData().toString());
-        System.out.println("I was called with this line "+ buttonIndex);
-
 
         if (emojiButtonClicked[buttonIndex]) {
             emojiButtonTransitions[buttonIndex].setRate(-1);  // Reverse the animation when clicked again
