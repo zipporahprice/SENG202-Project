@@ -1,4 +1,4 @@
-package seng202;
+package seng202.team0.models;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

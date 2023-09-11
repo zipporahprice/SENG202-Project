@@ -8,6 +8,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import seng202.team0.models.Crash;
+import seng202.team0.models.JavaScriptBridge;
 
 public class MapController {
 
@@ -16,12 +17,12 @@ public class MapController {
 
     private Stage stage;
     private WebEngine webEngine;
-    private seng202.JavaScriptBridge javaScriptBridge;
+    private JavaScriptBridge javaScriptBridge;
     JSObject javaScriptConnector;
 
     public void init(Stage stage) {
         this.stage = stage;
-        javaScriptBridge = new seng202.JavaScriptBridge();
+        javaScriptBridge = new JavaScriptBridge();
         initMap();
         stage.sizeToScene();
     }
