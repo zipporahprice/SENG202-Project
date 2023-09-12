@@ -3,6 +3,12 @@ package seng202.team0.models;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import seng202.team0.repository.CrashDAO;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Simple example class showing the ability to 'bridge' from javascript to java
@@ -13,7 +19,7 @@ import org.json.simple.parser.ParseException;
  * @author Morgan English
  */
 public class JavaScriptBridge {
-
+    CrashDAO crashData;
     /**
      * Function called from js when map clicked. In a real application you will want to do something other than printing
      * the information to the console
@@ -30,5 +36,24 @@ public class JavaScriptBridge {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public String crashes() {
+        List<Crash> crashList = crashData.getAll();
+
+        List<List<Double>> coordinates = new ArrayList<>();
+
+        for(Crash crash: crashList) {
+            double latitude = crash.getLatitude();
+            double longitude = crash.getLongitude();
+
+            coordinates.add(Arrays.asList(latitude,longitude));
+        }
+        Gson gson = new Gson();
+
+        String json = gson.toJson(coordinates);
+
+        return json;
+
     }
 }

@@ -61,11 +61,16 @@ public class CrashDAO implements DAOInterface<Crash> {
                         rs.getBoolean("train_involved"),
                         rs.getBoolean("truck_involved")));
             }
+            System.out.println("Hello");
+            for(Crash item : crashes) {
+                System.out.print(item + " ");
+            }
             return crashes;
         } catch (SQLException sqlException) {
             System.out.println(sqlException);
             return new ArrayList<>();
         }
+
     }
 
     /**
