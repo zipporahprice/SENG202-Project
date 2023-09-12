@@ -14,10 +14,8 @@ import java.util.List;
  * @author Morgan English
  * @author Angelica Silva
  */
-public class UserDAO {
+public class UserDAO implements DAOInterface<User> {
     private final DatabaseManager databaseManager;
-
-    private final Connection connection;
 
     private List<User> tempUsers = new ArrayList<>(); //just temporary list to get an idea of things
     // TODO delete tempUsers after database implemented and this class is refactored.
@@ -25,16 +23,14 @@ public class UserDAO {
     /**
      * Creates a new userDAO object
      */
-    public UserDAO() {
-        databaseManager = new DatabaseManager();
-        connection = databaseManager.getConnection();
-    }
+    public UserDAO() { databaseManager = DatabaseManager.getInstance(); }
 
     /**
      * Gets all users in a database
      * @return a List of all users
      */
-    public List<User> getALl() {
+    @Override
+    public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String sqlCommand = "SELECT * FROM Users"; //Users will be a table in database
         // TODO implement with SQL database
@@ -46,6 +42,7 @@ public class UserDAO {
      * @param id relevant user's id
      * @return the user from the database with the corresponding id
      */
+    @Override
     public User getOne(int id) {
         // TODO implement for SQL database
         String sqlCommand = "Select * FROM Users WHERE id = ?"; //'?' means placeholder for parametrized queries
@@ -57,10 +54,12 @@ public class UserDAO {
      * @param userToAdd user we want to add
      * @throws SQLException provides info on database access / other errors
      */
+    @Override
     public void addOne(User userToAdd) throws SQLException { //TODO create new DuplicateEntryException
         String sqlCommand = "INSERT INTO Users (username, password) VALUES (?, ?)";
 
-        PreparedStatement ps = connection.prepareStatement(sqlCommand);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sqlCommand);
         ps.setString(1, userToAdd.getUsername());
         ps.setString(2, userToAdd.getPassword());
         ps.executeUpdate();
@@ -69,17 +68,19 @@ public class UserDAO {
 
     }
 
-    //do we actually need an addMultiple function for users?
+    // TODO do we actually need an addMultiple function for users?
 
     /**
      * Deletes the user with the given userID from the database
      * @param userId the id of the user to be deleted
      * @throws SQLException provides info on database access/other errors
      */
+    @Override
     public void delete(int userId) throws SQLException {
         String sqlCommand = "DELETE FROM Users WHERE id = ?";
 
-        PreparedStatement ps = connection.prepareStatement(sqlCommand);
+        Connection conn = databaseManager.connect();
+        PreparedStatement ps = conn.prepareStatement(sqlCommand);
         ps.setInt(1, userId);
         ps.executeUpdate();
         //TODO add try/catch for deleting from database
@@ -90,6 +91,7 @@ public class UserDAO {
      * Updates the user in the database
      * @param userToUpdate user we want updated
      */
+    @Override
     public void update(User userToUpdate) {
         throw new NotImplementedException();
     }
@@ -99,7 +101,7 @@ public class UserDAO {
      * @param username username to filter by
      * @return the user with the matching username
      */
-    public User getFromUsername(String username) { //not overrided bec. not going to be from DAO interface
+    public User getFromUsername(String username) { //not overridden bec. not going to be from DAO interface
         throw new NotImplementedException();
         //TODO implement and add NotFoundException
         //think about uniqueness of usernames and how to implement that
