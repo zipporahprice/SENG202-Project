@@ -23,16 +23,31 @@ public class SQLiteQueryBuilder {
         return new SQLiteQueryBuilder();
     }
 
+    /**
+     * Takes a comma separated string of columns and appends to current query
+     * @param columns
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
     public SQLiteQueryBuilder select(String columns) {
         query.append("SELECT ").append(columns).append(" ");
         return this;
     }
 
+    /**
+     * Takes a table name to query data from
+     * @param table
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
     public SQLiteQueryBuilder from(String table) {
         query.append("FROM ").append(table).append(" ");
         return this;
     }
 
+    /**
+     * Takes a comma separated string of conditions and appends to current query
+     * @param conditions
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
     public SQLiteQueryBuilder where(String conditions) {
         query.append("WHERE ").append(conditions).append(" ");
         return this;
@@ -40,6 +55,10 @@ public class SQLiteQueryBuilder {
 
     // TODO have a think about how we want the data to come back to us as, currently have as a list
     // TODO List might not be the best way to have it
+    /**
+     * Takes the query in the builder object and returns a list of all data points in a List object.
+     * @return list of all data points from the current query string
+     */
     public List build() {
         List data = new ArrayList<HashMap>();
         try (Connection conn = databaseManager.connect();
