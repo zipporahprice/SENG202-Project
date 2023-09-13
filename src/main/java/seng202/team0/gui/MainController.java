@@ -52,6 +52,8 @@ public class MainController {
     private AnchorPane boundariesPane;
     @FXML
     private AnchorPane severityPane;
+    @FXML
+    private Button helpButton;
 
 
     private Stage stage;
@@ -140,9 +142,34 @@ public class MainController {
         togglePaneWithFade(boundariesPane, 3);
         togglePaneWithFade(severityPane, 4);
 
+        // Toggle the visibility of the helpButton
+        toggleHelpButtonVisibility();
+
         // Play each fade animation individually
         for (int i = 0; i < 5; i++) {
             fadeTransitions[i].play();
+        }
+    }
+
+    /**
+     * Toggles the visibility of the helpButton with a fade animation.
+     * If the helpButton is currently visible, it will be faded out and hidden.
+     * If the helpButton is currently hidden, it will be faded in and shown.
+     */
+    private void toggleHelpButtonVisibility() {
+        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
+            fadeTransition.stop(); // Stop the animation if it's currently running
+        }
+
+        if (helpButton.isVisible()) {
+            fadeTransition.setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
+            fadeTransition.setFromValue(1.0); // Start from fully visible
+            fadeTransition.setToValue(0.0);   // Transition to fully transparent (invisible)
+        } else {
+            helpButton.setVisible(true); // Make the helpButton visible before starting fade-in
+            fadeTransition.setOnFinished(null); // Reset the onFinished handler
+            fadeTransition.setFromValue(0.0);   // Start from fully transparent (invisible)
+            fadeTransition.setToValue(1.0);     // Transition to fully visible
         }
     }
 

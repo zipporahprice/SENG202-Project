@@ -6,18 +6,18 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400" prefWidth="600" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.helpController">
-    <AnchorPane layoutX="50" layoutY="50" prefHeight="300" prefWidth="400" style="-fx-background-color: black;">
-        <VBox layoutX="10" layoutY="10" spacing="10">
+    <AnchorPane layoutX="50" layoutY="50" prefHeight="300" prefWidth="400" styleClass="helpWindowStyle" stylesheets="@style.css">
+        <VBox layoutX="40" layoutY="40" spacing="10">
             <Label style="-fx-text-fill: white;" text="• Route Planning:" />
             <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Route Planning." />
 
             <Label style="-fx-text-fill: white;" text="• Data Filtering:" />
-            <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Filtering." />
+            <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Exporting." />
 
             <Label style="-fx-text-fill: white;" text="• Data Exporting:" />
-            <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Exporting." />
+            <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Filtering." />
         </VBox>
-      <Button fx:id="backButton" onAction="#handleBackButton" layoutX="153.0" layoutY="207.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="94.0" text="Back" />
+      <Button fx:id="backButton" layoutX="153.0" layoutY="207.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="35.0" prefWidth="94.0" text="Back" />
     </AnchorPane>
 
 
