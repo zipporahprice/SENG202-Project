@@ -16,44 +16,38 @@ import java.net.http.HttpResponse;
  * @author tve21
  */
 
-public class GeoLocater {
+public class GeoLocator {
     /**
      * Takes in user input and searches for the address using the Nominatim Geolocation API before returning the location
      * @param address user input to find latitude and longitude for
      */
 
     public Location getLocation(String address){
-        String msg = String.format("Searching for %d", address);
-        System.out.println(msg);
-
+        String logMessage = String.format("Requesting geolocation from Nominatim for address: %s, New Zealand", address);
+        System.out.println(logMessage);
         address = address.replace(' ', '+');
-
         try {
+            // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
-                    URI.create("https://nominatim.openstreetmap.org/search?q=\" + address + \",+New+Zealand&format=json")
+                    URI.create("https://nominatim.openstreetmap.org/search?q=" + address + ",+New+Zealand&format=json")
             ).build();
-
-            HttpResponse<String> data = client.send(request, HttpResponse.BodyHandlers.ofString());
-
+            // Getting the response
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            // Parsing the json response to get the latitude and longitude co-ordinates
             JSONParser parser = new JSONParser();
-            JSONArray results = (JSONArray) parser.parse(data.body());
-            JSONObject best  = (JSONObject) results.get(0);
-
-            double latitude = Double.parseDouble((String)best.get("lat"));
-            double longitude = Double.parseDouble((String)best.get("lon"));
-            
-            return new Location(latitude,longitude);
-        } catch (IOException | ParseException e){
+            JSONArray results = (JSONArray)  parser.parse(response.body());
+            JSONObject bestResult = (JSONObject) results.get(0);
+            double lat = Double.parseDouble((String) bestResult.get("lat"));
+            double lng = Double.parseDouble((String) bestResult.get("lon"));
+            return new Location(lat, lng);
+        } catch (IOException | ParseException e) {
             System.err.println(e);
         } catch (InterruptedException ie) {
             System.err.println(ie);
             Thread.currentThread().interrupt();
         }
-
-        return new Location(0d,0d);
-
-
+        return new Location(0d, 0d);
     }
 
 

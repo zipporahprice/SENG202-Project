@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Leaflet & OSM Map Demo</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
@@ -19,36 +19,47 @@
 </head>
 <body>
 <div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
     let map;
     var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
-
-
-
-
+    let markers = [];
+    var route;
 
     /**
-     * This object can be returned to our java code, where we can call the functions we define inside of it
+     * This object can be returned to our java code, where we can call the functions we define inside it
      */
     let jsConnector = {
+        addMarker: addMarker,
+        displayRoute: displayRoute,
+        removeRoute: removeRoute,
         initMap: initMap
     };
 
     /**
-     * creates and initialises the Google map, also defines on click event that calls java code
+     * creates and initialises the map, also defines on click event that calls java code
      */
     function initMap() {
-        let mapOptions = {
-            center: [-41.0, 172.0],
-            zoom: 5.5
+        if(map) {
+            return; // if map is already initialized, return
+        }
+
+        var mapOptions = {
+            center: [-43.5, 172.7],
+            zoom: 10
         }
         map = new L.map('map', mapOptions);
         new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
             attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
         }).addTo(map)
+
+        map.on("click", (map_event) => {
+            var latlng = map.mouseEventToLatLng(map_event.originalEvent)
+            javaScriptBridge.addMarkerFromClick(`{"lat": ${latlng.lat}, "lng": ${latlng.lng}}`)
+        })
     }
+
 
     /**
      * Adds a marker to the map and stores it in the markers array for later use (e.g. removal)
@@ -63,6 +74,33 @@
         markers.push(m)
     }
 
+    /**
+     * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
+     * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
+     */
+    function displayRoute(waypointsIn) {
+        var waypointsArray = JSON.parse(waypointsIn);
+        removeRoute()
+        console.log(waypointsArray)
+        var waypoints = []
+        waypointsArray.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)))
+        console.log(waypoints)
+        route = L.Routing.control({
+            // serviceUrl: "",
+            waypoints: waypoints,
+            routeWhileDragging: true
+        }).addTo(map);
+
+    }
+
+    /**
+     * Removes the current route being displayed (will not do anything if there is no route currently displayed)
+     */
+    function removeRoute() {
+        if(route){
+            route.remove()
+        }
+    }
 
 </script>
 </body>
