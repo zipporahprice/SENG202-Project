@@ -4,6 +4,8 @@
     <title>Leaflet & OSM Map Demo</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
@@ -23,6 +25,7 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="https://unpkg.com/heatmap.js@2.0.5/build/heatmap.min.js"></script>
 <script src="https://unpkg.com/heatmap.js@2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script>
     let map, baseLayer, heatmapLayer;
     var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
@@ -47,9 +50,9 @@
         });
         var crashesJSON = javaScriptBridge.crashes();
 
+
         var crashes = JSON.parse(crashesJSON);
         var testData = {
-
             max: 100,
             data: crashes
         };
@@ -74,34 +77,23 @@
         };
         heatmapLayer = new HeatmapOverlay(cfg);
 
+        var markers = L.markerClusterGroup();
+
+        for (var i = 0; i < crashes.length; i++) {
+            var a = crashes[i];
+            var title = "yay";
+            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: title });
+            marker.bindPopup(title);
+            markers.addLayer(marker);
+        }
+
         let mapOptions = {
             center: [-41.0, 172.0],
             zoom: 5.5,
-            layers:[baseLayer, heatmapLayer]
+            layers:[baseLayer, heatmapLayer, markers]
         };
         heatmapLayer.setData(testData);
         map = new L.map('map', mapOptions);
-
-
-
-
-
-
-
-
-    }
-
-    /**
-     * Adds a marker to the map and stores it in the markers array for later use (e.g. removal)
-     * @param title tooltip to display on hover
-     * @param lat latitude to place marker at
-     * @param lng longitude to place marker at
-     */
-    function addMarker(title, lat, lng) {
-        var m = new L.Marker([lat, lng])
-        m.bindPopup(title).openPopup()
-        m.addTo(map)
-        markers.push(m)
     }
 
 
