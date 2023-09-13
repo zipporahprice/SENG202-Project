@@ -12,10 +12,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-/**
- * Class to return the longitude and latitude of a location requested by the user
- * @author tve21
- */
 
 public class GeoLocator {
     /**
@@ -54,7 +50,7 @@ public class GeoLocator {
             System.err.println(ie);
             Thread.currentThread().interrupt();
         }
-        return new Location(0d, 0d); // Default fallback, you can adjust this
+        return new Location(0d, 0d);
     }
 
     private void showErrorAlert(String title, String message) {

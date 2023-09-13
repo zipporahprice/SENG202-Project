@@ -28,7 +28,22 @@ public class Route {
         route.forEach(pos -> stringBuilder.append(
                 String.format("{\"lat\": %f, \"lng\": %f}, ", pos.latitude, pos.longitude)));
         if (stringBuilder.length() > 2)
-            stringBuilder.setLength(stringBuilder.length() -2);
+            stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Returns the list of routes as a JSON array of arrays.
+     * @param routes list of route objects
+     * @return list of route objects as a JSON array of arrays
+     */
+    public static String routesToJSONArray(List<Route> routes) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        routes.forEach(route -> stringBuilder.append(route.toJSONArray()).append(", "));
+        if (stringBuilder.length() > 2)
+            stringBuilder.setLength(stringBuilder.length() - 2);
         stringBuilder.append("]");
         return stringBuilder.toString();
     }

@@ -25,7 +25,7 @@
     let map;
     var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
     let markers = [];
-    var route;
+    var routes = [];
 
     /**
      * This object can be returned to our java code, where we can call the functions we define inside it
@@ -78,28 +78,32 @@
      * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
      * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
      */
-    function displayRoute(waypointsIn) {
-        var waypointsArray = JSON.parse(waypointsIn);
-        removeRoute()
-        console.log(waypointsArray)
-        var waypoints = []
-        waypointsArray.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)))
-        console.log(waypoints)
-        route = L.Routing.control({
-            // serviceUrl: "",
-            waypoints: waypoints,
-            routeWhileDragging: true
-        }).addTo(map);
+    function displayRoute(routesIn) {
+        removeRoute();
 
+        var routesArray = JSON.parse(routesIn);
+        console.log(routesArray);
+
+        routesArray.forEach(waypointsIn => {
+            var waypoints = [];
+            waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
+            console.log(waypoints);
+            var newRoute = L.Routing.control({
+                waypoints: waypoints,
+                routeWhileDragging: true
+            }).addTo(map);
+            routes.push(newRoute);
+        });
     }
 
     /**
      * Removes the current route being displayed (will not do anything if there is no route currently displayed)
      */
     function removeRoute() {
-        if(route){
-            route.remove()
-        }
+        routes.forEach((r) => {
+            r.remove();
+        });
+        routes = [];
     }
 
 </script>

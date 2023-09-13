@@ -9,11 +9,16 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import org.json.simple.JSONArray;
 import seng202.team0.models.Crash;
 import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.models.GeoLocator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MapController {
 
@@ -26,6 +31,9 @@ public class MapController {
 
     @FXML
     private TextField endLocation;
+
+    @FXML
+    private TextField stopLocation;
 
     private Stage stage;
 
@@ -77,12 +85,10 @@ public class MapController {
                 crash.getLatitude(), crash.getLongitude());
     }
 
-    /**
-     * Displays a route on the WebView map using the underlying js command
-     * @param newRoute route to be displayed, made up of 2 or more Positions
-     */
-    private void displayRoute(Route newRoute) {
-        javaScriptConnector.call("displayRoute", newRoute.toJSONArray());
+    private void displayRoute(Route... routes) {
+        List<Route> routesList = new ArrayList<>();
+        Collections.addAll(routesList, routes);
+        javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
     }
 
     /**
@@ -101,7 +107,6 @@ public class MapController {
     private Location addStart() {
         String address = startLocation.getText().trim();
         if (address.isEmpty()) {
-            // Log or show an alert to user about the empty address
             return null;
         }
         Location newMarker = geolocator.getLocation(address);
@@ -113,13 +118,42 @@ public class MapController {
     private Location addEnd() {
         String address = endLocation.getText().trim();
         if (address.isEmpty()) {
-            // Log or show an alert to user about the empty address
             return null;
         }
         Location newMarker = geolocator.getLocation(address);
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
+
+    @FXML
+    private Location addStop() {
+        String address = stopLocation.getText().trim();
+        if (address.isEmpty()) {
+            return null;
+        }
+        Location newMarker = geolocator.getLocation(address);
+        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return newMarker;
+    }
+
+    @FXML
+    private void generateStop() {
+        Location stop = addStop();
+        Location start = addStart();
+        Location end = addEnd();
+        if (start != null && end != null && stop != null) {
+            Route route1 = new Route(start, stop);
+            Route route2 = new Route(stop, end);
+
+            List<Route> routesList = new ArrayList<>();
+            routesList.add(route1);
+            routesList.add(route2);
+
+            javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+        }
+    }
+
+
 
     @FXML
     private void generateRouteAction() {
