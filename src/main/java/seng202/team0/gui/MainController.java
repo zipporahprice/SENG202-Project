@@ -136,6 +136,8 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
+        toggleHelpButtonVisibility();
+
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
@@ -143,7 +145,6 @@ public class MainController {
         togglePaneWithFade(severityPane, 4);
 
         // Toggle the visibility of the helpButton
-        toggleHelpButtonVisibility();
 
         // Play each fade animation individually
         for (int i = 0; i < 5; i++) {
