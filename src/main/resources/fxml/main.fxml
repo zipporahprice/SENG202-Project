@@ -1,70 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-      <Label fx:id="defaultLabel" layoutX="320.0" layoutY="122.0" text="SafeTrip" textFill="WHITE" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="122.0">
-         <font>
-            <Font name="System Bold" size="29.0" />
-         </font></Label>
-      <AnchorPane layoutX="14.0" layoutY="13.0" prefHeight="374.0" prefWidth="59.0" styleClass="sideBarColor" stylesheets="@style.css">
+      <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
-            <Button layoutX="7.0" layoutY="261.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+            <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/car_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button layoutX="7.0" layoutY="317.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               </graphic>
+            </Button>
+            <Button fx:id="bikeButton" layoutX="14.0" layoutY="689.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="1">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/bike_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button layoutX="7.0" layoutY="205.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               </graphic>
+            </Button>
+            <Button fx:id="busButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="2">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/bus_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button layoutX="7.0" layoutY="149.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               </graphic>
+            </Button>
+            <Button fx:id="walkingButton" layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="3">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/walking_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button layoutX="7.0" layoutY="93.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               </graphic>
+            </Button>
+            <Button fx:id="helicopterButton" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="4">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/helicopter_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button layoutX="7.0" layoutY="37.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="45.0" styleClass="buttonColor" stylesheets="@style.css">
+               </graphic>
+            </Button>
+            <Button fx:id="motorbikeButton" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="5">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="27.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/motorbike_emoji.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+            </Button>
+            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="65.0" prefWidth="65.0" styleClass="menuButtonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                     <image>
+                        <Image url="@button_icons/menu_emoji.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="transportModePane" layoutX="145.0" layoutY="19.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
+            <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
+               <CheckBox mnemonicParsing="false" text="Bicycle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Bus" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Car" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Moped" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Motorcycle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Parked Vehicle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Pedestrian" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="School Bus" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Train" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" text="Truck" textFill="WHITE" />
+               <!-- Add more options as needed -->
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="weatherPane" layoutX="145.0" layoutY="308.0" prefHeight="235.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
+            <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox mnemonicParsing="false" text="Snow" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Sunny" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Overcast" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Thunder" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Light Rain" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Windy" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Tsunami" textFill="WHITE" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="severityPane" layoutX="145.0" layoutY="555.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
+            <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox mnemonicParsing="false" text="Non Injury" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Minor Crash" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Major Crash" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" text="Death" textFill="WHITE" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="datePane" layoutX="407.0" layoutY="19.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
+
+            <!-- Add a Slider for selecting the date between 2000 - 2023 -->
+            <Slider layoutX="14.0" layoutY="75.0" max="2023" min="2000" prefWidth="222.0" value="2010" />
+            <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
+            <Label layoutX="198.0" layoutY="59.0" text="2023" textFill="WHITE" />
+
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="boundariesPane" layoutX="407.0" layoutY="148.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <children>
+            <Label layoutX="88.0" layoutY="14.0" text="Boundaries" textFill="WHITE" />
+            <TextField layoutX="40.0" layoutY="43.0" promptText="Point 1" />
+            <TextField layoutX="40.0" layoutY="78.0" promptText="Point 2" />
+            <Button layoutX="90.0" layoutY="121.0" mnemonicParsing="false" text="Confirm" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="helpButton" layoutX="500.0" layoutY="400.0" mnemonicParsing="false" onAction="#loadHelp" text="Switch to Help" />
+
+
+
+
    </children>
 </AnchorPane>

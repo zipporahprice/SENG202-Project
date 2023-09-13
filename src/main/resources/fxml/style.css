@@ -1,14 +1,37 @@
 .backgroundColor{
-    -fx-background-color: linear-gradient(to right,rgba(0,36,102,1) 0%, rgba(34,153,255,1) 66%);
+    -fx-background-color: linear-gradient(to right,rgba(46,54,255,1) 0%, rgba(99,121,241,1) 0%, rgba(126,155,234,1) 9%, rgba(138,170,231,1) 13%, rgba(146,180,229,1) 17%, rgba(158,196,226,1) 23%, rgba(170,211,223,1) 31%);
 }
 
 .sideBarColor{
     -fx-background-color: #1e1e1e;
-    -fx-background-radius: 20px;
+    -fx-background-radius: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
+}
+
+.hamburgerStyle{
+    -fx-background-color: #1e1e1e;
+    -fx-background-radius: 30px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
 }
 
 .buttonColor{
     -fx-background-color: #2c2c2c;
-    -fx-background-radius: 16px;
+    -fx-background-radius: 32px;
+}
+
+.clickedButtonColor{
+    -fx-background-color: linear-gradient(to right, rgba(143,138,255,1) 0%, rgba(116,182,250,1) 48%, rgba(0,212,255,1) 100%);
+    -fx-background-radius: 32px;
+}
+
+.menuButtonColor{
+    -fx-background-color: #2c2c2c;
+    -fx-background-radius: 40px;
+}
+.feathered-border-pane {
+    -fx-background-color: transparent;
+    -fx-border-width: 5px;
+    -fx-border-color: linear-gradient(to bottom, transparent, white);
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(170,211,223,1), 10, 0, 0, 0);
 }
