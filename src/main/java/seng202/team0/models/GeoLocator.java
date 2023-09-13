@@ -1,5 +1,6 @@
 package seng202.team0.models;
 
+import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +23,7 @@ public class GeoLocator {
      * @param address user input to find latitude and longitude for
      */
 
-    public Location getLocation(String address){
+    public Location getLocation(String address) {
         String logMessage = String.format("Requesting geolocation from Nominatim for address: %s, New Zealand", address);
         System.out.println(logMessage);
         address = address.replace(' ', '+');
@@ -36,7 +37,13 @@ public class GeoLocator {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             // Parsing the json response to get the latitude and longitude co-ordinates
             JSONParser parser = new JSONParser();
-            JSONArray results = (JSONArray)  parser.parse(response.body());
+            JSONArray results = (JSONArray) parser.parse(response.body());
+
+            if (results.isEmpty()) {
+                showErrorAlert("Invalid Address", "The address provided is invalid or couldn't be found.");
+                return null; // or return a default location, depending on your use-case
+            }
+
             JSONObject bestResult = (JSONObject) results.get(0);
             double lat = Double.parseDouble((String) bestResult.get("lat"));
             double lng = Double.parseDouble((String) bestResult.get("lon"));
@@ -47,8 +54,17 @@ public class GeoLocator {
             System.err.println(ie);
             Thread.currentThread().interrupt();
         }
-        return new Location(0d, 0d);
+        return new Location(0d, 0d); // Default fallback, you can adjust this
     }
+
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
 
 
