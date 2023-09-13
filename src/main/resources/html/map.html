@@ -21,8 +21,10 @@
 <div id="map"></div>
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/heatmap.js@2.0.5/build/heatmap.min.js"></script>
+<script src="https://unpkg.com/heatmap.js@2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
 <script>
-    let map;
+    let map, baseLayer, heatmapLayer;
     var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 
 
@@ -40,14 +42,53 @@
      * creates and initialises the Google map, also defines on click event that calls java code
      */
     function initMap() {
+        baseLayer= new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
+            attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
+        });
+        var crashesJSON = javaScriptBridge.crashes();
+
+        var crashes = JSON.parse(crashesJSON);
+        var testData = {
+
+            max: 100,
+            data: crashes
+        };
+
+        var cfg = {
+            // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+            // if scaleRadius is false it will be the constant radius used in pixels
+            "radius": 0.1,
+            "maxOpacity": .4,
+            // scales the radius based on map zoom
+            "scaleRadius": true,
+            // if set to false the heatmap uses the global maximum for colorization
+            // if activated: uses the data maximum within the current map boundaries
+            //   (there will always be a red spot with useLocalExtremas true)
+            "useLocalExtrema": false,
+            // which field name in your data represents the latitude - default "lat"
+            latField: 'lat',
+            // which field name in your data represents the longitude - default "lng"
+            lngField: 'lng',
+            // which field name in your data represents the data value - default "value"
+            valueField: 'count'
+        };
+        heatmapLayer = new HeatmapOverlay(cfg);
+
         let mapOptions = {
             center: [-41.0, 172.0],
-            zoom: 5.5
-        }
+            zoom: 5.5,
+            layers:[baseLayer, heatmapLayer]
+        };
+        heatmapLayer.setData(testData);
         map = new L.map('map', mapOptions);
-        new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
-            attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
-        }).addTo(map)
+
+
+
+
+
+
+
+
     }
 
     /**

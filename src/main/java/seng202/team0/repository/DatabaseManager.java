@@ -25,7 +25,6 @@ public class DatabaseManager {
     public DatabaseManager(String url) {
         if (url==null || url.isEmpty()) {
             this.url = this.getDatabasePath();
-            System.out.println(this.url);
         } else {
             this.url = url;
         }
