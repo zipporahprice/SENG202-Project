@@ -33,4 +33,5 @@ public class CrashManager {
     public List<Crash> getCrashes() throws SQLException {
         return crashDAO.getAll();
     }
+
 }

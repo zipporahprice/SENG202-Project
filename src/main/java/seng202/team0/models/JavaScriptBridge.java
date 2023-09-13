@@ -4,11 +4,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
+import seng202.team0.business.CrashManager;
 import seng202.team0.repository.CrashDAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 /**
  * Simple example class showing the ability to 'bridge' from javascript to java
@@ -19,7 +22,7 @@ import java.util.List;
  * @author Morgan English
  */
 public class JavaScriptBridge {
-    CrashDAO crashData;
+    CrashManager crashData = new CrashManager();
     /**
      * Function called from js when map clicked. In a real application you will want to do something other than printing
      * the information to the console
@@ -38,22 +41,34 @@ public class JavaScriptBridge {
         }
     }
 
-    public String crashes() {
-        List<Crash> crashList = crashData.getAll();
+    public String crashes() throws SQLException {
+        List<Crash> crashList = crashData.getCrashes();
 
-        List<List<Double>> coordinates = new ArrayList<>();
+        List<CrashInfo> crash = crashData.getCrashes().stream().map(crash1-> {
+            double latitude = crash1.getLatitude();
+            double longitude = crash1.getLongitude();
+            return new CrashInfo(latitude, longitude);
+        }).toList();
 
-        for(Crash crash: crashList) {
-            double latitude = crash.getLatitude();
-            double longitude = crash.getLongitude();
 
-            coordinates.add(Arrays.asList(latitude,longitude));
-        }
         Gson gson = new Gson();
 
-        String json = gson.toJson(coordinates);
+        String json = gson.toJson(crash);
+
 
         return json;
+
+    }
+
+    protected static class CrashInfo {
+
+        public double lat;
+        public double lng;
+
+        public CrashInfo(double lat, double lng) {
+            this.lat = lat;
+            this.lng = lng;
+        }
 
     }
 }

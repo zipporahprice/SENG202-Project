@@ -45,20 +45,20 @@
         baseLayer= new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
             attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
         });
+        var crashesJSON = javaScriptBridge.crashes();
 
+        var crashes = JSON.parse(crashesJSON);
         var testData = {
-            max: 200,
-            data: [{lat: -36.8485, lng: 174.7633, count: 50}, {lat: -43.5321, lng: 172.6362, count: 50}, {
-                lat: -45.0312,
-                lng: 168.6626, count: 100
-            }]
+
+            max: 100,
+            data: crashes
         };
 
         var cfg = {
             // radius should be small ONLY if scaleRadius is true (or small radius is intended)
             // if scaleRadius is false it will be the constant radius used in pixels
-            "radius": 2,
-            "maxOpacity": .8,
+            "radius": 0.1,
+            "maxOpacity": .4,
             // scales the radius based on map zoom
             "scaleRadius": true,
             // if set to false the heatmap uses the global maximum for colorization
@@ -84,9 +84,7 @@
 
 
 
-        //let crashesJSON = javaScriptBridge.crashes();
 
-        //let crashes = JSON.parse(crashesJSON);
 
 
 
