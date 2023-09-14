@@ -83,6 +83,8 @@ public class MainController {
         stage.setMaximized(true);
         loadMap(stage);
         stage.sizeToScene();
+        double viewportWidth= stage.getWidth();
+        double viewportHeight = stage.getHeight();
     }
 
     @FXML
@@ -106,7 +108,9 @@ public class MainController {
             mapViewController.init(stage);
 
             mainWindow.getChildren().add(mapViewParent);
+
             AnchorPane.setRightAnchor(mapViewParent,0d);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
