@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS crashes (
      crash_year INTEGER,
      crash_location1 TEXT,
      crash_location2 TEXT,
+     severity INT,
      region TEXT,
      weather TEXT,
      longitude REAL,
