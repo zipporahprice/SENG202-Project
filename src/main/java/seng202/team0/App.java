@@ -30,6 +30,14 @@ public class App {
         log.error("An error has occurred, thanks logging for helping find it! (This is a terrible error log message, but is only an example!')");
         log.log(Level.INFO, "There are many ways to log!");
 
+        DatabaseManager database = new DatabaseManager(null);
+        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashManager manager = new CrashManager();
+
+        URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
+        File file = new File(newUrl.getPath());
+        manager.addAllCrashesFromFile(importer, file);
+
         MainWindow.main(args);
     }
 }

@@ -54,7 +54,11 @@ public class MapController {
         geolocator = new GeoLocator();
         //TextFields.bindAutoCompletion(startLocation.getEditor(), t -> getSuggestions(t.getUserText()));
         initMap();
+        webView.prefWidthProperty().bind(stage.widthProperty().multiply(0.5));
+        webView.prefHeightProperty().bind(stage.heightProperty().multiply(0.97));
         stage.sizeToScene();
+
+
     }
 
     /**
