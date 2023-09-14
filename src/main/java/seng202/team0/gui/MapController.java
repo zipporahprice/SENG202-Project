@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+
 public class MapController {
 
     public Button generateRoute;
@@ -44,6 +45,7 @@ public class MapController {
     private GeoLocator geolocator;
     private WebEngine webEngine;
     private JavaScriptBridge javaScriptBridge;
+
     JSObject javaScriptConnector;
 
     public void init(Stage stage) {
@@ -157,8 +159,6 @@ public class MapController {
             javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
         }
     }
-
-
 
     @FXML
     private void generateRouteAction() {
