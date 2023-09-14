@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Leaflet & OSM Map Demo</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
@@ -21,7 +21,7 @@
 </head>
 <body>
 <div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script src="https://unpkg.com/heatmap.js@2.0.5/build/heatmap.min.js"></script>
 <script src="https://unpkg.com/heatmap.js@2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
@@ -29,20 +29,21 @@
 <script>
     let map, baseLayer, heatmapLayer;
     var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
-
-
-
-
+    let markers = [];
+    var routes = [];
 
     /**
-     * This object can be returned to our java code, where we can call the functions we define inside of it
+     * This object can be returned to our java code, where we can call the functions we define inside it
      */
     let jsConnector = {
+        addMarker: addMarker,
+        displayRoute: displayRoute,
+        removeRoute: removeRoute,
         initMap: initMap
     };
 
     /**
-     * creates and initialises the Google map, also defines on click event that calls java code
+     * creates and initialises the map, also defines on click event that calls java code
      */
     function initMap() {
         baseLayer= new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
@@ -126,6 +127,7 @@
 
     }
 
+
     /**
      * Adds a marker to the map and stores it in the markers array for later use (e.g. removal)
      * @param title tooltip to display on hover
@@ -139,6 +141,37 @@
         markers.push(m)
     }
 
+    /**
+     * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
+     * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
+     */
+    function displayRoute(routesIn) {
+        removeRoute();
+
+        var routesArray = JSON.parse(routesIn);
+        console.log(routesArray);
+
+        routesArray.forEach(waypointsIn => {
+            var waypoints = [];
+            waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
+            console.log(waypoints);
+            var newRoute = L.Routing.control({
+                waypoints: waypoints,
+                routeWhileDragging: true
+            }).addTo(map);
+            routes.push(newRoute);
+        });
+    }
+
+    /**
+     * Removes the current route being displayed (will not do anything if there is no route currently displayed)
+     */
+    function removeRoute() {
+        routes.forEach((r) => {
+            r.remove();
+        });
+        routes = [];
+    }
 
 </script>
 </body>
