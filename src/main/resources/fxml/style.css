@@ -43,7 +43,7 @@
     -fx-border-radius: 14px;
     -fx-border-width: 3px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
-    -fx-font: 13 arail; -fx-font-style: bold;
+    -fx-font: 13 arail; -fx-font-style: normal;
     -fx-text-fill: white;
 }
 
