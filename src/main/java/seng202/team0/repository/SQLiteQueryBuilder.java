@@ -10,12 +10,12 @@ import java.util.List;
 public class SQLiteQueryBuilder {
     private final DatabaseManager databaseManager;
     private static StringBuilder query;
-    private List<String> selectedColumns;
+    private final List<String> selectedColumns;
 
     private SQLiteQueryBuilder() {
         this.databaseManager = DatabaseManager.getInstance();
-        this.query = new StringBuilder();
-        this.selectedColumns = new ArrayList<String>();
+        query = new StringBuilder();
+        this.selectedColumns = new ArrayList<>();
     }
 
     // TODO reasoning, done for readability and chaining easier
@@ -30,6 +30,13 @@ public class SQLiteQueryBuilder {
      */
     public SQLiteQueryBuilder select(String columns) {
         query.append("SELECT ").append(columns).append(" ");
+        String[] columns_without_commas = columns.split(",");
+
+        // Adding columns to selectedColumns
+        for (String column: columns_without_commas) {
+            selectedColumns.add(column.trim());
+        }
+
         return this;
     }
 
@@ -78,5 +85,9 @@ public class SQLiteQueryBuilder {
         }
 
         return data;
+    }
+
+    public String getQuery() {
+        return query.toString();
     }
 }

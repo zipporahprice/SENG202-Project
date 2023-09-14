@@ -6,7 +6,6 @@ import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.models.Crash;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
