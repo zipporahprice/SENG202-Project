@@ -1,14 +1,17 @@
 package seng202.team0.gui;
 
+import javafx.collections.FXCollections;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import org.controlsfx.control.textfield.TextFields;
 import org.json.simple.JSONArray;
 import seng202.team0.models.Crash;
 import seng202.team0.models.JavaScriptBridge;
@@ -17,6 +20,7 @@ import seng202.team0.models.Route;
 import seng202.team0.models.GeoLocator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,6 +50,7 @@ public class MapController {
         this.stage = stage;
         javaScriptBridge = new JavaScriptBridge();
         geolocator = new GeoLocator();
+        //TextFields.bindAutoCompletion(startLocation.getEditor(), t -> getSuggestions(t.getUserText()));
         initMap();
         stage.sizeToScene();
     }
@@ -165,4 +170,9 @@ public class MapController {
             displayRoute(route);
         }
     }
+
+//    private Collection<String> getSuggestions(String userInput) {
+//        // Call the GeoLocator method to get address suggestions based on userInput
+//        return geolocator.getAddressSuggestions(userInput);
+//    }
 }

@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.Collection;
 
 
 public class GeoLocator {
@@ -60,6 +62,13 @@ public class GeoLocator {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /*Need to check out the API usage policies before getting into this*/
+//    public Collection<String> getAddressSuggestions(String userInput) {
+//        // Call the Nominatim API similarly to getLocation but fetch multiple results and return them
+//        // For now, let's assume it returns a dummy list for simplicity
+//        return Arrays.asList("123 Main St", "456 Elm St");
+//    }
 
 
 

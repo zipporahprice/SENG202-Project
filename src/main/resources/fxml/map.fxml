@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.web.WebView?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
+<BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
 <center>
    <AnchorPane BorderPane.alignment="CENTER">
       <WebView fx:id="webView" prefHeight="1000.0" prefWidth="800.0" />
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" onAction="#addStart" promptText="Start Location" />
       <TextField fx:id="endLocation" layoutX="100.0" layoutY="78.0" onAction="#addEnd" promptText="End Location" />
       <Button fx:id="generateRoute" layoutX="102.0" layoutY="120.0" mnemonicParsing="false" onAction="#generateRouteAction" text="Generate Route" />
          <TextField fx:id="stopLocation" layoutX="100.0" layoutY="187.0" onAction="#addStop" promptText="Add stop" />
          <Button fx:id="addStopButton" layoutX="100.0" layoutY="230.0" mnemonicParsing="false" onAction="#generateStop" text="Add Stop" />
+         <TextField fx:id="startLocation" layoutX="105.0" layoutY="32.0" onAction="#addStart" prefWidth="150.0" promptText="Start Location" />
    </AnchorPane>
 </center>
 </BorderPane>
