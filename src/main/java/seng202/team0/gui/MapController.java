@@ -24,7 +24,11 @@ public class MapController {
         this.stage = stage;
         javaScriptBridge = new JavaScriptBridge();
         initMap();
+        webView.prefWidthProperty().bind(stage.widthProperty().multiply(0.5));
+        webView.prefHeightProperty().bind(stage.heightProperty().multiply(0.97));
         stage.sizeToScene();
+
+
     }
 
     /**

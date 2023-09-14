@@ -66,6 +66,7 @@ public class CrashDAO implements DAOInterface<Crash> {
             System.out.println(sqlException);
             return new ArrayList<>();
         }
+
     }
 
     /**
