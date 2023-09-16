@@ -10,6 +10,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
@@ -20,10 +21,7 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
-import seng202.team0.models.Crash;
-import seng202.team0.models.Location;
-import seng202.team0.models.Route;
-import seng202.team0.models.GeoLocator;
+import seng202.team0.models.*;
 
 
 import java.io.IOException;
@@ -66,6 +64,7 @@ public class MainController {
     private Stage stage;
 
     private GeoLocator geolocator;
+    private WebEngine webEngine;
 
     JSObject javaScriptConnector;
 
@@ -105,12 +104,16 @@ public class MainController {
      */
     void init(Stage stage) {
         this.stage = stage;
-
+        geolocator = new GeoLocator();
         stage.setMaximized(true);
         MapController mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
         stage.sizeToScene();
+
+        javaScriptConnector = mapController.initMap();
+
+
     }
 
     @FXML
@@ -121,6 +124,8 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
+
+
 
 
     }

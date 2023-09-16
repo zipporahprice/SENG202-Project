@@ -69,7 +69,7 @@ public class MapController {
      * Initialises the WebView loading in the appropriate html and initialising important communicator
      * objects between Java and Javascript
      */
-    private void initMap() {
+    public JSObject initMap() {
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource("html/map.html").toExternalForm());
@@ -90,6 +90,7 @@ public class MapController {
                         javaScriptConnector.call("initMap");
                     }
                 });
+        return javaScriptConnector;
     }
 
 
