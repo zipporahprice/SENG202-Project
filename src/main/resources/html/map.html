@@ -94,16 +94,11 @@
         let mapOptions = {
             center: [-41.0, 172.0],
             zoom: 5.5,
-            layers:[baseLayer, heatmapLayer]
+            layers:[baseLayer, heatmapLayer, markers]
         };
         heatmapLayer.setData(testData);
 
         map = new L.map('map', mapOptions);
-
-
-
-
-
 
         map.on('zoomend', function() {
             var zoomLevel = map.getZoom();
@@ -111,21 +106,15 @@
             if(zoomLevel >= 12) {
                 console.log("Too zoomed in, heatmap disabled");
                 map.removeLayer(heatmapLayer);
-                map.addLayer(markers);
             }
             else {
-                if (!map.hasLayer(heatmapLayer)){ // Check if heatmap layer is already added
-                    map.removeLayer(markers);
+                if (!map.hasLayer(heatmapLayer)) { // Check if heatmap layer is already added
                     map.addLayer(heatmapLayer); // Add the heatmap layer back
                     heatmapLayer.setData(testData); // Set the data again if needed
                 }
             }
 
         });
-        function filterDataByBounds(data,bounds) {
-
-
-        }
 
 
 
