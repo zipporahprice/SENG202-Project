@@ -52,8 +52,8 @@ public class MainController {
     private AnchorPane boundariesPane;
     @FXML
     private AnchorPane severityPane;
-
-
+    @FXML
+    private AnchorPane includedMap;
     private Stage stage;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
@@ -80,11 +80,13 @@ public class MainController {
      * @param stage Top level container for this window
      */
     void init(Stage stage) {
+        this.stage = stage;
+
         stage.setMaximized(true);
-        loadMap(stage);
+        MapController mapController = new MapController();
+        mapController.setWebView(webView);
+        mapController.init(stage);
         stage.sizeToScene();
-        double viewportWidth= stage.getWidth();
-        double viewportHeight = stage.getHeight();
     }
 
     @FXML
@@ -95,26 +97,13 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
+
+
     }
 
 
 
-    public void loadMap(Stage stage) {
-        try {
-            FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/map.fxml"));
-            Parent mapViewParent = webViewLoader.load();
 
-            MapController mapViewController = webViewLoader.getController();
-            mapViewController.init(stage);
-
-            mainWindow.getChildren().add(mapViewParent);
-
-            AnchorPane.setRightAnchor(mapViewParent,0d);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void loadHelp() {
         try {

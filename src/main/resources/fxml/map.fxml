@@ -8,7 +8,6 @@
    <AnchorPane BorderPane.alignment="CENTER">
       <children>
 
-<!--         <WebView fx:id="webView" prefHeight="1000.0" prefWidth="800.0" />-->
          <WebView fx:id="webView" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
       </children>
    </AnchorPane>

@@ -19,7 +19,9 @@ public class MapController {
     private WebEngine webEngine;
     private JavaScriptBridge javaScriptBridge;
     JSObject javaScriptConnector;
-
+    public void setWebView(WebView webView) {
+        this.webView = webView;
+    }
     public void init(Stage stage) {
         this.stage = stage;
         javaScriptBridge = new JavaScriptBridge();
