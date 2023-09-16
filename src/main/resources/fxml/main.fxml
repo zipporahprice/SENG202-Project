@@ -13,9 +13,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView">
          <StackPane.margin>
@@ -26,6 +27,31 @@
             <BoxBlur height="0.0" width="255.0" />
          </effect>
       </Region>
+
+      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
+      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#addEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets top="50.0" />
+         </StackPane.margin></TextField>
+      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="187" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets top="500.0" />
+         </StackPane.margin></Button>
+      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets top="250.0" />
+         </StackPane.margin></TextField>
+      <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="76.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets top="100.0" />
+         </StackPane.margin></Button>
+
       <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
@@ -178,6 +204,14 @@
       <Button fx:id="helpButton" mnemonicParsing="false" onAction="#loadHelp" text="Switch to Help" visible="false" StackPane.alignment="TOP_CENTER">
          <StackPane.margin>
             <Insets top="500.0" />
+         </StackPane.margin>
+      </Button>
+      <Button fx:id="addStopButton1" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="97.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets top="200.0" />
          </StackPane.margin>
       </Button>
    </children>

@@ -47,6 +47,8 @@ public class MapController {
     private JavaScriptBridge javaScriptBridge;
 
     JSObject javaScriptConnector;
+
+
     public void setWebView(WebView webView) {
         this.webView = webView;
     }
@@ -90,92 +92,7 @@ public class MapController {
                 });
     }
 
-    /**
-     * Adds a location with given crash
-     */
-    private void addLocation(Crash crash) {
-        javaScriptConnector.call("addMarker", crash.getCrashLocation1() + "-" + crash.getCrashLocation2(),
-                crash.getLatitude(), crash.getLongitude());
-    }
 
-    private void displayRoute(Route... routes) {
-        List<Route> routesList = new ArrayList<>();
-        Collections.addAll(routesList, routes);
-        javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
-    }
-
-    /**
-     * Removes the route from the WebView map (if currently shown)
-     */
-    private void removeRoute() {
-        javaScriptConnector.call("removeRoute");
-    }
-
-    /**
-     * Adds a location when the "Add Location" button is clicked.
-     * Uses Geolocator class to turn the address into a lat, lng pair
-     */
-
-    @FXML
-    private Location addStart() {
-        String address = startLocation.getText().trim();
-        if (address.isEmpty()) {
-            return null;
-        }
-        Location newMarker = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
-    }
-
-    @FXML
-    private Location addEnd() {
-        String address = endLocation.getText().trim();
-        if (address.isEmpty()) {
-            return null;
-        }
-        Location newMarker = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
-    }
-
-    @FXML
-    private Location addStop() {
-        String address = stopLocation.getText().trim();
-        if (address.isEmpty()) {
-            return null;
-        }
-        Location newMarker = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
-    }
-
-    @FXML
-    private void generateStop() {
-        Location stop = addStop();
-        Location start = addStart();
-        Location end = addEnd();
-        if (start != null && end != null && stop != null) {
-            Route route1 = new Route(start, stop);
-            Route route2 = new Route(stop, end);
-
-            List<Route> routesList = new ArrayList<>();
-            routesList.add(route1);
-            routesList.add(route2);
-
-            javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
-        }
-    }
-
-    @FXML
-    private void generateRouteAction() {
-        Location start = addStart();
-        Location end = addEnd();
-
-        if (start != null && end != null) {
-            Route route = new Route(start, end);
-            displayRoute(route);
-        }
-    }
 
 //    private Collection<String> getSuggestions(String userInput) {
 //        // Call the GeoLocator method to get address suggestions based on userInput
