@@ -1,10 +1,15 @@
 package seng202.team0.gui;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +39,9 @@ public class MainController {
     public WebView webView;
 
     @FXML
+    private AnchorPane sideBar;
+
+    @FXML
     private AnchorPane mainWindow;
     @FXML
     private Label defaultLabel;
@@ -61,7 +69,7 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[5]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
 
     @FXML
     private Button carButton;
@@ -84,6 +92,19 @@ public class MainController {
     void init(Stage stage) {
         stage.setMaximized(true);
         loadMap(stage);
+
+        //TODO make the size of the filters resize with the window size, below code unfinished
+        sideBar.prefHeightProperty().bind(stage.heightProperty().multiply(0.9));
+
+        ListView<Button> listViewButtons = new ListView<>();
+        ObservableList<Button> sidebarButtons = FXCollections.observableArrayList(
+                hamburgerButton, carButton, bikeButton, busButton, walkingButton,
+                helicopterButton, motorbikeButton
+        );
+        listViewButtons.setItems(sidebarButtons);
+        listViewButtons.prefHeightProperty().bind(stage.heightProperty().multiply(0.05));
+        listViewButtons.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
+
         stage.sizeToScene();
     }
 
@@ -95,8 +116,14 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
-    }
+        helpButton.setVisible(false);
+        transportModePane.setVisible(false);
+        weatherPane.setVisible(false);
+        datePane.setVisible(false);
+        boundariesPane.setVisible(false);
+        severityPane.setVisible(false);
 
+    }
 
 
     public void loadMap(Stage stage) {
@@ -136,7 +163,7 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
-        toggleHelpButtonVisibility();
+        toggleHelpButtonVisibility(helpButton, 5);
 
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
@@ -147,7 +174,7 @@ public class MainController {
         // Toggle the visibility of the helpButton
 
         // Play each fade animation individually
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i <= 5; i++) {
             fadeTransitions[i].play();
         }
     }
@@ -157,20 +184,23 @@ public class MainController {
      * If the helpButton is currently visible, it will be faded out and hidden.
      * If the helpButton is currently hidden, it will be faded in and shown.
      */
-    private void toggleHelpButtonVisibility() {
-        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
-            fadeTransition.stop(); // Stop the animation if it's currently running
+    private void toggleHelpButtonVisibility(Button helpButton, int index) {
+        if (fadeTransitions[index] == null) {
+            fadeTransitions[index] = new FadeTransition(Duration.millis(500), helpButton);
+            fadeTransitions[index].setFromValue(0.0); // Start from fully transparent (invisible)
+            fadeTransitions[index].setToValue(1.0);   // Transition to fully visible
         }
 
         if (helpButton.isVisible()) {
-            fadeTransition.setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
-            fadeTransition.setFromValue(1.0); // Start from fully visible
-            fadeTransition.setToValue(0.0);   // Transition to fully transparent (invisible)
+            System.out.println("visible help button");
+            fadeTransitions[index].setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
+            fadeTransitions[index].setFromValue(1.0); // Start from fully visible
+            fadeTransitions[index].setToValue(0.0);   // Transition to fully transparent (invisible)
         } else {
             helpButton.setVisible(true); // Make the helpButton visible before starting fade-in
-            fadeTransition.setOnFinished(null); // Reset the onFinished handler
-            fadeTransition.setFromValue(0.0);   // Start from fully transparent (invisible)
-            fadeTransition.setToValue(1.0);     // Transition to fully visible
+            fadeTransitions[index].setOnFinished(null); // Reset the onFinished handler
+            fadeTransitions[index].setFromValue(0.0);   // Start from fully transparent (invisible)
+            fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
 

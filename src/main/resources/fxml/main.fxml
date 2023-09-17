@@ -13,11 +13,11 @@
 
 <AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-      <AnchorPane layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
+      <AnchorPane fx:id = "sideBar" layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css" >
          <children>
             <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0">
                <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
+                  <ImageView preserveRatio="true" fitHeight="52.0" fitWidth="52.0">
                      <image>
                         <Image url="@button_icons/car_emoji.png" />
                      </image>
