@@ -1,11 +1,8 @@
 package seng202.team0.gui;
 
 import javafx.concurrent.Worker;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,13 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -31,17 +23,12 @@ import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import seng202.team0.models.*;
-import seng202.team0.repository.SQLiteQueryBuilder;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller for the main.fxml window
@@ -76,6 +63,8 @@ public class MainController {
     @FXML
     private AnchorPane severityPane;
     @FXML
+    private CheckBox selectAllSeverity;
+    @FXML
     private CheckBox nonInjuryCheckBox;
     @FXML
     private CheckBox minorCrashCheckBox;
@@ -88,7 +77,7 @@ public class MainController {
     private Button helpButton;
 
     @FXML
-    private CheckBox selectAll;
+    private CheckBox selectAllWeather;
     @FXML
     private CheckBox snow;
     @FXML
@@ -100,6 +89,28 @@ public class MainController {
     @FXML
     private CheckBox mistOrFog;
 
+    @FXML
+    private CheckBox selectAllTransport;
+    @FXML
+    private CheckBox bicycle;
+    @FXML
+    private CheckBox bus;
+    @FXML
+    private CheckBox car;
+    @FXML
+    private CheckBox moped;
+    @FXML
+    private CheckBox motorcycle;
+    @FXML
+    private CheckBox parkedVehicle;
+    @FXML
+    private CheckBox pedestrian;
+    @FXML
+    private CheckBox schoolBus;
+    @FXML
+    private CheckBox train;
+    @FXML
+    private CheckBox truck;
 
 
 
@@ -117,6 +128,8 @@ public class MainController {
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
     private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
     private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
+    private ArrayList<CheckBox> transportCheckboxes = new ArrayList<CheckBox>();
+    private ArrayList<CheckBox> severityCheckboxes = new ArrayList<CheckBox>();
 
 
     @FXML
@@ -156,15 +169,33 @@ public class MainController {
         mapController.setWebView(webView);
         mapController.init(stage);
 
-        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        selectAllWeather.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println("Select All weather selected, including crashes with no weather data");
+                System.out.println("Select All weather includes crashes with no weather data");
 
                 for (CheckBox weather : weatherCheckboxes) {
                     weather.setSelected(newValue);
                 }
 
+            }
+        });
+
+        selectAllTransport.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                for (CheckBox transportMode : transportCheckboxes) {
+                    transportMode.setSelected(newValue);
+                }
+            }
+        });
+
+        selectAllSeverity.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                for (CheckBox severity : severityCheckboxes) {
+                    severity.setSelected(newValue);
+                }
             }
         });
 
@@ -217,11 +248,57 @@ public class MainController {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                     if (weather.isSelected() == false) {
-                        selectAll.setSelected(false);
+                        selectAllWeather.setSelected(false);
                     }
                 }
             });
         }
+
+        transportCheckboxes = new ArrayList<CheckBox>() {
+            {
+                add(bicycle);
+                add(bus);
+                add(car);
+                add(moped);
+                add(motorcycle);
+                add(parkedVehicle);
+                add(pedestrian);
+                add(schoolBus);
+                add(train);
+                add(truck);
+            }
+        };
+        for (CheckBox transportMode : transportCheckboxes) {
+            transportMode.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (transportMode.isSelected() == false) {
+                        selectAllTransport.setSelected(false);
+                    }
+                }
+            });
+        }
+
+        severityCheckboxes = new ArrayList<CheckBox>() {
+            {
+                add(nonInjuryCheckBox);
+                add(minorCrashCheckBox);
+                add(majorCrashCheckBox);
+                add(deathCheckBox);
+            }
+        };
+
+        for (CheckBox severity : severityCheckboxes) {
+            severity.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (severity.isSelected() == false) {
+                        selectAllSeverity.setSelected(false);
+                    }
+                }
+            });
+        }
+        //TODO modularise the unticking of checkboxes
 
     }
 
