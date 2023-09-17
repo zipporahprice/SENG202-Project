@@ -79,9 +79,7 @@ public class CrashCSVImporter {
             String crashLocation1 = crashVariables[9];
             String crashLocation2 = crashVariables[10];
 
-            // TODO add severity as a variable to crash
-            // TODO add a safety check
-            CrashSeverity severity = CrashSeverity.stringToCrashSeverity(crashVariables[12]);
+            String severity = crashVariables[12];
 
             boolean holiday = !Objects.equals(crashVariables[22], "");
             boolean mopedInvolved = changeEmptyToZero(crashVariables[28]) > 0;
@@ -101,7 +99,7 @@ public class CrashCSVImporter {
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);
 
-            return new Crash(objectId, speedLimit, crashYear, crashLocation1, crashLocation2, region, weather,
+            return new Crash(objectId, speedLimit, crashYear, crashLocation1, crashLocation2, severity, region, weather,
                     longitude, latitude, bicycleInvolved, busInvolved, carInvolved, holiday, mopedInvolved,
                     motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
         } catch (NumberFormatException e) {

@@ -69,15 +69,15 @@
             <Insets left="150.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
+      <AnchorPane fx:id="severityPane" layoutX="145.0" layoutY="555.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Non Injury" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Minor Crash" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Major Crash" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Death" textFill="WHITE" />
+                  <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" text="Non Injury" textFill="WHITE" />
+                  <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" text="Minor Crash" textFill="WHITE" />
+                  <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" text="Major Crash" textFill="WHITE" />
+                  <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" text="Death" textFill="WHITE" />
                </children>
             </VBox>
          </children>

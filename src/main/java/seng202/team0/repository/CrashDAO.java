@@ -45,6 +45,7 @@ public class CrashDAO implements DAOInterface<Crash> {
                         rs.getInt("crash_year"),
                         rs.getString("crash_location1"),
                         rs.getString("crash_location2"),
+                        rs.getString("severity"),
                         rs.getString("region"),
                         rs.getString("weather"),
                         rs.getFloat("longitude"),
@@ -91,6 +92,7 @@ public class CrashDAO implements DAOInterface<Crash> {
                             rs.getInt("crash_year"),
                             rs.getString("crash_location1"),
                             rs.getString("crash_location2"),
+                            rs.getString("severity"),
                             rs.getString("region"),
                             rs.getString("weather"),
                             rs.getFloat("longitude"),
@@ -149,21 +151,22 @@ public class CrashDAO implements DAOInterface<Crash> {
         ps.setInt(2, crashToAdd.getCrashYear());
         ps.setString(3, crashToAdd.getCrashLocation1());
         ps.setString(4, crashToAdd.getCrashLocation2());
-        ps.setString(5, crashToAdd.getRegion());
-        ps.setString(6, crashToAdd.getWeather());
-        ps.setFloat(7, crashToAdd.getLongitude());
-        ps.setFloat(8, crashToAdd.getLatitude());
-        ps.setBoolean(9, crashToAdd.isBicycleInvolved());
-        ps.setBoolean(10, crashToAdd.isBusInvolved());
-        ps.setBoolean(11, crashToAdd.isCarInvolved());
-        ps.setBoolean(12, crashToAdd.isHoliday());
-        ps.setBoolean(13, crashToAdd.isMopedInvolved());
-        ps.setBoolean(14, crashToAdd.isMotorcycleInvolved());
-        ps.setBoolean(15, crashToAdd.isParkedVehicleInvolved());
-        ps.setBoolean(16, crashToAdd.isPedestrianInvolved());
-        ps.setBoolean(17, crashToAdd.isSchoolBusInvolved());
-        ps.setBoolean(18, crashToAdd.isTrainInvolved());
-        ps.setBoolean(19, crashToAdd.isTruckInvolved());
+        ps.setInt(5, crashToAdd.getSeverity().getValue());
+        ps.setString(6, crashToAdd.getRegion());
+        ps.setString(7, crashToAdd.getWeather());
+        ps.setFloat(8, crashToAdd.getLongitude());
+        ps.setFloat(9, crashToAdd.getLatitude());
+        ps.setBoolean(10, crashToAdd.isBicycleInvolved());
+        ps.setBoolean(11, crashToAdd.isBusInvolved());
+        ps.setBoolean(12, crashToAdd.isCarInvolved());
+        ps.setBoolean(13, crashToAdd.isHoliday());
+        ps.setBoolean(14, crashToAdd.isMopedInvolved());
+        ps.setBoolean(15, crashToAdd.isMotorcycleInvolved());
+        ps.setBoolean(16, crashToAdd.isParkedVehicleInvolved());
+        ps.setBoolean(17, crashToAdd.isPedestrianInvolved());
+        ps.setBoolean(18, crashToAdd.isSchoolBusInvolved());
+        ps.setBoolean(19, crashToAdd.isTrainInvolved());
+        ps.setBoolean(20, crashToAdd.isTruckInvolved());
     }
 
     /**
@@ -174,12 +177,12 @@ public class CrashDAO implements DAOInterface<Crash> {
     @Override
     public void addOne(Crash crashToAdd) throws SQLException {
         String sql = "INSERT INTO crashes (speed_limit, crash_year, " +
-                "crash_location1, crash_location2, region, weather, " +
+                "crash_location1, crash_location2, severity, region, weather, " +
                 "longitude, latitude, bicycle_involved, bus_involved, " +
                 "car_involved, holiday, moped_involved, motorcycle_involved, " +
                 "parked_vehicle_involved, pedestrian_involved, " +
                 "school_bus_involved, train_involved, truck_involved) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (Connection conn = databaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -212,12 +215,12 @@ public class CrashDAO implements DAOInterface<Crash> {
      */
     public void addMultiple(List<Crash> toAdd) throws SQLException {
         String sql = "INSERT OR IGNORE INTO crashes (speed_limit, crash_year, " +
-                "crash_location1, crash_location2, region, weather, " +
+                "crash_location1, crash_location2, severity, region, weather, " +
                 "longitude, latitude, bicycle_involved, bus_involved, " +
                 "car_involved, holiday, moped_involved, motorcycle_involved, " +
                 "parked_vehicle_involved, pedestrian_involved, " +
                 "school_bus_involved, train_involved, truck_involved) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         Connection conn = databaseManager.connect();
         PreparedStatement ps = conn.prepareStatement(sql);
         conn.setAutoCommit(false);

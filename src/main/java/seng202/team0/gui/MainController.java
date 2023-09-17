@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -17,18 +18,21 @@ import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team0.gui.MapController;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import seng202.team0.models.*;
+import seng202.team0.repository.SQLiteQueryBuilder;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the main.fxml window
@@ -58,8 +62,22 @@ public class MainController {
     private AnchorPane datePane;
     @FXML
     private AnchorPane boundariesPane;
+
+    // Severity Pane
     @FXML
     private AnchorPane severityPane;
+    @FXML
+    private CheckBox nonInjuryCheckBox;
+    @FXML
+    private CheckBox minorCrashCheckBox;
+    @FXML
+    private CheckBox majorCrashCheckBox;
+    @FXML
+    private CheckBox deathCheckBox;
+    private List<Integer> severitiesSelected = new ArrayList<Integer>();
+
+
+
     @FXML
     private AnchorPane includedMap;
     private Stage stage;
@@ -324,6 +342,34 @@ public class MainController {
             displayRoute(route);
         }
     }
+
+    public void handleSeverityCheckBoxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox)event.getSource();
+        int severity = 0;
+
+        if (checkBox.equals(nonInjuryCheckBox)) {
+            severity = 1;
+        } else if (checkBox.equals(minorCrashCheckBox)) {
+            severity = 2;
+        } else if (checkBox.equals(majorCrashCheckBox)) {
+            severity = 4;
+        } else if (checkBox.equals(deathCheckBox)) {
+            severity = 8;
+        }
+
+        if (checkBox.isSelected()) {
+            severitiesSelected.add(severity);
+        } else {
+            severitiesSelected.remove((Object)severity);
+        }
+
+        List crashes = SQLiteQueryBuilder
+                            .create()
+                            .select("object_id")
+                            .from("crashes")
+                            .where("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")")
+                            .build();
+        System.out.println("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")");
+        System.out.println(crashes.size());
+    }
 }
-
-
