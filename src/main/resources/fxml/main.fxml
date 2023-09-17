@@ -103,14 +103,16 @@
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Sunny" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Overcast" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Thunder" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Light Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Windy" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Tsunami" textFill="WHITE" />
+                  <CheckBox fx:id="snow" mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox fx:id="fine" mnemonicParsing="false" selected="true" text="Fine" textFill="WHITE" />
+                  <CheckBox fx:id="heavyRain" mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox fx:id="lightRain" mnemonicParsing="false" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox fx:id="mistOrFog" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" selected="true" text="Mist or Fog" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox layoutX="135.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAll" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
@@ -133,7 +135,7 @@
             <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
 
             <!-- Add a Slider for selecting the date between 2000 - 2023 -->
-            <Slider layoutX="14.0" layoutY="75.0" max="2023" min="2000" prefWidth="222.0" value="2010" />
+            <Slider layoutX="14.0" layoutY="75.0" max="2023" min="2000" prefWidth="222.0" value="2023.0" />
             <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
             <Label layoutX="198.0" layoutY="59.0" text="2023" textFill="WHITE" />
 

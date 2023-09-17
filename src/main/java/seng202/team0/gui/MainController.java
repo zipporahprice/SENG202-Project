@@ -1,16 +1,15 @@
 package seng202.team0.gui;
 
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -26,6 +25,7 @@ import javafx.event.ActionEvent;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Controller for the main.fxml window
@@ -63,6 +63,20 @@ public class MainController {
     @FXML
     private Button helpButton;
 
+    @FXML
+    private CheckBox selectAll;
+    @FXML
+    private CheckBox snow;
+    @FXML
+    private CheckBox fine;
+    @FXML
+    private CheckBox heavyRain;
+    @FXML
+    private CheckBox lightRain;
+    @FXML
+    private CheckBox mistOrFog;
+
+
 
     private Stage stage;
 
@@ -70,6 +84,8 @@ public class MainController {
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
     private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
+    private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
+
 
     @FXML
     private Button carButton;
@@ -93,6 +109,18 @@ public class MainController {
         stage.setMaximized(true);
         loadMap(stage);
 
+        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                System.out.println("Select All weather selected, including crashes with no weather data");
+
+                for (CheckBox weather : weatherCheckboxes) {
+                    weather.setSelected(newValue);
+                }
+
+            }
+        });
+
         //TODO make the size of the filters resize with the window size, below code unfinished
         sideBar.prefHeightProperty().bind(stage.heightProperty().multiply(0.9));
 
@@ -104,6 +132,8 @@ public class MainController {
         listViewButtons.setItems(sidebarButtons);
         listViewButtons.prefHeightProperty().bind(stage.heightProperty().multiply(0.05));
         listViewButtons.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
+
+
 
         stage.sizeToScene();
     }
@@ -123,23 +153,27 @@ public class MainController {
         boundariesPane.setVisible(false);
         severityPane.setVisible(false);
 
-        if (sideBar != null) {
-            Scene scene = sideBar.getScene();
-            if (scene != null) {
-                Stage stage = (Stage) mainWindow.getScene().getWindow();
-                sideBar.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
-//                ListView<Button> listViewButtons = new ListView<>();
-//                ObservableList<Button> sidebarButtons = FXCollections.observableArrayList(
-//                        hamburgerButton, carButton, bikeButton, busButton, walkingButton,
-//                        helicopterButton, motorbikeButton
-//                );
-//                listViewButtons.setItems(sidebarButtons);
-//                listViewButtons.prefHeightProperty().bind(stage.heightProperty().multiply(0.05));
-//                listViewButtons.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
+        weatherCheckboxes = new ArrayList<CheckBox>() {
+            {
+                add(snow);
+                add(fine);
+                add(heavyRain);
+                add(lightRain);
+                add(mistOrFog);
             }
+        };
+
+        for (CheckBox weather : weatherCheckboxes) {
+            weather.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (weather.isSelected() == false) {
+                        selectAll.setSelected(false);
+                    }
+                }
+            });
         }
-//        Stage stage = (Stage) mainWindow.getScene().getWindow();
-//        sideBar.prefHeightProperty().bind(stage.widthProperty().multiply(0.05));
+
     }
 
 
