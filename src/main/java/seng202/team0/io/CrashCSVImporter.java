@@ -34,14 +34,10 @@ public class CrashCSVImporter {
                 csvReader.skip(1);
                 String[] line;
                 while ((line = csvReader.readNext()) != null) {
-                    System.out.println(line[0]);
                     if (!Objects.equals(line[0], "")) {
                         Crash currentPoint = crashFromString(line);
                         if (currentPoint != null) {
                             pointList.add(currentPoint);
-
-                            // TODO manual testing to see if it works
-                            System.out.println(currentPoint.getWeather());
                         }
                     }
                 }
