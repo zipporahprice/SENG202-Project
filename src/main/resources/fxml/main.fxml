@@ -38,18 +38,14 @@
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets top="500.0" />
-         </StackPane.margin></Button>
-      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
-         <StackPane.margin>
             <Insets top="250.0" />
-         </StackPane.margin></TextField>
+         </StackPane.margin></Button>
       <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="76.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets top="100.0" />
+            <Insets right="60.0" top="200.0" />
          </StackPane.margin></Button>
 
       <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
@@ -211,8 +207,12 @@
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets top="200.0" />
+            <Insets right="50.0" top="150.0" />
          </StackPane.margin>
       </Button>
+      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets top="100.0" />
+         </StackPane.margin></TextField>
    </children>
 </StackPane>

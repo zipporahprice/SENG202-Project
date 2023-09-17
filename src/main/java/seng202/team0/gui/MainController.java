@@ -1,5 +1,6 @@
 package seng202.team0.gui;
 
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -110,8 +111,17 @@ public class MainController {
         mapController.setWebView(webView);
         mapController.init(stage);
         stage.sizeToScene();
+        webEngine = webView.getEngine();
+        webEngine.getLoadWorker().stateProperty().addListener(
+                (ov, oldState, newState) -> {
+                    // if javascript loads successfully
+                    if (newState == Worker.State.SUCCEEDED) {
+                        javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
 
-        javaScriptConnector = mapController.initMap();
+                    }
+                });
+
+
 
 
     }
@@ -300,7 +310,6 @@ public class MainController {
             List<Route> routesList = new ArrayList<>();
             routesList.add(route1);
             routesList.add(route2);
-
             javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
         }
     }
