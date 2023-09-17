@@ -10,23 +10,10 @@
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MapController">
 <center>
    <AnchorPane BorderPane.alignment="CENTER">
-      <WebView fx:id="webView" prefHeight="1000.0" prefWidth="800.0" />
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" onAction="#addStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" />
-      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" onAction="#addEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" />
-      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="187" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE">
-            <font>
-               <Font name="System Bold" size="15.0" />
-            </font></Button>
-      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" onAction="#addStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" />
-      <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="76.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add" textFill="WHITE">
-            <font>
-               <Font name="System Bold" size="15.0" />
-            </font></Button>
-         <Button fx:id="addStopButton1" layoutX="190.0" layoutY="294.0" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="97.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove" textFill="WHITE">
-            <font>
-               <Font name="System Bold" size="15.0" />
-            </font>
-         </Button>
+      <children>
+
+         <WebView fx:id="webView" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+      </children>
    </AnchorPane>
 </center>
 </BorderPane>

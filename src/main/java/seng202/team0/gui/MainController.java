@@ -1,16 +1,20 @@
 package seng202.team0.gui;
 
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.gui.MapController;
@@ -18,9 +22,13 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
+import seng202.team0.models.*;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller for the main.fxml window
@@ -52,9 +60,14 @@ public class MainController {
     private AnchorPane boundariesPane;
     @FXML
     private AnchorPane severityPane;
-
-
+    @FXML
+    private AnchorPane includedMap;
     private Stage stage;
+
+    private GeoLocator geolocator;
+    private WebEngine webEngine;
+
+    JSObject javaScriptConnector;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
@@ -74,17 +87,43 @@ public class MainController {
     @FXML
     private Button motorbikeButton;
 
+    @FXML
+    private TextField startLocation;
+
+    @FXML
+    private TextField endLocation;
+
+    @FXML
+    private TextField stopLocation;
+
+
+
     /**
      * Initialize the window
      *
      * @param stage Top level container for this window
      */
     void init(Stage stage) {
+        this.stage = stage;
+        geolocator = new GeoLocator();
         stage.setMaximized(true);
-        loadMap(stage);
+        MapController mapController = new MapController();
+        mapController.setWebView(webView);
+        mapController.init(stage);
         stage.sizeToScene();
-        double viewportWidth= stage.getWidth();
-        double viewportHeight = stage.getHeight();
+        webEngine = webView.getEngine();
+        webEngine.getLoadWorker().stateProperty().addListener(
+                (ov, oldState, newState) -> {
+                    // if javascript loads successfully
+                    if (newState == Worker.State.SUCCEEDED) {
+                        javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
+
+                    }
+                });
+
+
+
+
     }
 
     @FXML
@@ -95,26 +134,15 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
+
+
+
+
     }
 
 
 
-    public void loadMap(Stage stage) {
-        try {
-            FXMLLoader webViewLoader = new FXMLLoader(getClass().getResource("/fxml/map.fxml"));
-            Parent mapViewParent = webViewLoader.load();
 
-            MapController mapViewController = webViewLoader.getController();
-            mapViewController.init(stage);
-
-            mainWindow.getChildren().add(mapViewParent);
-
-            AnchorPane.setRightAnchor(mapViewParent,0d);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void loadHelp() {
         try {
@@ -210,4 +238,92 @@ public class MainController {
         }
         emojiButtonTransitions[buttonIndex].play();
     }
+
+    /**
+     * Adds a location with given crash
+     */
+    private void addLocation(Crash crash) {
+        javaScriptConnector.call("addMarker", crash.getCrashLocation1() + "-" + crash.getCrashLocation2(),
+                crash.getLatitude(), crash.getLongitude());
+    }
+
+    private void displayRoute(Route... routes) {
+        List<Route> routesList = new ArrayList<>();
+        Collections.addAll(routesList, routes);
+        javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+    }
+
+    /**
+     * Removes the route from the WebView map (if currently shown)
+     */
+    private void removeRoute() {
+        javaScriptConnector.call("removeRoute");
+    }
+
+    /**
+     * Adds a location when the "Add Location" button is clicked.
+     * Uses Geolocator class to turn the address into a lat, lng pair
+     */
+
+    @FXML
+    private Location addStart() {
+        String address = startLocation.getText().trim();
+        if (address.isEmpty()) {
+            return null;
+        }
+        Location newMarker = geolocator.getLocation(address);
+        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return newMarker;
+    }
+
+    @FXML
+    private Location addEnd() {
+        String address = endLocation.getText().trim();
+        if (address.isEmpty()) {
+            return null;
+        }
+        Location newMarker = geolocator.getLocation(address);
+        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return newMarker;
+    }
+
+    @FXML
+    private Location addStop() {
+        String address = stopLocation.getText().trim();
+        if (address.isEmpty()) {
+            return null;
+        }
+        Location newMarker = geolocator.getLocation(address);
+        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return newMarker;
+    }
+
+    @FXML
+    private void generateStop() {
+        Location stop = addStop();
+        Location start = addStart();
+        Location end = addEnd();
+        if (start != null && end != null && stop != null) {
+            Route route1 = new Route(start, stop);
+            Route route2 = new Route(stop, end);
+
+            List<Route> routesList = new ArrayList<>();
+            routesList.add(route1);
+            routesList.add(route2);
+            javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+        }
+    }
+
+    @FXML
+    private void generateRouteAction() {
+        Location start = addStart();
+        Location end = addEnd();
+
+        if (start != null && end != null) {
+            Route route = new Route(start, end);
+            displayRoute(route);
+        }
+    }
 }
+
+
