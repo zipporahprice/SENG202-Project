@@ -1,6 +1,11 @@
 package seng202.team0.gui;
 
 import javafx.concurrent.Worker;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +14,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -27,6 +34,7 @@ import seng202.team0.repository.SQLiteQueryBuilder;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +83,22 @@ public class MainController {
     @FXML
     private CheckBox deathCheckBox;
     private List<Integer> severitiesSelected = new ArrayList<Integer>();
+    @FXML
+    private Button helpButton;
+
+    @FXML
+    private CheckBox selectAll;
+    @FXML
+    private CheckBox snow;
+    @FXML
+    private CheckBox fine;
+    @FXML
+    private CheckBox heavyRain;
+    @FXML
+    private CheckBox lightRain;
+    @FXML
+    private CheckBox mistOrFog;
+
 
 
 
@@ -90,7 +114,9 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[5]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
+    private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
+
 
     @FXML
     private Button carButton;
@@ -128,6 +154,22 @@ public class MainController {
         MapController mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
+
+        selectAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                System.out.println("Select All weather selected, including crashes with no weather data");
+
+                for (CheckBox weather : weatherCheckboxes) {
+                    weather.setSelected(newValue);
+                }
+
+            }
+        });
+
+        //TODO make the size of the filters resize with the window size, below code unfinished
+
+
         stage.sizeToScene();
         webEngine = webView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener(
@@ -152,9 +194,33 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
+        helpButton.setVisible(false);
+        transportModePane.setVisible(false);
+        weatherPane.setVisible(false);
+        datePane.setVisible(false);
+        boundariesPane.setVisible(false);
+        severityPane.setVisible(false);
 
+        weatherCheckboxes = new ArrayList<CheckBox>() {
+            {
+                add(snow);
+                add(fine);
+                add(heavyRain);
+                add(lightRain);
+                add(mistOrFog);
+            }
+        };
 
-
+        for (CheckBox weather : weatherCheckboxes) {
+            weather.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (weather.isSelected() == false) {
+                        selectAll.setSelected(false);
+                    }
+                }
+            });
+        }
 
     }
 
@@ -184,15 +250,44 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
+        toggleHelpButtonVisibility(helpButton, 5);
+
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(boundariesPane, 3);
         togglePaneWithFade(severityPane, 4);
 
+        // Toggle the visibility of the helpButton
+
         // Play each fade animation individually
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i <= 5; i++) {
             fadeTransitions[i].play();
+        }
+    }
+
+    /**
+     * Toggles the visibility of the helpButton with a fade animation.
+     * If the helpButton is currently visible, it will be faded out and hidden.
+     * If the helpButton is currently hidden, it will be faded in and shown.
+     */
+    private void toggleHelpButtonVisibility(Button helpButton, int index) {
+        if (fadeTransitions[index] == null) {
+            fadeTransitions[index] = new FadeTransition(Duration.millis(500), helpButton);
+            fadeTransitions[index].setFromValue(0.0); // Start from fully transparent (invisible)
+            fadeTransitions[index].setToValue(1.0);   // Transition to fully visible
+        }
+
+        if (helpButton.isVisible()) {
+            System.out.println("visible help button");
+            fadeTransitions[index].setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
+            fadeTransitions[index].setFromValue(1.0); // Start from fully visible
+            fadeTransitions[index].setToValue(0.0);   // Transition to fully transparent (invisible)
+        } else {
+            helpButton.setVisible(true); // Make the helpButton visible before starting fade-in
+            fadeTransitions[index].setOnFinished(null); // Reset the onFinished handler
+            fadeTransitions[index].setFromValue(0.0);   // Start from fully transparent (invisible)
+            fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
 

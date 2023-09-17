@@ -27,6 +27,7 @@
             <BoxBlur height="0.0" width="255.0" />
          </effect>
       </Region>
+<?import javafx.scene.text.Font?>
 
       <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
       <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#addEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
@@ -182,14 +183,16 @@
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Snow" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Sunny" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Overcast" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Heavy Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Thunder" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Light Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Windy" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Tsunami" textFill="WHITE" />
+                  <CheckBox fx:id="snow" mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox fx:id="fine" mnemonicParsing="false" selected="true" text="Fine" textFill="WHITE" />
+                  <CheckBox fx:id="heavyRain" mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox fx:id="lightRain" mnemonicParsing="false" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox fx:id="mistOrFog" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" selected="true" text="Mist or Fog" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox layoutX="135.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAll" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
