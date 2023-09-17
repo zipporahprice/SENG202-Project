@@ -15,8 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
+<?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView">
          <StackPane.margin>
@@ -27,7 +28,7 @@
             <BoxBlur height="0.0" width="255.0" />
          </effect>
       </Region>
-<?import javafx.scene.text.Font?>
+
 
       <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
       <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#addEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
@@ -200,10 +201,13 @@
             <Insets left="150.0" top="279.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button fx:id="helpButton" mnemonicParsing="false" onAction="#loadHelp" text="Switch to Help" visible="false" StackPane.alignment="TOP_CENTER">
-         <StackPane.margin>
-            <Insets top="500.0" />
-         </StackPane.margin>
+      <Button fx:id="helpButton" layoutX="451.0" layoutY="340.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="100.0" prefWidth="162.0" styleClass="buttonColor" stylesheets="@style.css" text="Help" textFill="#f2f2f2" userData="3" StackPane.alignment="TOP_CENTER">
+         <font>
+            <Font name="System Bold Italic" size="37.0" />
+         </font>
+<!--         <StackPane.margin>-->
+<!--            <Insets top="500.0" />-->
+<!--         </StackPane.margin>-->
       </Button>
       <Button fx:id="addStopButton1" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="97.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>

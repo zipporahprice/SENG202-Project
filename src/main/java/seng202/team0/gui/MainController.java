@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -54,7 +55,7 @@ public class MainController {
     public WebView webView;
 
     @FXML
-    private AnchorPane mainWindow;
+    private StackPane mainWindow;
     @FXML
     private Label defaultLabel;
 
