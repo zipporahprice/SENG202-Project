@@ -164,6 +164,16 @@
         routes = [];
     }
 
+    function getSeverityStringFromValue(severity) {
+        switch (severity) {
+            case 1: return "Non-Injury";
+            case 2: return "Minor Crash";
+            case 4: return "Major Crash";
+            case 8: return "Death";
+            default: return "Invalid";
+        }
+    }
+
     function setData() {
         var crashesJSON = javaScriptBridge.crashes();
         var crashes = JSON.parse(crashesJSON);
@@ -175,7 +185,7 @@
         markerLayer.clearLayers();
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
-            var title = "yay";
+            var title = "Severity: " + getSeverityStringFromValue(a.severity);
             var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: title });
             marker.bindPopup(title);
             markerLayer.addLayer(marker);

@@ -35,7 +35,7 @@ public class App {
         // Initialises database and checks if populated
         DatabaseManager database = new DatabaseManager(null);
         CrashManager manager = new CrashManager();
-        List crashes = manager.getCrashes();
+        List crashes = manager.getCrashLocations();
         if (crashes.size() == 0) {
             try {
                 CrashCSVImporter importer = new CrashCSVImporter();
