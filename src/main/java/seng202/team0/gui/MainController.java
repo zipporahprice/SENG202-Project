@@ -356,20 +356,5 @@ public class MainController {
         } else if (checkBox.equals(deathCheckBox)) {
             severity = 8;
         }
-
-        if (checkBox.isSelected()) {
-            severitiesSelected.add(severity);
-        } else {
-            severitiesSelected.remove((Object)severity);
-        }
-
-        List crashes = SQLiteQueryBuilder
-                            .create()
-                            .select("object_id")
-                            .from("crashes")
-                            .where("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")")
-                            .build();
-        System.out.println("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")");
-        System.out.println(crashes.size());
     }
 }

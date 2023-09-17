@@ -69,7 +69,7 @@
             <Insets left="150.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="severityPane" layoutX="145.0" layoutY="555.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+      <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
