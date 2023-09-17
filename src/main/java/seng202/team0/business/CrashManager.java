@@ -8,6 +8,7 @@ import seng202.team0.repository.SQLiteQueryBuilder;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,17 +39,36 @@ public class CrashManager {
         // TODO do not hard code for severities, make it flexible to all filters
         // TODO could instead do a * for columns
         // TODO although * does not work for query builder weirdly
-        if (filters.getSeveritiesSelected().size() == 0) {
-            return crashDAO.getAll();
-        } else {
-            return SQLiteQueryBuilder
-                    .create()
-                    .select("longitude, latitude")
-                    .from("crashes")
-                    .where("severity IN (" + filters.getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(", ")) + ")")
-                    .build();
+
+        String select = "longitude, latitude";
+        String from = "crashes";
+        List<String> where = new ArrayList<String>();
+
+
+        if (filters.getSeveritiesSelected().size() > 0) {
+            where.add("severity IN (" +
+                    filters.getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(", "))
+                    + ")");
         }
 
-    }
+        if (filters.getEarliestYear() != null) {
+            where.add("crash_year >= " + filters.getEarliestYear());
+        }
 
+        if (where.size() == 0) {
+            return SQLiteQueryBuilder
+                    .create()
+                    .select(select)
+                    .from(from)
+                    .build();
+        } else {
+            System.out.println(String.join("AND ", where));
+            return SQLiteQueryBuilder
+                    .create()
+                    .select(select)
+                    .from(from)
+                    .where(String.join(" AND ", where))
+                    .build();
+        }
+    }
 }

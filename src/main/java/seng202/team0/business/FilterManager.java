@@ -13,6 +13,7 @@ import java.util.List;
 public class FilterManager {
     private static FilterManager filters;
     private List<Integer> severitiesSelected;
+    private Integer earliestYear;
 
     private FilterManager() {
         severitiesSelected = new ArrayList<>();
@@ -25,15 +26,11 @@ public class FilterManager {
         return filters;
     }
 
-    public List<Integer> getSeveritiesSelected() {
-        return this.severitiesSelected;
-    }
+    public List<Integer> getSeveritiesSelected() { return this.severitiesSelected; }
 
-    public void addToSeverities(Integer severity) {
-        severitiesSelected.add(severity);
-    }
+    public void addToSeverities(Integer severity) { severitiesSelected.add(severity); }
 
-    public void removeFromSeverities(Integer severity) {
-        severitiesSelected.remove((Object)severity);
-    }
+    public void removeFromSeverities(Integer severity) { severitiesSelected.remove((Object)severity); }
+    public Integer getEarliestYear() { return earliestYear; }
+    public void setEarliestYear(Integer year) { earliestYear = year; }
 }

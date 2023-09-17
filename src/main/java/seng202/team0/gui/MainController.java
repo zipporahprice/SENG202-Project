@@ -361,6 +361,12 @@ public class MainController {
     @FXML
     public void sliderValueChange() {
         int sliderValue = (int)Math.round(dateSlider.getValue());
+
+        // Update year label for user
         currentYearLabel.setText(Integer.toString(sliderValue));
+
+        //
+        FilterManager filters = FilterManager.getInstance();
+        filters.setEarliestYear(sliderValue);
     }
 }

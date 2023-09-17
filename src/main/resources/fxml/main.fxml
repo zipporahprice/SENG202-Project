@@ -154,12 +154,12 @@
       </AnchorPane>
       <AnchorPane fx:id="datePane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
          <children>
-            <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
+            <Label layoutX="90.0" layoutY="14.0" text="Earliest Date" textFill="WHITE" />
 
                         <!-- Add a Slider for selecting the date between 2000 - 2023 -->
-            <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="75.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2023.0" />
+            <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="75.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2000.0" />
             <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
-            <Label fx:id="currentYearLabel" layoutX="109.0" layoutY="42.0" text="2023" textFill="WHITE" />
+            <Label fx:id="currentYearLabel" layoutX="109.0" layoutY="42.0" text="2000" textFill="WHITE" />
             <Label layoutX="198.0" layoutY="59.0" text="2023" textFill="WHITE" />
 
                      </children>
