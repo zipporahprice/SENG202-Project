@@ -1,6 +1,5 @@
-package seng202.team0.unitttests;
+package seng202.team0.unittests;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team0.models.GeoLocater;
 import seng202.team0.models.Location;
