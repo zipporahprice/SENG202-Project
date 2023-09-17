@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<AnchorPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="879.0" prefWidth="1254.0" styleClass="backgroundColor" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-      <AnchorPane fx:id = "sideBar" layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css" >
+      <AnchorPane fx:id="sideBar" layoutX="14.0" layoutY="17.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css">
          <children>
             <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0">
                <graphic>
-                  <ImageView preserveRatio="true" fitHeight="52.0" fitWidth="52.0">
+                  <ImageView fitHeight="52.0" fitWidth="52.0" preserveRatio="true">
                      <image>
                         <Image url="@button_icons/car_emoji.png" />
                      </image>
@@ -84,16 +84,16 @@
          <children>
             <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
             <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
-               <CheckBox mnemonicParsing="false" text="Bicycle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Bus" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Car" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Moped" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Motorcycle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Parked Vehicle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Pedestrian" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="School Bus" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Train" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Truck" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Bicycle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Bus" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Car" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Moped" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Motorcycle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Parked Vehicle" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Pedestrian" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="School Bus" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Train" textFill="WHITE" />
+               <CheckBox mnemonicParsing="false" selected="true" text="Truck" textFill="WHITE" />
                <!-- Add more options as needed -->
             </VBox>
          </children>
@@ -103,14 +103,14 @@
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Snow" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Sunny" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Overcast" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Heavy Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Thunder" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Light Rain" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Windy" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Tsunami" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Sunny" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Overcast" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Thunder" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Windy" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Tsunami" textFill="WHITE" />
                </children>
             </VBox>
          </children>
@@ -120,10 +120,10 @@
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
             <VBox layoutX="14.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Non Injury" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Minor Crash" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Major Crash" textFill="WHITE" />
-                  <CheckBox mnemonicParsing="false" text="Death" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Non Injury" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Minor Crash" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Major Crash" textFill="WHITE" />
+                  <CheckBox mnemonicParsing="false" selected="true" text="Death" textFill="WHITE" />
                </children>
             </VBox>
          </children>
