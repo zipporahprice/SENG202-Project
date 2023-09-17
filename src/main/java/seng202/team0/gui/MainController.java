@@ -22,6 +22,7 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
+import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.SQLiteQueryBuilder;
 
@@ -74,8 +75,6 @@ public class MainController {
     private CheckBox majorCrashCheckBox;
     @FXML
     private CheckBox deathCheckBox;
-    private List<Integer> severitiesSelected = new ArrayList<Integer>();
-
 
 
     @FXML
@@ -114,6 +113,8 @@ public class MainController {
     @FXML
     private TextField stopLocation;
 
+    private MapController mapController;
+
 
 
     /**
@@ -125,7 +126,7 @@ public class MainController {
         this.stage = stage;
         geolocator = new GeoLocator();
         stage.setMaximized(true);
-        MapController mapController = new MapController();
+        mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
         stage.sizeToScene();
@@ -138,10 +139,6 @@ public class MainController {
 
                     }
                 });
-
-
-
-
     }
 
     @FXML
@@ -152,15 +149,7 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
-
-
-
-
     }
-
-
-
-
 
     public void loadHelp() {
         try {
@@ -343,6 +332,7 @@ public class MainController {
         }
     }
 
+    @FXML
     public void handleSeverityCheckBoxEvent(ActionEvent event) {
         CheckBox checkBox = (CheckBox)event.getSource();
         int severity = 0;
@@ -355,6 +345,13 @@ public class MainController {
             severity = 4;
         } else if (checkBox.equals(deathCheckBox)) {
             severity = 8;
+        }
+
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToSeverities(severity);
+        } else {
+            filters.removeFromSeverities(severity);
         }
     }
 }

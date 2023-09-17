@@ -34,12 +34,11 @@ public class App {
 
         // Initialises database and checks if populated
         DatabaseManager database = new DatabaseManager(null);
-        CrashDAO crashDao = new CrashDAO();
-        List crashes = crashDao.getAll();
+        CrashManager manager = new CrashManager();
+        List crashes = manager.getCrashes();
         if (crashes.size() == 0) {
             try {
                 CrashCSVImporter importer = new CrashCSVImporter();
-                CrashManager manager = new CrashManager();
                 // TODO replace with full file
                 URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
                 File file = new File(newUrl.getPath());

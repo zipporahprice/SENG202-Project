@@ -5,11 +5,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
+import seng202.team0.business.FilterManager;
 import seng202.team0.repository.CrashDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,19 +44,24 @@ public class JavaScriptBridge {
     }
 
     public String crashes() throws SQLException {
-        List<Crash> crashList = crashData.getCrashes();
-
-        List<CrashInfo> crash = crashData.getCrashes().stream().map(crash1-> {
-            double latitude = crash1.getLatitude();
-            double longitude = crash1.getLongitude();
-            return new CrashInfo(latitude, longitude);
+        // TODO currently hard coding difference in having filters or not, have a think about how to not do this
+        List crashList = crashData.getCrashes().stream().map(crash -> {
+            if (crash instanceof Crash) {
+                Crash crash1 = (Crash) crash;
+                double latitude = crash1.getLatitude();
+                double longitude = crash1.getLongitude();
+                return new CrashInfo(latitude, longitude);
+            } else {
+                HashMap crash1 = (HashMap) crash;
+                double latitude = (double) crash1.get("latitude");
+                double longitude = (double) crash1.get("longitude");
+                return new CrashInfo(latitude, longitude);
+            }
         }).toList();
-
 
         Gson gson = new Gson();
 
-        String json = gson.toJson(crash);
-
+        String json = gson.toJson(crashList);
 
         return json;
 

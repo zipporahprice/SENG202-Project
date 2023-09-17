@@ -2,8 +2,14 @@ package seng202.team0.unittests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import seng202.team0.business.CrashManager;
+import seng202.team0.business.FilterManager;
+import seng202.team0.models.Crash;
+import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.repository.SQLiteQueryBuilder;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 public class SQLiteQueryBuilderTest {
@@ -33,11 +39,11 @@ public class SQLiteQueryBuilderTest {
     }
 
     @Test
-    void testBuild() {
+    void testBuild() throws SQLException {
         List crashes = SQLiteQueryBuilder.create()
-                                        .select("object_id, speed_limit, longitude, latitude")
+                                        .select("object_id, longitude, latitude")
                                         .from("crashes")
-                                        .where("speed_limit = 100")
+                                        .where("severity = 8")
                                         .build();
 
         // Note: Assumes there is one crash at a speed limit of 100
