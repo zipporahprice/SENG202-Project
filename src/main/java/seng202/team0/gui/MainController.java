@@ -123,7 +123,27 @@ public class MainController {
         boundariesPane.setVisible(false);
         severityPane.setVisible(false);
 
+        if (sideBar != null) {
+            Scene scene = sideBar.getScene();
+            if (scene != null) {
+                Stage stage = (Stage) mainWindow.getScene().getWindow();
+                sideBar.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
+//                ListView<Button> listViewButtons = new ListView<>();
+//                ObservableList<Button> sidebarButtons = FXCollections.observableArrayList(
+//                        hamburgerButton, carButton, bikeButton, busButton, walkingButton,
+//                        helicopterButton, motorbikeButton
+//                );
+//                listViewButtons.setItems(sidebarButtons);
+//                listViewButtons.prefHeightProperty().bind(stage.heightProperty().multiply(0.05));
+//                listViewButtons.prefWidthProperty().bind(stage.widthProperty().multiply(0.05));
+            }
+        }
+//        Stage stage = (Stage) mainWindow.getScene().getWindow();
+//        sideBar.prefHeightProperty().bind(stage.widthProperty().multiply(0.05));
     }
+
+
+
 
 
     public void loadMap(Stage stage) {
