@@ -4,11 +4,7 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -60,8 +56,6 @@ public class MainController {
     @FXML
     private AnchorPane weatherPane;
     @FXML
-    private AnchorPane datePane;
-    @FXML
     private AnchorPane boundariesPane;
 
     // Severity Pane
@@ -75,6 +69,14 @@ public class MainController {
     private CheckBox majorCrashCheckBox;
     @FXML
     private CheckBox deathCheckBox;
+
+    // Date Pane
+    @FXML
+    private AnchorPane datePane;
+    @FXML
+    private Slider dateSlider;
+    @FXML
+    private Label currentYearLabel;
 
 
     @FXML
@@ -114,6 +116,7 @@ public class MainController {
     private TextField stopLocation;
 
     private MapController mapController;
+
 
 
 
@@ -353,5 +356,11 @@ public class MainController {
         } else {
             filters.removeFromSeverities(severity);
         }
+    }
+
+    @FXML
+    public void sliderValueChange() {
+        int sliderValue = (int)Math.round(dateSlider.getValue());
+        currentYearLabel.setText(Integer.toString(sliderValue));
     }
 }
