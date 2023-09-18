@@ -6,10 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -22,6 +19,7 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
+import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 
 
@@ -55,24 +53,8 @@ public class MainController {
     @FXML
     private AnchorPane weatherPane;
     @FXML
-    private AnchorPane datePane;
-    @FXML
     private AnchorPane boundariesPane;
 
-    // Severity Pane
-    @FXML
-    private AnchorPane severityPane;
-    @FXML
-    private CheckBox selectAllSeverity;
-    @FXML
-    private CheckBox nonInjuryCheckBox;
-    @FXML
-    private CheckBox minorCrashCheckBox;
-    @FXML
-    private CheckBox majorCrashCheckBox;
-    @FXML
-    private CheckBox deathCheckBox;
-    private List<Integer> severitiesSelected = new ArrayList<Integer>();
     @FXML
     private Button helpButton;
 
@@ -91,27 +73,50 @@ public class MainController {
 
     @FXML
     private CheckBox selectAllTransport;
-    @FXML
-    private CheckBox bicycle;
-    @FXML
-    private CheckBox bus;
-    @FXML
-    private CheckBox car;
-    @FXML
-    private CheckBox moped;
-    @FXML
-    private CheckBox motorcycle;
-    @FXML
-    private CheckBox parkedVehicle;
-    @FXML
-    private CheckBox pedestrian;
-    @FXML
-    private CheckBox schoolBus;
-    @FXML
-    private CheckBox train;
-    @FXML
-    private CheckBox truck;
 
+    // Severity Pane
+    @FXML
+    private AnchorPane severityPane;
+    @FXML
+    private CheckBox selectAllSeverity;
+    @FXML
+    private CheckBox nonInjuryCheckBox;
+    @FXML
+    private CheckBox minorCrashCheckBox;
+    @FXML
+    private CheckBox majorCrashCheckBox;
+    @FXML
+    private CheckBox deathCheckBox;
+    @FXML
+    private CheckBox bicycleCheckBox;
+    @FXML
+    private CheckBox busCheckBox;
+    @FXML
+    private CheckBox carCheckBox;
+    @FXML
+    private CheckBox mopedCheckBox;
+    @FXML
+    private CheckBox motorcycleCheckBox;
+    @FXML
+    private CheckBox parkedVehicleCheckBox;
+    @FXML
+    private CheckBox pedestrianCheckBox;
+    @FXML
+    private CheckBox schoolBusCheckBox;
+    @FXML
+    private CheckBox trainCheckBox;
+    @FXML
+    private CheckBox truckCheckBox;
+    @FXML
+    private AnchorPane holidayPane;
+
+    // Date Pane
+    @FXML
+    private AnchorPane datePane;
+    @FXML
+    private Slider dateSlider;
+    @FXML
+    private Label currentYearLabel;
 
 
     @FXML
@@ -154,6 +159,9 @@ public class MainController {
     @FXML
     private TextField stopLocation;
 
+    private MapController mapController;
+
+
 
 
     /**
@@ -171,7 +179,7 @@ public class MainController {
         this.stage = stage;
         geolocator = new GeoLocator();
         stage.setMaximized(true);
-        MapController mapController = new MapController();
+        mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
 
@@ -218,10 +226,6 @@ public class MainController {
 
                     }
                 });
-
-
-
-
     }
 
     @FXML
@@ -262,16 +266,16 @@ public class MainController {
 
         transportCheckboxes = new ArrayList<CheckBox>() {
             {
-                add(bicycle);
-                add(bus);
-                add(car);
-                add(moped);
-                add(motorcycle);
-                add(parkedVehicle);
-                add(pedestrian);
-                add(schoolBus);
-                add(train);
-                add(truck);
+                add(bicycleCheckBox);
+                add(busCheckBox);
+                add(carCheckBox);
+                add(mopedCheckBox);
+                add(motorcycleCheckBox);
+                add(parkedVehicleCheckBox);
+                add(pedestrianCheckBox);
+                add(schoolBusCheckBox);
+                add(trainCheckBox);
+                add(truckCheckBox);
             }
         };
         for (CheckBox transportMode : transportCheckboxes) {
@@ -308,10 +312,6 @@ public class MainController {
 
     }
 
-
-
-
-
     public void loadHelp() {
         try {
             FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
@@ -341,11 +341,12 @@ public class MainController {
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(boundariesPane, 3);
         togglePaneWithFade(severityPane, 4);
+        togglePaneWithFade(holidayPane, 5);
 
         // Toggle the visibility of the helpButton
 
         // Play each fade animation individually
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i < 6; i++) {
             fadeTransitions[i].play();
         }
     }
@@ -522,6 +523,7 @@ public class MainController {
         }
     }
 
+    @FXML
     public void handleSeverityCheckBoxEvent(ActionEvent event) {
         CheckBox checkBox = (CheckBox)event.getSource();
         int severity = 0;
@@ -534,6 +536,59 @@ public class MainController {
             severity = 4;
         } else if (checkBox.equals(deathCheckBox)) {
             severity = 8;
+        }
+
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToSeverities(severity);
+        } else {
+            filters.removeFromSeverities(severity);
+        }
+    }
+
+    @FXML
+    public void sliderValueChange() {
+        int sliderValue = (int)Math.round(dateSlider.getValue());
+
+        // Update year label for user
+        currentYearLabel.setText(Integer.toString(sliderValue));
+
+        //
+        FilterManager filters = FilterManager.getInstance();
+        filters.setEarliestYear(sliderValue);
+    }
+
+    @FXML
+    public void handleTypeInvolved(ActionEvent event) {
+        CheckBox checkBox = (CheckBox)event.getSource();
+        String mode = null;
+
+        if (checkBox.equals(bicycleCheckBox)) {
+            mode = "bicycle_involved";
+        } else if (checkBox.equals(busCheckBox)) {
+            mode = "bus_involved";
+        } else if (checkBox.equals(carCheckBox)) {
+            mode = "car_involved";
+        } else if (checkBox.equals(mopedCheckBox)) {
+            mode = "moped_involved";
+        } else if (checkBox.equals(motorcycleCheckBox)) {
+            mode = "motorcycle_involved";
+        } else if (checkBox.equals(parkedVehicleCheckBox)) {
+            mode = "parked_vehicle_involved";
+        } else if (checkBox.equals(pedestrianCheckBox)) {
+            mode = "pedestrian_involved";
+        } else if (checkBox.equals(schoolBusCheckBox)) {
+            mode = "school_bus_involved";
+        } else if (checkBox.equals(trainCheckBox)) {
+            mode = "train_involved";
+        } else if (checkBox.equals(truckCheckBox)) {
+            mode = "truck_involved";
+        }
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToModes(mode);
+        } else {
+            filters.removeFromModes(mode);
         }
     }
 }

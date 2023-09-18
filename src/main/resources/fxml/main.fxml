@@ -52,18 +52,17 @@
       <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
-            <VBox layoutX="30.0" layoutY="37.0" spacing="5.0">
-               <CheckBox fx:id="bicycle" mnemonicParsing="false" selected="true" text="Bicycle" textFill="WHITE" />
-               <CheckBox fx:id="bus" mnemonicParsing="false" selected="true" text="Bus" textFill="WHITE" />
-               <CheckBox fx:id="car" mnemonicParsing="false" selected="true" text="Car" textFill="WHITE" />
-               <CheckBox fx:id="moped" mnemonicParsing="false" selected="true" text="Moped" textFill="WHITE" />
-               <CheckBox fx:id="motorcycle" mnemonicParsing="false" selected="true" text="Motorcycle" textFill="WHITE" />
-               <CheckBox fx:id="parkedVehicle" mnemonicParsing="false" selected="true" text="Parked Vehicle" textFill="WHITE" />
-               <CheckBox fx:id="pedestrian" mnemonicParsing="false" selected="true" text="Pedestrian" textFill="WHITE" />
-               <CheckBox fx:id="schoolBus" mnemonicParsing="false" selected="true" text="School Bus" textFill="WHITE" />
-               <CheckBox fx:id="train" mnemonicParsing="false" selected="true" text="Train" textFill="WHITE" />
-               <CheckBox fx:id="truck" mnemonicParsing="false" selected="true" text="Truck" textFill="WHITE" />
-               <!-- Add more options as needed -->
+            <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
+               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Bicycle" textFill="WHITE" />
+               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Bus" textFill="WHITE" />
+               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Car" textFill="WHITE" />
+               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Moped" textFill="WHITE" />
+               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Motorcycle" textFill="WHITE" />
+               <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Parked Vehicle" textFill="WHITE" />
+               <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Pedestrian" textFill="WHITE" />
+               <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="School Bus" textFill="WHITE" />
+               <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Train" textFill="WHITE" />
+               <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Truck" textFill="WHITE" />
             </VBox>
             <VBox spacing="5.0" />
             <CheckBox fx:id="selectAllTransport" layoutX="150.0" layoutY="37.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
@@ -162,16 +161,25 @@
       </AnchorPane>
       <AnchorPane fx:id="datePane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
-            <Label layoutX="109.0" layoutY="14.0" text="Date" textFill="WHITE" />
+            <Label layoutX="90.0" layoutY="14.0" text="Earliest Date" textFill="WHITE" />
 
                         <!-- Add a Slider for selecting the date between 2000 - 2023 -->
-            <Slider layoutX="14.0" layoutY="75.0" max="2023" min="2000" prefWidth="222.0" value="2010" />
+            <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="75.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2000.0" />
             <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
+            <Label fx:id="currentYearLabel" layoutX="109.0" layoutY="42.0" text="2000" textFill="WHITE" />
             <Label layoutX="198.0" layoutY="59.0" text="2023" textFill="WHITE" />
 
                      </children>
          <StackPane.margin>
             <Insets left="401.0" />
+         </StackPane.margin>
+      </AnchorPane>
+      <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Label layoutX="90.0" layoutY="14.0" text="Holiday" textFill="WHITE" />
+         </children>
+         <StackPane.margin>
+            <Insets left="401.0" top="435.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="boundariesPane" maxHeight="166.0" maxWidth="250.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">

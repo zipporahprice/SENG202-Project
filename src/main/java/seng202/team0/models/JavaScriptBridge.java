@@ -5,11 +5,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
+import seng202.team0.business.FilterManager;
 import seng202.team0.repository.CrashDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -30,19 +32,26 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String crashes() throws SQLException {
-        List<Crash> crashList = crashData.getCrashes();
-
-        List<CrashInfo> crash = crashData.getCrashes().stream().map(crash1-> {
-            double latitude = crash1.getLatitude();
-            double longitude = crash1.getLongitude();
-            return new CrashInfo(latitude, longitude);
+        // TODO currently hard coding difference in having filters or not, have a think about how to not do this
+        List crashList = crashData.getCrashLocations().stream().map(crash -> {
+            if (crash instanceof Crash) {
+                Crash crash1 = (Crash) crash;
+                double latitude = crash1.getLatitude();
+                double longitude = crash1.getLongitude();
+                int severity = crash1.getSeverity().getValue();
+                return new CrashInfo(latitude, longitude, severity);
+            } else {
+                HashMap crash1 = (HashMap) crash;
+                double latitude = (double) crash1.get("latitude");
+                double longitude = (double) crash1.get("longitude");
+                int severity = (int) crash1.get("severity");
+                return new CrashInfo(latitude, longitude, severity);
+            }
         }).toList();
-
 
         Gson gson = new Gson();
 
-        String json = gson.toJson(crash);
-
+        String json = gson.toJson(crashList);
 
         return json;
 
@@ -59,6 +68,7 @@ public class JavaScriptBridge {
          * The longitude of the crash location.
          */
         public double lng;
+        public int severity;
         /**
          * Constructs a CrashInfo object with latitude and longitude.
          *
@@ -66,9 +76,10 @@ public class JavaScriptBridge {
          * @param lng The longitude of the crash location.
          */
 
-        public CrashInfo(double lat, double lng) {
+        public CrashInfo(double lat, double lng, int severity) {
             this.lat = lat;
             this.lng = lng;
+            this.severity = severity;
         }
 
     }
