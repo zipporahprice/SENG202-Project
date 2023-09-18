@@ -464,7 +464,7 @@ public class MainController {
      */
 
     @FXML
-    private Location addStart() {
+    private Location getStart() {
         String address = startLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
@@ -475,7 +475,7 @@ public class MainController {
     }
 
     @FXML
-    private Location addEnd() {
+    private Location getEnd() {
         String address = endLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
@@ -486,7 +486,7 @@ public class MainController {
     }
 
     @FXML
-    private Location addStop() {
+    private Location getStop() {
         String address = stopLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
@@ -498,9 +498,9 @@ public class MainController {
 
     @FXML
     private void generateStop() {
-        Location stop = addStop();
-        Location start = addStart();
-        Location end = addEnd();
+        Location stop = getStop();
+        Location start = getStart();
+        Location end = getEnd();
         if (start != null && end != null && stop != null) {
             Route route1 = new Route(start, stop);
             Route route2 = new Route(stop, end);
@@ -514,8 +514,8 @@ public class MainController {
 
     @FXML
     private void generateRouteAction() {
-        Location start = addStart();
-        Location end = addEnd();
+        Location start = getStart();
+        Location end = getEnd();
 
         if (start != null && end != null) {
             Route route = new Route(start, end);
