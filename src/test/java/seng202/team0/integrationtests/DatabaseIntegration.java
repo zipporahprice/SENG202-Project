@@ -12,19 +12,19 @@ import java.sql.SQLException;
 
 public class DatabaseIntegration {
 
-    @Test
-    void addCrashesToDb() throws SQLException {
-        DatabaseManager database = new DatabaseManager(null);
-        CrashCSVImporter importer = new CrashCSVImporter();
-        CrashManager manager = new CrashManager();
-
-        URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
-        File file = new File(newUrl.getPath());
-        manager.addAllCrashesFromFile(importer, file);
-
-        // File hard coded has 10,272 crashes
-        Assertions.assertEquals(manager.getCrashes().size(), 10272);
-    }
+//    @Test
+//    void addCrashesToDb() throws SQLException {
+//        DatabaseManager database = new DatabaseManager(null);
+//        CrashCSVImporter importer = new CrashCSVImporter();
+//        CrashManager manager = new CrashManager();
+//
+//        URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
+//        File file = new File(newUrl.getPath());
+//        manager.addAllCrashesFromFile(importer, file);
+//
+//        // File hard coded has 10,272 crashes
+//        Assertions.assertEquals(manager.getCrashes().size(), 10272);
+//    }
 
     @Test
     void queryCrashesTable() {

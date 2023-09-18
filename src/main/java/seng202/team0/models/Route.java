@@ -8,7 +8,7 @@ import java.util.List;
  * Simple class representing a route as any number of positions
  */
 public class Route {
-    private List<Location> route = new ArrayList<>();
+    public List<Location> route = new ArrayList<>();
 
     /**
      * Create a new route with any number of positions
