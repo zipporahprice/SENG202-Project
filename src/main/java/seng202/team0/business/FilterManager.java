@@ -16,8 +16,11 @@ public class FilterManager {
     private List<Integer> severitiesSelected;
     private Integer earliestYear;
 
+    private List<String> modesSelected;
+
     private FilterManager() {
         severitiesSelected = new ArrayList<>();
+        modesSelected = new ArrayList<>();
     }
 
     public static FilterManager getInstance() {
@@ -26,6 +29,7 @@ public class FilterManager {
         }
         return filters;
     }
+
 
     public List<Integer> getSeveritiesSelected() { return this.severitiesSelected; }
 
@@ -51,4 +55,10 @@ public class FilterManager {
 
         return String.join(" AND ", where);
     }
+
+    public List<String> getModesSelected() { return this.modesSelected; }
+
+    public void addToModes(String mode) { modesSelected.add(mode); }
+
+    public void removeFromModes(String mode) { modesSelected.remove((Object)mode); }
 }

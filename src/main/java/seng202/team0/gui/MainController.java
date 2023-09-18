@@ -70,6 +70,26 @@ public class MainController {
     @FXML
     private CheckBox deathCheckBox;
     @FXML
+    private CheckBox bicycleCheckBox;
+    @FXML
+    private CheckBox busCheckBox;
+    @FXML
+    private CheckBox carCheckBox;
+    @FXML
+    private CheckBox mopedCheckBox;
+    @FXML
+    private CheckBox motorcycleCheckBox;
+    @FXML
+    private CheckBox parkedVehicleCheckBox;
+    @FXML
+    private CheckBox pedestrianCheckBox;
+    @FXML
+    private CheckBox schoolBusCheckBox;
+    @FXML
+    private CheckBox trainCheckBox;
+    @FXML
+    private CheckBox truckCheckBox;
+    @FXML
     private AnchorPane holidayPane;
 
     // Date Pane
@@ -371,5 +391,39 @@ public class MainController {
         //
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
+    }
+
+    @FXML
+    public void handleTypeInvolved(ActionEvent event) {
+        CheckBox checkBox = (CheckBox)event.getSource();
+        String mode = null;
+
+        if (checkBox.equals(bicycleCheckBox)) {
+            mode = "bicycle_involved";
+        } else if (checkBox.equals(busCheckBox)) {
+            mode = "bus_involved";
+        } else if (checkBox.equals(carCheckBox)) {
+            mode = "car_involved";
+        } else if (checkBox.equals(mopedCheckBox)) {
+            mode = "moped_involved";
+        } else if (checkBox.equals(motorcycleCheckBox)) {
+            mode = "motorcycle_involved";
+        } else if (checkBox.equals(parkedVehicleCheckBox)) {
+            mode = "parked_vehicle_involved";
+        } else if (checkBox.equals(pedestrianCheckBox)) {
+            mode = "pedestrian_involved";
+        } else if (checkBox.equals(schoolBusCheckBox)) {
+            mode = "school_bus_involved";
+        } else if (checkBox.equals(trainCheckBox)) {
+            mode = "train_involved";
+        } else if (checkBox.equals(truckCheckBox)) {
+            mode = "truck_involved";
+        }
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToModes(mode);
+        } else {
+            filters.removeFromModes(mode);
+        }
     }
 }
