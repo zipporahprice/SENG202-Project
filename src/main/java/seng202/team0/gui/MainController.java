@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Filter;
 
 /**
  * Controller for the main.fxml window
@@ -603,6 +604,18 @@ public class MainController {
             filters.removeFromSeverities(severity);
         }
     }
+    @FXML
+    public void handleWeatherCheckboxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox)event.getSource();
+        String weather = checkBox.getText();
+
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToWeathers(weather);
+        } else {
+            filters.removeFromWeathers(weather);
+        }
+    }
 
     @FXML
     public void sliderValueChange() {
@@ -648,21 +661,5 @@ public class MainController {
         } else {
             filters.removeFromModes(mode);
         }
-    }
-
-    @FXML
-    public void handleRegionCheckBoxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        String region = null;
-
-        region = checkBox.getText();
-
-        FilterManager filters = FilterManager.getInstance();
-        if (checkBox.isSelected()) {
-            filters.addToRegions(region);
-        } else {
-            filters.removeFromRegions(region);
-        }
-
     }
 }
