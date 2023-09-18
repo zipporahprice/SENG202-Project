@@ -33,14 +33,14 @@ public class CrashManager {
         return crashDAO.getOne(id);
     }
 
-    public List getCrashes() throws SQLException {
+    public List getCrashLocations() throws SQLException {
         FilterManager filters = FilterManager.getInstance();
 
         // TODO do not hard code for severities, make it flexible to all filters
         // TODO could instead do a * for columns
         // TODO although * does not work for query builder weirdly
 
-        String select = "longitude, latitude";
+        String select = "longitude, latitude, severity";
         String from = "crashes";
         List<String> where = new ArrayList<String>();
 

@@ -45,17 +45,19 @@ public class JavaScriptBridge {
 
     public String crashes() throws SQLException {
         // TODO currently hard coding difference in having filters or not, have a think about how to not do this
-        List crashList = crashData.getCrashes().stream().map(crash -> {
+        List crashList = crashData.getCrashLocations().stream().map(crash -> {
             if (crash instanceof Crash) {
                 Crash crash1 = (Crash) crash;
                 double latitude = crash1.getLatitude();
                 double longitude = crash1.getLongitude();
-                return new CrashInfo(latitude, longitude);
+                int severity = crash1.getSeverity().getValue();
+                return new CrashInfo(latitude, longitude, severity);
             } else {
                 HashMap crash1 = (HashMap) crash;
                 double latitude = (double) crash1.get("latitude");
                 double longitude = (double) crash1.get("longitude");
-                return new CrashInfo(latitude, longitude);
+                int severity = (int) crash1.get("severity");
+                return new CrashInfo(latitude, longitude, severity);
             }
         }).toList();
 
@@ -71,10 +73,12 @@ public class JavaScriptBridge {
 
         public double lat;
         public double lng;
+        public int severity;
 
-        public CrashInfo(double lat, double lng) {
+        public CrashInfo(double lat, double lng, int severity) {
             this.lat = lat;
             this.lng = lng;
+            this.severity = severity;
         }
 
     }
