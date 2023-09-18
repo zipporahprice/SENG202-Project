@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
-<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView">
          <StackPane.margin>
@@ -86,60 +94,12 @@
       </AnchorPane>
       <AnchorPane maxWidth="118.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="CENTER_LEFT">
          <children>
-            <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/car_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="bikeButton" layoutX="14.0" layoutY="689.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="1">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/bike_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="busButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="2">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/bus_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="walkingButton" layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="3">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/walking_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="helicopterButton" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="4">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/helicopter_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="motorbikeButton" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="5">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/motorbike_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0" />
+            <Button fx:id="bikeButton" layoutX="14.0" layoutY="689.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="1" />
+            <Button fx:id="busButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="2" />
+            <Button fx:id="walkingButton" layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="3" />
+            <Button fx:id="helicopterButton" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="4" />
+            <Button fx:id="motorbikeButton" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="5" />
             <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="65.0" prefWidth="65.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0">
@@ -149,6 +109,26 @@
                   </ImageView>
                </graphic>
             </Button>
+            <ImageView fitHeight="52.0" fitWidth="52.0" layoutX="33.0" layoutY="356.0">
+               <image>
+                  <Image url="@button_icons/bike_emoji.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="52.0" fitWidth="52.0" layoutX="33.0" layoutY="118.0">
+               <image>
+                  <Image url="@button_icons/car_emoji.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="52.0" fitWidth="52.0" layoutX="33.0" layoutY="237.0">
+               <image>
+                  <Image url="@button_icons/walking_emoji.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="52.0" fitWidth="52.0" layoutX="33.0" layoutY="475.0">
+               <image>
+                  <Image url="@button_icons/bus_emoji.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="datePane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
