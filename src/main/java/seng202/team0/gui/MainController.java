@@ -415,7 +415,6 @@ public class MainController {
         } else if (checkBox.equals(truckCheckBox)) {
             mode = "truck_involved";
         }
-
         FilterManager filters = FilterManager.getInstance();
         if (checkBox.isSelected()) {
             filters.addToModes(mode);

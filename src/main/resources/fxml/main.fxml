@@ -62,7 +62,6 @@
                <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="School Bus" textFill="WHITE" />
                <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Train" textFill="WHITE" />
                <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Truck" textFill="WHITE" />
-               <!-- Add more options as needed -->
             </VBox>
          </children>
          <StackPane.margin>

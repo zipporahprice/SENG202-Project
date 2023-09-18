@@ -28,6 +28,7 @@ public class FilterManager {
         return filters;
     }
 
+
     public List<Integer> getSeveritiesSelected() { return this.severitiesSelected; }
 
     public void addToSeverities(Integer severity) { severitiesSelected.add(severity); }
