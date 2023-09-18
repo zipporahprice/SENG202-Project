@@ -12,7 +12,9 @@ public class Crash {
     private String crashLocation1;
     private String crashLocation2;
     private String region;
-    private String weather;
+    //private String weather;
+    //
+    private Weather weather;
 
     private float longitude;
     private float latitude;
@@ -40,7 +42,7 @@ public class Crash {
         this.crashLocation2 = location2;
         this.severity = CrashSeverity.stringToCrashSeverity(severity);
         this.region = region;
-        this.weather = weather;
+        this.weather = Weather.stringToWeather(weather);
         this.longitude = longitude;
         this.latitude = lat;
         this.bicycleInvolved = bicycleInvolved;
@@ -85,7 +87,7 @@ public class Crash {
         return region;
     }
 
-    public String getWeather(){
+    public Weather getWeather(){
         return weather;
     }
 
