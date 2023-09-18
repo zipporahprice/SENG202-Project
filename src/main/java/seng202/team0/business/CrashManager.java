@@ -44,12 +44,6 @@ public class CrashManager {
         String from = "crashes";
         String where = FilterManager.getInstance().toString();
 
-        if (filters.getModesSelected().size() > 0) {
-            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
-            where.add(modesCondition);
-
-        }
-
         if (where.length() == 0) {
             return SQLiteQueryBuilder
                     .create()

@@ -49,6 +49,12 @@ public class FilterManager {
                     + ")");
         }
 
+        if (filters.getModesSelected().size() > 0) {
+            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
+            where.add(modesCondition);
+
+        }
+
         if (getEarliestYear() != null) {
             where.add("crash_year >= " + getEarliestYear());
         }
