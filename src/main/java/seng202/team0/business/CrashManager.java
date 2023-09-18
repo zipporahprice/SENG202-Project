@@ -51,6 +51,11 @@ public class CrashManager {
                     + ")");
         }
 
+        if (filters.getModesSelected().size() > 0) {
+            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
+            where.add(modesCondition);
+        }
+
         if (filters.getEarliestYear() != null) {
             where.add("crash_year >= " + filters.getEarliestYear());
         }

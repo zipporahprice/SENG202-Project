@@ -15,6 +15,8 @@ public class FilterManager {
     private List<Integer> severitiesSelected;
     private Integer earliestYear;
 
+    private List<String> modesSelected;
+
     private FilterManager() {
         severitiesSelected = new ArrayList<>();
     }
@@ -33,4 +35,10 @@ public class FilterManager {
     public void removeFromSeverities(Integer severity) { severitiesSelected.remove((Object)severity); }
     public Integer getEarliestYear() { return earliestYear; }
     public void setEarliestYear(Integer year) { earliestYear = year; }
+
+    public List<String> getModesSelected() { return this.modesSelected; }
+
+    public void addToModes(String mode) { modesSelected.add(mode); }
+
+    public void removeFromModes(String mode) { modesSelected.remove((Object)mode); }
 }

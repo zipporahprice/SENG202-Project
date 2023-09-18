@@ -52,16 +52,16 @@
          <children>
             <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
             <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
-               <CheckBox mnemonicParsing="false" text="Bicycle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Bus" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Car" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Moped" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Motorcycle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Parked Vehicle" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Pedestrian" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="School Bus" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Train" textFill="WHITE" />
-               <CheckBox mnemonicParsing="false" text="Truck" textFill="WHITE" />
+               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Bicycle" textFill="WHITE" />
+               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Bus" textFill="WHITE" />
+               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Car" textFill="WHITE" />
+               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Moped" textFill="WHITE" />
+               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Motorcycle" textFill="WHITE" />
+               <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Parked Vehicle" textFill="WHITE" />
+               <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Pedestrian" textFill="WHITE" />
+               <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="School Bus" textFill="WHITE" />
+               <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Train" textFill="WHITE" />
+               <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" text="Truck" textFill="WHITE" />
                <!-- Add more options as needed -->
             </VBox>
          </children>
