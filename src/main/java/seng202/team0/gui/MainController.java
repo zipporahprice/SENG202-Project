@@ -15,6 +15,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.util.Duration;
@@ -500,7 +501,12 @@ public class MainController {
 
     @FXML
     private void loadRoute() {
-
+        int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
+        if (favouriteID != 0 && favouriteID != -1) {
+            FavouriteDAO favourites = new FavouriteDAO();
+            Favourite favourite = favourites.getOne(favouriteID);
+            generateRouteAction(favourite);
+        }
     }
 
     @FXML
@@ -534,6 +540,16 @@ public class MainController {
     private void generateRouteAction() {
         Location start = getStart();
         Location end = getEnd();
+
+        if (start != null && end != null) {
+            Route route = new Route(start, end);
+            displayRoute(route);
+        }
+    }
+
+    private void generateRouteAction(Favourite favourite) {
+        Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
+        Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 
         if (start != null && end != null) {
             Route route = new Route(start, end);

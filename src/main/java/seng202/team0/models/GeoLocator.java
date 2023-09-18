@@ -84,7 +84,10 @@ public class GeoLocator {
             JSONObject address = (JSONObject) result.get("address");
             String houseNumber = (String) address.get("house_number");
             String road = (String) address.get("road");
-            return houseNumber + " " + road;
+            if (houseNumber != null) {
+                return houseNumber + " " + road;
+            }
+            return road;
         } catch (IOException | ParseException e) {
             System.err.println(e);
         } catch (InterruptedException ie) {
