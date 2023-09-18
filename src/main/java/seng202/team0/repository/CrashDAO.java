@@ -152,7 +152,7 @@ public class CrashDAO implements DAOInterface<Crash> {
         ps.setString(3, crashToAdd.getCrashLocation1());
         ps.setString(4, crashToAdd.getCrashLocation2());
         ps.setInt(5, crashToAdd.getSeverity().getValue());
-        ps.setString(6, crashToAdd.getRegion());
+        ps.setString(6, crashToAdd.getRegion().getName());
         ps.setString(7, crashToAdd.getWeather().getName());
         ps.setFloat(8, crashToAdd.getLongitude());
         ps.setFloat(9, crashToAdd.getLatitude());
