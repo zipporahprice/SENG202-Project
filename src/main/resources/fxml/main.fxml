@@ -59,7 +59,10 @@
                <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Moped" textFill="WHITE" />
                <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Motorcycle" textFill="WHITE" />
             </VBox>
-            <VBox spacing="5.0" />
+            <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children></VBox>
             <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
                <children>
                   <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Parked Vehicle" textFill="WHITE" />
@@ -69,7 +72,6 @@
                   <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Truck" textFill="WHITE" />
                </children>
             </VBox>
-            <CheckBox fx:id="selectAllTransport" layoutX="107.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
          </children>
          <StackPane.margin>
             <Insets left="150.0" />
@@ -186,7 +188,7 @@
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllRegions" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllRegions" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
@@ -206,8 +208,10 @@
                   <CheckBox fx:id="snow" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Snow" textFill="WHITE" />
                </children>
             </VBox>
-            <VBox layoutX="150.0" layoutY="42.0" spacing="5.0" />
-            <CheckBox fx:id="selectAllWeather" layoutX="160.0" layoutY="42.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+            <VBox layoutX="150.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllWeather" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children></VBox>
          </children>
          <StackPane.margin>
             <Insets left="150.0" top="279.0" />
@@ -238,7 +242,7 @@
             </VBox>
             <VBox layoutX="156.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
@@ -249,10 +253,16 @@
       <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
-            <VBox layoutX="107.0" layoutY="50.0" spacing="5.0" />
-            <CheckBox fx:id="yesHoliday" layoutX="50.0" layoutY="41.0" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
-            <CheckBox fx:id="noHoliday" layoutX="51.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" wrapText="true" />
-            <CheckBox fx:id="allHoliday" layoutX="148.0" layoutY="41.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+            <VBox layoutX="148.0" layoutY="41.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="allHoliday" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children></VBox>
+            <VBox layoutX="50.0" layoutY="41.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="yesHoliday" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="noHoliday" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" wrapText="true" />
+               </children>
+            </VBox>
          </children>
          <StackPane.margin>
             <Insets left="401.0" top="490.0" />

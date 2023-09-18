@@ -1,14 +1,13 @@
 package seng202.team0.gui;
 
 import javafx.concurrent.Worker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -58,8 +57,6 @@ public class MainController {
     @FXML
     private AnchorPane holidayPane;
 
-    @FXML
-    private CheckBox yesHoliday;
 
 
 
@@ -68,16 +65,7 @@ public class MainController {
     //weather pane
     @FXML
     private CheckBox selectAllWeather;
-    @FXML
-    private CheckBox snow;
-    @FXML
-    private CheckBox fine;
-    @FXML
-    private CheckBox heavyRain;
-    @FXML
-    private CheckBox lightRain;
-    @FXML
-    private CheckBox mistOrFog;
+
 
     @FXML
     private CheckBox selectAllTransport;
@@ -127,38 +115,7 @@ public class MainController {
     //regions pane
     @FXML
     private CheckBox selectAllRegions;
-    @FXML
-    private CheckBox aucklandCheckbox;
-    @FXML
-    private CheckBox bayOfPlentyCheckbox;
-    @FXML
-    private CheckBox canterburyCheckbox;
-    @FXML
-    private CheckBox gisborneCheckbox;
-    @FXML
-    private CheckBox hawkesBayCheckbox;
-    @FXML
-    private CheckBox manawatuWhanganuiCheckbox;
-    @FXML
-    private CheckBox marlboroughCheckbox;
-    @FXML
-    private CheckBox nelsonCheckbox;
-    @FXML
-    private CheckBox northlandCheckbox;
-    @FXML
-    private CheckBox otagoCheckbox;
-    @FXML
-    private CheckBox southlandCheckbox;
-    @FXML
-    private CheckBox taranakiCheckbox;
-    @FXML
-    private CheckBox tasmanCheckbox;
-    @FXML
-    private CheckBox waikatoCheckbox;
-    @FXML
-    private CheckBox wellingtonCheckbox;
-    @FXML
-    private CheckBox westCoastCheckbox;
+
 
 
     @FXML
@@ -174,10 +131,7 @@ public class MainController {
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
     private FadeTransition[] fadeTransitions = new FadeTransition[7]; // Array to store individual fade transitions
-    private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
-    private ArrayList<CheckBox> transportCheckboxes = new ArrayList<CheckBox>();
-    private ArrayList<CheckBox> severityCheckboxes = new ArrayList<CheckBox>();
-    private  ArrayList<CheckBox> regionCheckboxes = new ArrayList<CheckBox>();
+
 
 
     @FXML
@@ -226,44 +180,7 @@ public class MainController {
         mapController.setWebView(webView);
         mapController.init(stage);
 
-        selectAllWeather.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println("Select All weather includes crashes with no weather data");
 
-                for (CheckBox weather : weatherCheckboxes) {
-                    weather.setSelected(newValue);
-                }
-
-            }
-        });
-
-        selectAllTransport.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox transportMode : transportCheckboxes) {
-                    transportMode.setSelected(newValue);
-                }
-            }
-        });
-
-        selectAllSeverity.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox severity : severityCheckboxes) {
-                    severity.setSelected(newValue);
-                }
-            }
-        });
-
-        selectAllRegions.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox region : regionCheckboxes){
-                    region.setSelected(newValue);
-                }
-            }
-        });
 
 
 
@@ -295,80 +212,8 @@ public class MainController {
         severityPane.setVisible(false);
         holidayPane.setVisible(false);
 
-        weatherCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(snow);
-                add(fine);
-                add(heavyRain);
-                add(lightRain);
-                add(mistOrFog);
-            }
-        };
 
-        checkboxItemListener(weatherCheckboxes, selectAllWeather);
 
-        transportCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(bicycleCheckBox);
-                add(busCheckBox);
-                add(carCheckBox);
-                add(mopedCheckBox);
-                add(motorcycleCheckBox);
-                add(parkedVehicleCheckBox);
-                add(pedestrianCheckBox);
-                add(schoolBusCheckBox);
-                add(trainCheckBox);
-                add(truckCheckBox);
-            }
-        };
-        checkboxItemListener(transportCheckboxes, selectAllTransport);
-
-        severityCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(nonInjuryCheckBox);
-                add(minorCrashCheckBox);
-                add(majorCrashCheckBox);
-                add(deathCheckBox);
-            }
-        };
-
-        checkboxItemListener(severityCheckboxes, selectAllSeverity);
-
-        regionCheckboxes = new ArrayList<CheckBox>(){
-            {
-                add(aucklandCheckbox);
-                add(bayOfPlentyCheckbox);
-                add(canterburyCheckbox);
-                add(gisborneCheckbox);
-                add(hawkesBayCheckbox);
-                add(manawatuWhanganuiCheckbox);
-                add(marlboroughCheckbox);
-                add(nelsonCheckbox);
-                add(northlandCheckbox);
-                add(otagoCheckbox);
-                add(southlandCheckbox);
-                add(taranakiCheckbox);
-                add(tasmanCheckbox);
-                add(waikatoCheckbox);
-                add(wellingtonCheckbox);
-                add(westCoastCheckbox);
-            }
-        };
-        checkboxItemListener(regionCheckboxes, selectAllRegions);
-
-    }
-
-    void checkboxItemListener(ArrayList<CheckBox> itemCheckboxes, CheckBox selectAllCheckbox) {
-        for (CheckBox item : itemCheckboxes) {
-            item.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (item.isSelected() == false) {
-                        selectAllCheckbox.setSelected(false);
-                    }
-                }
-            });
-        }
     }
 
     public void loadHelp() {
@@ -600,8 +445,12 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         if (checkBox.isSelected()) {
             filters.addToSeverities(severity);
+            if (filters.getSeveritiesSelected().size() == CrashSeverity.values().length) {
+                selectAllSeverity.setSelected(true);
+            }
         } else {
             filters.removeFromSeverities(severity);
+            selectAllSeverity.setSelected(false);
         }
     }
     @FXML
@@ -612,8 +461,12 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         if (checkBox.isSelected()) {
             filters.addToWeathers(weather);
+            if (filters.getWeathersSelected().size() == Weather.values().length) {
+                selectAllWeather.setSelected(true);
+            }
         } else {
             filters.removeFromWeathers(weather);
+            selectAllWeather.setSelected(false);
         }
     }
 
@@ -658,8 +511,12 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         if (checkBox.isSelected()) {
             filters.addToModes(mode);
+            if (filters.getModesSelected().size() == 10) { //todo remove hard coding
+                selectAllTransport.setSelected(true);
+            }
         } else {
             filters.removeFromModes(mode);
+            selectAllTransport.setSelected(false);
         }
     }
 
@@ -673,10 +530,33 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         if (checkBox.isSelected()) {
             filters.addToRegions(region);
+            if (filters.getRegionsSelected().size() == Region.values().length) {
+                selectAllRegions.setSelected(true);
+            }
         } else {
             filters.removeFromRegions(region);
+            selectAllRegions.setSelected(false);
         }
 
+    }
+
+    @FXML
+    public void handleAllCheckboxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
+
+        boolean allSelected = checkBox.isSelected();
+
+        for (Object child : parent.getChildren()) {
+            if (child instanceof VBox) {
+                for (Object childCheckBox : ((VBox) child).getChildren()) {
+                    if (childCheckBox instanceof  CheckBox) {
+                        System.out.println("child: " + ((CheckBox) childCheckBox).getText());
+                        ((CheckBox) childCheckBox).setSelected(allSelected);
+                    }
+                }
+            }
+        }
     }
 
 }
