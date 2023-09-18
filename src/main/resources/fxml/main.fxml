@@ -185,7 +185,7 @@
             <Insets left="401.0" top="120.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="weatherPane" maxHeight="235.0" maxWidth="250.0" prefHeight="235.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
+      <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="180.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox layoutX="30.0" layoutY="42.0" spacing="5.0">
