@@ -39,6 +39,9 @@ public class helpController {
             helpWindow.getChildren().clear();
             helpWindow.getChildren().add(mainViewParent);
             AnchorPane.setRightAnchor(mainViewParent, 0d);
+            AnchorPane.setLeftAnchor(mainViewParent, 0d);
+            AnchorPane.setBottomAnchor(mainViewParent, 0d);
+            AnchorPane.setTopAnchor(mainViewParent, 0d);
 
         } catch (IOException e) {
             e.printStackTrace();
