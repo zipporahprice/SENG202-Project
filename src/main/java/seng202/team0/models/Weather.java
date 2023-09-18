@@ -27,11 +27,10 @@ public enum Weather {
             case "Fine": return Weather.FINE;
             case "Light rain": return Weather.LIGHTRAIN;
             case "Heavy rain": return Weather.HEAVYRAIN;
-            case "Mist or fog": return Weather.MISTORFOG;
+            case "Mist or Fog": return Weather.MISTORFOG;
             case "Snow": return Weather.SNOW;
             case "Hail or sleet": return Weather.HAILORSLEET;
-            case "Null": return Weather.NULL;
-            default: return null;
+            default: return Weather.NULL;
         }
     }
 
