@@ -23,7 +23,7 @@ public class DatabaseIntegration {
         manager.addAllCrashesFromFile(importer, file);
 
         // File hard coded has 10,272 crashes
-        Assertions.assertEquals(manager.getCrashes().size(), 10272);
+        Assertions.assertEquals(manager.getCrashLocations().size(), 10272);
     }
 
     @Test
