@@ -45,7 +45,7 @@ public enum Region {
             case "Canterbury Region": return Region.CANTERBURY;
             case "Gisborne Region": return Region.GISBORNE;
             case "Hawke's Bay Region": return Region.HAWKESBAY;
-            case "ManawatÅ«-Whanganui Region": return Region.MANAWATUWHANGANUI;
+            case "Manawatū-Whanganui Region": return Region.MANAWATUWHANGANUI;
             case "Marlborough Region": return Region.MARLBOROUGH;
             case "Nelson Region": return Region.NELSON;
             case "Northland Region": return Region.NORTHLAND;
