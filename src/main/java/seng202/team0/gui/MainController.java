@@ -527,17 +527,64 @@ public class MainController {
 
         region = checkBox.getText();
 
-        FilterManager filters = FilterManager.getInstance();
-        if (checkBox.isSelected()) {
-            filters.addToRegions(region);
-            if (filters.getRegionsSelected().size() == Region.values().length) {
-                selectAllRegions.setSelected(true);
-            }
-        } else {
-            filters.removeFromRegions(region);
-            selectAllRegions.setSelected(false);
-        }
+        toggleAllCheckbox(checkBox, (AnchorPane) checkBox.getParent().getParent(), region);
 
+    }
+
+    public void toggleAllCheckbox(CheckBox checkBox, AnchorPane parent, Object toAdd) {
+        FilterManager filters = FilterManager.getInstance();
+
+        if (parent.equals(transportModePane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getModesSelected().contains(toAdd)) {
+                    filters.addToModes((String) toAdd);
+                }
+                if (filters.getModesSelected().size() == 10) { //todo remove hard coding
+                    selectAllTransport.setSelected(true);
+                }
+            } else {
+                filters.removeFromModes((String) toAdd);
+                selectAllTransport.setSelected(false);
+            }
+        } else if (parent.equals(weatherPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getWeathersSelected().contains(toAdd)) {
+                    filters.addToWeathers((String) toAdd);
+                }
+                if (filters.getWeathersSelected().size() == Weather.values().length) {
+                    selectAllWeather.setSelected(true);
+                }
+            } else {
+                filters.removeFromWeathers((String) toAdd);
+                selectAllWeather.setSelected(false);
+            }
+        } else if (parent.equals(severityPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getSeveritiesSelected().contains(toAdd)) {
+                    filters.addToSeverities((Integer) toAdd);
+                }
+                if (filters.getSeveritiesSelected().size() == CrashSeverity.values().length) {
+                    selectAllSeverity.setSelected(true);
+                }
+            } else {
+                filters.removeFromSeverities((Integer) toAdd);
+                selectAllSeverity.setSelected(false);
+            }
+        } else if (parent.equals(regionsPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getRegionsSelected().contains(toAdd)) {
+                    filters.addToRegions((String) toAdd);
+                }
+                if (filters.getRegionsSelected().size() == Region.values().length) {
+                    selectAllRegions.setSelected(true);
+                }
+            } else {
+                filters.removeFromRegions((String) toAdd);
+                selectAllRegions.setSelected(false);
+            }
+        } else if (parent.equals(holidayPane)) {
+            System.out.println("hol");
+        }
     }
 
     @FXML
@@ -553,6 +600,7 @@ public class MainController {
                     if (childCheckBox instanceof  CheckBox) {
                         System.out.println("child: " + ((CheckBox) childCheckBox).getText());
                         ((CheckBox) childCheckBox).setSelected(allSelected);
+                        toggleAllCheckbox((CheckBox) childCheckBox, parent, ((CheckBox) childCheckBox).getText());
                     }
                 }
             }
