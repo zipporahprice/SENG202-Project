@@ -253,16 +253,7 @@ public class MainController {
             }
         };
 
-        for (CheckBox weather : weatherCheckboxes) {
-            weather.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (weather.isSelected() == false) {
-                        selectAllWeather.setSelected(false);
-                    }
-                }
-            });
-        }
+        checkboxItemListener(weatherCheckboxes, selectAllWeather);
 
         transportCheckboxes = new ArrayList<CheckBox>() {
             {
@@ -278,16 +269,7 @@ public class MainController {
                 add(truckCheckBox);
             }
         };
-        for (CheckBox transportMode : transportCheckboxes) {
-            transportMode.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (transportMode.isSelected() == false) {
-                        selectAllTransport.setSelected(false);
-                    }
-                }
-            });
-        }
+        checkboxItemListener(transportCheckboxes, selectAllTransport);
 
         severityCheckboxes = new ArrayList<CheckBox>() {
             {
@@ -298,18 +280,22 @@ public class MainController {
             }
         };
 
-        for (CheckBox severity : severityCheckboxes) {
-            severity.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        checkboxItemListener(severityCheckboxes, selectAllSeverity);
+        //TODO modularise the unticking of checkboxes - DONE
+
+    }
+
+    private void checkboxItemListener(ArrayList<CheckBox> itemCheckboxes, CheckBox selectAllCheckbox) {
+        for (CheckBox item : itemCheckboxes) {
+            item.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (severity.isSelected() == false) {
-                        selectAllSeverity.setSelected(false);
+                    if (item.isSelected() == false) {
+                        selectAllCheckbox.setSelected(false);
                     }
                 }
             });
         }
-        //TODO modularise the unticking of checkboxes
-
     }
 
     public void loadHelp() {
