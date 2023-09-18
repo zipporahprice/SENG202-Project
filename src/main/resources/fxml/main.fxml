@@ -162,7 +162,7 @@
       <AnchorPane fx:id="regionsPane" maxHeight="366.0" maxWidth="250.0" prefHeight="366.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="106.0" layoutY="14.0" text="Region" textFill="WHITE" />
-            <VBox layoutX="22.0" layoutY="76.0" spacing="15.0">
+            <VBox fx:id="leftRegionVBox" layoutX="22.0" layoutY="76.0" spacing="15.0">
                <children>
                   <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Auckland" textFill="WHITE" />
                   <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Bay of Plenty" textFill="WHITE" />
@@ -174,7 +174,7 @@
                   <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" />
                </children>
             </VBox>
-            <VBox layoutX="143.0" layoutY="76.0" spacing="15.0">
+            <VBox fx:id="rightRegionVBox" layoutX="143.0" layoutY="76.0" spacing="15.0">
                <children>
                   <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Northland" textFill="WHITE" />
                   <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Otago" textFill="WHITE" />
@@ -199,13 +199,13 @@
       <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="180.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
-            <VBox layoutX="41.0" layoutY="42.0" spacing="5.0">
+            <VBox fx:id="weatherVBox" layoutX="41.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="fine" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Fine" textFill="WHITE" />
-                  <CheckBox fx:id="lightRain" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Light Rain" textFill="WHITE" />
-                  <CheckBox fx:id="heavyRain" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Heavy Rain" textFill="WHITE" />
-                  <CheckBox fx:id="mistOrFog" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Mist or Fog" textFill="WHITE" />
-                  <CheckBox fx:id="snow" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox fx:id="fineCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Fine" textFill="WHITE" />
+                  <CheckBox fx:id="lightRainCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Mist or Fog" textFill="WHITE" />
+                  <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Snow" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0">
