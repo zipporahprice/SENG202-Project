@@ -649,4 +649,20 @@ public class MainController {
             filters.removeFromModes(mode);
         }
     }
+
+    @FXML
+    public void handleRegionCheckBoxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox)event.getSource();
+        String region = null;
+
+        region = checkBox.getText();
+
+        FilterManager filters = FilterManager.getInstance();
+        if (checkBox.isSelected()) {
+            filters.addToRegions(region);
+        } else {
+            filters.removeFromRegions(region);
+        }
+
+    }
 }

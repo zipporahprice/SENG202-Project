@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 public class FilterManager {
     private static FilterManager filters;
     private List<Integer> severitiesSelected;
+
+    private List<String> regionsSelected;
     private Integer earliestYear;
 
     private List<String> modesSelected;
@@ -21,6 +23,7 @@ public class FilterManager {
     private FilterManager() {
         severitiesSelected = new ArrayList<>();
         modesSelected = new ArrayList<>();
+        regionsSelected = new ArrayList<>();
     }
 
     public static FilterManager getInstance() {
@@ -55,6 +58,13 @@ public class FilterManager {
 
         }
 
+        if (regionsSelected.size() > 0) {
+            where.add("region IN(" +
+                    getRegionsSelected().stream().map(region -> "\""+region+"\"").collect(Collectors.joining(", "))
+            + ")");
+
+        }
+
         if (getEarliestYear() != null) {
             where.add("crash_year >= " + getEarliestYear());
         }
@@ -67,4 +77,12 @@ public class FilterManager {
     public void addToModes(String mode) { modesSelected.add(mode); }
 
     public void removeFromModes(String mode) { modesSelected.remove((Object)mode); }
+
+    public List<String> getRegionsSelected() { return this.regionsSelected; }
+
+    public void addToRegions(String region) { regionsSelected.add(region); }
+
+    public void removeFromRegions(String region) {
+        regionsSelected.remove((Object)region);
+    }
 }
