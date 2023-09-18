@@ -63,6 +63,8 @@ public class GeoLocator {
         alert.showAndWait();
     }
 
+
+
     public String getAddress(Double lat, Double lng) {
         try {
             // Creating the http request

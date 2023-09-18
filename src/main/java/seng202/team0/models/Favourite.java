@@ -1,5 +1,7 @@
 package seng202.team0.models;
 
+import java.util.List;
+
 public class Favourite {
     private double startLat;
     private double startLong;
@@ -10,6 +12,7 @@ public class Favourite {
     private String startAddress;
 
     private String endAddress;
+
 
     public Favourite(String startAddress, String endAddress, double startLat, double startLong, double endLat, double endLong, String filters) {
         this.startAddress = startAddress;
@@ -45,4 +48,6 @@ public class Favourite {
     public String getStartAddress() {return startAddress;}
 
     public String getEndAddress() {return endAddress;}
+
+
 }

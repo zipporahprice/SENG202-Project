@@ -133,6 +133,9 @@ public class MainController {
     private GeoLocator geolocator;
     private WebEngine webEngine;
 
+    private List<Location> stops = new ArrayList<>();
+
+
     JSObject javaScriptConnector;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
@@ -430,13 +433,6 @@ public class MainController {
         emojiButtonTransitions[buttonIndex].play();
     }
 
-    /**
-     * Adds a location with given crash
-     */
-    private void addLocation(Crash crash) {
-        javaScriptConnector.call("addMarker", crash.getCrashLocation1() + "-" + crash.getCrashLocation2(),
-                crash.getLatitude(), crash.getLongitude());
-    }
 
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
@@ -495,7 +491,7 @@ public class MainController {
     private void displayRoutes() {
         FavouriteDAO favourites = new FavouriteDAO();
         List<Favourite> favouritesList = favourites.getAll();
-        ObservableList<String> items = FXCollections.observableArrayList(favouritesList.stream().map(favourite -> {return favourite.getStartAddress()+favourite.getEndAddress();}).toList());
+        ObservableList<String> items = FXCollections.observableArrayList(favouritesList.stream().map(favourite -> {return favourite.getStartAddress()+" to "+favourite.getEndAddress();}).toList());
         loadRoutesComboBox.setItems(items);
     }
 
@@ -505,7 +501,11 @@ public class MainController {
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
+            stops.clear();
             generateRouteAction(favourite);
+            loadRoutesComboBox.getSelectionModel().clearSelection();
+            startLocation.setText(favourite.getStartAddress());
+            endLocation.setText(favourite.getEndAddress());
         }
     }
 
@@ -521,20 +521,22 @@ public class MainController {
     }
 
     @FXML
-    private void generateStop() {
+    private void addStop() {
         Location stop = getStop();
-        Location start = getStart();
-        Location end = getEnd();
-        if (start != null && end != null && stop != null) {
-            Route route1 = new Route(start, stop);
-            Route route2 = new Route(stop, end);
+        if (stop != null) {
+            stops.add(stop);
+        }
+        generateRouteAction();
+    }
 
-            List<Route> routesList = new ArrayList<>();
-            routesList.add(route1);
-            routesList.add(route2);
-            javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+    @FXML
+    private void removeStop() {
+        if (stops.size() >= 1) {
+            stops.remove(stops.size()-1);
+            generateRouteAction();
         }
     }
+
 
     @FXML
     private void generateRouteAction() {
@@ -542,7 +544,12 @@ public class MainController {
         Location end = getEnd();
 
         if (start != null && end != null) {
-            Route route = new Route(start, end);
+            List<Location> routeLocations = new ArrayList<>();
+            routeLocations.add(start);
+            routeLocations.addAll(stops);  // add all the stops
+            routeLocations.add(end);
+
+            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
         }
     }
@@ -552,7 +559,12 @@ public class MainController {
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 
         if (start != null && end != null) {
-            Route route = new Route(start, end);
+            List<Location> routeLocations = new ArrayList<>();
+            routeLocations.add(start);
+            routeLocations.addAll(stops);
+            routeLocations.add(end);
+
+            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
         }
     }
