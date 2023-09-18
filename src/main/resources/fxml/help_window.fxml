@@ -16,12 +16,12 @@
      </Region>
     <AnchorPane layoutX="50" layoutY="50" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="250.0" prefHeight="300.0" prefWidth="350.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="CENTER">
       <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="35.0" prefWidth="94.0" text="Back" />
-        <VBox alignment="TOP_CENTER" layoutX="13.0" layoutY="40.0" prefHeight="181.0" prefWidth="323.0" spacing="10">
+        <VBox alignment="TOP_CENTER" layoutX="13.0" layoutY="34.0" prefHeight="181.0" prefWidth="323.0" spacing="10">
             <Label style="-fx-text-fill: white;" text="• Route Planning:" />
             <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Route Planning." />
    
                         <Label style="-fx-text-fill: white;" text="• Data Filtering:" />
-            <Label prefHeight="19.0" prefWidth="293.0" style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Exporting." />
+            <Label alignment="CENTER" prefHeight="19.0" prefWidth="293.0" style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Exporting." />
    
                         <Label style="-fx-text-fill: white;" text="• Data Exporting:" />
             <Label style="-fx-text-fill: white; -fx-padding: 0 0 0 20;" text="Your placeholder text for Data Filtering." />
