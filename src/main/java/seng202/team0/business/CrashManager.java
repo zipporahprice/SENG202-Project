@@ -42,20 +42,9 @@ public class CrashManager {
 
         String select = "longitude, latitude, severity";
         String from = "crashes";
-        List<String> where = new ArrayList<String>();
+        String where = FilterManager.getInstance().toString();
 
-
-        if (filters.getSeveritiesSelected().size() > 0) {
-            where.add("severity IN (" +
-                    filters.getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(", "))
-                    + ")");
-        }
-
-        if (filters.getEarliestYear() != null) {
-            where.add("crash_year >= " + filters.getEarliestYear());
-        }
-
-        if (where.size() == 0) {
+        if (where.length() == 0) {
             return SQLiteQueryBuilder
                     .create()
                     .select(select)
@@ -67,7 +56,7 @@ public class CrashManager {
                     .create()
                     .select(select)
                     .from(from)
-                    .where(String.join(" AND ", where))
+                    .where(where)
                     .build();
         }
     }

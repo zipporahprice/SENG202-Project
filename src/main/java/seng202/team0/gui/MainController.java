@@ -69,6 +69,8 @@ public class MainController {
     private CheckBox majorCrashCheckBox;
     @FXML
     private CheckBox deathCheckBox;
+    @FXML
+    private AnchorPane holidayPane;
 
     // Date Pane
     @FXML
@@ -91,7 +93,7 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[5]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
 
     @FXML
     private Button carButton;
@@ -181,9 +183,10 @@ public class MainController {
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(boundariesPane, 3);
         togglePaneWithFade(severityPane, 4);
+        togglePaneWithFade(holidayPane, 5);
 
         // Play each fade animation individually
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             fadeTransitions[i].play();
         }
     }
