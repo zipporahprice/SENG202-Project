@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GeoLocationTest {
 
@@ -42,5 +43,15 @@ public class GeoLocationTest {
         Location calcLocation = locater.getLocation("30 Durey Road");
 
         assertEquals(location.latitude,calcLocation.latitude, 0.1);
+    }
+
+    @Test
+    void testLocationPair() {
+        double delta = 0.00001; // Use an appropriate delta value, which defines the acceptable difference between the actual and expected values
+        GeoLocator locator = new GeoLocator();
+        Location calcLocation = locator.getLocation("30 Durey Road");
+        assertNotNull(calcLocation);  // Ensure the location is not null before proceeding
+        assertEquals(-43.488116649999995, calcLocation.latitude, delta);
+        assertEquals(172.54213544359874, calcLocation.longitude, delta);
     }
 }
