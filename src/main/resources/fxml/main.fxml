@@ -21,8 +21,8 @@
       </Region>
 
 
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
-      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#addEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
+      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#getEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets top="50.0" />
          </StackPane.margin></TextField>
@@ -223,7 +223,7 @@
             <Insets right="50.0" top="150.0" />
          </StackPane.margin>
       </Button>
-      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#addStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets top="100.0" />
          </StackPane.margin></TextField>
