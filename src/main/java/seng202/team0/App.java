@@ -6,11 +6,13 @@ import org.apache.logging.log4j.Logger;
 import seng202.team0.business.CrashManager;
 import seng202.team0.gui.MainWindow;
 import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Default entry point class
@@ -30,14 +32,24 @@ public class App {
         log.error("An error has occurred, thanks logging for helping find it! (This is a terrible error log message, but is only an example!')");
         log.log(Level.INFO, "There are many ways to log!");
 
+        // Initialises database and checks if populated
         DatabaseManager database = new DatabaseManager(null);
-        CrashCSVImporter importer = new CrashCSVImporter();
-        CrashManager manager = new CrashManager();
+        CrashDAO crashDao = new CrashDAO();
+        List crashes = crashDao.getAll();
+        if (crashes.size() == 0) {
+            try {
+                CrashCSVImporter importer = new CrashCSVImporter();
+                CrashManager manager = new CrashManager();
+                // TODO replace with full file
+                URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
+                File file = new File(newUrl.getPath());
+                manager.addAllCrashesFromFile(importer, file);
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
 
-        URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
-        File file = new File(newUrl.getPath());
-        manager.addAllCrashesFromFile(importer, file);
-
+        // Initialises GUI
         MainWindow.main(args);
     }
 }

@@ -1,4 +1,4 @@
-package seng202.team0.unitttests;
+package seng202.team0.integrationtests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 
-public class CrashDAOTest {
+public class DatabaseIntegration {
 
     @Test
     void addCrashesToDb() throws SQLException {
@@ -26,4 +26,7 @@ public class CrashDAOTest {
         Assertions.assertEquals(manager.getCrashes().size(), 10272);
     }
 
+    @Test
+    void queryCrashesTable() {
+    }
 }

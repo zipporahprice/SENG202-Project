@@ -1,7 +1,12 @@
 package seng202.team0.models;
 
 public enum CrashSeverity {
-    NONINJURY, MINOR, SERIOUS, FATAL;
+    NONINJURY(1), MINOR(2), SERIOUS(4), FATAL(8);
+    private final int value;
+
+    CrashSeverity(int value) {
+        this.value = value;
+    }
 
     public static CrashSeverity stringToCrashSeverity(String stringSeverity) {
         switch(stringSeverity) {
@@ -12,4 +17,12 @@ public enum CrashSeverity {
             default: return null;
         }
     }
+
+    public int getValue() {
+        return value;
+    }
+
+
+
+
 }

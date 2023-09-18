@@ -1,9 +1,14 @@
 package seng202.team0.repository;
 
+import seng202.team0.business.CrashManager;
+import seng202.team0.io.CrashCSVImporter;
+
 import java.io.*;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.List;
 
 /**
  * Class instantiating and initialising SQLite database.
@@ -29,7 +34,7 @@ public class DatabaseManager {
             this.url = url;
         }
 
-        if(!checkDatabaseExists(this.url)){
+        if (!checkDatabaseExists(this.url)) {
             createNewDatabase(this.url);
             resetDB();
         }
