@@ -32,10 +32,12 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 favourites.add(new Favourite(
+                        rs.getString("start_address"),
+                        rs.getString("end_address"),
                         rs.getFloat("start_lat"),
-                        rs.getFloat("start_long"),
+                        rs.getFloat("start_lng"),
                         rs.getFloat("end_lat"),
-                        rs.getFloat("end_long"),
+                        rs.getFloat("end_lng"),
                         rs.getString("filters")));
             }
             return favourites;
@@ -60,10 +62,12 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     favourite = new Favourite(
+                            rs.getString("start_address"),
+                            rs.getString("end_address"),
                             rs.getFloat("start_lat"),
-                            rs.getFloat("start_long"),
+                            rs.getFloat("start_lng"),
                             rs.getFloat("end_lat"),
-                            rs.getFloat("end_long"),
+                            rs.getFloat("end_lng"),
                             rs.getString("filters"));
                 }
                 return favourite;
@@ -81,11 +85,13 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
      * @throws SQLException
      */
     public void addToPreparedStatement(PreparedStatement ps, Favourite toAdd) throws SQLException {
-        ps.setDouble(1, toAdd.getStartLat());
-        ps.setDouble(2, toAdd.getStartLong());
-        ps.setDouble(3, toAdd.getEndLat());
-        ps.setDouble(4, toAdd.getEndLong());
-        ps.setString(5, toAdd.getFilters());
+        ps.setString(1, toAdd.getStartAddress());
+        ps.setString(2, toAdd.getEndAddress());
+        ps.setDouble(3, toAdd.getStartLat());
+        ps.setDouble(4, toAdd.getStartLong());
+        ps.setDouble(5, toAdd.getEndLat());
+        ps.setDouble(6, toAdd.getEndLong());
+        ps.setString(7, toAdd.getFilters());
     }
 
     /**
@@ -95,8 +101,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
      */
     @Override
     public void addOne(Favourite toAdd) throws SQLException {
-        String sql = "INSERT INTO favourites (start_lat, start_lng," +
-                "end_lat, end_lng, filters) values (?,?,?,?,?);";
+        String sql = "INSERT INTO favourites (start_address, end_address, start_lat, start_lng," +
+                "end_lat, end_lng, filters) values (?,?,?,?,?,?,?);";
         Connection conn = databaseManager.connect();
         PreparedStatement ps = conn.prepareStatement(sql);
         addToPreparedStatement(ps, toAdd);
@@ -109,8 +115,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
      * @throws SQLException
      */
     public void addMultiple(List<Favourite> toAdd) throws SQLException {
-        String sql = "INSERT OR IGNORE INTO favourites (start_lat, start_long" +
-                "end_lat, end_long, filters) values (?,?,?,?,?);";
+        String sql = "INSERT OR IGNORE INTO favourites (start_address, end_address, start_lat, start_long" +
+                "end_lat, end_long, filters) values (?,?,?,?,?,?,?);";
         Connection conn = databaseManager.connect();
         PreparedStatement ps = conn.prepareStatement(sql);
         conn.setAutoCommit(false);

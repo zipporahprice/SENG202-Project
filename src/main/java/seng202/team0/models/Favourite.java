@@ -7,7 +7,13 @@ public class Favourite {
     private double endLong;
     private String filters;
 
-    public Favourite(double startLat, double startLong, double endLat, double endLong, String filters) {
+    private String startAddress;
+
+    private String endAddress;
+
+    public Favourite(String startAddress, String endAddress, double startLat, double startLong, double endLat, double endLong, String filters) {
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
         this.startLat = startLat;
         this.startLong = startLong;
         this.endLat = endLat;
@@ -35,4 +41,8 @@ public class Favourite {
     public String getFilters() {
         return filters;
     }
+
+    public String getStartAddress() {return startAddress;}
+
+    public String getEndAddress() {return endAddress;}
 }

@@ -1,5 +1,7 @@
 package seng202.team0.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -56,6 +58,8 @@ public class MainController {
     private AnchorPane weatherPane;
     @FXML
     private AnchorPane boundariesPane;
+    @FXML
+    private ComboBox<String> loadRoutesComboBox;
 
     @FXML
     private Button helpButton;
@@ -479,9 +483,24 @@ public class MainController {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
-        Favourite favourite = new Favourite(start.latitude, start.longitude, end.latitude, end.longitude, filters);
+        String startAddress = geolocator.getAddress(start.latitude, start.longitude);
+        String endAddress = geolocator.getAddress(end.latitude, end.longitude);
+        Favourite favourite = new Favourite(startAddress, endAddress, start.latitude, start.longitude, end.latitude, end.longitude, filters);
         FavouriteDAO favorites = new FavouriteDAO();
         favorites.addOne(favourite);
+    }
+
+    @FXML
+    private void displayRoutes() {
+        FavouriteDAO favourites = new FavouriteDAO();
+        List<Favourite> favouritesList = favourites.getAll();
+        ObservableList<String> items = FXCollections.observableArrayList(favouritesList.stream().map(favourite -> {return favourite.getStartAddress()+favourite.getEndAddress();}).toList());
+        loadRoutesComboBox.setItems(items);
+    }
+
+    @FXML
+    private void loadRoute() {
+
     }
 
     @FXML
