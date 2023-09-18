@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -307,7 +308,7 @@ public class MainController {
             mainWindow.getChildren().clear();
 
             mainWindow.getChildren().add(helpViewParent);
-            AnchorPane.setRightAnchor(helpViewParent,0d);
+            StackPane.setAlignment(helpViewParent, Pos.CENTER);
         } catch (IOException e) {
             e.printStackTrace();
         }
