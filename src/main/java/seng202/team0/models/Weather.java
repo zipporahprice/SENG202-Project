@@ -8,7 +8,13 @@ package seng202.team0.models;
  */
 public enum Weather {
 
-    FINE("Fine"), LIGHTRAIN("Light rain"), HEAVYRAIN("Heavy rain"), MISTORFOG("Mist or fog"), SNOW("Snow"), HAILORSLEET("Hail or sleet"), NULL("Null");
+    FINE("Fine"),
+    LIGHTRAIN("Light rain"),
+    HEAVYRAIN("Heavy rain"),
+    MISTORFOG("Mist or fog"),
+    SNOW("Snow"),
+    HAILORSLEET("Hail or sleet"),
+    NULL("Null");
 
     private final String name;
 
