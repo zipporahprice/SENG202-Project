@@ -99,9 +99,15 @@ public class MainController {
 
 
     /**
-     * Initialize the window
+     * Initializes the main stage, UI components, and the map controller.
+     * This method sets up the primary stage, initializes a GeoLocator, maximizes
+     * the stage, configures the map controller with the WebView, and initializes
+     * the map. It also sets up a listener for WebView state changes to interact
+     * with JavaScript code once it's loaded.
      *
-     * @param stage Top level container for this window
+     * @param stage The primary stage of the JavaFX application.
+     * @throws NullPointerException If the 'stage' object is not properly initialized
+     *                              before calling this method.
      */
     void init(Stage stage) {
         this.stage = stage;

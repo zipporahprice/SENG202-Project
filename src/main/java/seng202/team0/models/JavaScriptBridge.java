@@ -14,33 +14,21 @@ import java.util.List;
 
 
 /**
- * Simple example class showing the ability to 'bridge' from javascript to java
- * The functions within can be called from our javascript in the map view when we set an object of this class
- * as a member of the javascript
- * Note: This is a very basic example you can use any java code, though you may need to be careful when working
- * with objects
- * @author Morgan English
+ * Provides a bridge between JavaScript and Java for handling crash data.
+ * This class retrieves crash data, converts it to a JSON format, and exposes it
+ * to JavaScript for integration with web applications.
+ * @author toddv
  */
 public class JavaScriptBridge {
     CrashManager crashData = new CrashManager();
-    /**
-     * Function called from js when map clicked. In a real application you will want to do something other than printing
-     * the information to the console
-     * @param latlng co-ordinates clicked at in JSON object format {"lat":number, "lng":number}
-     */
-    public void addMarkerFromClick(String latlng){
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject latlng_json = (JSONObject) parser.parse(latlng);
-            float lat = ((Double)latlng_json.get("lat")).floatValue();
-            float lng = ((Double) latlng_json.get("lng")).floatValue();
-            String logMessage = String.format("From Java: you clicked at %s, %s", lat, lng);
-            System.out.println(logMessage);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
+
+    /**
+     * Retrieves a list of crash data and converts it to a JSON format.
+     *
+     * @return A JSON representation of crash data containing latitude and longitude information.
+     * @throws SQLException If there is an error while retrieving crash data from the database.
+     */
     public String crashes() throws SQLException {
         List<Crash> crashList = crashData.getCrashes();
 
@@ -59,11 +47,24 @@ public class JavaScriptBridge {
         return json;
 
     }
-
+    /**
+     * Represents crash information containing latitude and longitude.
+     */
     protected static class CrashInfo {
-
+        /**
+         * The latitude of the crash location.
+         */
         public double lat;
+        /**
+         * The longitude of the crash location.
+         */
         public double lng;
+        /**
+         * Constructs a CrashInfo object with latitude and longitude.
+         *
+         * @param lat The latitude of the crash location.
+         * @param lng The longitude of the crash location.
+         */
 
         public CrashInfo(double lat, double lng) {
             this.lat = lat;
