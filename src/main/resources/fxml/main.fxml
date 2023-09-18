@@ -162,26 +162,26 @@
             <Label layoutX="106.0" layoutY="14.0" text="Region" textFill="WHITE" />
             <VBox layoutX="22.0" layoutY="76.0" spacing="15.0">
                <children>
-                  <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Auckland" textFill="WHITE" />
-                  <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bay of Plenty" textFill="WHITE" />
-                  <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Canterbury" textFill="WHITE" />
-                  <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Gisborne" textFill="WHITE" />
-                  <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Hawke's Bay" textFill="WHITE" />
-                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
-                  <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Marlborough" textFill="WHITE" />
-                  <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Nelson" textFill="WHITE" />
+                  <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Auckland" textFill="WHITE" />
+                  <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Bay of Plenty" textFill="WHITE" />
+                  <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Canterbury" textFill="WHITE" />
+                  <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Gisborne" textFill="WHITE" />
+                  <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Hawke's Bay" textFill="WHITE" />
+                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
+                  <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Marlborough" textFill="WHITE" />
+                  <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="143.0" layoutY="76.0" spacing="15.0">
                <children>
-                  <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Northland" textFill="WHITE" />
-                  <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Otago" textFill="WHITE" />
-                  <CheckBox fx:id="southlandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Southland" textFill="WHITE" />
-                  <CheckBox fx:id="taranakiCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Taranaki" textFill="WHITE" />
-                  <CheckBox fx:id="tasmanCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Tasman" textFill="WHITE" />
-                  <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Waikato" textFill="WHITE" />
-                  <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Wellington" textFill="WHITE" />
-                  <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="West Coast" textFill="WHITE" />
+                  <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Northland" textFill="WHITE" />
+                  <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Otago" textFill="WHITE" />
+                  <CheckBox fx:id="southlandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Southland" textFill="WHITE" />
+                  <CheckBox fx:id="taranakiCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Taranaki" textFill="WHITE" />
+                  <CheckBox fx:id="tasmanCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Tasman" textFill="WHITE" />
+                  <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" />
+                  <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" />
+                  <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0">
