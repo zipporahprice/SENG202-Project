@@ -53,7 +53,7 @@ public class MainController {
     @FXML
     private AnchorPane weatherPane;
     @FXML
-    private AnchorPane boundariesPane;
+    private AnchorPane regionsPane;
     @FXML
     private AnchorPane holidayPane;
 
@@ -64,7 +64,7 @@ public class MainController {
 
     @FXML
     private Button helpButton;
-
+    //weather pane
     @FXML
     private CheckBox selectAllWeather;
     @FXML
@@ -123,6 +123,42 @@ public class MainController {
     @FXML
     private Label currentYearLabel;
 
+    //regions pane
+    @FXML
+    private CheckBox selectAllRegions;
+    @FXML
+    private CheckBox aucklandCheckbox;
+    @FXML
+    private CheckBox bayOfPlentyCheckbox;
+    @FXML
+    private CheckBox canterburyCheckbox;
+    @FXML
+    private CheckBox gisborneCheckbox;
+    @FXML
+    private CheckBox hawkesBayCheckbox;
+    @FXML
+    private CheckBox manawatuWhanganuiCheckbox;
+    @FXML
+    private CheckBox marlboroughCheckbox;
+    @FXML
+    private CheckBox nelsonCheckbox;
+    @FXML
+    private CheckBox northlandCheckbox;
+    @FXML
+    private CheckBox otagoCheckbox;
+    @FXML
+    private CheckBox southlandCheckbox;
+    @FXML
+    private CheckBox taranakiCheckbox;
+    @FXML
+    private CheckBox tasmanCheckbox;
+    @FXML
+    private CheckBox waikatoCheckbox;
+    @FXML
+    private CheckBox wellingtonCheckbox;
+    @FXML
+    private CheckBox westCoastCheckbox;
+
 
     @FXML
     private AnchorPane includedMap;
@@ -140,6 +176,7 @@ public class MainController {
     private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
     private ArrayList<CheckBox> transportCheckboxes = new ArrayList<CheckBox>();
     private ArrayList<CheckBox> severityCheckboxes = new ArrayList<CheckBox>();
+    private  ArrayList<CheckBox> regionCheckboxes = new ArrayList<CheckBox>();
 
 
     @FXML
@@ -218,7 +255,15 @@ public class MainController {
             }
         });
 
-        //TODO make the size of the filters resize with the window size, below code unfinished
+        selectAllRegions.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                for (CheckBox region : regionCheckboxes){
+                    region.setSelected(newValue);
+                }
+            }
+        });
+
 
 
         stage.sizeToScene();
@@ -245,7 +290,7 @@ public class MainController {
         transportModePane.setVisible(false);
         weatherPane.setVisible(false);
         datePane.setVisible(false);
-        boundariesPane.setVisible(false);
+        regionsPane.setVisible(false);
         severityPane.setVisible(false);
         holidayPane.setVisible(false);
 
@@ -288,9 +333,31 @@ public class MainController {
 
         checkboxItemListener(severityCheckboxes, selectAllSeverity);
 
+        regionCheckboxes = new ArrayList<CheckBox>(){
+            {
+                add(aucklandCheckbox);
+                add(bayOfPlentyCheckbox);
+                add(canterburyCheckbox);
+                add(gisborneCheckbox);
+                add(hawkesBayCheckbox);
+                add(manawatuWhanganuiCheckbox);
+                add(marlboroughCheckbox);
+                add(nelsonCheckbox);
+                add(northlandCheckbox);
+                add(otagoCheckbox);
+                add(southlandCheckbox);
+                add(taranakiCheckbox);
+                add(tasmanCheckbox);
+                add(waikatoCheckbox);
+                add(wellingtonCheckbox);
+                add(westCoastCheckbox);
+            }
+        };
+        checkboxItemListener(regionCheckboxes, selectAllRegions);
+
     }
 
-    private void checkboxItemListener(ArrayList<CheckBox> itemCheckboxes, CheckBox selectAllCheckbox) {
+    void checkboxItemListener(ArrayList<CheckBox> itemCheckboxes, CheckBox selectAllCheckbox) {
         for (CheckBox item : itemCheckboxes) {
             item.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
@@ -330,7 +397,7 @@ public class MainController {
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
-        togglePaneWithFade(boundariesPane, 3);
+        togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
         togglePaneWithFade(holidayPane, 6);
 

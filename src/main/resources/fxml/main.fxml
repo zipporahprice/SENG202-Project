@@ -51,45 +51,28 @@
 
       <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
-            <Label layoutX="73.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
-            <VBox layoutX="13.0" layoutY="37.0" spacing="5.0">
+            <Label layoutX="82.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
+            <VBox layoutX="41.0" layoutY="97.0" spacing="15.0">
                <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bicycle" textFill="WHITE" />
                <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bus" textFill="WHITE" />
                <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Car" textFill="WHITE" />
                <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Moped" textFill="WHITE" />
                <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Motorcycle" textFill="WHITE" />
-               <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Parked Vehicle" textFill="WHITE" />
-               <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Pedestrian" textFill="WHITE" />
-               <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="School Bus" textFill="WHITE" />
-               <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Train" textFill="WHITE" />
-               <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Truck" textFill="WHITE" />
             </VBox>
             <VBox spacing="5.0" />
-            <CheckBox fx:id="selectAllTransport" layoutX="150.0" layoutY="37.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+            <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
+               <children>
+                  <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Parked Vehicle" textFill="WHITE" />
+                  <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Pedestrian" textFill="WHITE" />
+                  <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="School Bus" textFill="WHITE" />
+                  <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Train" textFill="WHITE" />
+                  <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Truck" textFill="WHITE" />
+               </children>
+            </VBox>
+            <CheckBox fx:id="selectAllTransport" layoutX="107.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
          </children>
          <StackPane.margin>
             <Insets left="150.0" />
-         </StackPane.margin>
-      </AnchorPane>
-      <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
-         <children>
-            <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
-            <VBox layoutX="30.0" layoutY="42.0" spacing="5.0">
-               <children>
-                  <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" />
-                  <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" />
-                  <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" />
-                  <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Death" textFill="WHITE" />
-               </children>
-            </VBox>
-            <VBox layoutX="156.0" layoutY="42.0" spacing="5.0">
-               <children>
-                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
-               </children>
-            </VBox>
-         </children>
-         <StackPane.margin>
-            <Insets left="401.0" top="289.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane maxWidth="118.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="CENTER_LEFT">
@@ -174,22 +157,38 @@
             <Insets left="401.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
+      <AnchorPane fx:id="regionsPane" maxHeight="366.0" maxWidth="250.0" prefHeight="366.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
-            <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
-            <VBox layoutX="107.0" layoutY="50.0" spacing="5.0" />
-            <CheckBox fx:id="yesHoliday" layoutX="105.0" layoutY="59.0" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
-         </children>
-         <StackPane.margin>
-            <Insets left="401.0" top="435.0" />
-         </StackPane.margin>
-      </AnchorPane>
-      <AnchorPane fx:id="boundariesPane" maxHeight="166.0" maxWidth="250.0" prefHeight="166.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
-         <children>
-            <Label layoutX="88.0" layoutY="14.0" text="Boundaries" textFill="WHITE" />
-            <TextField layoutX="40.0" layoutY="43.0" promptText="Point 1" />
-            <TextField layoutX="40.0" layoutY="78.0" promptText="Point 2" />
-            <Button layoutX="90.0" layoutY="121.0" mnemonicParsing="false" text="Confirm" />
+            <Label layoutX="106.0" layoutY="14.0" text="Region" textFill="WHITE" />
+            <VBox layoutX="22.0" layoutY="76.0" spacing="15.0">
+               <children>
+                  <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Auckland" textFill="WHITE" />
+                  <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bay of Plenty" textFill="WHITE" />
+                  <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Canterbury" textFill="WHITE" />
+                  <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Gisborne" textFill="WHITE" />
+                  <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Hawke's Bay" textFill="WHITE" />
+                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
+                  <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Marlborough" textFill="WHITE" />
+                  <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Nelson" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox layoutX="143.0" layoutY="76.0" spacing="15.0">
+               <children>
+                  <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Northland" textFill="WHITE" />
+                  <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Otago" textFill="WHITE" />
+                  <CheckBox fx:id="southlandCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Southland" textFill="WHITE" />
+                  <CheckBox fx:id="taranakiCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Taranaki" textFill="WHITE" />
+                  <CheckBox fx:id="tasmanCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Tasman" textFill="WHITE" />
+                  <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Waikato" textFill="WHITE" />
+                  <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Wellington" textFill="WHITE" />
+                  <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="West Coast" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox layoutX="107.0" layoutY="43.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllRegions" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children>
+            </VBox>
          </children>
          <StackPane.margin>
             <Insets left="401.0" top="120.0" />
@@ -198,33 +197,22 @@
       <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="180.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
-            <VBox layoutX="30.0" layoutY="42.0" spacing="5.0">
+            <VBox layoutX="41.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="snow" mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
                   <CheckBox fx:id="fine" mnemonicParsing="false" selected="true" text="Fine" textFill="WHITE" />
-                  <CheckBox fx:id="heavyRain" mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
                   <CheckBox fx:id="lightRain" mnemonicParsing="false" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox fx:id="heavyRain" mnemonicParsing="false" selected="true" text="Heavy Rain" textFill="WHITE" />
                   <CheckBox fx:id="mistOrFog" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" selected="true" text="Mist or Fog" textFill="WHITE" />
+                  <CheckBox fx:id="snow" mnemonicParsing="false" selected="true" text="Snow" textFill="WHITE" />
                </children>
             </VBox>
-            <VBox layoutX="150.0" layoutY="42.0" spacing="5.0">
-               <children>
-                  <CheckBox fx:id="selectAllWeather" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
-               </children>
-            </VBox>
+            <VBox layoutX="150.0" layoutY="42.0" spacing="5.0" />
+            <CheckBox fx:id="selectAllWeather" layoutX="160.0" layoutY="42.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
          </children>
          <StackPane.margin>
             <Insets left="150.0" top="279.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button fx:id="helpButton" layoutX="451.0" layoutY="340.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="100.0" prefWidth="162.0" styleClass="buttonColor" stylesheets="@style.css" text="Help" textFill="#f2f2f2" userData="3" StackPane.alignment="TOP_CENTER">
-         <font>
-            <Font name="System Bold Italic" size="37.0" />
-         </font>
-<!--         <StackPane.margin>-->
-<!--            <Insets top="500.0" />-->
-<!--         </StackPane.margin>-->
-      </Button>
       <Button fx:id="addStopButton1" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#generateStop" prefHeight="43" prefWidth="97.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>
             <Font name="System Bold" size="15.0" />
@@ -237,5 +225,47 @@
          <StackPane.margin>
             <Insets top="100.0" />
          </StackPane.margin></TextField>
+      <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
+            <VBox layoutX="38.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" />
+                  <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" />
+                  <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" />
+                  <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Death" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox layoutX="156.0" layoutY="42.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+         <StackPane.margin>
+            <Insets left="150.0" top="463.0" />
+         </StackPane.margin>
+      </AnchorPane>
+      <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
+            <VBox layoutX="107.0" layoutY="50.0" spacing="5.0" />
+            <CheckBox fx:id="yesHoliday" layoutX="105.0" layoutY="59.0" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
+         </children>
+         <StackPane.margin>
+            <Insets left="401.0" top="490.0" />
+         </StackPane.margin>
+      </AnchorPane>
+      <Button fx:id="helpButton" mnemonicParsing="false" onAction="#loadHelp" prefHeight="100.0" prefWidth="162.0" styleClass="buttonColor" stylesheets="@style.css" text="Help" textFill="#f2f2f2" userData="3">
+         <font>
+            <Font name="System Bold Italic" size="37.0" />
+         </font>
+         <StackPane.margin>
+            <Insets top="520.0" />
+         </StackPane.margin>
+<!--         <StackPane.margin>-->
+<!--            <Insets top="500.0" />-->
+<!--         </StackPane.margin>-->
+      </Button>
    </children>
 </StackPane>
