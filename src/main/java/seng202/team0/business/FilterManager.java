@@ -19,6 +19,7 @@ public class FilterManager {
 
     private FilterManager() {
         severitiesSelected = new ArrayList<>();
+        modesSelected = new ArrayList<>();
     }
 
     public static FilterManager getInstance() {
