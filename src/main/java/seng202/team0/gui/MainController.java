@@ -21,9 +21,11 @@ import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
+import seng202.team0.repository.FavouriteDAO;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -469,6 +471,17 @@ public class MainController {
         Location newMarker = geolocator.getLocation(address);
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
+    }
+
+    //TODO add stops to the save route
+    @FXML
+    private void saveRoute() throws SQLException {
+        Location start = getStart();
+        Location end = getEnd();
+        String filters = FilterManager.getInstance().toString();
+        Favourite favourite = new Favourite(start.latitude, start.longitude, end.latitude, end.longitude, filters);
+        FavouriteDAO favorites = new FavouriteDAO();
+        favorites.addOne(favourite);
     }
 
     @FXML

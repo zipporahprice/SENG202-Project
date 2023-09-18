@@ -1,15 +1,13 @@
 package seng202.team0.models;
 
 public class Favourite {
-    private int id;
-    private float startLat;
-    private float startLong;
-    private float endLat;
-    private float endLong;
+    private double startLat;
+    private double startLong;
+    private double endLat;
+    private double endLong;
     private String filters;
 
-    public Favourite(int id, float startLat, float startLong, float endLat, float endLong, String filters) {
-        this.id = id;
+    public Favourite(double startLat, double startLong, double endLat, double endLong, String filters) {
         this.startLat = startLat;
         this.startLong = startLong;
         this.endLat = endLat;
@@ -17,23 +15,20 @@ public class Favourite {
         this.filters = filters;
 
     }
-    public int getId() {
-        return id;
-    }
 
-    public float getStartLat() {
+    public double getStartLat() {
         return startLat;
     }
 
-    public float getStartLong() {
+    public double getStartLong() {
         return startLong;
     }
 
-    public float getEndLat() {
+    public double getEndLat() {
         return endLat;
     }
 
-    public float getEndLong() {
+    public double getEndLong() {
         return endLong;
     }
 
