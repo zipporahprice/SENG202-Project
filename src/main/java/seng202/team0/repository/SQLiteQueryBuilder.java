@@ -33,7 +33,7 @@ public class SQLiteQueryBuilder {
         String[] columns_without_commas = columns.split(",");
 
         // Adding columns to selectedColumns
-        for (String column: columns_without_commas) {
+        for (String column : columns_without_commas) {
             selectedColumns.add(column.trim());
         }
 
@@ -47,6 +47,23 @@ public class SQLiteQueryBuilder {
      */
     public SQLiteQueryBuilder from(String table) {
         query.append("FROM ").append(table).append(" ");
+
+        // If "*" is selected, update columns to all columns of the table
+        if (selectedColumns.contains("*")) {
+            try (Connection conn = databaseManager.connect()) {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet rs = metaData.getColumns(null, null, table, null);
+
+                selectedColumns.clear();
+                while (rs.next()) {
+                    selectedColumns.add(rs.getString("COLUMN_NAME"));
+                    System.out.println(rs.getString("COLUMN_NAME"));
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
         return this;
     }
 

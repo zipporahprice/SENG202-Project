@@ -33,7 +33,7 @@ public class MainControllerTest {
 
         try {
             CrashManager manager = new CrashManager();
-            expectedCrashes = manager.getCrashes();
+            expectedCrashes = manager.getCrashLocations();
         } catch (SQLException e) {
             System.out.println(e);
         }
