@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Filter;
 
 /**
@@ -139,7 +140,6 @@ public class MainController {
     private VBox leftRegionVBox;
     @FXML
     private VBox rightRegionVBox;
-//    private List<VBox> filterVboxList = List.of(weatherVBox, leftRegionVBox, rightRegionVBox);
 
 
     @FXML
@@ -434,17 +434,6 @@ public class MainController {
     }
 
     @FXML
-    public void handleSeverityCheckBoxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        toggleAllCheckbox(checkBox, severityPane);
-    }
-    @FXML
-    public void handleWeatherCheckboxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        toggleAllCheckbox(checkBox, weatherPane);
-    }
-
-    @FXML
     public void sliderValueChange() {
         int sliderValue = (int)Math.round(dateSlider.getValue());
 
@@ -456,72 +445,49 @@ public class MainController {
         filters.setEarliestYear(sliderValue);
     }
 
-    @FXML
-    public void handleTypeInvolved(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        toggleAllCheckbox(checkBox, transportModePane);
-    }
-
-    @FXML
-    public void handleRegionCheckBoxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        toggleAllCheckbox(checkBox, (AnchorPane) checkBox.getParent().getParent());
-    }
-
     public void toggleAllCheckbox(CheckBox checkBox, AnchorPane parent) {
         FilterManager filters = FilterManager.getInstance();
         Object toAdd = checkBox.getUserData();
 
+        System.out.println(toAdd.getClass());
+        System.out.println(toAdd);
+
+        // TODO check if logic event needs to check if the list contains the thing you are adding
+
         if (parent.equals(transportModePane)) {
             if (checkBox.isSelected()) {
-                if (!filters.getModesSelected().contains(toAdd)) {
+                if (!filters.getModesSelected().contains((String) toAdd)) {
                     filters.addToModes((String) toAdd);
-                }
-                if (filters.getModesSelected().size() == 10) { //todo remove hard coding
-                    selectAllTransport.setSelected(true);
                 }
             } else {
                 filters.removeFromModes((String) toAdd);
-                selectAllTransport.setSelected(false);
             }
         } else if (parent.equals(weatherPane)) {
             if (checkBox.isSelected()) {
-                if (!filters.getWeathersSelected().contains(toAdd)) {
+                if (!filters.getWeathersSelected().contains((String) toAdd)) {
                     filters.addToWeathers((String) toAdd);
-                }
-                if (filters.getWeathersSelected().size() == Weather.values().length) {
-                    selectAllWeather.setSelected(true);
                 }
             } else {
                 filters.removeFromWeathers((String) toAdd);
-                selectAllWeather.setSelected(false);
             }
         } else if (parent.equals(severityPane)) {
             if (checkBox.isSelected()) {
-                if (!filters.getSeveritiesSelected().contains(toAdd)) {
+                if (!filters.getSeveritiesSelected().contains((Integer) toAdd)) {
                     filters.addToSeverities((Integer) toAdd);
-                }
-                if (filters.getSeveritiesSelected().size() == CrashSeverity.values().length) {
-                    selectAllSeverity.setSelected(true);
                 }
             } else {
                 filters.removeFromSeverities((Integer) toAdd);
-                selectAllSeverity.setSelected(false);
             }
         } else if (parent.equals(regionsPane)) {
             if (checkBox.isSelected()) {
-                if (!filters.getRegionsSelected().contains(toAdd)) {
+                if (!filters.getRegionsSelected().contains((String) toAdd)) {
                     filters.addToRegions((String) toAdd);
-                }
-                if (filters.getRegionsSelected().size() == Region.values().length) {
-                    selectAllRegions.setSelected(true);
                 }
             } else {
                 filters.removeFromRegions((String) toAdd);
-                selectAllRegions.setSelected(false);
             }
         } else if (parent.equals(holidayPane)) {
-            System.out.println("hol");
+            System.out.println("CREATE HOLIDAY FILTERING");
         }
     }
 
@@ -538,18 +504,10 @@ public class MainController {
         trainCheckBox.setUserData("train_involved");
         truckCheckBox.setUserData("truck_involved");
 
-        nonInjuryCheckBox.setUserData("1");
-        minorCrashCheckBox.setUserData("2");
-        majorCrashCheckBox.setUserData("4");
-        deathCheckBox.setUserData("8");
-
-//        for (VBox filters : filterVboxList) {
-//            for (Object child : filters.getChildren()) {
-//                if (child instanceof CheckBox) {
-//                    ((CheckBox) child).setUserData(((CheckBox) child).getText());
-//                }
-//            }
-//        }
+        nonInjuryCheckBox.setUserData(1);
+        minorCrashCheckBox.setUserData(2);
+        majorCrashCheckBox.setUserData(4);
+        deathCheckBox.setUserData(8);
 
         for (Object child : weatherVBox.getChildren()) {
             if (child instanceof CheckBox) {
@@ -571,23 +529,61 @@ public class MainController {
     }
 
     @FXML
-    public void handleAllCheckboxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox) event.getSource();
-        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
+    public void handleAllCheckBoxEvent(ActionEvent event) {
+        CheckBox allCheckBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
 
-        boolean allSelected = checkBox.isSelected();
+        boolean allSelected = allCheckBox.isSelected();
 
         for (Object child : parent.getChildren()) {
             if (child instanceof VBox) {
                 for (Object childCheckBox : ((VBox) child).getChildren()) {
                     if (childCheckBox instanceof  CheckBox) {
-                        System.out.println("child: " + ((CheckBox) childCheckBox).getText());
                         ((CheckBox) childCheckBox).setSelected(allSelected);
                         toggleAllCheckbox((CheckBox) childCheckBox, parent);
                     }
                 }
             }
         }
+    }
+
+    @FXML
+    public void handleCheckBoxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
+
+        toggleAllCheckbox(checkBox, parent);
+
+        CheckBox allCheckBox = null;
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        for (Object child : parent.getChildren()) {
+            if (child instanceof VBox) {
+                for (Object childCheckBox : ((VBox) child).getChildren()) {
+                    if (childCheckBox instanceof  CheckBox) {
+                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
+                            checkBoxes.add((CheckBox) childCheckBox);
+                        } else {
+                            allCheckBox = (CheckBox) childCheckBox;
+                        }
+                    }
+                }
+            }
+        }
+
+        assert allCheckBox != null;
+        updateAllCheckBox(allCheckBox, checkBoxes);
+    }
+
+    public void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
+        boolean allSelected = true;
+        for (CheckBox checkBox : checkBoxes) {
+            if (!checkBox.isSelected()) {
+                allSelected = false;
+                break;
+            }
+        }
+        allCheckBox.setSelected(allSelected);
     }
 
 }

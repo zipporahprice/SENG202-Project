@@ -53,23 +53,23 @@
          <children>
             <Label layoutX="82.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
             <VBox layoutX="41.0" layoutY="97.0" spacing="15.0">
-               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bicycle" textFill="WHITE" />
-               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Bus" textFill="WHITE" />
-               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Car" textFill="WHITE" />
-               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Moped" textFill="WHITE" />
-               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Motorcycle" textFill="WHITE" />
+               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bicycle" textFill="WHITE" />
+               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bus" textFill="WHITE" />
+               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Car" textFill="WHITE" />
+               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Moped" textFill="WHITE" />
+               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Motorcycle" textFill="WHITE" />
             </VBox>
             <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children></VBox>
             <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
                <children>
-                  <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Parked Vehicle" textFill="WHITE" />
-                  <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Pedestrian" textFill="WHITE" />
-                  <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="School Bus" textFill="WHITE" />
-                  <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Train" textFill="WHITE" />
-                  <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleTypeInvolved" selected="true" text="Truck" textFill="WHITE" />
+                  <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Parked Vehicle" textFill="WHITE" />
+                  <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Pedestrian" textFill="WHITE" />
+                  <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="School Bus" textFill="WHITE" />
+                  <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Train" textFill="WHITE" />
+                  <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Truck" textFill="WHITE" />
                </children>
             </VBox>
          </children>
@@ -164,31 +164,31 @@
             <Label layoutX="106.0" layoutY="14.0" text="Region" textFill="WHITE" />
             <VBox fx:id="leftRegionVBox" layoutX="22.0" layoutY="76.0" spacing="15.0">
                <children>
-                  <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Auckland" textFill="WHITE" />
-                  <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Bay of Plenty" textFill="WHITE" />
-                  <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Canterbury" textFill="WHITE" />
-                  <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Gisborne" textFill="WHITE" />
-                  <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Hawke's Bay" textFill="WHITE" />
-                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
-                  <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Marlborough" textFill="WHITE" />
-                  <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" />
+                  <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Auckland" textFill="WHITE" />
+                  <CheckBox fx:id="bayOfPlentyCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bay of Plenty" textFill="WHITE" />
+                  <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Canterbury" textFill="WHITE" />
+                  <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Gisborne" textFill="WHITE" />
+                  <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Hawke's Bay" textFill="WHITE" />
+                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
+                  <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Marlborough" textFill="WHITE" />
+                  <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" />
                </children>
             </VBox>
             <VBox fx:id="rightRegionVBox" layoutX="143.0" layoutY="76.0" spacing="15.0">
                <children>
-                  <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Northland" textFill="WHITE" />
-                  <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Otago" textFill="WHITE" />
-                  <CheckBox fx:id="southlandCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Southland" textFill="WHITE" />
-                  <CheckBox fx:id="taranakiCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Taranaki" textFill="WHITE" />
-                  <CheckBox fx:id="tasmanCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Tasman" textFill="WHITE" />
-                  <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" />
-                  <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" />
-                  <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleRegionCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" />
+                  <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Northland" textFill="WHITE" />
+                  <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Otago" textFill="WHITE" />
+                  <CheckBox fx:id="southlandCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Southland" textFill="WHITE" />
+                  <CheckBox fx:id="taranakiCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Taranaki" textFill="WHITE" />
+                  <CheckBox fx:id="tasmanCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Tasman" textFill="WHITE" />
+                  <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" />
+                  <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" />
+                  <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllRegions" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllRegions" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
@@ -201,16 +201,16 @@
             <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
             <VBox fx:id="weatherVBox" layoutX="41.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="fineCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Fine" textFill="WHITE" />
-                  <CheckBox fx:id="lightRainCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Light Rain" textFill="WHITE" />
-                  <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Heavy Rain" textFill="WHITE" />
-                  <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Mist or Fog" textFill="WHITE" />
-                  <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleWeatherCheckboxEvent" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox fx:id="fineCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Fine" textFill="WHITE" />
+                  <CheckBox fx:id="lightRainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Light Rain" textFill="WHITE" />
+                  <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Heavy Rain" textFill="WHITE" />
+                  <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Mist or Fog" textFill="WHITE" />
+                  <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Snow" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllWeather" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllWeather" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children></VBox>
          </children>
          <StackPane.margin>
@@ -234,15 +234,15 @@
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
             <VBox layoutX="38.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" />
-                  <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" />
-                  <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" />
-                  <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleSeverityCheckBoxEvent" selected="true" text="Death" textFill="WHITE" />
+                  <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" />
+                  <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" />
+                  <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" />
+                  <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Death" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="156.0" layoutY="42.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="selectAllSeverity" layoutX="150.0" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </children>
@@ -255,7 +255,7 @@
             <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
             <VBox layoutX="148.0" layoutY="41.0" spacing="5.0">
                <children>
-                  <CheckBox fx:id="allHoliday" mnemonicParsing="false" onAction="#handleAllCheckboxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+                  <CheckBox fx:id="allHoliday" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
                </children></VBox>
             <VBox layoutX="50.0" layoutY="41.0" spacing="5.0">
                <children>
