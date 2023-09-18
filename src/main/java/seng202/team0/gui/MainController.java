@@ -57,6 +57,9 @@ public class MainController {
     @FXML
     private AnchorPane holidayPane;
 
+    @FXML
+    private CheckBox yesHoliday;
+
 
 
     @FXML
