@@ -250,7 +250,9 @@
          <children>
             <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
             <VBox layoutX="107.0" layoutY="50.0" spacing="5.0" />
-            <CheckBox fx:id="yesHoliday" layoutX="105.0" layoutY="59.0" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
+            <CheckBox fx:id="yesHoliday" layoutX="50.0" layoutY="41.0" mnemonicParsing="false" selected="true" text="Yes" textFill="WHITE" wrapText="true" />
+            <CheckBox fx:id="noHoliday" layoutX="51.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" wrapText="true" />
+            <CheckBox fx:id="allHoliday" layoutX="148.0" layoutY="41.0" mnemonicParsing="false" selected="true" text="All" textFill="WHITE" wrapText="true" />
          </children>
          <StackPane.margin>
             <Insets left="401.0" top="490.0" />
