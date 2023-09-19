@@ -1,5 +1,7 @@
 package seng202.team0.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -7,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.util.Duration;
@@ -21,9 +25,11 @@ import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
+import seng202.team0.repository.FavouriteDAO;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,9 +61,10 @@ public class MainController {
     @FXML
     private AnchorPane boundariesPane;
     @FXML
+    private ComboBox<String> loadRoutesComboBox;
+
+    @FXML
     private AnchorPane holidayPane;
-
-
 
     @FXML
     private Button helpButton;
@@ -128,6 +135,9 @@ public class MainController {
     private GeoLocator geolocator;
     private WebEngine webEngine;
 
+    private List<Location> stops = new ArrayList<>();
+
+
     JSObject javaScriptConnector;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
@@ -184,6 +194,25 @@ public class MainController {
         mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
+        loadRoutesComboBox.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
+            if (isNowShowing) {
+                // The ComboBox is now showing its list.
+                ListView<?> lv = (ListView<?>) loadRoutesComboBox.lookup(".list-view");
+                if (lv != null && lv instanceof ListView) {
+                    lv.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+                        Object selectedItem = lv.getSelectionModel().getSelectedItem();
+                        if (selectedItem != null) {
+                            System.out.println("Clicked on: " + selectedItem);
+                            loadRoute();
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+
 
         selectAllWeather.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -425,13 +454,6 @@ public class MainController {
         emojiButtonTransitions[buttonIndex].play();
     }
 
-    /**
-     * Adds a location with given crash
-     */
-    private void addLocation(Crash crash) {
-        javaScriptConnector.call("addMarker", crash.getCrashLocation1() + "-" + crash.getCrashLocation2(),
-                crash.getLatitude(), crash.getLongitude());
-    }
 
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
@@ -473,6 +495,40 @@ public class MainController {
         return newMarker;
     }
 
+    //TODO add stops to the save route
+    @FXML
+    private void saveRoute() throws SQLException {
+        Location start = getStart();
+        Location end = getEnd();
+        String filters = FilterManager.getInstance().toString();
+        String startAddress = geolocator.getAddress(start.latitude, start.longitude);
+        String endAddress = geolocator.getAddress(end.latitude, end.longitude);
+        Favourite favourite = new Favourite(startAddress, endAddress, start.latitude, start.longitude, end.latitude, end.longitude, filters);
+        FavouriteDAO favorites = new FavouriteDAO();
+        favorites.addOne(favourite);
+    }
+
+    @FXML
+    private void displayRoutes() {
+        FavouriteDAO favourites = new FavouriteDAO();
+        List<Favourite> favouritesList = favourites.getAll();
+        ObservableList<String> items = FXCollections.observableArrayList(favouritesList.stream().map(favourite -> {return favourite.getStartAddress()+" to "+favourite.getEndAddress();}).toList());
+        loadRoutesComboBox.setItems(items);
+    }
+
+    @FXML
+    private void loadRoute() {
+        int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
+        if (favouriteID != 0 && favouriteID != -1) {
+            FavouriteDAO favourites = new FavouriteDAO();
+            Favourite favourite = favourites.getOne(favouriteID);
+            stops.clear();
+            generateRouteAction(favourite);
+            startLocation.setText(favourite.getStartAddress());
+            endLocation.setText(favourite.getEndAddress());
+        }
+    }
+
     @FXML
     private Location getStop() {
         String address = stopLocation.getText().trim();
@@ -485,20 +541,22 @@ public class MainController {
     }
 
     @FXML
-    private void generateStop() {
+    private void addStop() {
         Location stop = getStop();
-        Location start = getStart();
-        Location end = getEnd();
-        if (start != null && end != null && stop != null) {
-            Route route1 = new Route(start, stop);
-            Route route2 = new Route(stop, end);
+        if (stop != null) {
+            stops.add(stop);
+        }
+        generateRouteAction();
+    }
 
-            List<Route> routesList = new ArrayList<>();
-            routesList.add(route1);
-            routesList.add(route2);
-            javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+    @FXML
+    private void removeStop() {
+        if (stops.size() >= 1) {
+            stops.remove(stops.size()-1);
+            generateRouteAction();
         }
     }
+
 
     @FXML
     private void generateRouteAction() {
@@ -506,7 +564,27 @@ public class MainController {
         Location end = getEnd();
 
         if (start != null && end != null) {
-            Route route = new Route(start, end);
+            List<Location> routeLocations = new ArrayList<>();
+            routeLocations.add(start);
+            routeLocations.addAll(stops);  // add all the stops
+            routeLocations.add(end);
+
+            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
+            displayRoute(route);
+        }
+    }
+
+    private void generateRouteAction(Favourite favourite) {
+        Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
+        Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
+
+        if (start != null && end != null) {
+            List<Location> routeLocations = new ArrayList<>();
+            routeLocations.add(start);
+            routeLocations.addAll(stops);
+            routeLocations.add(end);
+
+            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
         }
     }

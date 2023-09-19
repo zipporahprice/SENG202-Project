@@ -8,14 +8,14 @@ import java.util.List;
  * Simple class representing a route as any number of positions
  */
 public class Route {
-    private List<Location> route = new ArrayList<>();
+    public List<Location> route = new ArrayList<>();
 
     /**
      * Create a new route with any number of positions
      * @param points points along the route in order first to last
      */
-    public Route(Location ...points) {
-        Collections.addAll(route, points);
+    public Route(List<Location> points) {
+        this.route.addAll(points);
     }
 
     /**
