@@ -273,5 +273,19 @@
 <!--            <Insets top="500.0" />-->
 <!--         </StackPane.margin>-->
       </Button>
+      <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="203.0" styleClass="buttonColor" stylesheets="@style.css" text="Settings" textFill="#f2f2f2" StackPane.alignment="BOTTOM_RIGHT" onAction="#toggleAnchorPaneVisibility">
+         <font>
+            <Font name="System Bold Italic" size="37.0" />
+         </font>
+      </Button>
+      <AnchorPane fx:id="settingsPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="BOTTOM_RIGHT">
+         <children>
+            <ChoiceBox fx:id="viewChoiceBox" layoutX="51.0" layoutY="46.0" prefWidth="150.0" />
+            <Label layoutX="112.0" layoutY="14.0" text="View" textFill="WHITE" />
+         </children>
+         <StackPane.margin>
+            <Insets bottom="100.0" />
+         </StackPane.margin>
+      </AnchorPane>
    </children>
 </StackPane>

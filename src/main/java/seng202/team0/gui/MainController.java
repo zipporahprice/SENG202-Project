@@ -118,6 +118,9 @@ public class MainController {
     @FXML
     private CheckBox selectAllRegions;
 
+    @FXML
+    private ChoiceBox viewChoiceBox;
+
 
 
     @FXML
@@ -166,6 +169,11 @@ public class MainController {
 
     private MapController mapController;
 
+    public static String currentView = "Automatic";
+
+    @FXML
+    private AnchorPane settingsPane;
+
 
 
 
@@ -189,6 +197,7 @@ public class MainController {
         mapController.init(stage);
 
         setCheckboxesUserData();
+        setViewOptions();
 
         stage.sizeToScene();
         webEngine = webView.getEngine();
@@ -244,13 +253,12 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
-        toggleHelpButtonVisibility(helpButton, 5);
-
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
+        toggleHelpButtonVisibility(helpButton, 5);
         togglePaneWithFade(holidayPane, 6);
 
         // Toggle the visibility of the helpButton
@@ -585,4 +593,19 @@ public class MainController {
         allCheckBox.setSelected(allSelected);
     }
 
+    private void setViewOptions() {
+        viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");
+        viewChoiceBox.setValue("Automatic");
+        viewChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                currentView = (String) newValue;
+            }
+        });
+    }
+
+    @FXML
+    private void toggleAnchorPaneVisibility() {
+        settingsPane.setVisible(!settingsPane.isVisible());
+        System.out.println("yay");
+    }
 }
