@@ -274,14 +274,14 @@
             <Insets bottom="100.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="csvPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="CENTER_LEFT">
+      <AnchorPane fx:id="csvPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="81.0" layoutY="14.0" text="CSV File Options" textFill="WHITE" />
             <Button layoutX="55.0" layoutY="58.0" mnemonicParsing="false" text="Import" />
             <Button layoutX="144.0" layoutY="58.0" mnemonicParsing="false" text="Export" />
          </children>
          <StackPane.margin>
-            <Insets left="45.0" top="350.0" />
+            <Insets left="45.0" top="430.0" />
          </StackPane.margin>
       </AnchorPane>
    </children>
