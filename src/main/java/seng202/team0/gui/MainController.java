@@ -451,8 +451,14 @@ public class MainController {
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
+
+            // Updates FilterManager singleton with Favourite's filters
+            FilterManager.getInstance().updateFiltersWithQueryString(favourite.getFilters());
+
+            // Generates a route and makes sure stops is cleared
             stops.clear();
             generateRouteAction(favourite);
+
             startLocation.setText(favourite.getStartAddress());
             endLocation.setText(favourite.getEndAddress());
         }

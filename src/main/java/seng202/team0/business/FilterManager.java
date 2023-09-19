@@ -4,10 +4,7 @@ import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Region;
 import seng202.team0.models.Weather;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +24,14 @@ public class FilterManager {
     private List<String> modesSelected;
     private List<String> weathersSelected;
     private List<String> regionsSelected;
+
+    private HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
+        put("severity", "severity IN (");
+        put("transport_mode", "(");
+        put("crash_year", "crash_year >= ");
+        put("weather", "weather IN (");
+        put("region", "region IN (");
+    }};
 
     private FilterManager() {
         severitiesSelected = new ArrayList<>(
@@ -83,37 +88,76 @@ public class FilterManager {
 
     public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
+    public void updateFiltersWithQueryString(String query) {
+        // Restarts FilterManager
+        filters = new FilterManager();
+
+        // Clear all lists
+        severitiesSelected = new ArrayList<>();
+        modesSelected = new ArrayList<>();
+        weathersSelected = new ArrayList<>();
+        regionsSelected = new ArrayList<>();
+
+        if (!Objects.equals(query, "1 = 0")) {
+            String[] queryList = query.split(" AND ");
+
+            // TODO look out for quotation marks and make a substring from 1 index to length - 1 to get rid of quotation marks
+
+            for (String filter : queryList) {
+                if (filter.startsWith(startOfClauses.get("severity"))) {
+                    String severitiesString = filter.substring(startOfClauses.get("severity").length(), filter.length() - 1);
+                    Arrays.stream(severitiesString.split(", ")).forEach(severityString ->
+                            severitiesSelected.add(Integer.parseInt(severityString)));
+                } else if (filter.startsWith(startOfClauses.get("transport_mode"))) {
+                    String transportModesString = filter.substring(startOfClauses.get("transport_mode").length(), filter.length() - 1);
+                    System.out.println(transportModesString.split(" OR "));
+                    Arrays.stream(transportModesString.split(" OR ")).forEach(transportModeString ->
+                            modesSelected.add(transportModeString));
+                } else if (filter.startsWith(startOfClauses.get("crash_year"))) {
+                    earliestYear = Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length()));
+                } else if (filter.startsWith(startOfClauses.get("weather"))) {
+                    String weathersString = filter.substring(startOfClauses.get("weather").length(), filter.length() - 1);
+                    Arrays.stream(weathersString.split(", ")).forEach(weatherString ->
+                            weathersSelected.add(weatherString.substring(1, weatherString.length() - 1)));
+                } else if (filter.startsWith(startOfClauses.get("region"))) {
+                    String regionsString = filter.substring(startOfClauses.get("region").length(), filter.length() - 1);
+                    Arrays.stream(regionsString.split(", ")).forEach(regionString ->
+                            regionsSelected.add(regionString.substring(1, regionString.length() - 1)));
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         List<String> where = new ArrayList<>();
 
         if (getSeveritiesSelected().size() > 0) {
-            where.add("severity IN (" +
+            where.add(startOfClauses.get("severity") +
                     getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(", "))
                     + ")");
         }
 
         if (filters.getModesSelected().size() > 0) {
             String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
-            where.add("(" + modesCondition + ")");
+            where.add(startOfClauses.get("transport_mode") + modesCondition + ")");
 
         }
 
         if (getEarliestYear() != null) {
-            where.add("crash_year >= " + getEarliestYear());
+            where.add(startOfClauses.get("crash_year") + getEarliestYear());
         }
 
         if (getWeathersSelected().size() > 0) {
-            where.add("Weather IN (" +
+            where.add(startOfClauses.get("weather") +
                     getWeathersSelected().stream().map(weather -> "\""+weather+"\"").collect(Collectors.joining(", "))
                     + ")");
         }
 
         if (regionsSelected.size() > 0) {
-            where.add("region IN(" +
+            where.add(startOfClauses.get("region") +
                     getRegionsSelected().stream().map(region -> "\""+region+"\"").collect(Collectors.joining(", "))
                     + ")");
-
         }
 
         // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER

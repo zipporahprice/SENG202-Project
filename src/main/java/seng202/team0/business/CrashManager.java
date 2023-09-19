@@ -34,8 +34,6 @@ public class CrashManager {
     }
 
     public List getCrashLocations() throws SQLException {
-        FilterManager filters = FilterManager.getInstance();
-
         // TODO do not hard code for severities, make it flexible to all filters
         // TODO could instead do a * for columns
         // TODO although * does not work for query builder weirdly
@@ -43,6 +41,8 @@ public class CrashManager {
         String select = "longitude, latitude, severity";
         String from = "crashes";
         String where = FilterManager.getInstance().toString();
+
+        System.out.println(where);
 
         if (where.length() == 0) {
             return SQLiteQueryBuilder
