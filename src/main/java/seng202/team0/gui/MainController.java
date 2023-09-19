@@ -221,7 +221,6 @@ public class MainController {
                     // if javascript loads successfully
                     if (newState == Worker.State.SUCCEEDED) {
                         javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
-
                     }
                 });
     }

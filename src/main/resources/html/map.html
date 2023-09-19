@@ -84,9 +84,14 @@
 
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
-            var title = "yay";
-            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: title });
-            marker.bindPopup(title);
+            var severity = getSeverityStringFromValue(a.severity);
+            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity });
+            marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
+                "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
+                "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
+                "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "</div>"
+            );
             markerLayer.addLayer(marker);
         }
 
@@ -220,16 +225,22 @@
         markerLayer.clearLayers();
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
-            var title = "Severity: " + getSeverityStringFromValue(a.severity);
-            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: title });
-            marker.bindPopup(title);
+            var severity = getSeverityStringFromValue(a.severity);
+            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity });
+            marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
+                "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
+                "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
+                "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "</div>"
+            );
             markerLayer.addLayer(marker);
         }
 
         heatmapLayer.setData(testData);
     }
 
-    var intervalID = setInterval(setData, 1000);
+    // TODO refresh of layers also closes pop up
+    var intervalID = setInterval(setData, 2000);
 
 </script>
 </body>
