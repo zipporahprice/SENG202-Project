@@ -50,8 +50,8 @@ public class App {
                 File tempFile = File.createTempFile("tempCSV", ".csv");
                 Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 manager.addAllCrashesFromFile(importer, tempFile);
-            } catch (SQLException | IOException e) {
-                System.out.println(e);
+            } catch (IOException e) {
+                log.error(e);
             }
         }
 

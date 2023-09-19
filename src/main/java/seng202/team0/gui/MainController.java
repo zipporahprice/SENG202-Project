@@ -17,6 +17,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.util.Duration;
@@ -186,6 +187,9 @@ public class MainController {
     @FXML
     private AnchorPane settingsPane;
 
+    // Helper classes
+    private CheckBoxHelper checkBoxHelper;
+
 
 
 
@@ -227,7 +231,8 @@ public class MainController {
             }
         });
 
-
+        checkBoxHelper = new CheckBoxHelper(severityPane, transportModePane, dateSlider,
+                currentYearLabel, weatherPane, regionsPane);
 
 
 
@@ -437,7 +442,6 @@ public class MainController {
         loadRoutesComboBox.setItems(items);
     }
 
-
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
@@ -446,7 +450,7 @@ public class MainController {
             Favourite favourite = favourites.getOne(favouriteID);
 
             // Updates FilterManager singleton with Favourite's filters and Checkboxes to match
-            updateCheckboxesWithFavourites(favourite);
+            checkBoxHelper.updateCheckboxesWithFavourites(favourite);
 
             // Generates a route and makes sure stops is cleared
             stops.clear();
@@ -761,47 +765,21 @@ public class MainController {
 
         addToFilters(checkBox, parent);
 
-        CheckBox allCheckBox = null;
-        List<CheckBox> checkBoxes = new ArrayList<>();
-
-        for (Object child : parent.getChildren()) {
-            if (child instanceof VBox) {
-                for (Object childCheckBox : ((VBox) child).getChildren()) {
-                    if (childCheckBox instanceof  CheckBox) {
-                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
-                            checkBoxes.add((CheckBox) childCheckBox);
-                        } else {
-                            allCheckBox = (CheckBox) childCheckBox;
-                        }
-                    }
-                }
-            }
-        }
+        // Runs helper function to get all checkbox and list of other checkboxes
+        Pair<CheckBox, List<CheckBox>> result = checkBoxHelper.getAllCheckBoxAndCheckBoxList(parent);
+        CheckBox allCheckBox = result.getLeft();
+        List<CheckBox> checkBoxes = result.getRight();
 
         assert allCheckBox != null;
-        updateAllCheckBox(allCheckBox, checkBoxes);
+        checkBoxHelper.updateAllCheckBox(allCheckBox, checkBoxes);
     }
 
-    /**
-     * Updates the state of an "All" CheckBox based on the selection state of a list of related CheckBoxes.
-     * If all related CheckBoxes are selected, the "All" CheckBox is also selected; otherwise, it is deselected.
-     *
-     * @param allCheckBox The "All" CheckBox to update.
-     * @param checkBoxes  The list of related CheckBoxes to check for selection.
-     */
-
-    public void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
-        boolean allSelected = true;
-        for (CheckBox checkBox : checkBoxes) {
-            if (!checkBox.isSelected()) {
-                allSelected = false;
-                break;
-            }
-        }
-        allCheckBox.setSelected(allSelected);
+    @FXML
+    private void toggleAnchorPaneVisibility() {
+        settingsPane.setVisible(!settingsPane.isVisible());
     }
 
-
+    // TODO look at creating a new SettingsHelper
     private void setViewOptions() {
         viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");
         viewChoiceBox.setValue("Automatic");
@@ -810,44 +788,5 @@ public class MainController {
                 currentView = (String) newValue;
             }
         });
-    }
-
-    @FXML
-    private void toggleAnchorPaneVisibility() {
-        settingsPane.setVisible(!settingsPane.isVisible());
-    }
-
-    private void updateCheckboxesWithFilterList(AnchorPane parent, List filterList) {
-        for (Object vBoxChild : parent.getChildren()) {
-            if (vBoxChild instanceof VBox vBox) {
-                for (Object checkBoxChild : vBox.getChildren()) {
-                    if (checkBoxChild instanceof CheckBox checkBox) {
-                        checkBox.setSelected(filterList.contains((checkBox.getUserData())));
-                    }
-                }
-            }
-        }
-    }
-    private void updateCheckboxesWithFavourites(Favourite favourite) {
-        // Update FilterManager class with the filters associated to the favourite route
-        FilterManager filters = FilterManager.getInstance();
-        filters.updateFiltersWithQueryString(favourite.getFilters());
-
-        // Retrieve all updated filter data
-        List<Integer> severitiesSelected = filters.getSeveritiesSelected();
-        List<String> modesSelected = filters.getModesSelected();
-        int earliestYear = filters.getEarliestYear();
-        List<String> weathersSelected = filters.getWeathersSelected();
-        List<String> regionsSelected = filters.getRegionsSelected();
-
-        // Updating checkboxes according to filters
-        updateCheckboxesWithFilterList(severityPane, severitiesSelected);
-        updateCheckboxesWithFilterList(transportModePane, modesSelected);
-        dateSlider.setValue(earliestYear);
-        currentYearLabel.setText(Integer.toString(earliestYear));
-        updateCheckboxesWithFilterList(weatherPane, weathersSelected);
-        updateCheckboxesWithFilterList(regionsPane, regionsSelected);
-
-
     }
 }
