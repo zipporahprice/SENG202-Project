@@ -92,7 +92,7 @@
             <Insets left="335.0" top="10.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="409.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="339.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
             <Button fx:id="settingsButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
@@ -121,15 +121,6 @@
                   <ImageView fitHeight="39.0" fitWidth="200.0">
                      <image>
                         <Image url="@images/user_help.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="importExportButton" layoutX="26.0" layoutY="318.0" mnemonicParsing="false" onAction="#toggleImportExporter" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
-               <graphic>
-                  <ImageView fitHeight="39.0" fitWidth="260.0" translateX="2.0">
-                     <image>
-                        <Image url="@images/import_export.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -272,16 +263,6 @@
          </children>
          <StackPane.margin>
             <Insets bottom="100.0" />
-         </StackPane.margin>
-      </AnchorPane>
-      <AnchorPane fx:id="csvPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
-         <children>
-            <Label layoutX="81.0" layoutY="14.0" text="CSV File Options" textFill="WHITE" />
-            <Button layoutX="55.0" layoutY="58.0" mnemonicParsing="false" text="Import" />
-            <Button layoutX="144.0" layoutY="58.0" mnemonicParsing="false" text="Export" />
-         </children>
-         <StackPane.margin>
-            <Insets left="45.0" top="430.0" />
          </StackPane.margin>
       </AnchorPane>
    </children>

@@ -49,8 +49,6 @@ public class MainController {
 
     @FXML
     private StackPane mainWindow;
-    @FXML
-    private Label defaultLabel;
 
 
     @FXML
@@ -65,20 +63,9 @@ public class MainController {
     private AnchorPane holidayPane;
 
 
-
-    //weather pane
-    @FXML
-    private CheckBox selectAllWeather;
-
-
-    @FXML
-    private CheckBox selectAllTransport;
-
     // Severity Pane
     @FXML
     private AnchorPane severityPane;
-    @FXML
-    private CheckBox selectAllSeverity;
     @FXML
     private CheckBox nonInjuryCheckBox;
     @FXML
@@ -116,27 +103,10 @@ public class MainController {
     @FXML
     private Label currentYearLabel;
 
-    //regions pane
-    @FXML
-    private CheckBox selectAllRegions;
 
     @FXML
     private ChoiceBox viewChoiceBox;
 
-
-    @FXML
-    private Button settingsButton;
-    @FXML
-    private Button filterDataButton;
-    @FXML
-    private Button userHelpButton;
-    @FXML
-    private Button importExportButton;
-    @FXML
-    private AnchorPane csvPane;
-
-    @FXML
-    private AnchorPane includedMap;
     private Stage stage;
 
     private GeoLocator geolocator;
@@ -148,9 +118,7 @@ public class MainController {
     JSObject javaScriptConnector;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
-    private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
-    private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[7]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
 
     @FXML
     private VBox weatherVBox;
@@ -240,7 +208,6 @@ public class MainController {
         regionsPane.setVisible(false);
         severityPane.setVisible(false);
         holidayPane.setVisible(false);
-        csvPane.setVisible(false);
 
 
 
@@ -266,10 +233,6 @@ public class MainController {
     public void toggleHamburger() {
         if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
             fadeTransition.stop(); // Stop the animation if it's currently running
-        }
-
-        if (csvPane.isVisible()) {
-            toggleImportExporter();
         }
 
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
@@ -314,60 +277,9 @@ public class MainController {
         }
     }
 
-    public void toggleImportExporter() {
-        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
-            fadeTransition.stop(); // Stop the animation if it's currently running
-        }
-        if (transportModePane.isVisible()) {
-            toggleHamburger();
-        }
-
-
-        togglePaneWithFade(csvPane, 6);
 
 
 
-        fadeTransitions[6].play();
-
-    }
-
-
-    /**
-     * Sets up a fade animation for an emoji button.
-     *
-     * @param button The emoji button to set up the animation for.
-     * @param index The index of the emoji button in the array.
-     */
-    private void setupEmojiButtonTransition(Button button, int index) {
-        emojiButtonTransitions[index] = new FadeTransition(Duration.millis(300));
-        emojiButtonTransitions[index].setNode(button);
-        emojiButtonTransitions[index].setFromValue(1.0);  // Fully visible
-        emojiButtonTransitions[index].setToValue(1.0);    // Semi-transparent
-        emojiButtonTransitions[index].setOnFinished(event -> {
-            if (emojiButtonClicked[index]) {
-                button.getStyleClass().remove("clickedButtonColor");
-            } else {
-                button.getStyleClass().add("clickedButtonColor");
-            }
-            emojiButtonClicked[index] = !emojiButtonClicked[index];
-        });
-    }
-    /**
-     * Handles the click event of an emoji button.
-     *
-     * @param event The action event triggered by the emoji button click.
-     */
-    public void handleEmojiButtonClick(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        int buttonIndex = Integer.parseInt(button.getUserData().toString());
-
-        if (emojiButtonClicked[buttonIndex]) {
-            emojiButtonTransitions[buttonIndex].setRate(-1);  // Reverse the animation when clicked again
-        } else {
-            emojiButtonTransitions[buttonIndex].setRate(1);
-        }
-        emojiButtonTransitions[buttonIndex].play();
-    }
 
 
     private void displayRoute(Route... routes) {
