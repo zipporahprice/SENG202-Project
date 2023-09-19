@@ -9,7 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Class that communicates with the favourites table in the database through SQL queries.
+/**
+ * Class that communicates with the favourites table in the database through SQL queries.
  *
  * @author Morgan English
  * @author Angelica Silva
@@ -35,7 +36,7 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
      */
     @Override
     public List<Favourite> getAll() {
-        List<Favourite> favourites = new ArrayList<Favourite>();
+        List<Favourite> favourites = new ArrayList<>();
         String sql = "SELECT * FROM favourites";
         try (Connection conn = databaseManager.connect();
              Statement stmt = conn.createStatement();
@@ -47,7 +48,7 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
             }
             return favourites;
         } catch (AssertionError | SQLException e) {
-            System.out.println(e);
+            log.error(e);
             return new ArrayList<>();
         }
     }

@@ -1,6 +1,8 @@
 package seng202.team0.repository;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
 
 import java.sql.*;
@@ -20,6 +22,7 @@ import java.util.List;
  *
  */
 public class CrashDAO implements DAOInterface<Crash> {
+    private static final Logger log = LogManager.getLogger(CrashDAO.class);
     private final DatabaseManager databaseManager;
 
     /**
@@ -51,7 +54,7 @@ public class CrashDAO implements DAOInterface<Crash> {
             }
             return crashes;
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
             return new ArrayList<>();
         }
     }
@@ -80,7 +83,7 @@ public class CrashDAO implements DAOInterface<Crash> {
                 return crash;
             }
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
             return null;
         }
     }
@@ -113,7 +116,7 @@ public class CrashDAO implements DAOInterface<Crash> {
             ps.setBoolean(19, crashToAdd.isTrainInvolved());
             ps.setBoolean(20, crashToAdd.isTruckInvolved());
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
         }
     }
 
@@ -146,10 +149,8 @@ public class CrashDAO implements DAOInterface<Crash> {
             // Adding the crash to the database
             ps.executeUpdate();
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
         }
-
-
     }
 
     /**
@@ -176,8 +177,8 @@ public class CrashDAO implements DAOInterface<Crash> {
 
             ps.executeBatch();
             conn.commit();
-        } catch (SQLException e) {
-            System.out.println(e);
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
         }
     }
 
@@ -233,7 +234,7 @@ public class CrashDAO implements DAOInterface<Crash> {
                     rs.getBoolean("train_involved"),
                     rs.getBoolean("truck_involved"));
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
             return null;
         }
     }
