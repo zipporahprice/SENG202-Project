@@ -35,6 +35,7 @@ public class FilterManager {
         put("crash_year", "crash_year >= ");
         put("weather", "weather IN (");
         put("region", "region IN (");
+        put("holiday", "holiday IN (");
     }};
 
     // Singleton instance of FilterManager
@@ -44,6 +45,7 @@ public class FilterManager {
     private List<String> modesSelected;
     private List<String> weathersSelected;
     private List<String> regionsSelected;
+    private List<Integer> holidaysSelected;
 
     /**
      * Initializer of the FilterManager class that populates the filters
@@ -77,6 +79,8 @@ public class FilterManager {
         regionsSelected = new ArrayList<>(
                 Arrays.stream(Region.values()).map(region -> region.getName()).toList()
         );
+
+        holidaysSelected = new ArrayList<>(Arrays.asList(0,1));
     }
 
 
@@ -192,6 +196,27 @@ public class FilterManager {
     public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
     /**
+     * Retrieves the list of holidays (0 for No, 1 for Yes) for filtering crash data.
+     *
+     * @return A list of holidays (0 for No, 1 for Yes).
+     */
+    public List<Integer> getHolidaysSelected() { return this.holidaysSelected; }
+
+    /**
+     * Adds a holiday to the list of selected holidays (0 for No, 1 for Yes).
+     *
+     * @param holiday The holiday to add.
+     */
+    public void addToHolidays(int holiday) { holidaysSelected.add(holiday); }
+
+    /**
+     * Removes a holiday from the list of selected holidays (0 for No, 1 for Yes).
+     *
+     * @param holiday The holiday to remove.
+     */
+    public void removeFromHolidays(int holiday) { holidaysSelected.remove(holiday); }
+
+    /**
      * Updates the filters based on a query string.
      * This method clears all existing filter lists and updates them with the filter values
      * extracted from the provided query string.
@@ -205,6 +230,7 @@ public class FilterManager {
         weathersSelected.clear();
         regionsSelected.clear();
         earliestYear = 2000;
+        holidaysSelected.clear();
 
         if (!Objects.equals(query, "1 = 0")) {
             String[] queryList = query.split(AND);
@@ -214,21 +240,25 @@ public class FilterManager {
                 if (filter.startsWith(startOfClauses.get("severity"))) {
                     String severitiesString = filter.substring(startOfClauses.get("severity").length(), filter.length() - 1);
                     Arrays.stream(severitiesString.split(COMMA)).forEach(severityString ->
-                            severitiesSelected.add(Integer.parseInt(severityString)));
+                            addToSeverities(Integer.parseInt(severityString)));
                 } else if (filter.startsWith(startOfClauses.get("transport_mode"))) {
                     String transportModesString = filter.substring(startOfClauses.get("transport_mode").length(), filter.length() - 1);
                     Arrays.stream(transportModesString.split(OR)).forEach(transportModeString ->
-                            modesSelected.add(transportModeString.split(" ")[0]));
+                            addToModes(transportModeString.split(" ")[0]));
                 } else if (filter.startsWith(startOfClauses.get("crash_year"))) {
-                    earliestYear = Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length()));
+                    setEarliestYear(Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length())));
                 } else if (filter.startsWith(startOfClauses.get("weather"))) {
                     String weathersString = filter.substring(startOfClauses.get("weather").length(), filter.length() - 1);
                     Arrays.stream(weathersString.split(COMMA)).forEach(weatherString ->
-                            weathersSelected.add(weatherString.substring(1, weatherString.length() - 1)));
+                            addToWeathers(weatherString.substring(1, weatherString.length() - 1)));
                 } else if (filter.startsWith(startOfClauses.get("region"))) {
                     String regionsString = filter.substring(startOfClauses.get("region").length(), filter.length() - 1);
                     Arrays.stream(regionsString.split(COMMA)).forEach(regionString ->
-                            regionsSelected.add(regionString.substring(1, regionString.length() - 1)));
+                            addToRegions(regionString.substring(1, regionString.length() - 1)));
+                } else if (filter.startsWith(startOfClauses.get("holiday"))) {
+                    String holidaysString = filter.substring(startOfClauses.get("holiday").length(), filter.length() - 1);
+                    Arrays.stream(holidaysString.split(COMMA)).forEach(holidayString ->
+                            addToHolidays(Integer.parseInt(holidayString)));
                 }
             }
         }
@@ -274,11 +304,18 @@ public class FilterManager {
                     + CLOSE_PARENTHESES);
         }
 
+        if (holidaysSelected.size() > 0) {
+            where.add(startOfClauses.get("holiday") +
+                    getHolidaysSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
+                    + CLOSE_PARENTHESES);
+        }
+
         // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
-        if (modesSelected.size() == 0 || severitiesSelected.size() == 0 ||
-                weathersSelected.size() == 0 || regionsSelected.size() == 0) {
+        if (modesSelected.size() == 0 || severitiesSelected.size() == 0 || weathersSelected.size() == 0
+                || regionsSelected.size() == 0 || holidaysSelected.size() == 0) {
             return "1 = 0";
         } else {
+            System.out.println(String.join(AND, where));
             return String.join(AND, where);
         }
     }

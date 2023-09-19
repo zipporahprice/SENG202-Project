@@ -62,6 +62,7 @@ public class CheckBoxHelper {
         int earliestYear = filters.getEarliestYear();
         List<String> weathersSelected = filters.getWeathersSelected();
         List<String> regionsSelected = filters.getRegionsSelected();
+        List<Integer> holidaysSelected = filters.getHolidaysSelected();
 
         // Updating checkboxes according to filters
         updateCheckboxesWithFilterList(severityPane, severitiesSelected);
@@ -70,6 +71,7 @@ public class CheckBoxHelper {
         currentYearLabel.setText(Integer.toString(earliestYear));
         updateCheckboxesWithFilterList(weatherPane, weathersSelected);
         updateCheckboxesWithFilterList(regionsPane, regionsSelected);
+        updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
     }
 
     /**
@@ -135,7 +137,14 @@ public class CheckBoxHelper {
                 filters.removeFromRegions((String) toAdd);
             }
         } else if (parent.equals(holidayPane)) {
-            System.out.println("CREATE HOLIDAY FILTERING");
+            int holiday = Integer.parseInt((String) toAdd);
+            if (checkBox.isSelected()) {
+                if (!filters.getHolidaysSelected().contains(holiday)) {
+                    filters.addToHolidays(holiday);
+                }
+            } else {
+                filters.removeFromHolidays(holiday);
+            }
         }
     }
 
