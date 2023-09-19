@@ -51,7 +51,7 @@ public class CrashManager {
                     .from(from)
                     .build();
         } else {
-            System.out.println(String.join("AND ", where));
+//            System.out.println(String.join("AND ", where));
             return SQLiteQueryBuilder
                     .create()
                     .select(select)

@@ -172,7 +172,6 @@ public class CrashDAO implements DAOInterface<Crash> {
             if (rs.next()) {
                 insertId = rs.getInt(1);
             }
-            System.out.println(insertId);
         } catch (SQLException sqlException) {
             System.out.println(sqlException);
         }
