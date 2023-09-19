@@ -106,14 +106,20 @@
     function automaticViewChange() {
         var zoomLevel = map.getZoom();
         if (zoomLevel >= 12) {
-            map.removeLayer(heatmapLayer);
-            map.addLayer(markerLayer);
+            if (map.hasLayer(heatmapLayer)) {
+                map.removeLayer(heatmapLayer);
+            }
+            if (!map.hasLayer(markerLayer)) {
+                map.addLayer(markerLayer);
+            }
         }
         else {
-            if (!map.hasLayer(heatmapLayer)) { // Check if heatmap layer is already added
-                map.addLayer(heatmapLayer); // Add the heatmap layer back
-                heatmapLayer.setData(testData); // Set the data again if needed
+            if (map.hasLayer(markerLayer)) {
                 map.removeLayer(markerLayer);
+            }
+            if (!map.hasLayer(heatmapLayer)) {
+                map.addLayer(heatmapLayer);
+                heatmapLayer.setData(testData);
             }
         }
     }

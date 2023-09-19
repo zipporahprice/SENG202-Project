@@ -606,6 +606,5 @@ public class MainController {
     @FXML
     private void toggleAnchorPaneVisibility() {
         settingsPane.setVisible(!settingsPane.isVisible());
-        System.out.println("yay");
     }
 }
