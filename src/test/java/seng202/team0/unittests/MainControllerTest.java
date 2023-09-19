@@ -41,4 +41,35 @@ public class MainControllerTest {
         assert expectedCrashes != null;
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
     }
+
+    @Test
+    void testingWeatherSelected() {
+        //like ticking all the checkboxes in weather
+        List<String> weatherSelected = new ArrayList<String>();
+        weatherSelected.add("Fine");
+        weatherSelected.add("Light Rain");
+        weatherSelected.add("Heavy Rain");
+        weatherSelected.add("Mist or Fog");
+        weatherSelected.add("Snow");
+        weatherSelected.add("Null");
+
+        List crashes = SQLiteQueryBuilder
+                .create()
+                .select("object_id")
+                .from("crashes")
+                .where("weather IN (" + weatherSelected.stream().collect(Collectors.joining(", ")) + ")")
+                .build();
+
+        List expectedCrashes  = null;
+
+        try {
+            CrashManager manager = new CrashManager();
+            expectedCrashes = manager.getCrashLocations();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        Assertions.assertNotNull(expectedCrashes);
+        Assertions.assertEquals(crashes.size(), expectedCrashes.size());
+    }
 }
