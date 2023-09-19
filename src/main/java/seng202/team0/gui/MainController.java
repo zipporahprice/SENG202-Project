@@ -445,8 +445,8 @@ public class MainController {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
 
-            // Updates FilterManager singleton with Favourite's filters
-            FilterManager.getInstance().updateFiltersWithQueryString(favourite.getFilters());
+            // Updates FilterManager singleton with Favourite's filters and Checkboxes to match
+            updateCheckboxesWithFavourites(favourite);
 
             // Generates a route and makes sure stops is cleared
             stops.clear();
@@ -623,7 +623,7 @@ public class MainController {
         // Update year label for user
         currentYearLabel.setText(Integer.toString(sliderValue));
 
-        //
+        // Updates Filter Manager with the earliest year for crash query
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
     }
@@ -815,5 +815,39 @@ public class MainController {
     @FXML
     private void toggleAnchorPaneVisibility() {
         settingsPane.setVisible(!settingsPane.isVisible());
+    }
+
+    private void updateCheckboxesWithFilterList(AnchorPane parent, List filterList) {
+        for (Object vBoxChild : parent.getChildren()) {
+            if (vBoxChild instanceof VBox vBox) {
+                for (Object checkBoxChild : vBox.getChildren()) {
+                    if (checkBoxChild instanceof CheckBox checkBox) {
+                        checkBox.setSelected(filterList.contains((checkBox.getUserData())));
+                    }
+                }
+            }
+        }
+    }
+    private void updateCheckboxesWithFavourites(Favourite favourite) {
+        // Update FilterManager class with the filters associated to the favourite route
+        FilterManager filters = FilterManager.getInstance();
+        filters.updateFiltersWithQueryString(favourite.getFilters());
+
+        // Retrieve all updated filter data
+        List<Integer> severitiesSelected = filters.getSeveritiesSelected();
+        List<String> modesSelected = filters.getModesSelected();
+        int earliestYear = filters.getEarliestYear();
+        List<String> weathersSelected = filters.getWeathersSelected();
+        List<String> regionsSelected = filters.getRegionsSelected();
+
+        // Updating checkboxes according to filters
+        updateCheckboxesWithFilterList(severityPane, severitiesSelected);
+        updateCheckboxesWithFilterList(transportModePane, modesSelected);
+        dateSlider.setValue(earliestYear);
+        currentYearLabel.setText(Integer.toString(earliestYear));
+        updateCheckboxesWithFilterList(weatherPane, weathersSelected);
+        updateCheckboxesWithFilterList(regionsPane, regionsSelected);
+
+
     }
 }
