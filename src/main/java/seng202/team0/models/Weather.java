@@ -8,7 +8,13 @@ package seng202.team0.models;
  */
 public enum Weather {
 
-    FINE("Fine"), LIGHTRAIN("Light rain"), HEAVYRAIN("Heavy rain"), MISTORFOG("Mist or fog"), SNOW("Snow"), HAILORSLEET("Hail or sleet"), NULL("Null");
+    FINE("Fine"),
+    LIGHTRAIN("Light Rain"),
+    HEAVYRAIN("Heavy Rain"),
+    MISTORFOG("Mist or Fog"),
+    SNOW("Snow"),
+//    HAILORSLEET("Hail or sleet"),
+    NULL("Null");
 
     private final String name;
 
@@ -29,7 +35,7 @@ public enum Weather {
             case "Heavy rain": return Weather.HEAVYRAIN;
             case "Mist or Fog": return Weather.MISTORFOG;
             case "Snow": return Weather.SNOW;
-            case "Hail or sleet": return Weather.HAILORSLEET;
+//            case "Hail or sleet": return Weather.HAILORSLEET;
             default: return Weather.NULL;
         }
     }

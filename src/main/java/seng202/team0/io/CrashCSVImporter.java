@@ -87,7 +87,6 @@ public class CrashCSVImporter {
             boolean parkedVehicleInvolved = changeEmptyToZero(crashVariables[35]) > 0;
             boolean pedestrianInvolved = changeEmptyToZero(crashVariables[36]) > 0;
 
-            // TODO create enum with region list
             String region = crashVariables[39];
             boolean schoolBusInvolved = changeEmptyToZero(crashVariables[44]) > 0;
             int speedLimit = changeEmptyToZero(crashVariables[47]);
