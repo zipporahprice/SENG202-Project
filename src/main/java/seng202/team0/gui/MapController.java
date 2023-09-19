@@ -21,6 +21,7 @@ import seng202.team0.models.GeoLocator;
  * The controller class for managing the Map view in the application.
  * This class handles interactions between the JavaFX UI components and the WebView
  * used to display a map with JavaScript functionality.
+ * @author Team 10
  */
 
 public class MapController {
@@ -46,6 +47,7 @@ public class MapController {
     public void setWebView(WebView webView) {
         this.webView = webView;
     }
+
     /**
      * Initializes the application's main stage and components.
      * This method sets up the primary stage, initializes the JavaScript bridge,
@@ -103,10 +105,6 @@ public class MapController {
                 });
     }
 
-
-
-//    private Collection<String> getSuggestions(String userInput) {
-//        // Call the GeoLocator method to get address suggestions based on userInput
-//        return geolocator.getAddressSuggestions(userInput);
-//    }
 }
+
+

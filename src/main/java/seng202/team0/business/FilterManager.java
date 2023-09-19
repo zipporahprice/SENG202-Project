@@ -33,6 +33,8 @@ public class FilterManager {
         put("region", "region IN (");
     }};
 
+
+
     private FilterManager() {
         severitiesSelected = new ArrayList<>(
                 Arrays.stream(CrashSeverity.values()).map(severity -> severity.getValue()).toList()
@@ -57,6 +59,11 @@ public class FilterManager {
         );
     }
 
+    /**
+     * Retrieves the singleton instance of the FilterManager class.
+     *
+     * @return The singleton instance of FilterManager.
+     */
     public static FilterManager getInstance() {
         if (filters == null) {
             filters = new FilterManager();
@@ -65,29 +72,111 @@ public class FilterManager {
     }
 
 
+    /**
+     * Retrieves the list of selected severity levels for filtering crash data.
+     *
+     * @return A list of selected severity levels.
+     */
     public List<Integer> getSeveritiesSelected() { return this.severitiesSelected; }
 
+    /**
+     * Adds a severity level to the list of selected severity levels.
+     *
+     * @param severity The severity level to add.
+     */
     public void addToSeverities(Integer severity) { severitiesSelected.add(severity); }
 
+    /**
+     * Removes a severity level from the list of selected severity levels.
+     *
+     * @param severity The severity level to remove.
+     */
     public void removeFromSeverities(Integer severity) { severitiesSelected.remove(severity); }
+
+    /**
+     * Retrieves the earliest year for filtering crash data.
+     *
+     * @return The earliest year for filtering.
+     */
     public Integer getEarliestYear() { return earliestYear; }
+
+    /**
+     * Sets the earliest year for filtering crash data.
+     *
+     * @param year The earliest year to set.
+     */
     public void setEarliestYear(Integer year) { earliestYear = year; }
 
+    /**
+     * Retrieves the list of selected weather conditions for filtering crash data.
+     *
+     * @return A list of selected weather conditions.
+     */
     public List<String> getWeathersSelected() { return this.weathersSelected; }
+
+    /**
+     * Adds a weather condition to the list of selected weather conditions.
+     *
+     * @param weather The weather condition to add.
+     */
     public void addToWeathers(String weather) { weathersSelected.add(weather); }
+
+    /**
+     * Removes a weather condition from the list of selected weather conditions.
+     *
+     * @param weather The weather condition to remove.
+     */
     public void removeFromWeathers(String weather) { weathersSelected.remove((Object)weather); }
+
+    /**
+     * Retrieves the list of selected transportation modes for filtering crash data.
+     *
+     * @return A list of selected transportation modes.
+     */
     public List<String> getModesSelected() { return this.modesSelected; }
 
+    /**
+     * Adds a transportation mode to the list of selected transportation modes.
+     *
+     * @param mode The transportation mode to add.
+     */
     public void addToModes(String mode) { modesSelected.add(mode); }
 
+    /**
+     * Removes a transportation mode from the list of selected transportation modes.
+     *
+     * @param mode The transportation mode to remove.
+     */
     public void removeFromModes(String mode) { modesSelected.remove(mode); }
 
+    /**
+     * Retrieves the list of selected regions for filtering crash data.
+     *
+     * @return A list of selected regions.
+     */
     public List<String> getRegionsSelected() { return this.regionsSelected; }
 
+    /**
+     * Adds a region to the list of selected regions.
+     *
+     * @param region The region to add.
+     */
     public void addToRegions(String region) { regionsSelected.add(region); }
 
+    /**
+     * Removes a region from the list of selected regions.
+     *
+     * @param region The region to remove.
+     */
     public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
+    /**
+     * Updates the filters based on a query string.
+     * This method clears all existing filter lists and updates them with the filter values
+     * extracted from the provided query string.
+     *
+     * @param query The query string containing filter values.
+     */
     public void updateFiltersWithQueryString(String query) {
         // Clear all lists
         severitiesSelected.clear();
@@ -125,6 +214,14 @@ public class FilterManager {
         }
     }
 
+
+    /**
+     * Generates a query string based on the selected filters for retrieving crash data.
+     * This method constructs a query string based on the selected severity levels, transportation modes,
+     * earliest year, weather conditions, and regions. The query string is used to filter crash data.
+     *
+     * @return A query string representing the selected filters for crash data retrieval.
+     */
     @Override
     public String toString() {
         List<String> where = new ArrayList<>();

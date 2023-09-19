@@ -36,7 +36,7 @@ import java.util.logging.Filter;
 
 /**
  * Controller for the main.fxml window
- * @author seng202 teaching team & Willy T
+ * @author Team10
  */
 
 
@@ -246,6 +246,8 @@ public class MainController {
                 });
     }
 
+
+
     @FXML
     private void initialize() {
         setupEmojiButtonTransition(carButton, 0);
@@ -265,7 +267,12 @@ public class MainController {
 
 
     }
-
+    /**
+     * Loads and displays the help window within the main application window.
+     * This method uses JavaFX's FXMLLoader to load the content of the help window from an FXML file.
+     * It clears the existing content in the main window and adds the help window's content.
+     * The help window is anchored to the right side of the main window.
+     */
     public void loadHelp() {
         try {
             FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
@@ -304,11 +311,7 @@ public class MainController {
         }
     }
 
-    /**
-     * Toggles the visibility of the helpButton with a fade animation.
-     * If the helpButton is currently visible, it will be faded out and hidden.
-     * If the helpButton is currently hidden, it will be faded in and shown.
-     */
+
     private void toggleHelpButtonVisibility(Button helpButton, int index) {
         if (fadeTransitions[index] == null) {
             fadeTransitions[index] = new FadeTransition(Duration.millis(500), helpButton);
@@ -329,12 +332,7 @@ public class MainController {
         }
     }
 
-    /**
-     * Toggles the visibility of a given pane with a fade animation.
-     *
-     * @param pane The pane to toggle.
-     * @param index The index of the fade transition in the array.
-     */
+
     private void togglePaneWithFade(AnchorPane pane, int index) {
         if (fadeTransitions[index] == null) {
             fadeTransitions[index] = new FadeTransition(Duration.millis(500), pane);
@@ -353,12 +351,7 @@ public class MainController {
             fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
-    /**
-     * Sets up a fade animation for an emoji button.
-     *
-     * @param button The emoji button to set up the animation for.
-     * @param index The index of the emoji button in the array.
-     */
+
     private void setupEmojiButtonTransition(Button button, int index) {
         emojiButtonTransitions[index] = new FadeTransition(Duration.millis(300));
         emojiButtonTransitions[index].setNode(button);
@@ -397,10 +390,7 @@ public class MainController {
         javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
     }
 
-    /**
-     * Adds a location when the "Add Location" button is clicked.
-     * Uses Geolocator class to turn the address into a lat, lng pair
-     */
+
 
     @FXML
     private Location getStart() {
@@ -424,7 +414,8 @@ public class MainController {
         return newMarker;
     }
 
-    //TODO add stops to the save route
+
+
     @FXML
     private void saveRoute() throws SQLException {
         Location start = getStart();
@@ -437,6 +428,7 @@ public class MainController {
         favorites.addOne(favourite);
     }
 
+
     @FXML
     private void displayRoutes() {
         FavouriteDAO favourites = new FavouriteDAO();
@@ -444,6 +436,7 @@ public class MainController {
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList.stream().map(favourite -> {return favourite.getStartAddress()+" to "+favourite.getEndAddress();}).toList());
         loadRoutesComboBox.setItems(items);
     }
+
 
     @FXML
     private void loadRoute() throws SQLException {
@@ -464,6 +457,7 @@ public class MainController {
         }
     }
 
+
     @FXML
     private Location getStop() {
         String address = stopLocation.getText().trim();
@@ -474,6 +468,7 @@ public class MainController {
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
+
 
     @FXML
     private void addStop() throws SQLException {
@@ -492,6 +487,17 @@ public class MainController {
         }
     }
 
+    /**
+     * Retrieves crash points that overlap with a given route within a specified danger radius.
+     * This method retrieves crash information from a database, calculates distances between the route
+     * segments and crash points using the Haversine formula, and identifies crash points that fall
+     * within the specified danger radius of the route segments.
+     *
+     * @param route        The route for which overlapping crash points are to be identified.
+     * @param dangerRadius The radius within which crash points are considered overlapping with the route.
+     * @return A list of CrashInfo objects representing crash points that overlap with the route.
+     * @throws SQLException If an SQL-related error occurs during database query execution.
+     */
     public List<CrashInfo> getOverlappingPoints(Route route, double dangerRadius) throws SQLException {
         List<CrashInfo> overlappingPoints = new ArrayList<>();
         CrashManager crashManager = new CrashManager();
@@ -519,7 +525,15 @@ public class MainController {
 
         return overlappingPoints;
     }
-
+    /**
+     * Calculates the Haversine distance between two geographic coordinates using the Haversine formula.
+     * The Haversine formula is used to compute the distance between two points on the Earth's surface
+     * given their latitude and longitude coordinates.
+     *
+     * @param loc1 The first location with latitude and longitude coordinates.
+     * @param loc2 The second location with latitude and longitude coordinates.
+     * @return The Haversine distance between the two locations in meters.
+     */
     public double haversineDistance(Location loc1, CrashInfo loc2) {
         double R = 6371000; // Earth radius in meters
         double dLat = Math.toRadians(loc2.lat - loc1.latitude);
@@ -557,6 +571,7 @@ public class MainController {
         }
     }
 
+
     private int ratingGenerator(List<CrashInfo> crashInfos) {
         int total = 0;
         for (CrashInfo crash: crashInfos) {
@@ -574,6 +589,7 @@ public class MainController {
         }
         return total;
     }
+
 
     private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
@@ -594,6 +610,12 @@ public class MainController {
         }
     }
 
+
+    /**
+     * Handles the change in the slider value and updates the user interface accordingly.
+     * This method is called when the user interacts with a slider to select a value.
+     * It rounds the slider value to an integer, updates the year label, and sets the earliest year filter.
+     */
     @FXML
     public void sliderValueChange() {
         int sliderValue = (int)Math.round(dateSlider.getValue());
@@ -605,7 +627,13 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
     }
-
+    /**
+     * Adds or removes a filter item based on the state of a CheckBox and its associated parent AnchorPane.
+     * This method is used to manage and update filtering options based on user selections.
+     *
+     * @param checkBox The CheckBox representing the filter item.
+     * @param parent   The parent AnchorPane of the CheckBox.
+     */
     public void addToFilters(CheckBox checkBox, AnchorPane parent) {
         FilterManager filters = FilterManager.getInstance();
         Object toAdd = checkBox.getUserData();
@@ -649,6 +677,12 @@ public class MainController {
         }
     }
 
+
+    /**
+     * Sets the user data for various CheckBoxes used in the application.
+     * This method assigns meaningful user data to CheckBoxes, which is often used for filtering logic.
+     * User data is typically a string or an integer representing the role or value associated with the CheckBox.
+     */
     @FXML
     public void setCheckboxesUserData() {
         bicycleCheckBox.setUserData("bicycle_involved");
@@ -686,6 +720,12 @@ public class MainController {
         }
     }
 
+    /**
+     * Handles the event triggered when an "All" CheckBox is selected or deselected.
+     * This method is typically used to select or deselect all other related CheckBoxes within the same group.
+     *
+     * @param event The ActionEvent triggered by the "All" CheckBox.
+     */
     @FXML
     public void handleAllCheckBoxEvent(ActionEvent event) {
         CheckBox allCheckBox = (CheckBox) event.getSource();
@@ -707,6 +747,13 @@ public class MainController {
         }
     }
 
+    /**
+     * Handles the event triggered when a CheckBox is selected or deselected.
+     * This method is responsible for updating filters and potentially the "All" CheckBox state
+     * within the same group of CheckBoxes.
+     *
+     * @param event The ActionEvent triggered by the CheckBox.
+     */
     @FXML
     public void handleCheckBoxEvent(ActionEvent event) {
         CheckBox checkBox = (CheckBox) event.getSource();
@@ -735,6 +782,14 @@ public class MainController {
         updateAllCheckBox(allCheckBox, checkBoxes);
     }
 
+    /**
+     * Updates the state of an "All" CheckBox based on the selection state of a list of related CheckBoxes.
+     * If all related CheckBoxes are selected, the "All" CheckBox is also selected; otherwise, it is deselected.
+     *
+     * @param allCheckBox The "All" CheckBox to update.
+     * @param checkBoxes  The list of related CheckBoxes to check for selection.
+     */
+
     public void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
         boolean allSelected = true;
         for (CheckBox checkBox : checkBoxes) {
@@ -745,6 +800,7 @@ public class MainController {
         }
         allCheckBox.setSelected(allSelected);
     }
+
 
     private void setViewOptions() {
         viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");

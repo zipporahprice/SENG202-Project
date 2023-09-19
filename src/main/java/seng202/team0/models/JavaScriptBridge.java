@@ -70,13 +70,13 @@ public class JavaScriptBridge {
          */
         public double lng;
         public int severity;
+
         /**
          * Constructs a CrashInfo object with latitude and longitude.
          *
          * @param lat The latitude of the crash location.
          * @param lng The longitude of the crash location.
          */
-
         public CrashInfo(double lat, double lng, int severity) {
             this.lat = lat;
             this.lng = lng;
@@ -85,6 +85,11 @@ public class JavaScriptBridge {
 
     }
 
+    /**
+     * Retrieves the name of the current view in the application.
+     *
+     * @return The name of the current view.
+     */
     public String currentView() {
         return MainController.currentView;
     }

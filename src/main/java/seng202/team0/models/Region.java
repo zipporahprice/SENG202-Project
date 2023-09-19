@@ -61,6 +61,11 @@ public enum Region {
         }
     }
 
+    /**
+     * Gets the name of the person.
+     *
+     * @return The name of the region as a String.
+     */
     public String getName() {
         return name;
     }

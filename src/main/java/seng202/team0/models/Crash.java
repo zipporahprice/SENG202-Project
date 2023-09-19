@@ -2,6 +2,11 @@ package seng202.team0.models;
 
 import javafx.util.Pair;
 
+/**
+ * Represents a crash event with various attributes such as speed limit, year, location, severity, and more.
+ *
+ * @author Team 10
+ */
 public class Crash {
 
     private int objectID;
@@ -11,7 +16,6 @@ public class Crash {
 
     private String crashLocation1;
     private String crashLocation2;
-    //private String region;
     private Region region;
     private Weather weather;
 
@@ -58,91 +62,201 @@ public class Crash {
 
     }
 
+    /**
+     * Get the object ID associated with this crash.
+     *
+     * @return The object ID of the crash.
+     */
     public int getObjectId(){
         return objectID;
     }
 
+    /**
+     * Get the speed limit at the crash location.
+     *
+     * @return The speed limit at the crash location.
+     */
     public int getSpeedLimit(){
         return speedLimit;
     }
 
+    /**
+     * Get the year in which the crash occurred.
+     *
+     * @return The year of the crash.
+     */
     public int getCrashYear(){
         return crashYear;
     }
 
+    /**
+     * Get the first crash location description.
+     *
+     * @return The description of the first crash location.
+     */
     public String getCrashLocation1(){
         return crashLocation1;
     }
 
+    /**
+     * Get the second crash location description.
+     *
+     * @return The description of the second crash location.
+     */
     public String getCrashLocation2(){
         return crashLocation2;
     }
 
+    /**
+     * Get the severity level of the crash.
+     *
+     * @return The severity level of the crash.
+     */
     public CrashSeverity getSeverity() {
         return severity;
     }
 
+    /**
+     * Get the region where the crash occurred.
+     *
+     * @return The region of the crash.
+     */
     public Region getRegion(){
         return region;
     }
 
+    /**
+     * Get the weather conditions at the time of the crash.
+     *
+     * @return The weather conditions at the time of the crash.
+     */
     public Weather getWeather(){
         return weather;
     }
 
+    /**
+     * Get the longitude coordinate of the crash location.
+     *
+     * @return The longitude coordinate of the crash location.
+     */
     public Float getLongitude(){
         return longitude;
     }
 
+    /**
+     * Get the latitude coordinate of the crash location.
+     *
+     * @return The latitude coordinate of the crash location.
+     */
     public Float getLatitude(){
         return latitude;
     }
 
+    /**
+     * Get the longitude and latitude coordinates of the crash location as a pair.
+     *
+     * @return A pair containing the longitude and latitude coordinates of the crash location.
+     */
     public Pair<Float,Float> getLongitudeAndLatitude(){
         Pair geoLocation = new Pair(longitude, latitude);
         return geoLocation;
     }
 
+    /**
+     * Check if bicycles were involved in the crash.
+     *
+     * @return True if bicycles were involved, false otherwise.
+     */
     public boolean isBicycleInvolved(){
         return bicycleInvolved;
     }
 
+    /**
+     * Check if trucks were involved in the crash.
+     *
+     * @return True if trucks were involved, false otherwise.
+     */
     public boolean isTruckInvolved() {
         return truckInvolved;
     }
 
+    /**
+     * Check if a school bus was involved in the crash.
+     *
+     * @return True if a school bus was involved, false otherwise.
+     */
     public boolean isSchoolBusInvolved() {
         return schoolBusInvolved;
     }
 
+    /**
+     * Check if buses were involved in the crash.
+     *
+     * @return True if buses were involved, false otherwise.
+     */
     public boolean isBusInvolved() {
         return busInvolved;
     }
 
+    /**
+     * Check if a train was involved in the crash.
+     *
+     * @return True if a train was involved, false otherwise.
+     */
     public boolean isTrainInvolved() {
         return trainInvolved;
     }
 
+    /**
+     * Check if cars were involved in the crash.
+     *
+     * @return True if cars were involved, false otherwise.
+     */
     public boolean isCarInvolved() {
         return carInvolved;
     }
 
+    /**
+     * Check if motorcycles were involved in the crash.
+     *
+     * @return True if motorcycles were involved, false otherwise.
+     */
     public boolean isMotorcycleInvolved() {
         return motorcycleInvolved;
     }
 
+    /**
+     * Check if the crash occurred on a holiday.
+     *
+     * @return True if the crash occurred on a holiday, false otherwise.
+     */
     public boolean isHoliday() {
         return holiday;
     }
 
+    /**
+     * Check if pedestrians were involved in the crash.
+     *
+     * @return True if pedestrians were involved, false otherwise.
+     */
     public boolean isPedestrianInvolved() {
         return pedestrianInvolved;
     }
 
+    /**
+     * Check if parked vehicles were involved in the crash.
+     *
+     * @return True if parked vehicles were involved, false otherwise.
+     */
     public boolean isParkedVehicleInvolved() {
         return parkedVehicleInvolved;
     }
 
+    /**
+     * Check if mopeds were involved in the crash.
+     *
+     * @return True if mopeds were involved, false otherwise.
+     */
     public boolean isMopedInvolved() {
         return mopedInvolved;
     }

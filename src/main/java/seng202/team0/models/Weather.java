@@ -39,7 +39,11 @@ public enum Weather {
             default: return Weather.NULL;
         }
     }
-
+    /**
+     * Gets the name of the person.
+     *
+     * @return The name of the Weather as a String.
+     */
     public String getName() {
         return name;
     }

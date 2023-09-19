@@ -1,5 +1,10 @@
 package seng202.team0.models;
 
+/**
+ * Represents a geographic location with latitude and longitude coordinates.
+ *
+ * @author Team 10
+ */
 public class Location {
     public double latitude;
 

@@ -14,7 +14,11 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.Collection;
 
-
+/**
+ * Provides geolocation functionality using the Nominatim Geolocation API.
+ *
+ * @author Team 10
+ */
 public class GeoLocator {
     /**
      * Takes in user input and searches for the address using the Nominatim Geolocation API before returning the location
@@ -64,7 +68,13 @@ public class GeoLocator {
     }
 
 
-
+    /**
+     * Retrieves the address for a given latitude and longitude using the Nominatim Geolocation API.
+     *
+     * @param lat The latitude coordinate.
+     * @param lng The longitude coordinate.
+     * @return The address corresponding to the provided latitude and longitude, or "No Address Found" if none is found or an error occurs.
+     */
     public String getAddress(Double lat, Double lng) {
         try {
             // Creating the http request

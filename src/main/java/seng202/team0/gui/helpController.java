@@ -24,6 +24,10 @@ public class helpController {
         this.stage = stage;
     }
 
+    /**
+     * Handles the action of navigating back to the main window view from the current help window view.
+     * Clears the help window contents and loads the main window view.
+     */
     public void handleBackButtonn() {
         try {
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
@@ -41,7 +45,12 @@ public class helpController {
             e.printStackTrace();
         }
     }
-    // Function to handle back navigation
+
+    /**
+     * Handles the action of navigating back to the main window view from the current view.
+     *
+     * @param event The ActionEvent that triggered this method, typically associated with a button click.
+     */
     public void handleBackButton(ActionEvent event) {
         try {
             // Load the main window FXML file

@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Manages operations related to Crash data, including importing Crash data from CSV files,
+ * retrieving individual Crash objects by ID, and retrieving filtered crash locations.
+ * This class interacts with the repository layer and utilizes the FilterManager for filtering data.
+ *
+ * @author Team 10
+ */
+
 public class CrashManager {
 
     private final CrashDAO crashDAO;
@@ -29,10 +37,23 @@ public class CrashManager {
         crashDAO.addMultiple(sales);
     }
 
+    /**
+     * Retrieves a Crash object by its unique identifier (ID) from the database.
+     *
+     * @param id The unique identifier (ID) of the Crash object to retrieve.
+     * @return The Crash object associated with the specified ID, or null if no such Crash is found.
+     * @throws SQLException If an error occurs while accessing the database.
+     */
     public Crash getCrash(int id) throws SQLException {
         return crashDAO.getOne(id);
     }
 
+    /**
+     * Retrieves crash locations from the database based on selected filters.
+     *
+     * @return A list of crash locations represented as database records containing longitude, latitude, and severity.
+     * @throws SQLException If an error occurs while accessing the database.
+     */
     public List getCrashLocations() throws SQLException {
         // TODO do not hard code for severities, make it flexible to all filters
         // TODO could instead do a * for columns
