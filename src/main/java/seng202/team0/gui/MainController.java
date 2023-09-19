@@ -64,6 +64,9 @@ public class MainController {
     private ComboBox<String> loadRoutesComboBox;
 
     @FXML
+    private AnchorPane holidayPane;
+
+    @FXML
     private Button helpButton;
 
     @FXML
@@ -115,8 +118,6 @@ public class MainController {
     private CheckBox trainCheckBox;
     @FXML
     private CheckBox truckCheckBox;
-    @FXML
-    private AnchorPane holidayPane;
 
     // Date Pane
     @FXML
@@ -142,7 +143,7 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[7]; // Array to store individual fade transitions
     private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
     private ArrayList<CheckBox> transportCheckboxes = new ArrayList<CheckBox>();
     private ArrayList<CheckBox> severityCheckboxes = new ArrayList<CheckBox>();
@@ -272,6 +273,7 @@ public class MainController {
         datePane.setVisible(false);
         boundariesPane.setVisible(false);
         severityPane.setVisible(false);
+        holidayPane.setVisible(false);
 
         weatherCheckboxes = new ArrayList<CheckBox>() {
             {
@@ -311,7 +313,6 @@ public class MainController {
         };
 
         checkboxItemListener(severityCheckboxes, selectAllSeverity);
-        //TODO modularise the unticking of checkboxes - DONE
 
     }
 
@@ -357,12 +358,12 @@ public class MainController {
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(boundariesPane, 3);
         togglePaneWithFade(severityPane, 4);
-        togglePaneWithFade(holidayPane, 5);
+        togglePaneWithFade(holidayPane, 6);
 
         // Toggle the visibility of the helpButton
 
         // Play each fade animation individually
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             fadeTransitions[i].play();
         }
     }

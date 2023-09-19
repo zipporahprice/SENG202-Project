@@ -185,9 +185,9 @@
             <Insets left="401.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="TOP_LEFT">
+      <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
-            <Label layoutX="90.0" layoutY="14.0" text="Holiday" textFill="WHITE" />
+            <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
          </children>
          <StackPane.margin>
             <Insets left="401.0" top="435.0" />
