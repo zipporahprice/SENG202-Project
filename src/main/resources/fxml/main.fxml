@@ -94,7 +94,7 @@
       </AnchorPane>
       <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="409.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
-            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="settingsButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="44.0" fitWidth="200.0">
                      <image>
@@ -125,7 +125,15 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="hamburgerButton1" layoutX="26.0" layoutY="318.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css" />
+            <Button fx:id="importExportButton" layoutX="26.0" layoutY="318.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="260.0" translateX="2.0">
+                     <image>
+                        <Image url="@images/import_export.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <StackPane.margin>
             <Insets left="10.0" right="10.0" top="10.0" />

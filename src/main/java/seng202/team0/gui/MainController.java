@@ -52,10 +52,7 @@ public class MainController {
     @FXML
     private Label defaultLabel;
 
-    @FXML
-    private Button defaultButton;
-    @FXML
-    private Button hamburgerButton;
+
     @FXML
     private AnchorPane transportModePane;
     @FXML
@@ -69,9 +66,6 @@ public class MainController {
 
 
 
-
-    //@FXML
-    //private Button helpButton;
     //weather pane
     @FXML
     private CheckBox selectAllWeather;
@@ -130,6 +124,14 @@ public class MainController {
     private ChoiceBox viewChoiceBox;
 
 
+    @FXML
+    private Button settingsButton;
+    @FXML
+    private Button filterDataButton;
+    @FXML
+    private Button userHelpButton;
+    @FXML
+    private Button importExportButton;
 
     @FXML
     private AnchorPane includedMap;
@@ -155,19 +157,6 @@ public class MainController {
     @FXML
     private VBox rightRegionVBox;
 
-
-    @FXML
-    private Button carButton;
-    @FXML
-    private Button bikeButton;
-    @FXML
-    private Button busButton;
-    @FXML
-    private Button walkingButton;
-    @FXML
-    private Button helicopterButton;
-    @FXML
-    private Button motorbikeButton;
 
     @FXML
     private TextField startLocation;
@@ -243,12 +232,6 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        setupEmojiButtonTransition(carButton, 0);
-        setupEmojiButtonTransition(bikeButton, 1);
-        setupEmojiButtonTransition(busButton, 2);
-        setupEmojiButtonTransition(walkingButton, 3);
-        setupEmojiButtonTransition(helicopterButton, 4);
-        setupEmojiButtonTransition(motorbikeButton, 5);
         transportModePane.setVisible(false);
         weatherPane.setVisible(false);
         datePane.setVisible(false);
