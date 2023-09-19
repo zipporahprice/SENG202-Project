@@ -41,4 +41,5 @@ public class MainControllerTest {
         assert expectedCrashes != null;
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
     }
+
 }
