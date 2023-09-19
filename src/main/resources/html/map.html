@@ -99,23 +99,58 @@
 
         map = new L.map('map', mapOptions);
 
-        map.on('zoomend', function() {
-            var zoomLevel = map.getZoom();
-            console.log(zoomLevel);
-            if(zoomLevel >= 12) {
-                console.log("Too zoomed in, heatmap disabled");
+        updateView();
+        setInterval(updateView, 500);
+    }
+
+    function automaticViewChange() {
+        var zoomLevel = map.getZoom();
+        if (zoomLevel >= 12) {
+            if (map.hasLayer(heatmapLayer)) {
                 map.removeLayer(heatmapLayer);
+            }
+            if (!map.hasLayer(markerLayer)) {
                 map.addLayer(markerLayer);
             }
-            else {
-                if (!map.hasLayer(heatmapLayer)) { // Check if heatmap layer is already added
-                    map.addLayer(heatmapLayer); // Add the heatmap layer back
-                    heatmapLayer.setData(testData); // Set the data again if needed
-                    map.removeLayer(markerLayer);
-                }
+        }
+        else {
+            if (map.hasLayer(markerLayer)) {
+                map.removeLayer(markerLayer);
             }
+            if (!map.hasLayer(heatmapLayer)) {
+                map.addLayer(heatmapLayer);
+                heatmapLayer.setData(testData);
+            }
+        }
+    }
 
-        });
+    /**
+     * Updates the view according to the user selection
+     * Three views available:
+     * Automatic - Changes from heatmap to crash locations at "12" zoomed in and back
+     * Heatmap - Shows heatmap at all zooms
+     * Crash Locations - Shows crash locations in clusters at all zooms
+     */
+    function updateView() {
+        var currentView = javaScriptBridge.currentView();
+
+        if (currentView === "Automatic") {
+            automaticViewChange();
+            map.on('zoomend', automaticViewChange);
+        } else if (currentView === "Heatmap") {
+            map.off('zoomend', automaticViewChange);
+            if (map.hasLayer(markerLayer)) {
+                map.removeLayer(markerLayer);
+            }
+            map.addLayer(heatmapLayer);
+            heatmapLayer.setData(testData);
+        } else {
+            map.off('zoomend', automaticViewChange);
+            if (map.hasLayer(heatmapLayer)) {
+                map.removeLayer(heatmapLayer);
+            }
+            map.addLayer(markerLayer);
+        }
     }
 
 
