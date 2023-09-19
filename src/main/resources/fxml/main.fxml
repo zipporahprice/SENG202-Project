@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView">
          <StackPane.margin>
@@ -94,7 +94,7 @@
       </AnchorPane>
       <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="409.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
-            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="44.0" fitWidth="200.0">
                      <image>
@@ -107,7 +107,7 @@
                   <Image url="@images/SafeTripLogoLarge.png" />
                </image>
             </ImageView>
-            <Button fx:id="filterDataButton" layoutX="29.0" layoutY="79.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="filterDataButton" layoutX="29.0" layoutY="79.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="200.0">
                      <image>
