@@ -1,39 +1,46 @@
 package seng202.team0.repository;
 
-import seng202.team0.business.CrashManager;
-import seng202.team0.io.CrashCSVImporter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
-import java.util.List;
 
 /**
+ *
  * Class instantiating and initialising SQLite database.
  * Majority of code taken from Morgan English's JavaFX Sales app source code.
+ *
  * @author Morgan English
+ * @author Angelica Silva
+ * @author Christopher Wareing
  * @author Neil Alombro
+ * @authod Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 
-// TODO add logging with exceptions. currently do not know how it works so left out
-
 public class DatabaseManager {
+    private static final Logger log = LogManager.getLogger(DatabaseManager.class);
     private static DatabaseManager manager = null;
     private final String url;
     /**
      * Private constructor for singleton purposes
      * Creates database if it does not already exist in specified location
-     * @param url location of the db file
+     * @param url Location of the db file or null
      */
     public DatabaseManager(String url) {
+        // Uses url or helper function to get the relative database path
         if (url==null || url.isEmpty()) {
             this.url = this.getDatabasePath();
         } else {
             this.url = url;
         }
 
+        // If database does not exist, create database
         if (!checkDatabaseExists(this.url)) {
             createNewDatabase(this.url);
             resetDB();
@@ -69,8 +76,8 @@ public class DatabaseManager {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(this.url);
-        } catch (SQLException e) {
-            System.out.println(e);
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
         }
         return conn;
     }
@@ -82,8 +89,8 @@ public class DatabaseManager {
         try {
             InputStream in = getClass().getResourceAsStream("/sql/initialise_database.sql");
             executeSQLScript(in);
-        } catch (NullPointerException e) {
-            System.out.println(e);
+        } catch (NullPointerException nullPointerException) {
+            log.error(nullPointerException);
         }
     }
 
@@ -119,8 +126,8 @@ public class DatabaseManager {
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created.");
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
         }
     }
 
@@ -152,7 +159,7 @@ public class DatabaseManager {
                 statementConnection.execute(statement);
             }
         } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+            log.error(e);
         }
     }
 }

@@ -15,11 +15,6 @@ import java.util.List;
  *
  * @author Morgan English
  * @author Angelica Silva
- * @author Christopher Wareing
- * @author Neil Alombro
- * @authod Todd Vermeir
- * @author William Thompson
- * @author Zipporah Price
  *
  */
 public class UserDAO implements DAOInterface<User> {

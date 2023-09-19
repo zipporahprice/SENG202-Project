@@ -1,31 +1,55 @@
 package seng202.team0.repository;
 
-import seng202.team0.models.Crash;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Builder class of SQL queries for the SQLite database.
+ * Functions to chain include create, select, from, where, and build.
+ * Future developments look to create functions for delete, insert, update, group by.
+ *
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @authod Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
+ */
+
 public class SQLiteQueryBuilder {
+    private static final Logger log = LogManager.getLogger(SQLiteQueryBuilder.class);
     private final DatabaseManager databaseManager;
     private static StringBuilder query;
     private final List<String> selectedColumns;
 
+    /**
+     * Private instantiate that allows future connections to the database,
+     * creates an empty query, and an empty list for columns selected to move to.
+     */
     private SQLiteQueryBuilder() {
         this.databaseManager = DatabaseManager.getInstance();
         query = new StringBuilder();
         this.selectedColumns = new ArrayList<>();
     }
 
-    // TODO reasoning, done for readability and chaining easier
+    /**
+     * Create function creates a new instance of the class.
+     * Done for readability with function chaining.
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
     public static SQLiteQueryBuilder create() {
         return new SQLiteQueryBuilder();
     }
 
     /**
      * Takes a comma separated string of columns and appends to current query
-     * @param columns
+     * @param columns Comma separated string of columns or "*" denoting all columns of table
      * @return SQLiteQueryBuilder instance to chain methods
      */
     public SQLiteQueryBuilder select(String columns) {
@@ -42,7 +66,8 @@ public class SQLiteQueryBuilder {
 
     /**
      * Takes a table name to query data from
-     * @param table
+     * Note: Updates selected columns list from the table's metadata if all columns selected
+     * @param table String of table name
      * @return SQLiteQueryBuilder instance to chain methods
      */
     public SQLiteQueryBuilder from(String table) {
@@ -59,8 +84,8 @@ public class SQLiteQueryBuilder {
                     selectedColumns.add(rs.getString("COLUMN_NAME"));
                     System.out.println(rs.getString("COLUMN_NAME"));
                 }
-            } catch (SQLException e) {
-                System.out.println(e);
+            } catch (SQLException sqlException) {
+                log.error(sqlException);
             }
         }
 
@@ -69,7 +94,7 @@ public class SQLiteQueryBuilder {
 
     /**
      * Takes a comma separated string of conditions and appends to current query
-     * @param conditions
+     * @param conditions Comma separated string of conditions
      * @return SQLiteQueryBuilder instance to chain methods
      */
     public SQLiteQueryBuilder where(String conditions) {
@@ -78,10 +103,9 @@ public class SQLiteQueryBuilder {
     }
 
     // TODO have a think about how we want the data to come back to us as, currently have as a list
-    // TODO List might not be the best way to have it
     /**
      * Takes the query in the builder object and returns a list of all data points in a List object.
-     * @return list of all data points from the current query string
+     * @return List of all data points from the current query string
      */
     public List build() {
         List data = new ArrayList<HashMap>();
@@ -96,14 +120,17 @@ public class SQLiteQueryBuilder {
                 }
                 data.add(temp);
             }
-        } catch (SQLException e) {
-            // TODO do something better with error catching
-            System.out.println(e);
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
         }
 
         return data;
     }
 
+    /**
+     * Getter method for query
+     * @return Query string at the current state of method chaining
+     */
     public String getQuery() {
         return query.toString();
     }

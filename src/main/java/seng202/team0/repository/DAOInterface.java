@@ -1,7 +1,5 @@
 package seng202.team0.repository;
 
-//import org.apache.commons.lang3.NotImplementedException;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -29,6 +27,7 @@ public interface DAOInterface<T> {
      * @return object insert id if inserted correctly
      */
     void addOne(T toAdd) throws SQLException;
+
 //            throws DuplicateEntryException;
     //TODO consider making duplicate entry exception
     // throws DuplicateEntryException if the object already exists
