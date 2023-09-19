@@ -1,6 +1,8 @@
 package seng202.team0.repository;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Favourite;
 
 import java.sql.*;
@@ -8,14 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Class that communicates with the favourites table in the database through SQL queries.
- * @author Zipporah Price
+ *
  * @author Morgan English
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @authod Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class FavouriteDAO implements DAOInterface<Favourite> {
+    private static final Logger log = LogManager.getLogger(FavouriteDAO.class);
     private final DatabaseManager databaseManager;
 
     /**
-     * Creates a new FavouriteDAO object
+     * Creates a new FavouriteDAO object and creates reference to database
      */
     public FavouriteDAO() { this.databaseManager = DatabaseManager.getInstance(); }
 
@@ -31,17 +41,12 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                favourites.add(new Favourite(
-                        rs.getString("start_address"),
-                        rs.getString("end_address"),
-                        rs.getFloat("start_lat"),
-                        rs.getFloat("start_lng"),
-                        rs.getFloat("end_lat"),
-                        rs.getFloat("end_lng"),
-                        rs.getString("filters")));
+                Favourite favourite = favouriteFromResultSet(rs);
+                assert favourite != null;
+                favourites.add(favourite);
             }
             return favourites;
-        } catch (SQLException e) {
+        } catch (AssertionError | SQLException e) {
             System.out.println(e);
             return new ArrayList<>();
         }
@@ -56,24 +61,20 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     public Favourite getOne(int id) {
         Favourite favourite = null;
         String sql = "SELECT * FROM favourites WHERE id=?";
+
+        // Connect to database and gets the corresponding Favourite
         try (Connection conn = databaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    favourite = new Favourite(
-                            rs.getString("start_address"),
-                            rs.getString("end_address"),
-                            rs.getFloat("start_lat"),
-                            rs.getFloat("start_lng"),
-                            rs.getFloat("end_lat"),
-                            rs.getFloat("end_lng"),
-                            rs.getString("filters"));
+                    favourite = favouriteFromResultSet(rs);
                 }
+                assert favourite != null;
                 return favourite;
             }
-        } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+        } catch (AssertionError | SQLException sqlException) {
+            log.error(sqlException);
             return null;
         }
     }
@@ -82,49 +83,59 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
      * Adds a given Favourite object to a prepared statement
      * @param ps PreparedStatement being added to
      * @param toAdd Favourite object to be added
-     * @throws SQLException
      */
-    public void addToPreparedStatement(PreparedStatement ps, Favourite toAdd) throws SQLException {
-        ps.setString(1, toAdd.getStartAddress());
-        ps.setString(2, toAdd.getEndAddress());
-        ps.setDouble(3, toAdd.getStartLat());
-        ps.setDouble(4, toAdd.getStartLong());
-        ps.setDouble(5, toAdd.getEndLat());
-        ps.setDouble(6, toAdd.getEndLong());
-        ps.setString(7, toAdd.getFilters());
+    public void addToPreparedStatement(PreparedStatement ps, Favourite toAdd) {
+        try {
+            ps.setString(1, toAdd.getStartAddress());
+            ps.setString(2, toAdd.getEndAddress());
+            ps.setDouble(3, toAdd.getStartLat());
+            ps.setDouble(4, toAdd.getStartLong());
+            ps.setDouble(5, toAdd.getEndLat());
+            ps.setDouble(6, toAdd.getEndLong());
+            ps.setString(7, toAdd.getFilters());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     /**
      * Adds a single given Favourite to the database
      * @param toAdd Favourite object to be added
-     * @throws SQLException
      */
     @Override
-    public void addOne(Favourite toAdd) throws SQLException {
-        String sql = "INSERT INTO favourites (start_address, end_address, start_lat, start_lng," +
-                "end_lat, end_lng, filters) values (?,?,?,?,?,?,?);";
-        Connection conn = databaseManager.connect();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        addToPreparedStatement(ps, toAdd);
-        ps.executeUpdate();
+    public void addOne(Favourite toAdd) {
+        try {
+            String sql = "INSERT INTO favourites (start_address, end_address, start_lat, start_lng," +
+                    "end_lat, end_lng, filters) values (?,?,?,?,?,?,?);";
+            Connection conn = databaseManager.connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            addToPreparedStatement(ps, toAdd);
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
+    // TODO think about use for this. Will a user want to import a previous favourites csv file?
     /**
      * Adds a given list of Favourite objects to the database
      * @param toAdd List of Favourites to be added
-     * @throws SQLException
      */
-    public void addMultiple(List<Favourite> toAdd) throws SQLException {
-        String sql = "INSERT OR IGNORE INTO favourites (start_address, end_address, start_lat, start_long" +
-                "end_lat, end_long, filters) values (?,?,?,?,?,?,?);";
-        Connection conn = databaseManager.connect();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        conn.setAutoCommit(false);
-        for (Favourite favToAdd : toAdd) {
-            addToPreparedStatement(ps, favToAdd);
-            ps.addBatch();
+    public void addMultiple(List<Favourite> toAdd) {
+        try {
+            String sql = "INSERT OR IGNORE INTO favourites (start_address, end_address, start_lat, start_long" +
+                    "end_lat, end_long, filters) values (?,?,?,?,?,?,?);";
+            Connection conn = databaseManager.connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            conn.setAutoCommit(false);
+            for (Favourite favToAdd : toAdd) {
+                addToPreparedStatement(ps, favToAdd);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
         }
-        ps.executeBatch();
     }
 
     /**
@@ -139,17 +150,39 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException sqlException) {
-            System.out.println(sqlException);
+            log.error(sqlException);
         }
     }
 
+    // TODO Implement if we want to give users functionality to update a saved Favourite
     /**
      * Updates a given Favourite within the database
      * @param toUpdate Favourite object to be updated
      */
     @Override
     public void update(Favourite toUpdate) {
-        throw new NotImplementedException();
+        log.error(new NotImplementedException());
     }
 
+    /**
+     * Takes a ResultSet object and creates a Favourite object
+     * from the data of the row with corresponding column names.
+     * @param rs ResultSet from executing SQL query
+     * @return Favourite object with the current row result set is at
+     */
+    private Favourite favouriteFromResultSet(ResultSet rs) {
+        try {
+            return new Favourite(
+                    rs.getString("start_address"),
+                    rs.getString("end_address"),
+                    rs.getFloat("start_lat"),
+                    rs.getFloat("start_lng"),
+                    rs.getFloat("end_lat"),
+                    rs.getFloat("end_lng"),
+                    rs.getString("filters"));
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
+    }
 }

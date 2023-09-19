@@ -9,7 +9,15 @@ import java.util.List;
 
 /**
  * Class that communicates with the SQLite database's crashes table through SQL queries.
+ *
+ * @author Morgan English
+ * @author Angelica Silva
+ * @author Christopher Wareing
  * @author Neil Alombro
+ * @authod Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class CrashDAO implements DAOInterface<Crash> {
     private final DatabaseManager databaseManager;
@@ -19,42 +27,6 @@ public class CrashDAO implements DAOInterface<Crash> {
      */
     public CrashDAO() {
         this.databaseManager = DatabaseManager.getInstance();
-    }
-
-    /**
-     * Takes a ResultSet object and creates a Crash object
-     * from the data of the row with corresponding column names.
-     * @param rs ResultSet from executing SQL query
-     * @return Crash object with the current row result set is at
-     */
-    private Crash crashFromResultSet(ResultSet rs) {
-        try {
-            return new Crash(
-                    rs.getInt("object_id"),
-                    rs.getInt("speed_limit"),
-                    rs.getInt("crash_year"),
-                    rs.getString("crash_location1"),
-                    rs.getString("crash_location2"),
-                    rs.getString("severity"),
-                    rs.getString("region"),
-                    rs.getString("weather"),
-                    rs.getFloat("longitude"),
-                    rs.getFloat("latitude"),
-                    rs.getBoolean("bicycle_involved"),
-                    rs.getBoolean("bus_involved"),
-                    rs.getBoolean("car_involved"),
-                    rs.getBoolean("holiday"),
-                    rs.getBoolean("moped_involved"),
-                    rs.getBoolean("motorcycle_involved"),
-                    rs.getBoolean("parked_vehicle_involved"),
-                    rs.getBoolean("pedestrian_involved"),
-                    rs.getBoolean("school_bus_involved"),
-                    rs.getBoolean("train_involved"),
-                    rs.getBoolean("truck_involved"));
-        } catch (SQLException sqlException) {
-            System.out.println(sqlException);
-            return null;
-        }
     }
 
     /**
@@ -228,5 +200,41 @@ public class CrashDAO implements DAOInterface<Crash> {
     @Override
     public void update(Crash toUpdate) {
         throw new NotImplementedException();
+    }
+
+    /**
+     * Takes a ResultSet object and creates a Crash object
+     * from the data of the row with corresponding column names.
+     * @param rs ResultSet from executing SQL query
+     * @return Crash object with the current row result set is at
+     */
+    private Crash crashFromResultSet(ResultSet rs) {
+        try {
+            return new Crash(
+                    rs.getInt("object_id"),
+                    rs.getInt("speed_limit"),
+                    rs.getInt("crash_year"),
+                    rs.getString("crash_location1"),
+                    rs.getString("crash_location2"),
+                    rs.getString("severity"),
+                    rs.getString("region"),
+                    rs.getString("weather"),
+                    rs.getFloat("longitude"),
+                    rs.getFloat("latitude"),
+                    rs.getBoolean("bicycle_involved"),
+                    rs.getBoolean("bus_involved"),
+                    rs.getBoolean("car_involved"),
+                    rs.getBoolean("holiday"),
+                    rs.getBoolean("moped_involved"),
+                    rs.getBoolean("motorcycle_involved"),
+                    rs.getBoolean("parked_vehicle_involved"),
+                    rs.getBoolean("pedestrian_involved"),
+                    rs.getBoolean("school_bus_involved"),
+                    rs.getBoolean("train_involved"),
+                    rs.getBoolean("truck_involved"));
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException);
+            return null;
+        }
     }
 }

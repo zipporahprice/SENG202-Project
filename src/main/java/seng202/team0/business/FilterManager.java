@@ -281,7 +281,5 @@ public class FilterManager {
         } else {
             return String.join(AND, where);
         }
-
     }
-
 }
