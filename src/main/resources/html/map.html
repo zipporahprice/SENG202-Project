@@ -135,6 +135,7 @@
         var currentView = javaScriptBridge.currentView();
 
         if (currentView === "Automatic") {
+            automaticViewChange();
             map.on('zoomend', automaticViewChange);
         } else if (currentView === "Heatmap") {
             map.off('zoomend', automaticViewChange);
