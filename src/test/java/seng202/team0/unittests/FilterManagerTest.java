@@ -15,7 +15,7 @@ public class FilterManagerTest {
     @Test
     void testUpdateFiltersWithQueryString() {
         FilterManager filters = FilterManager.getInstance();
-        String expectedString = "severity IN (1, 2) AND (bicycle_involved = 1) AND weather IN (\"Fine\", \"Light Rain\", \"Heavy Rain\") AND region IN (\"Canterbury\")";
+        String expectedString = "severity IN (1, 2) AND (bicycle_involved = 1 OR moped_involved = 1) AND crash_year >= 2003 AND weather IN (\"Fine\", \"Light Rain\", \"Heavy Rain\") AND region IN (\"Canterbury\")";
         filters.updateFiltersWithQueryString(expectedString);
         Assertions.assertEquals(expectedString, filters.toString());
     }

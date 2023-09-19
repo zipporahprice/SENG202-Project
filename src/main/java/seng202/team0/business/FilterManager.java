@@ -89,14 +89,12 @@ public class FilterManager {
     public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
     public void updateFiltersWithQueryString(String query) {
-        // Restarts FilterManager
-        filters = new FilterManager();
-
         // Clear all lists
-        severitiesSelected = new ArrayList<>();
-        modesSelected = new ArrayList<>();
-        weathersSelected = new ArrayList<>();
-        regionsSelected = new ArrayList<>();
+        severitiesSelected.clear();
+        modesSelected.clear();
+        weathersSelected.clear();
+        regionsSelected.clear();
+        earliestYear = 2000;
 
         if (!Objects.equals(query, "1 = 0")) {
             String[] queryList = query.split(" AND ");
@@ -110,9 +108,8 @@ public class FilterManager {
                             severitiesSelected.add(Integer.parseInt(severityString)));
                 } else if (filter.startsWith(startOfClauses.get("transport_mode"))) {
                     String transportModesString = filter.substring(startOfClauses.get("transport_mode").length(), filter.length() - 1);
-                    System.out.println(transportModesString.split(" OR "));
                     Arrays.stream(transportModesString.split(" OR ")).forEach(transportModeString ->
-                            modesSelected.add(transportModeString));
+                            modesSelected.add(transportModeString.split(" ")[0]));
                 } else if (filter.startsWith(startOfClauses.get("crash_year"))) {
                     earliestYear = Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length()));
                 } else if (filter.startsWith(startOfClauses.get("weather"))) {
