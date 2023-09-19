@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
 
-public class helpController {
+public class HelpController {
 
     public AnchorPane helpWindow;
 

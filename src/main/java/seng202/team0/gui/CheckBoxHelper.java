@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.apache.commons.collections.functors.AndPredicate;
 import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.Favourite;
@@ -47,6 +46,11 @@ public class CheckBoxHelper {
         this.holidayPane = holidayPane;
     }
 
+    /**
+     * Takes a Favourite object and updates
+     * the FilterManager singleton class and the checkboxes on the GUI,
+     * @param favourite Favourite object that includes a filters string
+     */
     public void updateCheckboxesWithFavourites(Favourite favourite) {
         // Update FilterManager class with the filters associated to the favourite route
         FilterManager filters = FilterManager.getInstance();
@@ -114,12 +118,13 @@ public class CheckBoxHelper {
                 filters.removeFromWeathers((String) toAdd);
             }
         } else if (parent.equals(severityPane)) {
+            int severity = Integer.parseInt((String) toAdd);
             if (checkBox.isSelected()) {
-                if (!filters.getSeveritiesSelected().contains((Integer) toAdd)) {
-                    filters.addToSeverities((Integer) toAdd);
+                if (!filters.getSeveritiesSelected().contains(severity)) {
+                    filters.addToSeverities(severity);
                 }
             } else {
-                filters.removeFromSeverities((Integer) toAdd);
+                filters.removeFromSeverities(severity);
             }
         } else if (parent.equals(regionsPane)) {
             if (checkBox.isSelected()) {

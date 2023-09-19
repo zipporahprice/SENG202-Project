@@ -1,11 +1,13 @@
 package seng202.team0.gui;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -15,25 +17,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import netscape.javascript.JSObject;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import javafx.util.Duration;
-import javafx.animation.FadeTransition;
-import javafx.animation.Animation;
-import javafx.event.ActionEvent;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.FavouriteDAO;
 
-
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.logging.Filter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Controller for the main.fxml window
@@ -48,13 +47,7 @@ public class MainController {
 
     @FXML
     private StackPane mainWindow;
-    @FXML
-    private Label defaultLabel;
 
-    @FXML
-    private Button defaultButton;
-    @FXML
-    private Button hamburgerButton;
     @FXML
     private AnchorPane transportModePane;
     @FXML
@@ -72,19 +65,10 @@ public class MainController {
 
     @FXML
     private Button helpButton;
-    //weather pane
-    @FXML
-    private CheckBox selectAllWeather;
-
-
-    @FXML
-    private CheckBox selectAllTransport;
 
     // Severity Pane
     @FXML
     private AnchorPane severityPane;
-    @FXML
-    private CheckBox selectAllSeverity;
     @FXML
     private CheckBox nonInjuryCheckBox;
     @FXML
@@ -122,10 +106,6 @@ public class MainController {
     @FXML
     private Label currentYearLabel;
 
-    //regions pane
-    @FXML
-    private CheckBox selectAllRegions;
-
     @FXML
     private ChoiceBox viewChoiceBox;
 
@@ -133,8 +113,6 @@ public class MainController {
     public Label ratingText;
 
 
-    @FXML
-    private AnchorPane includedMap;
     private Stage stage;
 
     private GeoLocator geolocator;
@@ -234,9 +212,6 @@ public class MainController {
         checkBoxHelper = new CheckBoxHelper(severityPane, transportModePane, dateSlider,
                 currentYearLabel, weatherPane, regionsPane, holidayPane);
 
-
-
-        setCheckboxesUserData();
         setViewOptions();
 
         stage.sizeToScene();
@@ -552,9 +527,6 @@ public class MainController {
         return R * c;
     }
 
-
-
-
     @FXML
     private void generateRouteAction() throws SQLException {
         Location start = getStart();
@@ -630,49 +602,6 @@ public class MainController {
         // Updates Filter Manager with the earliest year for crash query
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
-    }
-
-
-
-    /**
-     * Sets the user data for various CheckBoxes used in the application.
-     * This method assigns meaningful user data to CheckBoxes, which is often used for filtering logic.
-     * User data is typically a string or an integer representing the role or value associated with the CheckBox.
-     */
-    public void setCheckboxesUserData() {
-        bicycleCheckBox.setUserData("bicycle_involved");
-        busCheckBox.setUserData("bus_involved");
-        carCheckBox.setUserData("car_involved");
-        mopedCheckBox.setUserData("moped_involved");
-        motorcycleCheckBox.setUserData("motorcycle_involved");
-        parkedVehicleCheckBox.setUserData("parked_vehicle_involved");
-        pedestrianCheckBox.setUserData("pedestrian_involved");
-        schoolBusCheckBox.setUserData("school_bus_involved");
-        trainCheckBox.setUserData("train_involved");
-        truckCheckBox.setUserData("truck_involved");
-
-        nonInjuryCheckBox.setUserData(1);
-        minorCrashCheckBox.setUserData(2);
-        majorCrashCheckBox.setUserData(4);
-        deathCheckBox.setUserData(8);
-
-        for (Object child : weatherVBox.getChildren()) {
-            if (child instanceof CheckBox) {
-                ((CheckBox) child).setUserData(((CheckBox) child).getText());
-            }
-        }
-
-        for (Object child : leftRegionVBox.getChildren()) {
-            if (child instanceof CheckBox) {
-                ((CheckBox) child).setUserData(((CheckBox) child).getText());
-            }
-        }
-
-        for (Object child : rightRegionVBox.getChildren()) {
-            if (child instanceof CheckBox) {
-                ((CheckBox) child).setUserData(((CheckBox) child).getText());
-            }
-        }
     }
 
     /**
