@@ -101,6 +101,7 @@ public class SQLiteQueryBuilder {
             System.out.println(e);
         }
 
+        System.out.println(data.size());
         return data;
     }
 

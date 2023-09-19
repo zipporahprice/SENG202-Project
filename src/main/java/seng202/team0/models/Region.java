@@ -13,6 +13,7 @@ public enum Region {
     CANTERBURY("Canterbury"),
     GISBORNE("Gisborne"),
     HAWKESBAY("Hawke's Bay"),
+    // TODO removing from a list with the macron on the last u on the first word is not working, just left it off
     MANAWATUWHANGANUI("Manawatū-Whanganui"),
     MARLBOROUGH("Marlborough"),
     NELSON("Nelson"),

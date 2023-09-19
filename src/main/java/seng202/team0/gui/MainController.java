@@ -445,12 +445,9 @@ public class MainController {
         filters.setEarliestYear(sliderValue);
     }
 
-    public void toggleAllCheckbox(CheckBox checkBox, AnchorPane parent) {
+    public void addToFilters(CheckBox checkBox, AnchorPane parent) {
         FilterManager filters = FilterManager.getInstance();
         Object toAdd = checkBox.getUserData();
-
-        System.out.println(toAdd.getClass());
-        System.out.println(toAdd);
 
         // TODO check if logic event needs to check if the list contains the thing you are adding
 
@@ -539,8 +536,10 @@ public class MainController {
             if (child instanceof VBox) {
                 for (Object childCheckBox : ((VBox) child).getChildren()) {
                     if (childCheckBox instanceof  CheckBox) {
-                        ((CheckBox) childCheckBox).setSelected(allSelected);
-                        toggleAllCheckbox((CheckBox) childCheckBox, parent);
+                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
+                            ((CheckBox) childCheckBox).setSelected(allSelected);
+                            addToFilters((CheckBox) childCheckBox, parent);
+                        }
                     }
                 }
             }
@@ -552,7 +551,7 @@ public class MainController {
         CheckBox checkBox = (CheckBox) event.getSource();
         AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
 
-        toggleAllCheckbox(checkBox, parent);
+        addToFilters(checkBox, parent);
 
         CheckBox allCheckBox = null;
         List<CheckBox> checkBoxes = new ArrayList<>();

@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.BoxBlur?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 
-<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView">
          <StackPane.margin>
@@ -59,10 +51,6 @@
                <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Moped" textFill="WHITE" />
                <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Motorcycle" textFill="WHITE" />
             </VBox>
-            <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
-               <children>
-                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
-               </children></VBox>
             <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
                <children>
                   <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Parked Vehicle" textFill="WHITE" />
@@ -72,6 +60,10 @@
                   <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Truck" textFill="WHITE" />
                </children>
             </VBox>
+            <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children></VBox>
          </children>
          <StackPane.margin>
             <Insets left="150.0" />
@@ -169,7 +161,7 @@
                   <CheckBox fx:id="canterburyCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Canterbury" textFill="WHITE" />
                   <CheckBox fx:id="gisborneCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Gisborne" textFill="WHITE" />
                   <CheckBox fx:id="hawkesBayCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Hawke's Bay" textFill="WHITE" />
-                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Manawatū-&#10;Whanganui" textFill="WHITE" />
+                  <CheckBox fx:id="manawatuWhanganuiCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" prefHeight="41.0" prefWidth="94.0" selected="true" text="Manawatū-Whanganui" textFill="WHITE" wrapText="true" />
                   <CheckBox fx:id="marlboroughCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Marlborough" textFill="WHITE" />
                   <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" />
                </children>
@@ -184,6 +176,7 @@
                   <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" />
                   <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" />
                   <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" />
+                  <CheckBox fx:id="regionNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0">
@@ -206,6 +199,7 @@
                   <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Heavy Rain" textFill="WHITE" />
                   <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Mist or Fog" textFill="WHITE" />
                   <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Snow" textFill="WHITE" />
+                  <CheckBox fx:id="weatherNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" />
                </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0">

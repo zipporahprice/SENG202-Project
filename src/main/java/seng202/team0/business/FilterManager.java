@@ -42,8 +42,7 @@ public class FilterManager {
                 "pedestrian_involved",
                 "school_bus_involved",
                 "train_involved",
-                "truck_involved",
-                "null"
+                "truck_involved"
         ));
         weathersSelected = new ArrayList<>(
                 Arrays.stream(Weather.values()).map(weather -> weather.getName()).toList()
@@ -72,6 +71,17 @@ public class FilterManager {
     public List<String> getWeathersSelected() { return this.weathersSelected; }
     public void addToWeathers(String weather) { weathersSelected.add(weather); }
     public void removeFromWeathers(String weather) { weathersSelected.remove((Object)weather); }
+    public List<String> getModesSelected() { return this.modesSelected; }
+
+    public void addToModes(String mode) { modesSelected.add(mode); }
+
+    public void removeFromModes(String mode) { modesSelected.remove(mode); }
+
+    public List<String> getRegionsSelected() { return this.regionsSelected; }
+
+    public void addToRegions(String region) { regionsSelected.add(region); }
+
+    public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
     @Override
     public String toString() {
@@ -85,7 +95,7 @@ public class FilterManager {
 
         if (filters.getModesSelected().size() > 0) {
             String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
-            where.add(modesCondition);
+            where.add("(" + modesCondition + ")");
 
         }
 
@@ -106,22 +116,14 @@ public class FilterManager {
 
         }
 
-        System.out.println(String.join(" AND ", where));
+        // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
+        if (modesSelected.size() == 0 || severitiesSelected.size() == 0 ||
+                weathersSelected.size() == 0 || regionsSelected.size() == 0) {
+            return "1 = 0";
+        } else {
+            return String.join(" AND ", where);
+        }
 
-
-        return String.join(" AND ", where);
     }
-
-    public List<String> getModesSelected() { return this.modesSelected; }
-
-    public void addToModes(String mode) { modesSelected.add(mode); }
-
-    public void removeFromModes(String mode) { modesSelected.remove(mode); }
-
-    public List<String> getRegionsSelected() { return this.regionsSelected; }
-
-    public void addToRegions(String region) { regionsSelected.add(region); }
-
-    public void removeFromRegions(String region) { regionsSelected.remove(region); }
 
 }
