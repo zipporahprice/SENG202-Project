@@ -34,15 +34,17 @@ public class CheckBoxHelper {
     Label currentYearLabel;
     AnchorPane weatherPane;
     AnchorPane regionsPane;
+    AnchorPane holidayPane;
 
     public CheckBoxHelper(AnchorPane severityPane, AnchorPane transportModePane, Slider dateSlider,
-                          Label currentYearLabel, AnchorPane weatherPane, AnchorPane regionsPane) {
+                          Label currentYearLabel, AnchorPane weatherPane, AnchorPane regionsPane, AnchorPane holidayPane) {
         this.severityPane = severityPane;
         this.transportModePane = transportModePane;
         this.dateSlider = dateSlider;
         this.currentYearLabel = currentYearLabel;
         this.weatherPane = weatherPane;
         this.regionsPane = regionsPane;
+        this.holidayPane = holidayPane;
     }
 
     public void updateCheckboxesWithFavourites(Favourite favourite) {
@@ -84,6 +86,60 @@ public class CheckBoxHelper {
         allCheckBox.setSelected(allSelected);
     }
 
+    /**
+     * Adds or removes a filter item based on the state of a CheckBox and its associated parent AnchorPane.
+     * This method is used to manage and update filtering options based on user selections.
+     *
+     * @param checkBox The CheckBox representing the filter item.
+     * @param parent   The parent AnchorPane of the CheckBox.
+     */
+    public void addToFilters(CheckBox checkBox, AnchorPane parent) {
+        FilterManager filters = FilterManager.getInstance();
+        Object toAdd = checkBox.getUserData();
+
+        if (parent.equals(transportModePane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getModesSelected().contains((String) toAdd)) {
+                    filters.addToModes((String) toAdd);
+                }
+            } else {
+                filters.removeFromModes((String) toAdd);
+            }
+        } else if (parent.equals(weatherPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getWeathersSelected().contains((String) toAdd)) {
+                    filters.addToWeathers((String) toAdd);
+                }
+            } else {
+                filters.removeFromWeathers((String) toAdd);
+            }
+        } else if (parent.equals(severityPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getSeveritiesSelected().contains((Integer) toAdd)) {
+                    filters.addToSeverities((Integer) toAdd);
+                }
+            } else {
+                filters.removeFromSeverities((Integer) toAdd);
+            }
+        } else if (parent.equals(regionsPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getRegionsSelected().contains((String) toAdd)) {
+                    filters.addToRegions((String) toAdd);
+                }
+            } else {
+                filters.removeFromRegions((String) toAdd);
+            }
+        } else if (parent.equals(holidayPane)) {
+            System.out.println("CREATE HOLIDAY FILTERING");
+        }
+    }
+
+    /**
+     * Takes an AnchorPane object and searches through for the allCheckBox and a list
+     * of all other checkBoxes in the AnchorPane (reflective of all option checkboxes).
+     * @param parent AnchorPane object to search through
+     * @return Pair with types CheckBox and List of CheckBox corresponding to allCheckBox and checkBoxes
+     */
     public Pair<CheckBox, List<CheckBox>> getAllCheckBoxAndCheckBoxList(AnchorPane parent) {
         CheckBox allCheckBox = null;
         List<CheckBox> checkBoxes = new ArrayList<>();
@@ -103,6 +159,27 @@ public class CheckBoxHelper {
         }
 
         return Pair.of(allCheckBox, checkBoxes);
+    }
+
+    /**
+     * Takes an AnchorPane and searches through for the CheckBox objects
+     * to set as the same state as given in allCheckBoxState.
+     * @param parent AnchorPane object to search through
+     * @param allCheckBoxState Boolean value to set each CheckBox to
+     */
+    public void setCheckBoxesFromAllCheckBoxState(AnchorPane parent, Boolean allCheckBoxState) {
+        for (Object child : parent.getChildren()) {
+            if (child instanceof VBox) {
+                for (Object childCheckBox : ((VBox) child).getChildren()) {
+                    if (childCheckBox instanceof  CheckBox) {
+                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
+                            ((CheckBox) childCheckBox).setSelected(allCheckBoxState);
+                            addToFilters((CheckBox) childCheckBox, parent);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

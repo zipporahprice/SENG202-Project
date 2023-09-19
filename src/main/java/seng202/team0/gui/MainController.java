@@ -232,7 +232,7 @@ public class MainController {
         });
 
         checkBoxHelper = new CheckBoxHelper(severityPane, transportModePane, dateSlider,
-                currentYearLabel, weatherPane, regionsPane);
+                currentYearLabel, weatherPane, regionsPane, holidayPane);
 
 
 
@@ -631,55 +631,7 @@ public class MainController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
     }
-    /**
-     * Adds or removes a filter item based on the state of a CheckBox and its associated parent AnchorPane.
-     * This method is used to manage and update filtering options based on user selections.
-     *
-     * @param checkBox The CheckBox representing the filter item.
-     * @param parent   The parent AnchorPane of the CheckBox.
-     */
-    public void addToFilters(CheckBox checkBox, AnchorPane parent) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
 
-        // TODO check if logic event needs to check if the list contains the thing you are adding
-
-        if (parent.equals(transportModePane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getModesSelected().contains((String) toAdd)) {
-                    filters.addToModes((String) toAdd);
-                }
-            } else {
-                filters.removeFromModes((String) toAdd);
-            }
-        } else if (parent.equals(weatherPane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getWeathersSelected().contains((String) toAdd)) {
-                    filters.addToWeathers((String) toAdd);
-                }
-            } else {
-                filters.removeFromWeathers((String) toAdd);
-            }
-        } else if (parent.equals(severityPane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getSeveritiesSelected().contains((Integer) toAdd)) {
-                    filters.addToSeverities((Integer) toAdd);
-                }
-            } else {
-                filters.removeFromSeverities((Integer) toAdd);
-            }
-        } else if (parent.equals(regionsPane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getRegionsSelected().contains((String) toAdd)) {
-                    filters.addToRegions((String) toAdd);
-                }
-            } else {
-                filters.removeFromRegions((String) toAdd);
-            }
-        } else if (parent.equals(holidayPane)) {
-            System.out.println("CREATE HOLIDAY FILTERING");
-        }
-    }
 
 
     /**
@@ -687,7 +639,6 @@ public class MainController {
      * This method assigns meaningful user data to CheckBoxes, which is often used for filtering logic.
      * User data is typically a string or an integer representing the role or value associated with the CheckBox.
      */
-    @FXML
     public void setCheckboxesUserData() {
         bicycleCheckBox.setUserData("bicycle_involved");
         busCheckBox.setUserData("bus_involved");
@@ -732,23 +683,13 @@ public class MainController {
      */
     @FXML
     public void handleAllCheckBoxEvent(ActionEvent event) {
+        // Initialise parent to search through and what to set
         CheckBox allCheckBox = (CheckBox) event.getSource();
         AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
-
         boolean allSelected = allCheckBox.isSelected();
 
-        for (Object child : parent.getChildren()) {
-            if (child instanceof VBox) {
-                for (Object childCheckBox : ((VBox) child).getChildren()) {
-                    if (childCheckBox instanceof  CheckBox) {
-                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
-                            ((CheckBox) childCheckBox).setSelected(allSelected);
-                            addToFilters((CheckBox) childCheckBox, parent);
-                        }
-                    }
-                }
-            }
-        }
+        // Use helper function to set all checkboxes to the same state as all checkbox
+        checkBoxHelper.setCheckBoxesFromAllCheckBoxState(parent, allSelected);
     }
 
     /**
@@ -763,7 +704,7 @@ public class MainController {
         CheckBox checkBox = (CheckBox) event.getSource();
         AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
 
-        addToFilters(checkBox, parent);
+        checkBoxHelper.addToFilters(checkBox, parent);
 
         // Runs helper function to get all checkbox and list of other checkboxes
         Pair<CheckBox, List<CheckBox>> result = checkBoxHelper.getAllCheckBoxAndCheckBoxList(parent);
