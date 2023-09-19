@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @author Angelica Silva
  * @author Christopher Wareing
  * @author Neil Alombro
- * @authod Todd Vermeir
+ * @author Todd Vermeir
  * @author William Thompson
  * @author Zipporah Price
  *
