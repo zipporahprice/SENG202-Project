@@ -11,7 +11,11 @@ import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -41,10 +45,11 @@ public class App {
             try {
                 CrashCSVImporter importer = new CrashCSVImporter();
                 // TODO replace with full file
-                URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
-                File file = new File(newUrl.getPath());
-                manager.addAllCrashesFromFile(importer, file);
-            } catch (SQLException e) {
+                InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("files/crash_data_10k.csv");
+                File tempFile = File.createTempFile("tempCSV", ".csv");
+                Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                manager.addAllCrashesFromFile(importer, tempFile);
+            } catch (SQLException | IOException e) {
                 System.out.println(e);
             }
         }
