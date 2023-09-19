@@ -125,34 +125,12 @@ public class CrashDAO implements DAOInterface<Crash> {
      * @throws SQLException throws if added parameters do not match values
      */
     private void addPointToPreparedStatement(PreparedStatement ps, Crash crashToAdd) throws SQLException {
-        // TODO think about numbering
-//        ps.setInt(1, crashToAdd.getObjectId());
-//        ps.setInt(2, crashToAdd.getSpeedLimit());
-//        ps.setInt(3, crashToAdd.getCrashYear());
-//        ps.setString(4, crashToAdd.getCrashLocation1());
-//        ps.setString(5, crashToAdd.getCrashLocation2());
-//        ps.setString(6, crashToAdd.getRegion());
-//        ps.setString(7, crashToAdd.getWeather());
-//        ps.setFloat(8, crashToAdd.getLongitude());
-//        ps.setFloat(9, crashToAdd.getLatitude());
-//        ps.setBoolean(10, crashToAdd.isBicycleInvolved());
-//        ps.setBoolean(11, crashToAdd.isBusInvolved());
-//        ps.setBoolean(12, crashToAdd.isCarInvolved());
-//        ps.setBoolean(13, crashToAdd.isHoliday());
-//        ps.setBoolean(14, crashToAdd.isMopedInvolved());
-//        ps.setBoolean(15, crashToAdd.isMotorcycleInvolved());
-//        ps.setBoolean(16, crashToAdd.isParkedVehicleInvolved());
-//        ps.setBoolean(17, crashToAdd.isPedestrianInvolved());
-//        ps.setBoolean(18, crashToAdd.isSchoolBusInvolved());
-//        ps.setBoolean(19, crashToAdd.isTrainInvolved());
-//        ps.setBoolean(20, crashToAdd.isTruckInvolved());
-
         ps.setInt(1, crashToAdd.getSpeedLimit());
         ps.setInt(2, crashToAdd.getCrashYear());
         ps.setString(3, crashToAdd.getCrashLocation1());
         ps.setString(4, crashToAdd.getCrashLocation2());
         ps.setInt(5, crashToAdd.getSeverity().getValue());
-        ps.setString(6, crashToAdd.getRegion());
+        ps.setString(6, crashToAdd.getRegion().getName());
         ps.setString(7, crashToAdd.getWeather().getName());
         ps.setFloat(8, crashToAdd.getLongitude());
         ps.setFloat(9, crashToAdd.getLatitude());

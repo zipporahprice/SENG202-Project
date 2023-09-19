@@ -3,15 +3,15 @@ package seng202.team0.gui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -33,6 +33,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Filter;
 
 /**
  * Controller for the main.fxml window
@@ -59,28 +61,21 @@ public class MainController {
     @FXML
     private AnchorPane weatherPane;
     @FXML
-    private AnchorPane boundariesPane;
+    private AnchorPane regionsPane;
     @FXML
     private ComboBox<String> loadRoutesComboBox;
-
     @FXML
     private AnchorPane holidayPane;
 
-    @FXML
-    private Button helpButton;
+
+
 
     @FXML
+    private Button helpButton;
+    //weather pane
+    @FXML
     private CheckBox selectAllWeather;
-    @FXML
-    private CheckBox snow;
-    @FXML
-    private CheckBox fine;
-    @FXML
-    private CheckBox heavyRain;
-    @FXML
-    private CheckBox lightRain;
-    @FXML
-    private CheckBox mistOrFog;
+
 
     @FXML
     private CheckBox selectAllTransport;
@@ -127,6 +122,14 @@ public class MainController {
     @FXML
     private Label currentYearLabel;
 
+    //regions pane
+    @FXML
+    private CheckBox selectAllRegions;
+
+    @FXML
+    private ChoiceBox viewChoiceBox;
+
+
 
     @FXML
     private AnchorPane includedMap;
@@ -144,9 +147,13 @@ public class MainController {
     private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
     private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
     private FadeTransition[] fadeTransitions = new FadeTransition[7]; // Array to store individual fade transitions
-    private ArrayList<CheckBox> weatherCheckboxes = new ArrayList<CheckBox>();
-    private ArrayList<CheckBox> transportCheckboxes = new ArrayList<CheckBox>();
-    private ArrayList<CheckBox> severityCheckboxes = new ArrayList<CheckBox>();
+
+    @FXML
+    private VBox weatherVBox;
+    @FXML
+    private VBox leftRegionVBox;
+    @FXML
+    private VBox rightRegionVBox;
 
 
     @FXML
@@ -172,6 +179,11 @@ public class MainController {
     private TextField stopLocation;
 
     private MapController mapController;
+
+    public static String currentView = "Automatic";
+
+    @FXML
+    private AnchorPane settingsPane;
 
 
 
@@ -214,38 +226,8 @@ public class MainController {
 
 
 
-        selectAllWeather.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println("Select All weather includes crashes with no weather data");
-
-                for (CheckBox weather : weatherCheckboxes) {
-                    weather.setSelected(newValue);
-                }
-
-            }
-        });
-
-        selectAllTransport.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox transportMode : transportCheckboxes) {
-                    transportMode.setSelected(newValue);
-                }
-            }
-        });
-
-        selectAllSeverity.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                for (CheckBox severity : severityCheckboxes) {
-                    severity.setSelected(newValue);
-                }
-            }
-        });
-
-        //TODO make the size of the filters resize with the window size, below code unfinished
-
+        setCheckboxesUserData();
+        setViewOptions();
 
         stage.sizeToScene();
         webEngine = webView.getEngine();
@@ -271,62 +253,12 @@ public class MainController {
         transportModePane.setVisible(false);
         weatherPane.setVisible(false);
         datePane.setVisible(false);
-        boundariesPane.setVisible(false);
+        regionsPane.setVisible(false);
         severityPane.setVisible(false);
         holidayPane.setVisible(false);
 
-        weatherCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(snow);
-                add(fine);
-                add(heavyRain);
-                add(lightRain);
-                add(mistOrFog);
-            }
-        };
 
-        checkboxItemListener(weatherCheckboxes, selectAllWeather);
 
-        transportCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(bicycleCheckBox);
-                add(busCheckBox);
-                add(carCheckBox);
-                add(mopedCheckBox);
-                add(motorcycleCheckBox);
-                add(parkedVehicleCheckBox);
-                add(pedestrianCheckBox);
-                add(schoolBusCheckBox);
-                add(trainCheckBox);
-                add(truckCheckBox);
-            }
-        };
-        checkboxItemListener(transportCheckboxes, selectAllTransport);
-
-        severityCheckboxes = new ArrayList<CheckBox>() {
-            {
-                add(nonInjuryCheckBox);
-                add(minorCrashCheckBox);
-                add(majorCrashCheckBox);
-                add(deathCheckBox);
-            }
-        };
-
-        checkboxItemListener(severityCheckboxes, selectAllSeverity);
-
-    }
-
-    private void checkboxItemListener(ArrayList<CheckBox> itemCheckboxes, CheckBox selectAllCheckbox) {
-        for (CheckBox item : itemCheckboxes) {
-            item.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (item.isSelected() == false) {
-                        selectAllCheckbox.setSelected(false);
-                    }
-                }
-            });
-        }
     }
 
     public void loadHelp() {
@@ -351,13 +283,12 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
-        toggleHelpButtonVisibility(helpButton, 5);
-
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
-        togglePaneWithFade(boundariesPane, 3);
+        togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
+        toggleHelpButtonVisibility(helpButton, 5);
         togglePaneWithFade(holidayPane, 6);
 
         // Toggle the visibility of the helpButton
@@ -459,13 +390,6 @@ public class MainController {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
-    }
-
-    /**
-     * Removes the route from the WebView map (if currently shown)
-     */
-    private void removeRoute() {
-        javaScriptConnector.call("removeRoute");
     }
 
     /**
@@ -590,29 +514,6 @@ public class MainController {
     }
 
     @FXML
-    public void handleSeverityCheckBoxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        int severity = 0;
-
-        if (checkBox.equals(nonInjuryCheckBox)) {
-            severity = 1;
-        } else if (checkBox.equals(minorCrashCheckBox)) {
-            severity = 2;
-        } else if (checkBox.equals(majorCrashCheckBox)) {
-            severity = 4;
-        } else if (checkBox.equals(deathCheckBox)) {
-            severity = 8;
-        }
-
-        FilterManager filters = FilterManager.getInstance();
-        if (checkBox.isSelected()) {
-            filters.addToSeverities(severity);
-        } else {
-            filters.removeFromSeverities(severity);
-        }
-    }
-
-    @FXML
     public void sliderValueChange() {
         int sliderValue = (int)Math.round(dateSlider.getValue());
 
@@ -624,37 +525,158 @@ public class MainController {
         filters.setEarliestYear(sliderValue);
     }
 
-    @FXML
-    public void handleTypeInvolved(ActionEvent event) {
-        CheckBox checkBox = (CheckBox)event.getSource();
-        String mode = null;
-
-        if (checkBox.equals(bicycleCheckBox)) {
-            mode = "bicycle_involved";
-        } else if (checkBox.equals(busCheckBox)) {
-            mode = "bus_involved";
-        } else if (checkBox.equals(carCheckBox)) {
-            mode = "car_involved";
-        } else if (checkBox.equals(mopedCheckBox)) {
-            mode = "moped_involved";
-        } else if (checkBox.equals(motorcycleCheckBox)) {
-            mode = "motorcycle_involved";
-        } else if (checkBox.equals(parkedVehicleCheckBox)) {
-            mode = "parked_vehicle_involved";
-        } else if (checkBox.equals(pedestrianCheckBox)) {
-            mode = "pedestrian_involved";
-        } else if (checkBox.equals(schoolBusCheckBox)) {
-            mode = "school_bus_involved";
-        } else if (checkBox.equals(trainCheckBox)) {
-            mode = "train_involved";
-        } else if (checkBox.equals(truckCheckBox)) {
-            mode = "truck_involved";
-        }
+    public void addToFilters(CheckBox checkBox, AnchorPane parent) {
         FilterManager filters = FilterManager.getInstance();
-        if (checkBox.isSelected()) {
-            filters.addToModes(mode);
-        } else {
-            filters.removeFromModes(mode);
+        Object toAdd = checkBox.getUserData();
+
+        // TODO check if logic event needs to check if the list contains the thing you are adding
+
+        if (parent.equals(transportModePane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getModesSelected().contains((String) toAdd)) {
+                    filters.addToModes((String) toAdd);
+                }
+            } else {
+                filters.removeFromModes((String) toAdd);
+            }
+        } else if (parent.equals(weatherPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getWeathersSelected().contains((String) toAdd)) {
+                    filters.addToWeathers((String) toAdd);
+                }
+            } else {
+                filters.removeFromWeathers((String) toAdd);
+            }
+        } else if (parent.equals(severityPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getSeveritiesSelected().contains((Integer) toAdd)) {
+                    filters.addToSeverities((Integer) toAdd);
+                }
+            } else {
+                filters.removeFromSeverities((Integer) toAdd);
+            }
+        } else if (parent.equals(regionsPane)) {
+            if (checkBox.isSelected()) {
+                if (!filters.getRegionsSelected().contains((String) toAdd)) {
+                    filters.addToRegions((String) toAdd);
+                }
+            } else {
+                filters.removeFromRegions((String) toAdd);
+            }
+        } else if (parent.equals(holidayPane)) {
+            System.out.println("CREATE HOLIDAY FILTERING");
         }
+    }
+
+    @FXML
+    public void setCheckboxesUserData() {
+        bicycleCheckBox.setUserData("bicycle_involved");
+        busCheckBox.setUserData("bus_involved");
+        carCheckBox.setUserData("car_involved");
+        mopedCheckBox.setUserData("moped_involved");
+        motorcycleCheckBox.setUserData("motorcycle_involved");
+        parkedVehicleCheckBox.setUserData("parked_vehicle_involved");
+        pedestrianCheckBox.setUserData("pedestrian_involved");
+        schoolBusCheckBox.setUserData("school_bus_involved");
+        trainCheckBox.setUserData("train_involved");
+        truckCheckBox.setUserData("truck_involved");
+
+        nonInjuryCheckBox.setUserData(1);
+        minorCrashCheckBox.setUserData(2);
+        majorCrashCheckBox.setUserData(4);
+        deathCheckBox.setUserData(8);
+
+        for (Object child : weatherVBox.getChildren()) {
+            if (child instanceof CheckBox) {
+                ((CheckBox) child).setUserData(((CheckBox) child).getText());
+            }
+        }
+
+        for (Object child : leftRegionVBox.getChildren()) {
+            if (child instanceof CheckBox) {
+                ((CheckBox) child).setUserData(((CheckBox) child).getText());
+            }
+        }
+
+        for (Object child : rightRegionVBox.getChildren()) {
+            if (child instanceof CheckBox) {
+                ((CheckBox) child).setUserData(((CheckBox) child).getText());
+            }
+        }
+    }
+
+    @FXML
+    public void handleAllCheckBoxEvent(ActionEvent event) {
+        CheckBox allCheckBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
+
+        boolean allSelected = allCheckBox.isSelected();
+
+        for (Object child : parent.getChildren()) {
+            if (child instanceof VBox) {
+                for (Object childCheckBox : ((VBox) child).getChildren()) {
+                    if (childCheckBox instanceof  CheckBox) {
+                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
+                            ((CheckBox) childCheckBox).setSelected(allSelected);
+                            addToFilters((CheckBox) childCheckBox, parent);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void handleCheckBoxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
+
+        addToFilters(checkBox, parent);
+
+        CheckBox allCheckBox = null;
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        for (Object child : parent.getChildren()) {
+            if (child instanceof VBox) {
+                for (Object childCheckBox : ((VBox) child).getChildren()) {
+                    if (childCheckBox instanceof  CheckBox) {
+                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
+                            checkBoxes.add((CheckBox) childCheckBox);
+                        } else {
+                            allCheckBox = (CheckBox) childCheckBox;
+                        }
+                    }
+                }
+            }
+        }
+
+        assert allCheckBox != null;
+        updateAllCheckBox(allCheckBox, checkBoxes);
+    }
+
+    public void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
+        boolean allSelected = true;
+        for (CheckBox checkBox : checkBoxes) {
+            if (!checkBox.isSelected()) {
+                allSelected = false;
+                break;
+            }
+        }
+        allCheckBox.setSelected(allSelected);
+    }
+
+    private void setViewOptions() {
+        viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");
+        viewChoiceBox.setValue("Automatic");
+        viewChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                currentView = (String) newValue;
+            }
+        });
+    }
+
+    @FXML
+    private void toggleAnchorPaneVisibility() {
+        settingsPane.setVisible(!settingsPane.isVisible());
     }
 }
