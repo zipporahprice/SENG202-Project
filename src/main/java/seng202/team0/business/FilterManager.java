@@ -11,21 +11,25 @@ import java.util.stream.Collectors;
  * Singleton class for storing filters from the FXML controller classes.
  * Stores filters in lists of the categories.
  *
+ * @author Angelica Silva
+ * @author Christopher Wareing
  * @author Neil Alombro
+ * @authod Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 
-// TODO currently has "null" taking care of no checkboxes ticked that will return no points. Works but bad
-
 public class FilterManager {
-    private static FilterManager filters;
-    private List<Integer> severitiesSelected;
-    private Integer earliestYear;
 
-    private List<String> modesSelected;
-    private List<String> weathersSelected;
-    private List<String> regionsSelected;
-
-    private HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
+    // Connectors for changing FilterManager to a where clause string, and back
+    private final String AND = " AND ";
+    private final String QUOTE = "\"";
+    private final String OR = " OR ";
+    private final String COMMA = ", ";
+    private final String CLOSE_PARENTHESES = ")";
+    private final String EQUAL_ONE = " = 1";
+    private final HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
         put("severity", "severity IN (");
         put("transport_mode", "(");
         put("crash_year", "crash_year >= ");
@@ -33,12 +37,26 @@ public class FilterManager {
         put("region", "region IN (");
     }};
 
+    // Singleton instance of FilterManager
+    private static FilterManager filters;
+    private List<Integer> severitiesSelected;
+    private Integer earliestYear;
+    private List<String> modesSelected;
+    private List<String> weathersSelected;
+    private List<String> regionsSelected;
 
-
+    /**
+     * Initializer of the FilterManager class that populates the filters
+     * with the default beginning state with all option checkboxes selected
+     * and included, and the earliestYear set to the earliest year of 2000.
+     */
     private FilterManager() {
         severitiesSelected = new ArrayList<>(
                 Arrays.stream(CrashSeverity.values()).map(severity -> severity.getValue()).toList()
         );
+
+        earliestYear = 2000;
+
         modesSelected = new ArrayList<>(Arrays.asList(
                 "bicycle_involved",
                 "bus_involved",
@@ -51,13 +69,16 @@ public class FilterManager {
                 "train_involved",
                 "truck_involved"
         ));
+
         weathersSelected = new ArrayList<>(
                 Arrays.stream(Weather.values()).map(weather -> weather.getName()).toList()
         );
+
         regionsSelected = new ArrayList<>(
                 Arrays.stream(Region.values()).map(region -> region.getName()).toList()
         );
     }
+
 
     /**
      * Retrieves the singleton instance of the FilterManager class.
@@ -108,27 +129,6 @@ public class FilterManager {
     public void setEarliestYear(Integer year) { earliestYear = year; }
 
     /**
-     * Retrieves the list of selected weather conditions for filtering crash data.
-     *
-     * @return A list of selected weather conditions.
-     */
-    public List<String> getWeathersSelected() { return this.weathersSelected; }
-
-    /**
-     * Adds a weather condition to the list of selected weather conditions.
-     *
-     * @param weather The weather condition to add.
-     */
-    public void addToWeathers(String weather) { weathersSelected.add(weather); }
-
-    /**
-     * Removes a weather condition from the list of selected weather conditions.
-     *
-     * @param weather The weather condition to remove.
-     */
-    public void removeFromWeathers(String weather) { weathersSelected.remove((Object)weather); }
-
-    /**
      * Retrieves the list of selected transportation modes for filtering crash data.
      *
      * @return A list of selected transportation modes.
@@ -148,6 +148,27 @@ public class FilterManager {
      * @param mode The transportation mode to remove.
      */
     public void removeFromModes(String mode) { modesSelected.remove(mode); }
+
+    /**
+     * Retrieves the list of selected weather conditions for filtering crash data.
+     *
+     * @return A list of selected weather conditions.
+     */
+    public List<String> getWeathersSelected() { return this.weathersSelected; }
+
+    /**
+     * Adds a weather condition to the list of selected weather conditions.
+     *
+     * @param weather The weather condition to add.
+     */
+    public void addToWeathers(String weather) { weathersSelected.add(weather); }
+
+    /**
+     * Removes a weather condition from the list of selected weather conditions.
+     *
+     * @param weather The weather condition to remove.
+     */
+    public void removeFromWeathers(String weather) { weathersSelected.remove((Object)weather); }
 
     /**
      * Retrieves the list of selected regions for filtering crash data.
@@ -186,28 +207,27 @@ public class FilterManager {
         earliestYear = 2000;
 
         if (!Objects.equals(query, "1 = 0")) {
-            String[] queryList = query.split(" AND ");
+            String[] queryList = query.split(AND);
 
-            // TODO look out for quotation marks and make a substring from 1 index to length - 1 to get rid of quotation marks
-
+            // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
             for (String filter : queryList) {
                 if (filter.startsWith(startOfClauses.get("severity"))) {
                     String severitiesString = filter.substring(startOfClauses.get("severity").length(), filter.length() - 1);
-                    Arrays.stream(severitiesString.split(", ")).forEach(severityString ->
+                    Arrays.stream(severitiesString.split(COMMA)).forEach(severityString ->
                             severitiesSelected.add(Integer.parseInt(severityString)));
                 } else if (filter.startsWith(startOfClauses.get("transport_mode"))) {
                     String transportModesString = filter.substring(startOfClauses.get("transport_mode").length(), filter.length() - 1);
-                    Arrays.stream(transportModesString.split(" OR ")).forEach(transportModeString ->
+                    Arrays.stream(transportModesString.split(OR)).forEach(transportModeString ->
                             modesSelected.add(transportModeString.split(" ")[0]));
                 } else if (filter.startsWith(startOfClauses.get("crash_year"))) {
                     earliestYear = Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length()));
                 } else if (filter.startsWith(startOfClauses.get("weather"))) {
                     String weathersString = filter.substring(startOfClauses.get("weather").length(), filter.length() - 1);
-                    Arrays.stream(weathersString.split(", ")).forEach(weatherString ->
+                    Arrays.stream(weathersString.split(COMMA)).forEach(weatherString ->
                             weathersSelected.add(weatherString.substring(1, weatherString.length() - 1)));
                 } else if (filter.startsWith(startOfClauses.get("region"))) {
                     String regionsString = filter.substring(startOfClauses.get("region").length(), filter.length() - 1);
-                    Arrays.stream(regionsString.split(", ")).forEach(regionString ->
+                    Arrays.stream(regionsString.split(COMMA)).forEach(regionString ->
                             regionsSelected.add(regionString.substring(1, regionString.length() - 1)));
                 }
             }
@@ -228,13 +248,13 @@ public class FilterManager {
 
         if (getSeveritiesSelected().size() > 0) {
             where.add(startOfClauses.get("severity") +
-                    getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(", "))
-                    + ")");
+                    getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
+                    + CLOSE_PARENTHESES);
         }
 
         if (filters.getModesSelected().size() > 0) {
-            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + " = 1").collect(Collectors.joining(" OR "));
-            where.add(startOfClauses.get("transport_mode") + modesCondition + ")");
+            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + EQUAL_ONE).collect(Collectors.joining(OR));
+            where.add(startOfClauses.get("transport_mode") + modesCondition + CLOSE_PARENTHESES);
 
         }
 
@@ -244,14 +264,14 @@ public class FilterManager {
 
         if (getWeathersSelected().size() > 0) {
             where.add(startOfClauses.get("weather") +
-                    getWeathersSelected().stream().map(weather -> "\""+weather+"\"").collect(Collectors.joining(", "))
-                    + ")");
+                    getWeathersSelected().stream().map(weather -> QUOTE+weather+QUOTE).collect(Collectors.joining(COMMA))
+                    + CLOSE_PARENTHESES);
         }
 
         if (regionsSelected.size() > 0) {
             where.add(startOfClauses.get("region") +
-                    getRegionsSelected().stream().map(region -> "\""+region+"\"").collect(Collectors.joining(", "))
-                    + ")");
+                    getRegionsSelected().stream().map(region -> QUOTE+region+QUOTE).collect(Collectors.joining(COMMA))
+                    + CLOSE_PARENTHESES);
         }
 
         // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
@@ -259,7 +279,7 @@ public class FilterManager {
                 weathersSelected.size() == 0 || regionsSelected.size() == 0) {
             return "1 = 0";
         } else {
-            return String.join(" AND ", where);
+            return String.join(AND, where);
         }
 
     }
