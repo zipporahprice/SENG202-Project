@@ -54,7 +54,7 @@
             <Insets right="50.0" top="300.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="loadRoutesComboBox" onAction="#loadRoute" onShowing="#displayRoutes" prefWidth="150.0" promptText="Select saved route" StackPane.alignment="TOP_RIGHT">
+      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="150.0" promptText="Select saved route" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets right="20.0" top="350.0" />
          </StackPane.margin>

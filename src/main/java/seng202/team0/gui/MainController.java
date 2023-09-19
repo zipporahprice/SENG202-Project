@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -192,6 +193,25 @@ public class MainController {
         mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
+        loadRoutesComboBox.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
+            if (isNowShowing) {
+                // The ComboBox is now showing its list.
+                ListView<?> lv = (ListView<?>) loadRoutesComboBox.lookup(".list-view");
+                if (lv != null && lv instanceof ListView) {
+                    lv.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+                        Object selectedItem = lv.getSelectionModel().getSelectedItem();
+                        if (selectedItem != null) {
+                            System.out.println("Clicked on: " + selectedItem);
+                            loadRoute();
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+
 
         selectAllWeather.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -503,7 +523,6 @@ public class MainController {
             Favourite favourite = favourites.getOne(favouriteID);
             stops.clear();
             generateRouteAction(favourite);
-            loadRoutesComboBox.getSelectionModel().clearSelection();
             startLocation.setText(favourite.getStartAddress());
             endLocation.setText(favourite.getEndAddress());
         }
