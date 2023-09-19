@@ -11,6 +11,7 @@ import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -42,9 +43,11 @@ public class App {
                 CrashCSVImporter importer = new CrashCSVImporter();
                 // TODO replace with full file
                 URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");
-                File file = new File(newUrl.getPath());
+                File file = new File(newUrl.toURI().getPath());
                 manager.addAllCrashesFromFile(importer, file);
             } catch (SQLException e) {
+                System.out.println(e);
+            } catch (URISyntaxException e) {
                 System.out.println(e);
             }
         }
