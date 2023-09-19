@@ -70,8 +70,8 @@ public class MainController {
 
 
 
-    @FXML
-    private Button helpButton;
+    //@FXML
+    //private Button helpButton;
     //weather pane
     @FXML
     private CheckBox selectAllWeather;
@@ -249,7 +249,6 @@ public class MainController {
         setupEmojiButtonTransition(walkingButton, 3);
         setupEmojiButtonTransition(helicopterButton, 4);
         setupEmojiButtonTransition(motorbikeButton, 5);
-        helpButton.setVisible(false);
         transportModePane.setVisible(false);
         weatherPane.setVisible(false);
         datePane.setVisible(false);
@@ -288,39 +287,13 @@ public class MainController {
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
-        toggleHelpButtonVisibility(helpButton, 5);
-        togglePaneWithFade(holidayPane, 6);
+        togglePaneWithFade(holidayPane, 5);
 
         // Toggle the visibility of the helpButton
 
         // Play each fade animation individually
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             fadeTransitions[i].play();
-        }
-    }
-
-    /**
-     * Toggles the visibility of the helpButton with a fade animation.
-     * If the helpButton is currently visible, it will be faded out and hidden.
-     * If the helpButton is currently hidden, it will be faded in and shown.
-     */
-    private void toggleHelpButtonVisibility(Button helpButton, int index) {
-        if (fadeTransitions[index] == null) {
-            fadeTransitions[index] = new FadeTransition(Duration.millis(500), helpButton);
-            fadeTransitions[index].setFromValue(0.0); // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);   // Transition to fully visible
-        }
-
-        if (helpButton.isVisible()) {
-            System.out.println("visible help button");
-            fadeTransitions[index].setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
-            fadeTransitions[index].setFromValue(1.0); // Start from fully visible
-            fadeTransitions[index].setToValue(0.0);   // Transition to fully transparent (invisible)
-        } else {
-            helpButton.setVisible(true); // Make the helpButton visible before starting fade-in
-            fadeTransitions[index].setOnFinished(null); // Reset the onFinished handler
-            fadeTransitions[index].setFromValue(0.0);   // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
 
