@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
+import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.FavouriteDAO;
@@ -30,10 +31,7 @@ import seng202.team0.repository.FavouriteDAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Filter;
 
 /**
@@ -67,7 +65,8 @@ public class MainController {
     @FXML
     private AnchorPane holidayPane;
 
-
+    @FXML
+    private Label numCrashesLabel;
 
 
     @FXML
@@ -129,6 +128,8 @@ public class MainController {
     @FXML
     private ChoiceBox viewChoiceBox;
 
+    @FXML
+    public Label ratingText;
 
 
     @FXML
@@ -215,7 +216,11 @@ public class MainController {
                         Object selectedItem = lv.getSelectionModel().getSelectedItem();
                         if (selectedItem != null) {
                             System.out.println("Clicked on: " + selectedItem);
-                            loadRoute();
+                            try {
+                                loadRoute();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     });
                 }
@@ -441,13 +446,19 @@ public class MainController {
     }
 
     @FXML
-    private void loadRoute() {
+    private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
+
+            // Updates FilterManager singleton with Favourite's filters
+            FilterManager.getInstance().updateFiltersWithQueryString(favourite.getFilters());
+
+            // Generates a route and makes sure stops is cleared
             stops.clear();
             generateRouteAction(favourite);
+
             startLocation.setText(favourite.getStartAddress());
             endLocation.setText(favourite.getEndAddress());
         }
@@ -465,7 +476,7 @@ public class MainController {
     }
 
     @FXML
-    private void addStop() {
+    private void addStop() throws SQLException {
         Location stop = getStop();
         if (stop != null) {
             stops.add(stop);
@@ -474,16 +485,60 @@ public class MainController {
     }
 
     @FXML
-    private void removeStop() {
+    private void removeStop() throws SQLException {
         if (stops.size() >= 1) {
             stops.remove(stops.size()-1);
             generateRouteAction();
         }
     }
 
+    public List<CrashInfo> getOverlappingPoints(Route route, double dangerRadius) throws SQLException {
+        List<CrashInfo> overlappingPoints = new ArrayList<>();
+        CrashManager crashManager = new CrashManager();
+        List<CrashInfo> crashPoints = crashManager.getCrashLocations().stream().map(crash -> {
+            HashMap crash1 = (HashMap) crash;
+            double latitude = (double) crash1.get("latitude");
+            double longitude = (double) crash1.get("longitude");
+            int severity = (int) crash1.get("severity");
+            return new CrashInfo(latitude, longitude, severity);
+        }).toList();
+        for (int i = 0; i < route.route.size() - 1; i++) {
+            Location start = route.route.get(i);
+            Location end = route.route.get(i + 1);
+
+            for (CrashInfo crashPoint : crashPoints) {
+                double distToStart = haversineDistance(start, crashPoint);
+                double distToEnd = haversineDistance(end, crashPoint);
+
+                if (distToStart < dangerRadius || distToEnd < dangerRadius) {
+                    // Check if crash point is along the extended line of the segment
+                    overlappingPoints.add(crashPoint);
+                }
+            }
+        }
+
+        return overlappingPoints;
+    }
+
+    public double haversineDistance(Location loc1, CrashInfo loc2) {
+        double R = 6371000; // Earth radius in meters
+        double dLat = Math.toRadians(loc2.lat - loc1.latitude);
+        double dLon = Math.toRadians(loc2.lng - loc1.longitude);
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(loc1.latitude)) * Math.cos(Math.toRadians(loc2.lat))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
+    }
+
+
+
 
     @FXML
-    private void generateRouteAction() {
+    private void generateRouteAction() throws SQLException {
         Location start = getStart();
         Location end = getEnd();
 
@@ -494,11 +549,33 @@ public class MainController {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
+            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
+            int total = ratingGenerator(crashInfos);
+            ratingText.setText("Danger: "+ total + "/5");
+            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(route);
         }
     }
 
-    private void generateRouteAction(Favourite favourite) {
+    private int ratingGenerator(List<CrashInfo> crashInfos) {
+        int total = 0;
+        for (CrashInfo crash: crashInfos) {
+            total += crash.severity;
+        }
+        if (crashInfos.size() == 0) {
+            total = (total*10) - 10;
+        } else {
+            total = (total*10 / crashInfos.size()) - 10;
+        }
+        if (total > 5) {
+            total = 5;
+        } else if (total < 0) {
+            total = 0;
+        }
+        return total;
+    }
+
+    private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 
@@ -509,6 +586,10 @@ public class MainController {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
+            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
+            int total = ratingGenerator(crashInfos);
+            ratingText.setText("Danger: "+ total + "/5");
+            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(route);
         }
     }

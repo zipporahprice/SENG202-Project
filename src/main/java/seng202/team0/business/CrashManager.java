@@ -34,8 +34,6 @@ public class CrashManager {
     }
 
     public List getCrashLocations() throws SQLException {
-        FilterManager filters = FilterManager.getInstance();
-
         // TODO do not hard code for severities, make it flexible to all filters
         // TODO could instead do a * for columns
         // TODO although * does not work for query builder weirdly
@@ -51,7 +49,6 @@ public class CrashManager {
                     .from(from)
                     .build();
         } else {
-//            System.out.println(String.join("AND ", where));
             return SQLiteQueryBuilder
                     .create()
                     .select(select)
