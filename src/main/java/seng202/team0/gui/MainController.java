@@ -132,6 +132,8 @@ public class MainController {
     private Button userHelpButton;
     @FXML
     private Button importExportButton;
+    @FXML
+    private AnchorPane csvPane;
 
     @FXML
     private AnchorPane includedMap;
@@ -238,6 +240,7 @@ public class MainController {
         regionsPane.setVisible(false);
         severityPane.setVisible(false);
         holidayPane.setVisible(false);
+        csvPane.setVisible(false);
 
 
 
@@ -265,12 +268,18 @@ public class MainController {
             fadeTransition.stop(); // Stop the animation if it's currently running
         }
 
+        if (csvPane.isVisible()) {
+            toggleImportExporter();
+        }
+
         togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
         togglePaneWithFade(weatherPane, 1);
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
         togglePaneWithFade(holidayPane, 5);
+
+
 
         // Toggle the visibility of the helpButton
 
@@ -304,6 +313,25 @@ public class MainController {
             fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
         }
     }
+
+    public void toggleImportExporter() {
+        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
+            fadeTransition.stop(); // Stop the animation if it's currently running
+        }
+        if (transportModePane.isVisible()) {
+            toggleHamburger();
+        }
+
+
+        togglePaneWithFade(csvPane, 6);
+
+
+
+        fadeTransitions[6].play();
+
+    }
+
+
     /**
      * Sets up a fade animation for an emoji button.
      *

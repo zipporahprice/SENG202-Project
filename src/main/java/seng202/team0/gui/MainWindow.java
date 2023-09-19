@@ -28,7 +28,7 @@ public class MainWindow extends Application {
         MainController baseController = baseLoader.getController();
         baseController.init(primaryStage);
 
-        primaryStage.setTitle("Trust App");
+        primaryStage.setTitle("SafeTrip");
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
