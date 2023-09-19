@@ -27,10 +27,12 @@ DROP TABLE IF EXISTS favourites;
 --SPLIT
 CREATE TABLE IF NOT EXISTS favourites (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
-     start_lat REAL,
-     start_lng REAL,
-     end_lat REAL,
-     end_lng REAL,
+     start_address TEXT,
+     end_address TEXT,
+     start_lat DOUBLE,
+     start_lng DOUBLE,
+     end_lat DOUBLE,
+     end_lng DOUBLE,
      filters TEXT);
 --SPLIT
 DROP TABLE IF EXISTS users;

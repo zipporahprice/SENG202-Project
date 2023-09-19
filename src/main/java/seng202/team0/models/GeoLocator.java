@@ -63,6 +63,44 @@ public class GeoLocator {
         alert.showAndWait();
     }
 
+
+
+    public String getAddress(Double lat, Double lng) {
+        try {
+            // Creating the http request
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder(
+                    URI.create("https://nominatim.openstreetmap.org/reverse?lat=" + lat + "&lon=" + lng+"&format=json")
+            ).build();
+            // Getting the response
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            // Parsing the json response to get the latitude and longitude co-ordinates
+            JSONParser parser = new JSONParser();
+            JSONObject result = (JSONObject) parser.parse(response.body());
+
+            if (result.isEmpty()) {
+                showErrorAlert("Invalid Address", "The address provided is invalid or couldn't be found.");
+                return null; // or return a default location, depending on your use-case
+            }
+
+            JSONObject address = (JSONObject) result.get("address");
+            String houseNumber = (String) address.get("house_number");
+            String road = (String) address.get("road");
+            if (houseNumber != null) {
+                return houseNumber + " " + road;
+            }
+            return road;
+        } catch (IOException | ParseException e) {
+            System.err.println(e);
+        } catch (InterruptedException ie) {
+            System.err.println(ie);
+            Thread.currentThread().interrupt();
+        }
+        return "No Address Found";
+    }
+
+
+
     /*Need to check out the API usage policies before getting into this*/
 //    public Collection<String> getAddressSuggestions(String userInput) {
 //        // Call the Nominatim API similarly to getLocation but fetch multiple results and return them
