@@ -393,13 +393,6 @@ public class MainController {
     }
 
     /**
-     * Removes the route from the WebView map (if currently shown)
-     */
-    private void removeRoute() {
-        javaScriptConnector.call("removeRoute");
-    }
-
-    /**
      * Adds a location when the "Add Location" button is clicked.
      * Uses Geolocator class to turn the address into a lat, lng pair
      */
