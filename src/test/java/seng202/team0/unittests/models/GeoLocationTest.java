@@ -1,4 +1,4 @@
-package seng202.team0.unittests;
+package seng202.team0.unittests.models;
 
 import org.junit.jupiter.api.Test;
 import seng202.team0.models.GeoLocator;
@@ -33,7 +33,7 @@ public class GeoLocationTest {
     @Test
     void testGetAddress() {
         Double lat = -43.488116649999995;
-
+        
         Double lng = 172.54213544359874;
 
         GeoLocator locator = new GeoLocator();

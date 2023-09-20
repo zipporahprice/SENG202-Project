@@ -1,4 +1,4 @@
-package seng202.team0.unittests;
+package seng202.team0.unittests.gui;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,12 +31,8 @@ public class MainControllerTest {
 
         List expectedCrashes = null;
 
-        try {
-            CrashManager manager = new CrashManager();
-            expectedCrashes = manager.getCrashLocations();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+        CrashManager manager = new CrashManager();
+        expectedCrashes = manager.getCrashLocations();
 
         assert expectedCrashes != null;
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
@@ -62,14 +58,11 @@ public class MainControllerTest {
 
         List expectedCrashes  = null;
 
-        try {
-            CrashManager manager = new CrashManager();
-            expectedCrashes = manager.getCrashLocations();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+        CrashManager manager = new CrashManager();
+        expectedCrashes = manager.getCrashLocations();
 
         Assertions.assertNotNull(expectedCrashes);
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
     }
+
 }

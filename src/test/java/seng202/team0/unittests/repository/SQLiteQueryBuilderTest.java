@@ -1,43 +1,60 @@
-package seng202.team0.unittests;
+package seng202.team0.unittests.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import seng202.team0.business.CrashManager;
-import seng202.team0.business.FilterManager;
-import seng202.team0.models.Crash;
-import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.repository.SQLiteQueryBuilder;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
+
+/**
+ * Test class for SQLiteQueryBuilder class
+ *
+ * @author Neil Alombro
+ *
+ */
 
 public class SQLiteQueryBuilderTest {
 
+    /**
+     * Tests create function.
+     */
     @Test
     void testCreate() {
         SQLiteQueryBuilder builder = SQLiteQueryBuilder.create();
         Assertions.assertTrue(builder instanceof SQLiteQueryBuilder);
     }
 
+    /**
+     * Tests select function.
+     */
     @Test
     void testSelect() {
         SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().select("id, ltd, lng");
         Assertions.assertEquals("SELECT id, ltd, lng ", builder.getQuery());
     }
 
+    /**
+     * Tests from function.
+     */
     @Test
     void testFrom() {
         SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().from("crashes");
         Assertions.assertEquals("FROM crashes ", builder.getQuery());
     }
 
+    /**
+     * Tests where function.
+     */
     @Test
     void testWhere() {
         SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().where("age > 30, speed > 30");
         Assertions.assertEquals("WHERE age > 30, speed > 30 ", builder.getQuery());
     }
 
+    /**
+     * Tests build function.
+     */
     @Test
     void testBuild() throws SQLException {
         List crashes = SQLiteQueryBuilder.create()
@@ -50,6 +67,9 @@ public class SQLiteQueryBuilderTest {
         Assertions.assertTrue(crashes.size() > 1);
     }
 
+    /**
+     * Tests getQuery function.
+     */
     @Test
     void testGetQuery() {
         String query = SQLiteQueryBuilder.create().getQuery();
