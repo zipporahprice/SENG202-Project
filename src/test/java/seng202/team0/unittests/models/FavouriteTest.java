@@ -22,6 +22,7 @@ public class FavouriteTest {
         favourite = new Favourite(startAddress, endAddress, startLat, startLong, endLat, endLong, filters);
     }
 
+
     @Test
     void testGetStartLat() {
         double result = favourite.getStartLat();
