@@ -1,20 +1,21 @@
 package seng202.team0.gui;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import seng202.team0.App;
 
 public class HelpController {
 
-    @FXML
-    public StackPane helpWindow;
+    private static final Logger log = LogManager.getLogger(App.class);
+    public AnchorPane helpWindow;
 
     private Stage stage;
 
@@ -25,6 +26,28 @@ public class HelpController {
      */
     public void init(Stage stage) {
         this.stage = stage;
+    }
+
+    /**
+     * Handles the action of navigating back to the main window view from the current help window view.
+     * Clears the help window contents and loads the main window view.
+     */
+    public void handleBackButtonn() {
+        try {
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+            Parent mainViewParent = mainLoader.load();
+
+            MainController mainController = mainLoader.getController();
+            mainController.init(stage);
+
+            // Clearing the help window and loading the main window
+            helpWindow.getChildren().clear();
+            helpWindow.getChildren().add(mainViewParent);
+            AnchorPane.setRightAnchor(mainViewParent, 0d);
+
+        } catch (IOException e) {
+            log.error(e);
+        }
     }
 
     /**
@@ -55,7 +78,7 @@ public class HelpController {
             window.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
