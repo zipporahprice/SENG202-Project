@@ -1,120 +1,241 @@
 package seng202.team0.repository;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
-import seng202.team0.io.CrashCSVImporter;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that communicates with database's crashes table through SQL queries.
+ * Class that communicates with the SQLite database's crashes table through SQL queries.
+ *
+ * @author Morgan English
+ * @author Angelica Silva
+ * @author Christopher Wareing
  * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
-public class CrashDAO {
+public class CrashDAO implements DAOInterface<Crash> {
+    private static final Logger log = LogManager.getLogger(CrashDAO.class);
     private final DatabaseManager databaseManager;
-    private final Connection connection;
 
-    // TODO think about database manager and how to get connection
+    /**
+     * Creates a new CrashDAO object and gets a reference to the database
+     */
     public CrashDAO() {
-        databaseManager = new DatabaseManager();
-        connection = databaseManager.getConnection();
+        this.databaseManager = DatabaseManager.getInstance();
     }
 
-    // TODO implement this
+    /**
+     * Gets all crashes from crashes table in the SQLite database
+     *
+     * @return List of all crashes from SQLite database
+     */
+    @Override
     public List<Crash> getAll() {
-        List<Crash> pointsList = new ArrayList<Crash>();
+        // Initialise crash list and SQL query statement
+        List<Crash> crashes = new ArrayList<>();
+        String sql = "SELECT * FROM crashes";
 
-        return pointsList;
-    }
-
-    // TODO implement this
-    public Crash getOne() {
-        throw new NotImplementedException();
-    }
-
-    private void addPointToPreparedStatement(PreparedStatement ps, Crash pointToAdd) throws SQLException {
-        ps.setInt(1, pointToAdd.getObjectId());
-        ps.setInt(2, pointToAdd.getSpeedLimit());
-        ps.setInt(3, pointToAdd.getCrashYear());
-        ps.setString(4, pointToAdd.getCrashLocation1());
-        ps.setString(5, pointToAdd.getCrashLocation2());
-        ps.setString(6, pointToAdd.getRegion());
-        ps.setString(7, pointToAdd.getWeather());
-        ps.setFloat(8, pointToAdd.getLongitude());
-        ps.setFloat(9, pointToAdd.getLatitude());
-        ps.setBoolean(10, pointToAdd.isBicycleInvolved());
-        ps.setBoolean(11, pointToAdd.isBusInvolved());
-        ps.setBoolean(12, pointToAdd.isCarInvolved());
-        ps.setBoolean(13, pointToAdd.isHoliday());
-        ps.setBoolean(14, pointToAdd.isMopedInvolved());
-        ps.setBoolean(15, pointToAdd.isMotorcycleInvolved());
-        ps.setBoolean(16, pointToAdd.isParkedVehicleInvolved());
-        ps.setBoolean(17, pointToAdd.isPedestrianInvolved());
-        ps.setBoolean(18, pointToAdd.isSchoolBusInvolved());
-        ps.setBoolean(19, pointToAdd.isTrainInvolved());
-        ps.setBoolean(20, pointToAdd.isTruckInvolved());
-    }
-
-    // TODO implement this
-    public void addOne(Crash pointToAdd) throws SQLException {
-        String sql = "INSERT INTO crashes (object_id, speed_limit, crash_year, " +
-                "crash_location1, crash_location2, region, weather, " +
-                "longitude, latitude, bicycle_involved, bus_involved, " +
-                "car_involved, holiday, moped_involved, motorcycle_involved, " +
-                "parked_vehicle_involved, pedestrian_involved, " +
-                "school_bus_involved, train_involved, train_involved) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        PreparedStatement ps = connection.prepareStatement(sql);
-
-        // Adding all values of point to sql statement
-        addPointToPreparedStatement(ps, pointToAdd);
-
-        ps.executeUpdate();
-    }
-
-    // TODO implement this
-    public void addMultiple(List<Crash> toAdd) throws SQLException {
-        String sql = "INSERT OR IGNORE INTO crashes (object_id, speed_limit, crash_year, " +
-                "crash_location1, crash_location2, region, weather, " +
-                "longitude, latitude, bicycle_involved, bus_involved, " +
-                "car_involved, holiday, moped_involved, motorcycle_involved, " +
-                "parked_vehicle_involved, pedestrian_involved, " +
-                "school_bus_involved, train_involved, train_involved) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        connection.setAutoCommit(false);
-
-        for (Crash pointToAdd : toAdd) {
-            addPointToPreparedStatement(ps, pointToAdd);
-            ps.addBatch();
+        // Connect to database and keep adding to crash list until the end of query result
+        try (Connection conn = databaseManager.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Crash crash = crashFromResultSet(rs);
+                assert crash != null;
+                crashes.add(crash);
+            }
+            return crashes;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return new ArrayList<>();
         }
-
-        ps.executeBatch();
     }
-    // TODO implement this
+
+    /**
+     * Gets an individual crash from database by id
+     *
+     * @param id id of crash to get
+     * @return crash from database that matches id
+     */
+    @Override
+    public Crash getOne(int id) {
+        // Initialise crash and SQL query statement
+        Crash crash = null;
+        String sql = "SELECT * FROM crashes WHERE object_id=?";
+
+        // Connect to database manager and run SQL query
+        try (Connection conn = databaseManager.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    crash = crashFromResultSet(rs);
+                }
+                assert crash != null;
+                return crash;
+            }
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
+    }
+
+    /**
+     * Adds given point to the prepared statement. Used by addOne and addMultiple functions.
+     * @param ps Prepared statement to add values into
+     * @param crashToAdd Crash object to add to database
+     */
+    private void addPointToPreparedStatement(PreparedStatement ps, Crash crashToAdd) {
+        try {
+            ps.setInt(1, crashToAdd.getSpeedLimit());
+            ps.setInt(2, crashToAdd.getCrashYear());
+            ps.setString(3, crashToAdd.getCrashLocation1());
+            ps.setString(4, crashToAdd.getCrashLocation2());
+            ps.setInt(5, crashToAdd.getSeverity().getValue());
+            ps.setString(6, crashToAdd.getRegion().getName());
+            ps.setString(7, crashToAdd.getWeather().getName());
+            ps.setFloat(8, crashToAdd.getLongitude());
+            ps.setFloat(9, crashToAdd.getLatitude());
+            ps.setBoolean(10, crashToAdd.isBicycleInvolved());
+            ps.setBoolean(11, crashToAdd.isBusInvolved());
+            ps.setBoolean(12, crashToAdd.isCarInvolved());
+            ps.setBoolean(13, crashToAdd.isHoliday());
+            ps.setBoolean(14, crashToAdd.isMopedInvolved());
+            ps.setBoolean(15, crashToAdd.isMotorcycleInvolved());
+            ps.setBoolean(16, crashToAdd.isParkedVehicleInvolved());
+            ps.setBoolean(17, crashToAdd.isPedestrianInvolved());
+            ps.setBoolean(18, crashToAdd.isSchoolBusInvolved());
+            ps.setBoolean(19, crashToAdd.isTrainInvolved());
+            ps.setBoolean(20, crashToAdd.isTruckInvolved());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
+
+    /**
+     * Adds one crash to database
+     * @param crashToAdd Crash object to add
+     */
+    @Override
+    public void addOne(Crash crashToAdd) {
+        // SQL statement for adding
+        String sql = "INSERT INTO crashes (speed_limit, crash_year, " +
+                "crash_location1, crash_location2, severity, region, weather, " +
+                "longitude, latitude, bicycle_involved, bus_involved, " +
+                "car_involved, holiday, moped_involved, motorcycle_involved, " +
+                "parked_vehicle_involved, pedestrian_involved, " +
+                "school_bus_involved, train_involved, truck_involved) " +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+
+        try (Connection conn = databaseManager.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            addPointToPreparedStatement(ps, crashToAdd);
+
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            int insertId = -1;
+            if (rs.next()) {
+                insertId = rs.getInt(1);
+            }
+
+            // Adding the crash to the database
+            ps.executeUpdate();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
+
+    /**
+     * Adds a list of Crash objects to the SQLite database
+     * @param toAdd Crashes to add
+     */
+    public void addMultiple(List<Crash> toAdd) {
+        try {
+            String sql = "INSERT OR IGNORE INTO crashes (speed_limit, crash_year, " +
+                    "crash_location1, crash_location2, severity, region, weather, " +
+                    "longitude, latitude, bicycle_involved, bus_involved, " +
+                    "car_involved, holiday, moped_involved, motorcycle_involved, " +
+                    "parked_vehicle_involved, pedestrian_involved, " +
+                    "school_bus_involved, train_involved, truck_involved) " +
+                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            Connection conn = databaseManager.connect();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            conn.setAutoCommit(false);
+
+            for (Crash pointToAdd : toAdd) {
+                addPointToPreparedStatement(ps, pointToAdd);
+                ps.addBatch();
+            }
+
+            ps.executeBatch();
+            conn.commit();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
+
+    // TODO Not implemented. Implement when able to import crashes from personal csv file
+    /**
+     * Deletes the corresponding objectId row in the crashes table in SQlite database.
+     * @param objectId Id of object to delete
+     */
+    @Override
     public void delete(int objectId) {
         throw new NotImplementedException();
     }
 
-    // TODO implement this
+    // TODO Not implemented. Implement when able to import crashes from personal csv file
+    /**
+     * Takes a Crash object with updates values and updates the corresponding
+     * objectId row in the crashes table in the SQLite database.
+     * @param toUpdate Crash that needs to be updated
+     */
+    @Override
     public void update(Crash toUpdate) {
         throw new NotImplementedException();
     }
 
-    // TODO remove manual testing
-    public static void main(String[] args) throws IOException, SQLException {
-        CrashDAO crashDAO = new CrashDAO();
-        URL url = Thread.currentThread().getContextClassLoader().getResource("manual_testing_files/test_crash.csv");
-        File file = new File(url.getPath());
-        CrashCSVImporter importer = new CrashCSVImporter();
-        List<Crash> pointList = importer.pointListFromFile(file);
-        crashDAO.addOne(pointList.get(0));
+    /**
+     * Takes a ResultSet object and creates a Crash object
+     * from the data of the row with corresponding column names.
+     * @param rs ResultSet from executing SQL query
+     * @return Crash object with the current row result set is at
+     */
+    private Crash crashFromResultSet(ResultSet rs) {
+        try {
+            return new Crash(
+                    rs.getInt("object_id"),
+                    rs.getInt("speed_limit"),
+                    rs.getInt("crash_year"),
+                    rs.getString("crash_location1"),
+                    rs.getString("crash_location2"),
+                    rs.getString("severity"),
+                    rs.getString("region"),
+                    rs.getString("weather"),
+                    rs.getFloat("longitude"),
+                    rs.getFloat("latitude"),
+                    rs.getBoolean("bicycle_involved"),
+                    rs.getBoolean("bus_involved"),
+                    rs.getBoolean("car_involved"),
+                    rs.getBoolean("holiday"),
+                    rs.getBoolean("moped_involved"),
+                    rs.getBoolean("motorcycle_involved"),
+                    rs.getBoolean("parked_vehicle_involved"),
+                    rs.getBoolean("pedestrian_involved"),
+                    rs.getBoolean("school_bus_involved"),
+                    rs.getBoolean("train_involved"),
+                    rs.getBoolean("truck_involved"));
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
     }
 }
