@@ -138,15 +138,6 @@ public class CrashDAO implements DAOInterface<Crash> {
         try (Connection conn = databaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             addPointToPreparedStatement(ps, crashToAdd);
-
-            ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
-            int insertId = -1;
-            if (rs.next()) {
-                insertId = rs.getInt(1);
-            }
-
-            // Adding the crash to the database
             ps.executeUpdate();
         } catch (SQLException sqlException) {
             log.error(sqlException);

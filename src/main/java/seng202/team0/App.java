@@ -34,12 +34,7 @@ public class App {
      * Also shows off some different logging levels
      * @param args program arguments from command line
      */
-    public static void main(String[] args) throws SQLException {
-        log.info("Hello World!");
-        log.warn("This is a warning message! Use this log type to 'warn' if something is not quite right");
-        log.error("An error has occurred, thanks logging for helping find it! (This is a terrible error log message, but is only an example!')");
-        log.log(Level.INFO, "There are many ways to log!");
-
+    public static void main(String[] args) {
         // Initialises database and checks if populated
         DatabaseManager database = new DatabaseManager(null);
         CrashManager manager = new CrashManager();

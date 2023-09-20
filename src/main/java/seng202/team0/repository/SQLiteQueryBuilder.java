@@ -82,7 +82,6 @@ public class SQLiteQueryBuilder {
                 selectedColumns.clear();
                 while (rs.next()) {
                     selectedColumns.add(rs.getString("COLUMN_NAME"));
-                    System.out.println(rs.getString("COLUMN_NAME"));
                 }
             } catch (SQLException sqlException) {
                 log.error(sqlException);
