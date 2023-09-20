@@ -174,26 +174,17 @@ public class MainController {
         mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
-        loadRoutesComboBox.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
-            if (isNowShowing) {
-                // The ComboBox is now showing its list.
-                ListView<?> lv = (ListView<?>) loadRoutesComboBox.lookup(".list-view");
-                if (lv != null && lv instanceof ListView) {
-                    lv.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
-                        Object selectedItem = lv.getSelectionModel().getSelectedItem();
-                        if (selectedItem != null) {
-                            System.out.println("Clicked on: " + selectedItem);
-                            try {
-                                loadRoute();
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    });
+        loadRoutesComboBox.setOnAction((ActionEvent event) -> {
+            Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                System.out.println("Selected: " + selectedItem);
+                try {
+                    loadRoute();  // Assuming this method uses the selected item
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
-
         checkBoxHelper = new CheckBoxHelper(severityPane, transportModePane, dateSlider,
                 currentYearLabel, weatherPane, regionsPane, holidayPane);
 

@@ -17,9 +17,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
-<?import javafx.scene.control.ChoiceBox?>
 
-<StackPane fx:id="mainWindow" minHeight="-Infinity" minWidth="-Infinity" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" minHeight="-Infinity" minWidth="-Infinity" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>
