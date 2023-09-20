@@ -32,7 +32,7 @@ public class JavaScriptBridge {
      * @return A JSON representation of crash data containing latitude and longitude information.
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
-    public String crashes() throws SQLException {
+    public String crashes() {
         // TODO currently hard coding difference in having filters or not, have a think about how to not do this
         List crashList = crashData.getCrashLocations().stream().map(crash -> {
             if (crash instanceof Crash) {

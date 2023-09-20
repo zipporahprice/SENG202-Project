@@ -40,7 +40,7 @@ public enum Weather {
         }
     }
     /**
-     * Gets the name of the person.
+     * Gets the name of the weather.
      *
      * @return The name of the Weather as a String.
      */
