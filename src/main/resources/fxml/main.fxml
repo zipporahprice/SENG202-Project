@@ -206,14 +206,6 @@
             <Insets left="335.0" top="291.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button fx:id="helpButton" layoutX="451.0" layoutY="340.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="100.0" prefWidth="162.0" styleClass="buttonColor" stylesheets="@style.css" text="Help" textFill="#f2f2f2" userData="3" StackPane.alignment="TOP_CENTER">
-         <font>
-            <Font name="System Bold Italic" size="37.0" />
-         </font>
-         <!--         <StackPane.margin>-->
-         <!--            <Insets top="500.0" />-->
-         <!--         </StackPane.margin>-->
-      </Button>
       <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets right="10.0" top="110.0" />

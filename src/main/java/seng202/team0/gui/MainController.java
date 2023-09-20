@@ -64,7 +64,7 @@ public class MainController {
 
 
     @FXML
-    private Button helpButton;
+    private Button userHelpButton;
 
 
     // Severity Pane
@@ -230,6 +230,7 @@ public class MainController {
      * It clears the existing content in the main window and adds the help window's content.
      * The help window is anchored to the right side of the main window.
      */
+    @FXML
     public void loadHelp() {
         try {
             FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
@@ -358,6 +359,7 @@ public class MainController {
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
+        System.out.println(favouriteID);
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
@@ -518,9 +520,9 @@ public class MainController {
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
             int total = ratingGenerator(crashInfos);
+            displayRoute(route);
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-            displayRoute(route);
         }
     }
 

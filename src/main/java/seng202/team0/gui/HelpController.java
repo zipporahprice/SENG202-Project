@@ -28,31 +28,6 @@ public class HelpController {
     }
 
     /**
-     * Handles the action of navigating back to the main window view from the current help window view.
-     * Clears the help window contents and loads the main window view.
-     */
-    public void handleBackButtonn() {
-        try {
-            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-            Parent mainViewParent = mainLoader.load();
-
-            MainController mainController = mainLoader.getController();
-            mainController.init(stage);
-
-            // Clearing the help window and loading the main window
-            helpWindow.getChildren().clear();
-            helpWindow.getChildren().add(mainViewParent);
-            AnchorPane.setRightAnchor(mainViewParent, 0d);
-            AnchorPane.setLeftAnchor(mainViewParent, 0d);
-            AnchorPane.setBottomAnchor(mainViewParent, 0d);
-            AnchorPane.setTopAnchor(mainViewParent, 0d);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Handles the action of navigating back to the main window view from the current view.
      *
      * @param event The ActionEvent that triggered this method, typically associated with a button click.
