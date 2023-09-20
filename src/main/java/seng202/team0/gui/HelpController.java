@@ -8,9 +8,13 @@ import java.io.IOException;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import seng202.team0.App;
 
 public class HelpController {
 
+    private static final Logger log = LogManager.getLogger(App.class);
     public AnchorPane helpWindow;
 
     private Stage stage;
@@ -42,7 +46,7 @@ public class HelpController {
             AnchorPane.setRightAnchor(mainViewParent, 0d);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -74,7 +78,7 @@ public class HelpController {
             window.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

@@ -1,10 +1,13 @@
 package seng202.team0.models;
 
 import javafx.scene.control.Alert;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import seng202.team0.App;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,6 +23,8 @@ import java.util.Collection;
  * @author Team 10
  */
 public class GeoLocator {
+    private static final Logger log = LogManager.getLogger(App.class);
+
     /**
      * Takes in user input and searches for the address using the Nominatim Geolocation API before returning the location
      * @param address user input to find latitude and longitude for
@@ -51,9 +56,9 @@ public class GeoLocator {
             double lng = Double.parseDouble((String) bestResult.get("lon"));
             return new Location(lat, lng);
         } catch (IOException | ParseException e) {
-            System.err.println(e);
+            log.error(e);
         } catch (InterruptedException ie) {
-            System.err.println(ie);
+            log.error(ie);
             Thread.currentThread().interrupt();
         }
         return new Location(0d, 0d);
@@ -102,9 +107,9 @@ public class GeoLocator {
             }
             return road + " " + state;
         } catch (IOException | ParseException e) {
-            System.err.println(e);
+            log.error(e);
         } catch (InterruptedException ie) {
-            System.err.println(ie);
+            log.error(ie);
             Thread.currentThread().interrupt();
         }
         return "No Address Found";
