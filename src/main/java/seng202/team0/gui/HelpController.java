@@ -1,8 +1,10 @@
 package seng202.team0.gui;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
@@ -11,7 +13,8 @@ import javafx.event.ActionEvent;
 
 public class HelpController {
 
-    public AnchorPane helpWindow;
+    @FXML
+    public StackPane helpWindow;
 
     private Stage stage;
 
@@ -40,6 +43,9 @@ public class HelpController {
             helpWindow.getChildren().clear();
             helpWindow.getChildren().add(mainViewParent);
             AnchorPane.setRightAnchor(mainViewParent, 0d);
+            AnchorPane.setLeftAnchor(mainViewParent, 0d);
+            AnchorPane.setBottomAnchor(mainViewParent, 0d);
+            AnchorPane.setTopAnchor(mainViewParent, 0d);
 
         } catch (IOException e) {
             e.printStackTrace();

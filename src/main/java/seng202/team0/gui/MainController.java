@@ -66,6 +66,7 @@ public class MainController {
     @FXML
     private Button helpButton;
 
+
     // Severity Pane
     @FXML
     private AnchorPane severityPane;
@@ -106,6 +107,7 @@ public class MainController {
     @FXML
     private Label currentYearLabel;
 
+
     @FXML
     private ChoiceBox viewChoiceBox;
 
@@ -124,9 +126,7 @@ public class MainController {
     JSObject javaScriptConnector;
 
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
-    private FadeTransition[] emojiButtonTransitions = new FadeTransition[6];
-    private boolean[] emojiButtonClicked = new boolean[6];  // Keep track of button states
-    private FadeTransition[] fadeTransitions = new FadeTransition[7]; // Array to store individual fade transitions
+    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
 
     @FXML
     private VBox weatherVBox;
@@ -135,19 +135,6 @@ public class MainController {
     @FXML
     private VBox rightRegionVBox;
 
-
-    @FXML
-    private Button carButton;
-    @FXML
-    private Button bikeButton;
-    @FXML
-    private Button busButton;
-    @FXML
-    private Button walkingButton;
-    @FXML
-    private Button helicopterButton;
-    @FXML
-    private Button motorbikeButton;
 
     @FXML
     private TextField startLocation;
@@ -165,10 +152,8 @@ public class MainController {
     @FXML
     private AnchorPane settingsPane;
 
-    // Helper classes
+
     private CheckBoxHelper checkBoxHelper;
-
-
 
 
     /**
@@ -229,13 +214,6 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        setupEmojiButtonTransition(carButton, 0);
-        setupEmojiButtonTransition(bikeButton, 1);
-        setupEmojiButtonTransition(busButton, 2);
-        setupEmojiButtonTransition(walkingButton, 3);
-        setupEmojiButtonTransition(helicopterButton, 4);
-        setupEmojiButtonTransition(motorbikeButton, 5);
-        helpButton.setVisible(false);
         transportModePane.setVisible(false);
         weatherPane.setVisible(false);
         datePane.setVisible(false);
@@ -279,39 +257,24 @@ public class MainController {
         togglePaneWithFade(datePane, 2);
         togglePaneWithFade(regionsPane, 3);
         togglePaneWithFade(severityPane, 4);
-        toggleHelpButtonVisibility(helpButton, 5);
-        togglePaneWithFade(holidayPane, 6);
+        togglePaneWithFade(holidayPane, 5);
+
+
 
         // Toggle the visibility of the helpButton
 
         // Play each fade animation individually
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             fadeTransitions[i].play();
         }
     }
 
-
-    private void toggleHelpButtonVisibility(Button helpButton, int index) {
-        if (fadeTransitions[index] == null) {
-            fadeTransitions[index] = new FadeTransition(Duration.millis(500), helpButton);
-            fadeTransitions[index].setFromValue(0.0); // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);   // Transition to fully visible
-        }
-
-        if (helpButton.isVisible()) {
-            System.out.println("visible help button");
-            fadeTransitions[index].setOnFinished(event -> helpButton.setVisible(false)); // Set the action to hide the helpButton after fade-out
-            fadeTransitions[index].setFromValue(1.0); // Start from fully visible
-            fadeTransitions[index].setToValue(0.0);   // Transition to fully transparent (invisible)
-        } else {
-            helpButton.setVisible(true); // Make the helpButton visible before starting fade-in
-            fadeTransitions[index].setOnFinished(null); // Reset the onFinished handler
-            fadeTransitions[index].setFromValue(0.0);   // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
-        }
-    }
-
-
+    /**
+     * Toggles the visibility of a given pane with a fade animation.
+     *
+     * @param pane The pane to toggle.
+     * @param index The index of the fade transition in the array.
+     */
     private void togglePaneWithFade(AnchorPane pane, int index) {
         if (fadeTransitions[index] == null) {
             fadeTransitions[index] = new FadeTransition(Duration.millis(500), pane);
@@ -331,36 +294,9 @@ public class MainController {
         }
     }
 
-    private void setupEmojiButtonTransition(Button button, int index) {
-        emojiButtonTransitions[index] = new FadeTransition(Duration.millis(300));
-        emojiButtonTransitions[index].setNode(button);
-        emojiButtonTransitions[index].setFromValue(1.0);  // Fully visible
-        emojiButtonTransitions[index].setToValue(1.0);    // Semi-transparent
-        emojiButtonTransitions[index].setOnFinished(event -> {
-            if (emojiButtonClicked[index]) {
-                button.getStyleClass().remove("clickedButtonColor");
-            } else {
-                button.getStyleClass().add("clickedButtonColor");
-            }
-            emojiButtonClicked[index] = !emojiButtonClicked[index];
-        });
-    }
-    /**
-     * Handles the click event of an emoji button.
-     *
-     * @param event The action event triggered by the emoji button click.
-     */
-    public void handleEmojiButtonClick(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        int buttonIndex = Integer.parseInt(button.getUserData().toString());
 
-        if (emojiButtonClicked[buttonIndex]) {
-            emojiButtonTransitions[buttonIndex].setRate(-1);  // Reverse the animation when clicked again
-        } else {
-            emojiButtonTransitions[buttonIndex].setRate(1);
-        }
-        emojiButtonTransitions[buttonIndex].play();
-    }
+
+
 
 
     private void displayRoute(Route... routes) {
@@ -369,7 +305,10 @@ public class MainController {
         javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
     }
 
-
+    /**
+     * Adds a location when the "Add Location" button is clicked.
+     * Uses Geolocator class to turn the address into a lat, lng pair
+     */
 
     @FXML
     private Location getStart() {
