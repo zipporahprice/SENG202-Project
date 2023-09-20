@@ -25,6 +25,7 @@ import java.util.List;
  * @author seng202 teaching team
  */
 public class App {
+
     private static final Logger log = LogManager.getLogger(App.class);
 
     /**
