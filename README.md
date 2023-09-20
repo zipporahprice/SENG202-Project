@@ -1,10 +1,14 @@
-# SENG202 Template Project Overview
-Welcome to the template project for SENG202-2022 which you will transform into your own.
-This README file includes some useful information to help you get started.
-However, we expect that this README becomes your own
+# SafeTrip - SENG 202 Project Team 10
+SafeTrip is a New Zealand based safety routing app with public data from the Waka Kotahi. This project is developed
+by a group of second-year software engineering students. The following details how to run the application.
 
 ## Authors
-- SENG202 Teaching team
+- Angelica Silva
+- Christopher Wareing
+- Neil Alombro
+- Todd Vermeir
+- William Thompson
+- Zipporah Price
 
 ## Prerequisites
 - JDK >= 17 [click here to get the latest stable OpenJDK release (as of writing this README)](https://jdk.java.net/18/)
@@ -45,4 +49,4 @@ You can run the project through your IDE from the main class (App.java) or use t
 ## Run App
 - If you haven't already, Build the project.
 - Open a command line interface inside the project directory and run `cd target` to change into the target directory.
-- Run the command `java -jar trust-1.0-SNAPSHOT.jar` to open the application.
+- Run the command `java -jar SafeTrip-1.0_10k` to open the application.
