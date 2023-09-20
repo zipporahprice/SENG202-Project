@@ -315,7 +315,6 @@ public class FilterManager {
                 || regionsSelected.size() == 0 || holidaysSelected.size() == 0) {
             return "1 = 0";
         } else {
-            System.out.println(String.join(AND, where));
             return String.join(AND, where);
         }
     }
