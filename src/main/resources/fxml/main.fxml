@@ -18,9 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane fx:id="mainWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" minHeight="-Infinity" minWidth="-Infinity" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
-      <WebView fx:id="webView">
+      <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>
             <Insets />
          </StackPane.margin></WebView>
@@ -31,33 +31,36 @@
       </Region>
 
 
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT" />
+      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets right="10.0" top="10.0" />
+         </StackPane.margin></TextField>
       <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#getEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
-            <Insets top="50.0" />
+            <Insets right="10.0" top="60.0" />
          </StackPane.margin></TextField>
       <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="187" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets top="250.0" />
+            <Insets right="10.0" top="260.0" />
          </StackPane.margin></Button>
       <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="99.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets right="40.0" top="200.0" />
+            <Insets right="50.0" top="210.0" />
          </StackPane.margin></Button>
-      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" text="Save Route" StackPane.alignment="TOP_RIGHT">
+      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
-            <Insets right="50.0" top="300.0" />
+            <Insets right="60.0" top="315.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="150.0" promptText="Select saved route" StackPane.alignment="TOP_RIGHT">
+      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="150.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
-            <Insets right="20.0" top="350.0" />
+            <Insets right="30.0" top="350.0" />
          </StackPane.margin>
       </ComboBox>
 
@@ -86,81 +89,52 @@
                </children></VBox>
          </children>
          <StackPane.margin>
-            <Insets left="150.0" />
+            <Insets left="335.0" top="10.0" />
          </StackPane.margin>
       </AnchorPane>
-      <AnchorPane maxWidth="118.0" prefHeight="810.0" prefWidth="118.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="CENTER_LEFT">
+      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="339.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
-            <Button fx:id="carButton" layoutX="14.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="0">
+            <Button fx:id="settingsButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
+                  <ImageView fitHeight="44.0" fitWidth="200.0">
                      <image>
-                        <Image url="@button_icons/car_emoji.png" />
+                        <Image url="@images/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="32.0" layoutY="26.0">
+               <image>
+                  <Image url="@images/SafeTripLogoLarge.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="filterDataButton" layoutX="29.0" layoutY="79.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@images/filter_data.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="bikeButton" layoutX="14.0" layoutY="689.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="1">
+            <Button fx:id="userHelpButton" layoutX="29.0" layoutY="238.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
+                  <ImageView fitHeight="39.0" fitWidth="200.0">
                      <image>
-                        <Image url="@button_icons/bike_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="busButton" layoutX="14.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="2">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/bus_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="walkingButton" layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="3">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/walking_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="helicopterButton" layoutX="14.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="4">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/helicopter_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="motorbikeButton" layoutX="14.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleEmojiButtonClick" prefHeight="100.0" prefWidth="90.0" styleClass="buttonColor" stylesheets="@style.css" userData="5">
-               <graphic>
-                  <ImageView fitHeight="52.0" fitWidth="52.0">
-                     <image>
-                        <Image url="@button_icons/motorbike_emoji.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="hamburgerButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#toggleHamburger" prefHeight="65.0" prefWidth="65.0" styleClass="menuButtonColor" stylesheets="@style.css">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0">
-                     <image>
-                        <Image url="@button_icons/menu_emoji.png" />
+                        <Image url="@images/user_help.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
          </children>
+         <StackPane.margin>
+            <Insets left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="datePane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="90.0" layoutY="14.0" text="Earliest Date" textFill="WHITE" />
 
-            <!-- Add a Slider for selecting the date between 2000 - 2023 -->
+                        <!-- Add a Slider for selecting the date between 2000 - 2023 -->
             <Slider fx:id="dateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="75.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2010.0" />
             <Label layoutX="14.0" layoutY="59.0" text="2000" textFill="WHITE" />
             <Label fx:id="currentYearLabel" layoutX="109.0" layoutY="42.0" text="2010" textFill="WHITE" />
@@ -168,7 +142,7 @@
 
          </children>
          <StackPane.margin>
-            <Insets left="401.0" />
+            <Insets left="590.0" top="10.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="regionsPane" maxHeight="366.0" maxWidth="250.0" prefHeight="366.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -206,7 +180,7 @@
             </VBox>
          </children>
          <StackPane.margin>
-            <Insets left="401.0" top="120.0" />
+            <Insets left="590.0" top="132.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="180.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -228,27 +202,19 @@
                </children></VBox>
          </children>
          <StackPane.margin>
-            <Insets left="150.0" top="279.0" />
+            <Insets left="335.0" top="291.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button fx:id="helpButton" layoutX="451.0" layoutY="340.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="100.0" prefWidth="162.0" styleClass="buttonColor" stylesheets="@style.css" text="Help" textFill="#f2f2f2" userData="3" StackPane.alignment="TOP_CENTER">
-         <font>
-            <Font name="System Bold Italic" size="37.0" />
-         </font>
-         <!--         <StackPane.margin>-->
-         <!--            <Insets top="500.0" />-->
-         <!--         </StackPane.margin>-->
-      </Button>
       <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
-            <Insets top="100.0" />
+            <Insets right="10.0" top="110.0" />
          </StackPane.margin></TextField>
       <Button fx:id="removeStopButton" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="120.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets right="30.0" top="150.0" />
+            <Insets right="40.0" top="160.0" />
          </StackPane.margin>
       </Button>
       <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -269,7 +235,7 @@
             </VBox>
          </children>
          <StackPane.margin>
-            <Insets left="150.0" top="463.0" />
+            <Insets left="335.0" top="476.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -287,14 +253,9 @@
             </VBox>
          </children>
          <StackPane.margin>
-            <Insets left="401.0" top="490.0" />
+            <Insets left="590.0" top="503.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="100.0" prefWidth="203.0" styleClass="buttonColor" stylesheets="@style.css" text="Settings" textFill="#f2f2f2" StackPane.alignment="BOTTOM_RIGHT">
-         <font>
-            <Font name="System Bold Italic" size="37.0" />
-         </font>
-      </Button>
       <AnchorPane fx:id="settingsPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false" StackPane.alignment="BOTTOM_RIGHT">
          <children>
             <ChoiceBox fx:id="viewChoiceBox" layoutX="51.0" layoutY="46.0" prefWidth="150.0" />

@@ -2,6 +2,9 @@ package seng202.team0.io;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import seng202.team0.App;
 import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Crash;
 
@@ -20,6 +23,8 @@ import java.util.Objects;
  */
 
 public class CrashCSVImporter {
+
+    private static final Logger log = LogManager.getLogger(App.class);
 
     /**
      * List of all the crashes as Point objects from the given file object
@@ -43,10 +48,10 @@ public class CrashCSVImporter {
                 }
                 return pointList;
             } catch (CsvValidationException e) {
-                System.out.println(e.getMessage());
+                log.error(e);
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.error(e);
         }
         return null;
     }
@@ -102,10 +107,8 @@ public class CrashCSVImporter {
                     longitude, latitude, bicycleInvolved, busInvolved, carInvolved, holiday, mopedInvolved,
                     motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
         } catch (NumberFormatException e) {
-            // TODO replace with something actually useful like a log
-            System.out.println(e);
+            log.error(e);
         }
-        // TODO uncomment once logging done on catch
         return null;
     }
 

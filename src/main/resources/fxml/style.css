@@ -16,7 +16,7 @@
 
 .buttonColor{
     -fx-background-color: #2c2c2c;
-    -fx-background-radius: 32px;
+    -fx-background-radius: 20px;
 }
 
 .clickedButtonColor{
