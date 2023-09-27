@@ -169,6 +169,8 @@ public class MainController {
      */
     void init(Stage stage) {
         this.stage = stage;
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
         geolocator = new GeoLocator();
         stage.setMaximized(true);
         mapController = new MapController();
@@ -565,7 +567,6 @@ public class MainController {
         AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
 
         checkBoxHelper.addToFilters(checkBox, parent);
-
         // Runs helper function to get all checkbox and list of other checkboxes
         Pair<CheckBox, List<CheckBox>> result = checkBoxHelper.getAllCheckBoxAndCheckBoxList(parent);
         CheckBox allCheckBox = result.getLeft();
