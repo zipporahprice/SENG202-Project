@@ -57,12 +57,15 @@ public class MainControllerTest {
                 .build();
 
         List expectedCrashes  = null;
-
         CrashManager manager = new CrashManager();
         expectedCrashes = manager.getCrashLocations();
 
         Assertions.assertNotNull(expectedCrashes);
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
     }
+
+
+
+
 
 }

@@ -21,8 +21,8 @@ public class RegionTest {
     }
 
     @Test
-    void testName() {
-        Region region = Region.stringToRegion("Wellington Region");
-        Assertions.assertEquals("Wellington", region.getName());
+    void testNames() {
+        Region region = Region.stringToRegion("Auckland region");
+        Assertions.assertEquals("Auckland", region.getName());
     }
 }
