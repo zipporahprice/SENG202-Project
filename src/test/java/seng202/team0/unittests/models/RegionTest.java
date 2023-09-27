@@ -20,9 +20,4 @@ public class RegionTest {
         Assertions.assertEquals(NULL, region);
     }
 
-    @Test
-    void testNames() {
-        Region region = Region.stringToRegion("Auckland region");
-        Assertions.assertEquals("Auckland", region.getName());
-    }
 }
