@@ -23,14 +23,23 @@
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
 
-      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="409.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="489.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
             <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="32.0" layoutY="26.0">
                <image>
                   <Image url="@images/SafeTripLogoLarge.png" />
                </image>
             </ImageView>
-            <Button fx:id="routingButton" layoutX="29.0" layoutY="79.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="routing">
+            <Button fx:id="routingButton" layoutX="9.0" layoutY="79.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="routing">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@images/plan_route.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="filterDataButton" layoutX="9.0" layoutY="159.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="filtering">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="200.0">
                      <image>
@@ -39,16 +48,16 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="filterDataButton" layoutX="29.0" layoutY="159.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="filtering">
+            <Button fx:id="importExportButton" layoutX="9.0" layoutY="239.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="34.0" fitWidth="200.0">
+                  <ImageView fitHeight="39.0" fitWidth="250.0">
                      <image>
-                        <Image url="@images/filter_data.png" />
+                        <Image url="@images/import_export.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="settingsButton" layoutX="29.0" layoutY="239.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="settings">
+            <Button fx:id="settingsButton" layoutX="9.0" layoutY="319.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="settings">
                <graphic>
                   <ImageView fitHeight="44.0" fitWidth="200.0">
                      <image>
@@ -57,7 +66,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="userHelpButton" layoutX="29.0" layoutY="319.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="userHelpButton" layoutX="9.0" layoutY="399.0" mnemonicParsing="false" onAction="#loadHelp" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="200.0">
                      <image>
