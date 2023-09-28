@@ -29,95 +29,6 @@
             <BoxBlur height="0.0" width="255.0" />
          </effect>
       </Region>
-
-
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStart" prefHeight="75.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="380.0" />
-         </StackPane.margin></TextField>
-      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="75.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="465.0" />
-         </StackPane.margin></TextField>
-      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="550.0" />
-         </StackPane.margin></TextField>
-      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <StackPane.margin>
-            <Insets left="20.0" right="10.0" top="638.0" />
-         </StackPane.margin>
-         <padding>
-            <Insets left="10.0" />
-         </padding></Button>
-      <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="99.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <StackPane.margin>
-            <Insets left="30.0" right="15.0" top="690.0" />
-         </StackPane.margin></Button>
-      <Button fx:id="removeStopButton" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="148.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <StackPane.margin>
-            <Insets left="140.0" right="40.0" top="690.0" />
-         </StackPane.margin>
-      </Button>
-      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="20.0" right="10.0" top="745.0" />
-         </StackPane.margin>
-         <prefWidth>280.0</prefWidth>
-         <prefHeight>43.0</prefHeight>
-         <minHeight>43.0</minHeight>
-         <minWidth>280.0</minWidth>
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-         <textFill>#FFFFFF</textFill>
-      </Button>
-      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="20.0" right="10.0" top="800.0" />
-         </StackPane.margin>
-         <prefWidth>280.0</prefWidth>
-         <prefHeight>43.0</prefHeight>
-         <minHeight>43.0</minHeight>
-      </ComboBox>
-
-      <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
-         <children>
-            <Label layoutX="82.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
-            <VBox layoutX="41.0" layoutY="97.0" spacing="15.0">
-               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bicycle" textFill="WHITE" userData="bicycle_involved" />
-               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bus" textFill="WHITE" userData="bus_involved" />
-               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Car" textFill="WHITE" userData="car_involved" />
-               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Moped" textFill="WHITE" userData="moped_involved" />
-               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Motorcycle" textFill="WHITE" userData="motorcycle_involved" />
-            </VBox>
-            <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
-               <children>
-                  <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Parked Vehicle" textFill="WHITE" userData="parked_vehicle_involved" />
-                  <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Pedestrian" textFill="WHITE" userData="pedestrian_involved" />
-                  <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="School Bus" textFill="WHITE" userData="school_bus_involved" />
-                  <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Train" textFill="WHITE" userData="train_involved" />
-                  <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Truck" textFill="WHITE" userData="truck_involved" />
-               </children>
-            </VBox>
-            <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
-               <children>
-                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
-               </children></VBox>
-         </children>
-         <StackPane.margin>
-            <Insets left="335.0" top="10.0" />
-         </StackPane.margin>
-      </AnchorPane>
       <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="339.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
             <Button fx:id="settingsButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
@@ -151,9 +62,105 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="importExportButton" layoutX="26.0" layoutY="318.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="35.0" fitWidth="240.0" translateX="2.0">
+                     <image>
+                        <Image url="@images/import_export.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <StackPane.margin>
             <Insets left="10.0" right="10.0" top="10.0" />
+         </StackPane.margin>
+      </AnchorPane>
+      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStart" prefHeight="75.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="410.0" right="10.0" top="380.0" />
+         </StackPane.margin></TextField>
+      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="75.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="410.0" right="10.0" top="465.0" />
+         </StackPane.margin></TextField>
+      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="410.0" right="10.0" top="550.0" />
+         </StackPane.margin></TextField>
+      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets left="420.0" right="10.0" top="638.0" />
+         </StackPane.margin>
+         <padding>
+            <Insets left="10.0" />
+         </padding></Button>
+      <Button fx:id="addStopButton" layoutX="100.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="99.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets left="430.0" right="15.0" top="690.0" />
+         </StackPane.margin></Button>
+      <Button fx:id="removeStopButton" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="148.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <StackPane.margin>
+            <Insets left="540.0" right="40.0" top="690.0" />
+         </StackPane.margin>
+      </Button>
+      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="420.0" right="10.0" top="745.0" />
+         </StackPane.margin>
+         <prefWidth>280.0</prefWidth>
+         <prefHeight>43.0</prefHeight>
+         <minHeight>43.0</minHeight>
+         <minWidth>280.0</minWidth>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <textFill>#FFFFFF</textFill>
+      </Button>
+      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="420.0" right="10.0" top="800.0" />
+         </StackPane.margin>
+         <prefWidth>280.0</prefWidth>
+         <prefHeight>43.0</prefHeight>
+         <minHeight>43.0</minHeight>
+      </ComboBox>
+
+      <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Label layoutX="82.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
+            <VBox layoutX="41.0" layoutY="97.0" spacing="15.0">
+               <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bicycle" textFill="WHITE" userData="bicycle_involved" />
+               <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bus" textFill="WHITE" userData="bus_involved" />
+               <CheckBox fx:id="carCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Car" textFill="WHITE" userData="car_involved" />
+               <CheckBox fx:id="mopedCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Moped" textFill="WHITE" userData="moped_involved" />
+               <CheckBox fx:id="motorcycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Motorcycle" textFill="WHITE" userData="motorcycle_involved" />
+            </VBox>
+            <VBox layoutX="136.0" layoutY="97.0" spacing="15.0">
+               <children>
+                  <CheckBox fx:id="parkedVehicleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Parked Vehicle" textFill="WHITE" userData="parked_vehicle_involved" />
+                  <CheckBox fx:id="pedestrianCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Pedestrian" textFill="WHITE" userData="pedestrian_involved" />
+                  <CheckBox fx:id="schoolBusCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="School Bus" textFill="WHITE" userData="school_bus_involved" />
+                  <CheckBox fx:id="trainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Train" textFill="WHITE" userData="train_involved" />
+                  <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Truck" textFill="WHITE" userData="truck_involved" />
+               </children>
+            </VBox>
+            <VBox layoutX="107.0" layoutY="49.0" spacing="5.0">
+               <children>
+                  <CheckBox fx:id="selectAllTransport" mnemonicParsing="false" onAction="#handleAllCheckBoxEvent" selected="true" text="All" textFill="WHITE" wrapText="true" />
+               </children></VBox>
+         </children>
+         <StackPane.margin>
+            <Insets left="335.0" top="10.0" />
          </StackPane.margin>
       </AnchorPane>
       <AnchorPane fx:id="datePane" maxHeight="117.0" maxWidth="250.0" prefHeight="117.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
