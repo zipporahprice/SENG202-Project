@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="seng202.team0.gui.SettingsMenuController"
+           prefHeight="100.0" prefWidth="600.0">
+
+    <AnchorPane fx:id="settingsPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
+        <children>
+            <ChoiceBox fx:id="viewChoiceBox" layoutX="51.0" layoutY="46.0" prefWidth="150.0" />
+            <Label layoutX="112.0" layoutY="14.0" text="View" textFill="WHITE" />
+        </children>
+        <StackPane.margin>
+            <Insets left="335.0" top="10.0" />
+        </StackPane.margin>
+    </AnchorPane>
+
+</StackPane>

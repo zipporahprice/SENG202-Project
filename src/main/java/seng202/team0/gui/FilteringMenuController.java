@@ -1,5 +1,8 @@
 package seng202.team0.gui;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -9,69 +12,90 @@ import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.Favourite;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
-/**
- * Helper class for the MainController class that
- * has functions that are not directly called and bound
- * to an event with the GUI elements.
- *
- * @author Angelica Silva
- * @author Christopher Wareing
- * @author Neil Alombro
- * @author Todd Vermeir
- * @author William Thompson
- * @author Zipporah Price
- */
+public class FilteringMenuController implements Initializable {
 
-public class CheckBoxHelper {
-    AnchorPane severityPane;
-    AnchorPane transportModePane;
-    Slider dateSlider;
-    Label currentYearLabel;
-    AnchorPane weatherPane;
-    AnchorPane regionsPane;
-    AnchorPane holidayPane;
+    @FXML
+    private AnchorPane severityPane;
+    @FXML
+    private AnchorPane transportModePane;
+    @FXML
+    private Slider dateSlider;
+    @FXML
+    private Label currentYearLabel;
+    @FXML
+    private AnchorPane weatherPane;
+    @FXML
+    private AnchorPane regionsPane;
+    @FXML
+    private AnchorPane holidayPane;
 
-    public CheckBoxHelper(AnchorPane severityPane, AnchorPane transportModePane, Slider dateSlider,
-                          Label currentYearLabel, AnchorPane weatherPane, AnchorPane regionsPane, AnchorPane holidayPane) {
-        this.severityPane = severityPane;
-        this.transportModePane = transportModePane;
-        this.dateSlider = dateSlider;
-        this.currentYearLabel = currentYearLabel;
-        this.weatherPane = weatherPane;
-        this.regionsPane = regionsPane;
-        this.holidayPane = holidayPane;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        updateCheckboxesWithFilterManager();
+    }
+
+
+    /**
+     * Handles the change in the slider value and updates the user interface accordingly.
+     * This method is called when the user interacts with a slider to select a value.
+     * It rounds the slider value to an integer, updates the year label, and sets the earliest year filter.
+     */
+    @FXML
+    public void sliderValueChange() {
+        int sliderValue = (int)Math.round(dateSlider.getValue());
+
+        // Update year label for user
+        currentYearLabel.setText(Integer.toString(sliderValue));
+
+        // Updates Filter Manager with the earliest year for crash query
+        FilterManager filters = FilterManager.getInstance();
+        filters.setEarliestYear(sliderValue);
     }
 
     /**
-     * Takes a Favourite object and updates
-     * the FilterManager singleton class and the checkboxes on the GUI,
-     * @param favourite Favourite object that includes a filters string
+     * Handles the event triggered when an "All" CheckBox is selected or deselected.
+     * This method is typically used to select or deselect all other related CheckBoxes within the same group.
+     *
+     * @param event The ActionEvent triggered by the "All" CheckBox.
      */
-    public void updateCheckboxesWithFavourites(Favourite favourite) {
-        // Update FilterManager class with the filters associated to the favourite route
-        FilterManager filters = FilterManager.getInstance();
-        filters.updateFiltersWithQueryString(favourite.getFilters());
+    @FXML
+    public void handleAllCheckBoxEvent(ActionEvent event) {
+        // Initialise parent to search through and what to set
+        CheckBox allCheckBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
+        boolean allSelected = allCheckBox.isSelected();
 
-        // Retrieve all updated filter data
-        List<Integer> severitiesSelected = filters.getSeveritiesSelected();
-        List<String> modesSelected = filters.getModesSelected();
-        int earliestYear = filters.getEarliestYear();
-        List<String> weathersSelected = filters.getWeathersSelected();
-        List<String> regionsSelected = filters.getRegionsSelected();
-        List<Integer> holidaysSelected = filters.getHolidaysSelected();
+        // Use helper function to set all checkboxes to the same state as all checkbox
+        setCheckBoxesFromAllCheckBoxState(parent, allSelected);
+    }
 
-        // Updating checkboxes according to filters
-        updateCheckboxesWithFilterList(severityPane, severitiesSelected);
-        updateCheckboxesWithFilterList(transportModePane, modesSelected);
-        dateSlider.setValue(earliestYear);
-        currentYearLabel.setText(Integer.toString(earliestYear));
-        updateCheckboxesWithFilterList(weatherPane, weathersSelected);
-        updateCheckboxesWithFilterList(regionsPane, regionsSelected);
-        updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
+    /**
+     * Handles the event triggered when a CheckBox is selected or deselected.
+     * This method is responsible for updating filters and potentially the "All" CheckBox state
+     * within the same group of CheckBoxes.
+     *
+     * @param event The ActionEvent triggered by the CheckBox.
+     */
+    @FXML
+    public void handleCheckBoxEvent(ActionEvent event) {
+        CheckBox checkBox = (CheckBox) event.getSource();
+        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
+
+        addToFilters(checkBox, parent);
+        // Runs helper function to get all checkbox and list of other checkboxes
+        Pair<CheckBox, List<CheckBox>> result = getAllCheckBoxAndCheckBoxList(parent);
+        CheckBox allCheckBox = result.getLeft();
+        List<CheckBox> checkBoxes = result.getRight();
+
+        assert allCheckBox != null;
+        updateAllCheckBox(allCheckBox, checkBoxes);
     }
 
     /**
@@ -81,7 +105,7 @@ public class CheckBoxHelper {
      * @param allCheckBox The "All" CheckBox to update.
      * @param checkBoxes  The list of related CheckBoxes to check for selection.
      */
-    public void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
+    private void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
         boolean allSelected = true;
         for (CheckBox checkBox : checkBoxes) {
             if (!checkBox.isSelected()) {
@@ -99,7 +123,7 @@ public class CheckBoxHelper {
      * @param checkBox The CheckBox representing the filter item.
      * @param parent   The parent AnchorPane of the CheckBox.
      */
-    public void addToFilters(CheckBox checkBox, AnchorPane parent) {
+    private void addToFilters(CheckBox checkBox, AnchorPane parent) {
         FilterManager filters = FilterManager.getInstance();
         Object toAdd = checkBox.getUserData();
 
@@ -154,7 +178,7 @@ public class CheckBoxHelper {
      * @param parent AnchorPane object to search through
      * @return Pair with types CheckBox and List of CheckBox corresponding to allCheckBox and checkBoxes
      */
-    public Pair<CheckBox, List<CheckBox>> getAllCheckBoxAndCheckBoxList(AnchorPane parent) {
+    private Pair<CheckBox, List<CheckBox>> getAllCheckBoxAndCheckBoxList(AnchorPane parent) {
         CheckBox allCheckBox = null;
         List<CheckBox> checkBoxes = new ArrayList<>();
 
@@ -181,7 +205,7 @@ public class CheckBoxHelper {
      * @param parent AnchorPane object to search through
      * @param allCheckBoxState Boolean value to set each CheckBox to
      */
-    public void setCheckBoxesFromAllCheckBoxState(AnchorPane parent, Boolean allCheckBoxState) {
+    private void setCheckBoxesFromAllCheckBoxState(AnchorPane parent, Boolean allCheckBoxState) {
         for (Object child : parent.getChildren()) {
             if (child instanceof VBox) {
                 for (Object childCheckBox : ((VBox) child).getChildren()) {
@@ -208,13 +232,43 @@ public class CheckBoxHelper {
         Pair<CheckBox, List<CheckBox>> result = getAllCheckBoxAndCheckBoxList(parent);
         CheckBox allCheckBox = result.getLeft();
         List<CheckBox> checkBoxes = result.getRight();
+        List<String> filterListStrings = filterList.stream()
+                .map(Object::toString)
+                .toList();
 
         // Updates checkboxes according to the list of filter values
         for (CheckBox checkBox : checkBoxes) {
-            checkBox.setSelected(filterList.contains(checkBox.getUserData()));
+            checkBox.setSelected(filterListStrings.contains((String)checkBox.getUserData()));
         }
 
         // Updates all checkbox to see if updated filters should have the box checked
         updateAllCheckBox(allCheckBox, checkBoxes);
     }
+
+
+    /**
+     * Takes a Favourite object and updates
+     * the FilterManager singleton class and the checkboxes on the GUI,
+     */
+    public void updateCheckboxesWithFilterManager() {
+        FilterManager filters = FilterManager.getInstance();
+
+        // Retrieve all updated filter data
+        List<Integer> severitiesSelected = filters.getSeveritiesSelected();
+        List<String> modesSelected = filters.getModesSelected();
+        int earliestYear = filters.getEarliestYear();
+        List<String> weathersSelected = filters.getWeathersSelected();
+        List<String> regionsSelected = filters.getRegionsSelected();
+        List<Integer> holidaysSelected = filters.getHolidaysSelected();
+
+        // Updating checkboxes according to filters
+        updateCheckboxesWithFilterList(severityPane, severitiesSelected);
+        updateCheckboxesWithFilterList(transportModePane, modesSelected);
+        dateSlider.setValue(earliestYear);
+        currentYearLabel.setText(Integer.toString(earliestYear));
+        updateCheckboxesWithFilterList(weatherPane, weathersSelected);
+        updateCheckboxesWithFilterList(regionsPane, regionsSelected);
+        updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
+    }
+
 }
