@@ -40,13 +40,17 @@ public class JavaScriptBridge {
                 double latitude = crash1.getLatitude();
                 double longitude = crash1.getLongitude();
                 int severity = crash1.getSeverity().getValue();
-                return new CrashInfo(latitude, longitude, severity);
+                String year = Integer.toString(crash1.getCrashYear());
+                String weather = crash1.getWeather().toString();
+                return new CrashInfo(latitude, longitude, severity, year, weather);
             } else {
                 HashMap crash1 = (HashMap) crash;
                 double latitude = (double) crash1.get("latitude");
                 double longitude = (double) crash1.get("longitude");
                 int severity = (int) crash1.get("severity");
-                return new CrashInfo(latitude, longitude, severity);
+                String year = (String) crash1.get("year");
+                String weather = (String) crash1.get("weather");
+                return new CrashInfo(latitude, longitude, severity, year, weather);
             }
         }).toList();
 
@@ -71,16 +75,22 @@ public class JavaScriptBridge {
         public double lng;
         public int severity;
 
+        public String crash_year; // Add year
+        public String weather;
+
         /**
          * Constructs a CrashInfo object with latitude and longitude.
          *
          * @param lat The latitude of the crash location.
          * @param lng The longitude of the crash location.
          */
-        public CrashInfo(double lat, double lng, int severity) {
+        public CrashInfo(double lat, double lng, int severity, String year, String weather) {
             this.lat = lat;
             this.lng = lng;
             this.severity = severity;
+            this.crash_year = year;
+            this.weather = weather;
+
         }
 
     }

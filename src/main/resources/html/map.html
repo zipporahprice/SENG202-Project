@@ -32,6 +32,9 @@
     let markers = [];
     var routes = [];
 
+
+
+
     /**
      * This object can be returned to our java code, where we can call the functions we define inside it
      */
@@ -90,6 +93,8 @@
                 "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
                 "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
                 "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "<p><strong>Year:</strong> " + a.crashyear + "</p>" + // Add year
+                "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
                 "</div>"
             );
             markerLayer.addLayer(marker);
@@ -214,6 +219,32 @@
         }
     }
 
+    function getMarkerIcon(severity) {
+        var iconUrl;
+        switch (severity) {
+            case 1: // Non-Injury
+                iconUrl = 'crash_markers/non_injury.png';
+                break;
+            case 2: // Minor Crash
+                iconUrl = 'crash_markers/minor_crash.png';
+                break;
+            case 4: // Major Crash
+                iconUrl = 'crash_markers/major_crash.png';
+                break;
+            case 8: // Death
+                iconUrl = 'crash_markers/death_crash.png';
+                break;
+            default: // Default icon
+                iconUrl = 'crash_markers/non_injury.png';
+                break;
+        }
+
+        return L.icon({
+            iconUrl: iconUrl,
+            iconSize: [24, 32.7], // Adjust the icon size as needed
+        });
+    }
+
     function setData() {
         var crashesJSON = javaScriptBridge.crashes();
         var crashes = JSON.parse(crashesJSON);
@@ -221,16 +252,18 @@
             max: 10,
             data: crashes
         };
-
         markerLayer.clearLayers();
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
             var severity = getSeverityStringFromValue(a.severity);
-            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity });
+            var markerIcon = getMarkerIcon(a.severity);
+            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity, icon: markerIcon });
             marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
                 "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
                 "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
                 "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "<p><strong>Year:</strong> " + a.year + "</p>" + // Add year
+                "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
                 "</div>"
             );
             markerLayer.addLayer(marker);
