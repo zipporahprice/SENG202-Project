@@ -10,16 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import netscape.javascript.JSObject;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.business.CrashManager;
@@ -49,63 +47,11 @@ public class MainController {
     private StackPane mainWindow;
 
     @FXML
-    private AnchorPane transportModePane;
-    @FXML
-    private AnchorPane weatherPane;
-    @FXML
-    private AnchorPane regionsPane;
-    @FXML
     private ComboBox<String> loadRoutesComboBox;
-    @FXML
-    private AnchorPane holidayPane;
 
     @FXML
     private Label numCrashesLabel;
 
-
-    @FXML
-    private Button userHelpButton;
-
-
-    // Severity Pane
-    @FXML
-    private AnchorPane severityPane;
-    @FXML
-    private CheckBox nonInjuryCheckBox;
-    @FXML
-    private CheckBox minorCrashCheckBox;
-    @FXML
-    private CheckBox majorCrashCheckBox;
-    @FXML
-    private CheckBox deathCheckBox;
-    @FXML
-    private CheckBox bicycleCheckBox;
-    @FXML
-    private CheckBox busCheckBox;
-    @FXML
-    private CheckBox carCheckBox;
-    @FXML
-    private CheckBox mopedCheckBox;
-    @FXML
-    private CheckBox motorcycleCheckBox;
-    @FXML
-    private CheckBox parkedVehicleCheckBox;
-    @FXML
-    private CheckBox pedestrianCheckBox;
-    @FXML
-    private CheckBox schoolBusCheckBox;
-    @FXML
-    private CheckBox trainCheckBox;
-    @FXML
-    private CheckBox truckCheckBox;
-
-    // Date Pane
-    @FXML
-    private AnchorPane datePane;
-    @FXML
-    private Slider dateSlider;
-    @FXML
-    private Label currentYearLabel;
 
 
     @FXML
@@ -128,13 +74,6 @@ public class MainController {
     private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
     private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
 
-    @FXML
-    private VBox weatherVBox;
-    @FXML
-    private VBox leftRegionVBox;
-    @FXML
-    private VBox rightRegionVBox;
-
 
     @FXML
     private TextField startLocation;
@@ -153,7 +92,8 @@ public class MainController {
     private AnchorPane settingsPane;
 
 
-    private CheckBoxHelper checkBoxHelper;
+    @FXML
+    private AnchorPane menuDisplayPane;
 
 
     /**
@@ -187,8 +127,6 @@ public class MainController {
                 }
             }
         });
-        checkBoxHelper = new CheckBoxHelper(severityPane, transportModePane, dateSlider,
-                currentYearLabel, weatherPane, regionsPane, holidayPane);
 
         setViewOptions();
 
@@ -201,22 +139,11 @@ public class MainController {
                         javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
                     }
                 });
+
+        loadEmptyMenuDisplay();
     }
 
 
-
-    @FXML
-    private void initialize() {
-        transportModePane.setVisible(false);
-        weatherPane.setVisible(false);
-        datePane.setVisible(false);
-        regionsPane.setVisible(false);
-        severityPane.setVisible(false);
-        holidayPane.setVisible(false);
-
-
-
-    }
     /**
      * Loads and displays the help window within the main application window.
      * This method uses JavaFX's FXMLLoader to load the content of the help window from an FXML file.
@@ -238,29 +165,61 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    private void loadEmptyMenuDisplay() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/empty_menu.fxml"));
+        try {
+            StackPane emptyMenuDisplay = loader.load();
+            menuDisplayPane.getChildren().setAll(emptyMenuDisplay);
+        } catch (IOException ioException) {
+            log.error(ioException);
+        }
+    }
+
+    private void loadFilteringMenuDisplay() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filtering_menu.fxml"));
+        try {
+            StackPane filteringMenuDisplay = loader.load();
+            menuDisplayPane.getChildren().setAll(filteringMenuDisplay);
+            FilteringMenuController filteringMenuController = loader.getController();
+            filteringMenuController.updateCheckboxesWithFilterManager();
+        } catch (IOException ioException) {
+            log.error(ioException);
+        }
+    }
+
+    private boolean isPopulated = false;
+
     /**
      * Toggles the visibility of various panes with fade animations.
      */
     public void toggleHamburger() {
-        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
-            fadeTransition.stop(); // Stop the animation if it's currently running
+//        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
+//            fadeTransition.stop(); // Stop the animation if it's currently running
+//        }
+//
+//        togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
+//        togglePaneWithFade(weatherPane, 1);
+//        togglePaneWithFade(datePane, 2);
+//        togglePaneWithFade(regionsPane, 3);
+//        togglePaneWithFade(severityPane, 4);
+//        togglePaneWithFade(holidayPane, 5);
+//
+//
+//
+//        // Toggle the visibility of the helpButton
+//
+//        // Play each fade animation individually
+//        for (int i = 0; i < 6; i++) {
+//            fadeTransitions[i].play();
+//        }
+
+        if (isPopulated) {
+            loadEmptyMenuDisplay();
+        } else {
+            loadFilteringMenuDisplay();
         }
-
-        togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
-        togglePaneWithFade(weatherPane, 1);
-        togglePaneWithFade(datePane, 2);
-        togglePaneWithFade(regionsPane, 3);
-        togglePaneWithFade(severityPane, 4);
-        togglePaneWithFade(holidayPane, 5);
-
-
-
-        // Toggle the visibility of the helpButton
-
-        // Play each fade animation individually
-        for (int i = 0; i < 6; i++) {
-            fadeTransitions[i].play();
-        }
+        isPopulated = !isPopulated;
     }
 
     /**
@@ -357,8 +316,9 @@ public class MainController {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
 
-            // Updates FilterManager singleton with Favourite's filters and Checkboxes to match
-            checkBoxHelper.updateCheckboxesWithFavourites(favourite);
+            // Update FilterManager class with the filters associated to the favourite route and Checkboxes to match
+            FilterManager filters = FilterManager.getInstance();
+            filters.updateFiltersWithQueryString(favourite.getFilters());
 
             // Generates a route and makes sure stops is cleared
             stops.clear();
@@ -517,63 +477,6 @@ public class MainController {
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
         }
-    }
-
-
-    /**
-     * Handles the change in the slider value and updates the user interface accordingly.
-     * This method is called when the user interacts with a slider to select a value.
-     * It rounds the slider value to an integer, updates the year label, and sets the earliest year filter.
-     */
-    @FXML
-    public void sliderValueChange() {
-        int sliderValue = (int)Math.round(dateSlider.getValue());
-
-        // Update year label for user
-        currentYearLabel.setText(Integer.toString(sliderValue));
-
-        // Updates Filter Manager with the earliest year for crash query
-        FilterManager filters = FilterManager.getInstance();
-        filters.setEarliestYear(sliderValue);
-    }
-
-    /**
-     * Handles the event triggered when an "All" CheckBox is selected or deselected.
-     * This method is typically used to select or deselect all other related CheckBoxes within the same group.
-     *
-     * @param event The ActionEvent triggered by the "All" CheckBox.
-     */
-    @FXML
-    public void handleAllCheckBoxEvent(ActionEvent event) {
-        // Initialise parent to search through and what to set
-        CheckBox allCheckBox = (CheckBox) event.getSource();
-        AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
-        boolean allSelected = allCheckBox.isSelected();
-
-        // Use helper function to set all checkboxes to the same state as all checkbox
-        checkBoxHelper.setCheckBoxesFromAllCheckBoxState(parent, allSelected);
-    }
-
-    /**
-     * Handles the event triggered when a CheckBox is selected or deselected.
-     * This method is responsible for updating filters and potentially the "All" CheckBox state
-     * within the same group of CheckBoxes.
-     *
-     * @param event The ActionEvent triggered by the CheckBox.
-     */
-    @FXML
-    public void handleCheckBoxEvent(ActionEvent event) {
-        CheckBox checkBox = (CheckBox) event.getSource();
-        AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
-
-        checkBoxHelper.addToFilters(checkBox, parent);
-        // Runs helper function to get all checkbox and list of other checkboxes
-        Pair<CheckBox, List<CheckBox>> result = checkBoxHelper.getAllCheckBoxAndCheckBoxList(parent);
-        CheckBox allCheckBox = result.getLeft();
-        List<CheckBox> checkBoxes = result.getRight();
-
-        assert allCheckBox != null;
-        checkBoxHelper.updateAllCheckBox(allCheckBox, checkBoxes);
     }
 
     @FXML
