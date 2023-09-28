@@ -214,6 +214,32 @@
         }
     }
 
+    function getMarkerIcon(severity) {
+        var iconUrl;
+        switch (severity) {
+            case 1: // Non-Injury
+                iconUrl = 'html/crash_markers/non_injury.png';
+                break;
+            case 2: // Minor Crash
+                iconUrl = 'html/crash_markers/minor_crash.png';
+                break;
+            case 4: // Major Crash
+                iconUrl = 'html/crash_markers/major_crash.png';
+                break;
+            case 8: // Death
+                iconUrl = 'html/crash_markers/death_crash.png';
+                break;
+            default: // Default icon
+                iconUrl = 'html/crash_markers/non_injury.png';
+                break;
+        }
+
+        return L.icon({
+            iconUrl: iconUrl,
+            iconSize: [32, 32], // Adjust the icon size as needed
+        });
+    }
+
     function setData() {
         var crashesJSON = javaScriptBridge.crashes();
         var crashes = JSON.parse(crashesJSON);
@@ -226,7 +252,8 @@
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
             var severity = getSeverityStringFromValue(a.severity);
-            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity });
+            var markerIcon = getMarkerIcon(a.severity);
+            var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity, icon: markerIcon });
             marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
                 "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
                 "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
