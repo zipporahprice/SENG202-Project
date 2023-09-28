@@ -27,10 +27,7 @@ import seng202.team0.repository.FavouriteDAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Controller for the main.fxml window
@@ -52,11 +49,6 @@ public class MainController {
     @FXML
     private Label numCrashesLabel;
 
-
-
-    @FXML
-    private ChoiceBox viewChoiceBox;
-
     @FXML
     public Label ratingText;
 
@@ -71,9 +63,6 @@ public class MainController {
 
     JSObject javaScriptConnector;
 
-    private FadeTransition fadeTransition = new FadeTransition(Duration.millis(500));
-    private FadeTransition[] fadeTransitions = new FadeTransition[6]; // Array to store individual fade transitions
-
 
     @FXML
     private TextField startLocation;
@@ -86,7 +75,7 @@ public class MainController {
 
     private MapController mapController;
 
-    public static String currentView = "Automatic";
+
 
     @FXML
     private AnchorPane settingsPane;
@@ -94,6 +83,8 @@ public class MainController {
 
     @FXML
     private AnchorPane menuDisplayPane;
+
+    private String menuPopulated = "empty";
 
 
     /**
@@ -127,8 +118,6 @@ public class MainController {
                 }
             }
         });
-
-        setViewOptions();
 
         stage.sizeToScene();
         webEngine = webView.getEngine();
@@ -166,6 +155,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Loads empty menu display from FXML file.
+     */
     private void loadEmptyMenuDisplay() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/empty_menu.fxml"));
         try {
@@ -176,6 +168,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Loads filtering menu display from FXML file.
+     */
     private void loadFilteringMenuDisplay() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filtering_menu.fxml"));
         try {
@@ -188,68 +183,46 @@ public class MainController {
         }
     }
 
-    private boolean isPopulated = false;
+    /**
+     * Loads settings menu display from FXML file.
+     */
+    private void loadSettingsMenuDisplay() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/settings_menu.fxml"));
+        try {
+            StackPane settingsMenuDisplay = loader.load();
+            menuDisplayPane.getChildren().setAll(settingsMenuDisplay);
+            SettingsMenuController settingsMenuController = loader.getController();
+            settingsMenuController.setViewOptions();
+        } catch (IOException ioException) {
+            log.error(ioException);
+        }
+    }
 
     /**
-     * Toggles the visibility of various panes with fade animations.
+     * Toggles the filtering menu display.
      */
-    public void toggleHamburger() {
-//        if (fadeTransition.getStatus() == Animation.Status.RUNNING) {
-//            fadeTransition.stop(); // Stop the animation if it's currently running
-//        }
-//
-//        togglePaneWithFade(transportModePane, 0); // Pass an index to identify the pane
-//        togglePaneWithFade(weatherPane, 1);
-//        togglePaneWithFade(datePane, 2);
-//        togglePaneWithFade(regionsPane, 3);
-//        togglePaneWithFade(severityPane, 4);
-//        togglePaneWithFade(holidayPane, 5);
-//
-//
-//
-//        // Toggle the visibility of the helpButton
-//
-//        // Play each fade animation individually
-//        for (int i = 0; i < 6; i++) {
-//            fadeTransitions[i].play();
-//        }
-
-        if (isPopulated) {
+    public void toggleFiltering() {
+        if (Objects.equals(menuPopulated, "filtering")) {
             loadEmptyMenuDisplay();
+            menuPopulated = "empty";
         } else {
             loadFilteringMenuDisplay();
+            menuPopulated = "filtering";
         }
-        isPopulated = !isPopulated;
     }
 
     /**
-     * Toggles the visibility of a given pane with a fade animation.
-     *
-     * @param pane The pane to toggle.
-     * @param index The index of the fade transition in the array.
+     * Toggles the settings menu display.
      */
-    private void togglePaneWithFade(AnchorPane pane, int index) {
-        if (fadeTransitions[index] == null) {
-            fadeTransitions[index] = new FadeTransition(Duration.millis(500), pane);
-            fadeTransitions[index].setFromValue(0.0); // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);   // Transition to fully visible
-        }
-
-        if (pane.isVisible()) {
-            fadeTransitions[index].setOnFinished(event -> pane.setVisible(false)); // Set the action to hide the pane after fade-out
-            fadeTransitions[index].setFromValue(1.0); // Start from fully visible
-            fadeTransitions[index].setToValue(0.0);   // Transition to fully transparent (invisible)
+    public void toggleSettings() {
+        if (Objects.equals(menuPopulated, "settings")) {
+            loadEmptyMenuDisplay();
+            menuPopulated = "empty";
         } else {
-            pane.setVisible(true); // Make the pane visible before starting fade-in
-            fadeTransitions[index].setOnFinished(null); // Reset the onFinished handler
-            fadeTransitions[index].setFromValue(0.0);   // Start from fully transparent (invisible)
-            fadeTransitions[index].setToValue(1.0);     // Transition to fully visible
+            loadSettingsMenuDisplay();
+            menuPopulated = "settings";
         }
     }
-
-
-
-
 
 
     private void displayRoute(Route... routes) {
@@ -477,21 +450,5 @@ public class MainController {
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
         }
-    }
-
-    @FXML
-    private void toggleAnchorPaneVisibility() {
-        settingsPane.setVisible(!settingsPane.isVisible());
-    }
-
-    // TODO look at creating a new SettingsHelper
-    private void setViewOptions() {
-        viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");
-        viewChoiceBox.setValue("Automatic");
-        viewChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                currentView = (String) newValue;
-            }
-        });
     }
 }

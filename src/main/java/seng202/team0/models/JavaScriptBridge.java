@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.gui.MainController;
+import seng202.team0.gui.SettingsMenuController;
 import seng202.team0.repository.CrashDAO;
 
 import java.sql.SQLException;
@@ -23,8 +24,8 @@ import java.util.List;
  * @author toddv
  */
 public class JavaScriptBridge {
-    CrashManager crashData = new CrashManager();
-
+    private CrashManager crashData = new CrashManager();
+    private String currentView;
 
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
@@ -101,6 +102,6 @@ public class JavaScriptBridge {
      * @return The name of the current view.
      */
     public String currentView() {
-        return MainController.currentView;
+        return SettingsMenuController.currentView;
     }
 }
