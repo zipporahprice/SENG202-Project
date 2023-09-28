@@ -31,20 +31,24 @@
       </Region>
 
 
-      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStart" prefHeight="43.0" prefWidth="187.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <TextField fx:id="startLocation" layoutX="100.0" layoutY="32.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStart" prefHeight="75.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="10.0" right="10.0" top="380.0" />
          </StackPane.margin></TextField>
-      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="43.0" maxWidth="187.0" onAction="#getEnd" prefHeight="43" prefWidth="187" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <TextField fx:id="endLocation" layoutX="100.0" layoutY="90.0" maxHeight="75.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="430.0" />
+            <Insets left="10.0" right="10.0" top="465.0" />
          </StackPane.margin></TextField>
-      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="187" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="75.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="10.0" right="10.0" top="550.0" />
+         </StackPane.margin></TextField>
+      <Button fx:id="generateRoute" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="630.0" />
+            <Insets left="20.0" right="10.0" top="638.0" />
          </StackPane.margin>
          <padding>
             <Insets left="10.0" />
@@ -54,17 +58,36 @@
             <Font name="System Bold" size="15.0" />
          </font>
          <StackPane.margin>
-            <Insets left="50.0" right="50.0" top="580.0" />
+            <Insets left="30.0" right="15.0" top="690.0" />
          </StackPane.margin></Button>
-      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
+      <Button fx:id="removeStopButton" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="148.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
          <StackPane.margin>
-            <Insets left="60.0" right="60.0" top="680.0" />
+            <Insets left="140.0" right="40.0" top="690.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="150.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="30.0" right="30.0" top="715.0" />
+            <Insets left="20.0" right="10.0" top="745.0" />
          </StackPane.margin>
+         <prefWidth>280.0</prefWidth>
+         <prefHeight>43.0</prefHeight>
+         <minHeight>43.0</minHeight>
+         <minWidth>280.0</minWidth>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <textFill>#FFFFFF</textFill>
+      </Button>
+      <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="20.0" right="10.0" top="800.0" />
+         </StackPane.margin>
+         <prefWidth>280.0</prefWidth>
+         <prefHeight>43.0</prefHeight>
+         <minHeight>43.0</minHeight>
       </ComboBox>
 
       <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -208,10 +231,6 @@
             <Insets left="335.0" top="291.0" />
          </StackPane.margin>
       </AnchorPane>
-      <TextField fx:id="stopLocation" layoutX="100.0" layoutY="236.0" maxHeight="43.0" maxWidth="187.0" onAction="#getStop" prefHeight="43" prefWidth="187" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-         <StackPane.margin>
-            <Insets left="10.0" right="10.0" top="480.0" />
-         </StackPane.margin></TextField>
       <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
          <children>
             <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
@@ -269,13 +288,5 @@
             <Insets right="20.0" top="500.0" />
          </StackPane.margin>
       </AnchorPane>
-      <Button fx:id="removeStopButton" layoutX="190.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="148.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <StackPane.margin>
-            <Insets left="40.0" right="40.0" top="530.0" />
-         </StackPane.margin>
-      </Button>
    </children>
 </StackPane>
