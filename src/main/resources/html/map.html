@@ -93,6 +93,8 @@
                 "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
                 "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
                 "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "<p><strong>Year:</strong> " + a.crashyear + "</p>" + // Add year
+                "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
                 "</div>"
             );
             markerLayer.addLayer(marker);
@@ -250,7 +252,6 @@
             max: 10,
             data: crashes
         };
-
         markerLayer.clearLayers();
         for (var i = 0; i < crashes.length; i++) {
             var a = crashes[i];
@@ -261,6 +262,8 @@
                 "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
                 "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
                 "<p><strong>Severity:</strong> " + severity + "</p>" +
+                "<p><strong>Year:</strong> " + a.crashyear + "</p>" + // Add year
+                "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
                 "</div>"
             );
             markerLayer.addLayer(marker);
