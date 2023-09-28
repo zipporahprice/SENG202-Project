@@ -75,7 +75,7 @@ public class JavaScriptBridge {
         public double lng;
         public int severity;
 
-        public String year; // Add year
+        public String crash_year; // Add year
         public String weather;
 
         /**
@@ -88,7 +88,7 @@ public class JavaScriptBridge {
             this.lat = lat;
             this.lng = lng;
             this.severity = severity;
-            this.year = year;
+            this.crash_year = year;
             this.weather = weather;
 
         }
