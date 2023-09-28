@@ -8,7 +8,6 @@ import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.models.CrashInfo;
 import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
@@ -19,7 +18,7 @@ import java.net.URL;
 import java.util.List;
 
 public class ViewCrashDataStepDefinitions {
-    CrashInfo crashSelected = null;
+    Crash crashSelected = null;
 
     @Given("the user wants to see crash information")
     public void selectCrash() {
@@ -39,7 +38,7 @@ public class ViewCrashDataStepDefinitions {
         JavaScriptBridge bridge = new JavaScriptBridge();
         String crashesString = bridge.crashes();
         Gson gson = new Gson();
-        List<CrashInfo> crashList = gson.fromJson(crashesString, new TypeToken<List<CrashInfo>>() {}.getType());
+        List<Crash> crashList = gson.fromJson(crashesString, new TypeToken<List<Crash>>() {}.getType());
         crashSelected = crashList.get(0);
     }
 
@@ -47,10 +46,10 @@ public class ViewCrashDataStepDefinitions {
     public void informationOfCrash() {
         double range = 0.00001;
 
-        double minLat = crashSelected.lat - range;
-        double maxLat = crashSelected.lat + range;
-        double minLng = crashSelected.lng - range;
-        double maxLng = crashSelected.lng + range;
+        double minLat = crashSelected.getLatitude() - range;
+        double maxLat = crashSelected.getLatitude() + range;
+        double minLng = crashSelected.getLongitude() - range;
+        double maxLng = crashSelected.getLongitude() + range;
 
         String whereClause = "latitude BETWEEN " + minLat + " AND " + maxLat +
                 " AND longitude BETWEEN " + minLng + " AND " + maxLng;

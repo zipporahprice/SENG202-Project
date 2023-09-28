@@ -170,21 +170,21 @@ public class RoutingMenuController implements Initializable {
      * @return A list of CrashInfo objects representing crash points that overlap with the route.
      * @throws SQLException If an SQL-related error occurs during database query execution.
      */
-    public List<CrashInfo> getOverlappingPoints(Route route, double dangerRadius) throws SQLException {
-        List<CrashInfo> overlappingPoints = new ArrayList<>();
+    public List<Crash> getOverlappingPoints(Route route, double dangerRadius) throws SQLException {
+        List<Crash> overlappingPoints = new ArrayList<>();
         CrashManager crashManager = new CrashManager();
-        List<CrashInfo> crashPoints = crashManager.getCrashLocations().stream().map(crash -> {
+        List<Crash> crashPoints = crashManager.getCrashLocations().stream().map(crash -> {
             HashMap crash1 = (HashMap) crash;
             double latitude = (double) crash1.get("latitude");
             double longitude = (double) crash1.get("longitude");
             int severity = (int) crash1.get("severity");
-            return new CrashInfo(latitude, longitude, severity);
+            return new Crash(latitude, longitude, severity);
         }).toList();
         for (int i = 0; i < route.route.size() - 1; i++) {
             Location start = route.route.get(i);
             Location end = route.route.get(i + 1);
 
-            for (CrashInfo crashPoint : crashPoints) {
+            for (Crash crashPoint : crashPoints) {
                 double distToStart = haversineDistance(start, crashPoint);
                 double distToEnd = haversineDistance(end, crashPoint);
 
@@ -206,13 +206,13 @@ public class RoutingMenuController implements Initializable {
      * @param loc2 The second location with latitude and longitude coordinates.
      * @return The Haversine distance between the two locations in meters.
      */
-    public double haversineDistance(Location loc1, CrashInfo loc2) {
+    public double haversineDistance(Location loc1, Crash loc2) {
         double R = 6371000; // Earth radius in meters
-        double dLat = Math.toRadians(loc2.lat - loc1.latitude);
-        double dLon = Math.toRadians(loc2.lng - loc1.longitude);
+        double dLat = Math.toRadians(loc2.getLatitude() - loc1.latitude);
+        double dLon = Math.toRadians(loc2.getLongitude() - loc1.longitude);
 
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(loc1.latitude)) * Math.cos(Math.toRadians(loc2.lat))
+                + Math.cos(Math.toRadians(loc1.latitude)) * Math.cos(Math.toRadians(loc2.getLatitude()))
                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -232,7 +232,7 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
+            List<Crash> crashInfos = getOverlappingPoints(route,1000);
             int total = ratingGenerator(crashInfos);
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
@@ -241,10 +241,10 @@ public class RoutingMenuController implements Initializable {
     }
 
 
-    private int ratingGenerator(List<CrashInfo> crashInfos) {
+    private int ratingGenerator(List<Crash> crashInfos) {
         int total = 0;
-        for (CrashInfo crash: crashInfos) {
-            total += crash.severity;
+        for (Crash crash: crashInfos) {
+            total += crash.getSevereInt();
         }
         if (crashInfos.size() == 0) {
             total = (total*10) - 10;
@@ -271,7 +271,7 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
+            List<Crash> crashInfos = getOverlappingPoints(route,1000);
             int total = ratingGenerator(crashInfos);
             displayRoute(route);
             ratingText.setText("Danger: "+ total + "/5");
