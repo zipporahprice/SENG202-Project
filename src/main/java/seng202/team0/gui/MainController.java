@@ -69,7 +69,7 @@ public class MainController {
                     }
                 });
 
-        loadEmptyMenuDisplay();
+        loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
     }
 
 
@@ -96,56 +96,13 @@ public class MainController {
     }
 
     /**
-     * Loads empty menu display from FXML file.
+     * Loads menu display in FXML file into menuDisplayPane
      */
-    private void loadEmptyMenuDisplay() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/empty_menu.fxml"));
+    private void loadMenuDisplayFromFXML(String filePath) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
         try {
-            StackPane emptyMenuDisplay = loader.load();
-            menuDisplayPane.getChildren().setAll(emptyMenuDisplay);
-        } catch (IOException ioException) {
-            log.error(ioException);
-        }
-    }
-
-    /**
-     * Loads filtering menu display from FXML file.
-     */
-    private void loadRoutingMenuDisplay() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/routing_menu.fxml"));
-        try {
-            StackPane routingMenuDisplay = loader.load();
-            menuDisplayPane.getChildren().setAll(routingMenuDisplay);
-        } catch (IOException ioException) {
-            log.error(ioException);
-        }
-    }
-
-    /**
-     * Loads filtering menu display from FXML file.
-     */
-    private void loadFilteringMenuDisplay() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filtering_menu.fxml"));
-        try {
-            StackPane filteringMenuDisplay = loader.load();
-            menuDisplayPane.getChildren().setAll(filteringMenuDisplay);
-            FilteringMenuController filteringMenuController = loader.getController();
-            filteringMenuController.updateCheckboxesWithFilterManager();
-        } catch (IOException ioException) {
-            log.error(ioException);
-        }
-    }
-
-    /**
-     * Loads settings menu display from FXML file.
-     */
-    private void loadSettingsMenuDisplay() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/settings_menu.fxml"));
-        try {
-            StackPane settingsMenuDisplay = loader.load();
-            menuDisplayPane.getChildren().setAll(settingsMenuDisplay);
-            SettingsMenuController settingsMenuController = loader.getController();
-            settingsMenuController.setViewOptions();
+            StackPane menuDisplay = loader.load();
+            menuDisplayPane.getChildren().setAll(menuDisplay);
         } catch (IOException ioException) {
             log.error(ioException);
         }
@@ -159,16 +116,16 @@ public class MainController {
         String menuChoice = (String) menuButton.getUserData();
 
         if (Objects.equals(menuPopulated, menuChoice)) {
-            loadEmptyMenuDisplay();
+            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
             menuPopulated = "empty";
         } else if (Objects.equals("routing", menuChoice)) {
-            loadRoutingMenuDisplay();
+            loadMenuDisplayFromFXML("/fxml/routing_menu.fxml");
             menuPopulated = menuChoice;
         } else if (Objects.equals("filtering", menuChoice)) {
-            loadFilteringMenuDisplay();
+            loadMenuDisplayFromFXML("/fxml/filtering_menu.fxml");
             menuPopulated = menuChoice;
         } else if (Objects.equals("settings", menuChoice)) {
-            loadSettingsMenuDisplay();
+            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
             menuPopulated = menuChoice;
         }
 

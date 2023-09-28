@@ -2,6 +2,7 @@ package seng202.team0.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -11,12 +12,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.Favourite;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class FilteringMenuController {
+public class FilteringMenuController implements Initializable {
 
     @FXML
     private AnchorPane severityPane;
@@ -33,7 +36,8 @@ public class FilteringMenuController {
     @FXML
     private AnchorPane holidayPane;
 
-    void init() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         updateCheckboxesWithFilterManager();
     }
 
