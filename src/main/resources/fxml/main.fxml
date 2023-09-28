@@ -29,7 +29,7 @@
             <BoxBlur height="0.0" width="255.0" />
          </effect>
       </Region>
-      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="339.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="489.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
             <Button fx:id="settingsButton" layoutX="26.0" layoutY="158.0" mnemonicParsing="false" onAction="#toggleAnchorPaneVisibility" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
@@ -62,11 +62,20 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="importExportButton" layoutX="26.0" layoutY="318.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="importExportButton" layoutX="26.0" layoutY="398.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
                <graphic>
-                  <ImageView fitHeight="35.0" fitWidth="240.0" translateX="2.0">
+                  <ImageView fitHeight="39.0" fitWidth="250.0">
                      <image>
                         <Image url="@images/import_export.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="planRouteButton" layoutX="29.0" layoutY="318.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="266.0" styleClass="menuButtonColor" stylesheets="@style.css">
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="210.0">
+                     <image>
+                        <Image url="@images/plan_route.png" />
                      </image>
                   </ImageView>
                </graphic>
