@@ -103,7 +103,7 @@
         let mapOptions = {
             center: [-41.0, 172.0],
             zoom: 5.5,
-            layers:[baseLayer, heatmapLayer]
+            layers:[baseLayer]
         };
         heatmapLayer.setData(testData);
 
@@ -115,23 +115,13 @@
 
     function automaticViewChange() {
         var zoomLevel = map.getZoom();
-        if (zoomLevel >= 12) {
-            if (map.hasLayer(heatmapLayer)) {
-                map.removeLayer(heatmapLayer);
-            }
-            if (!map.hasLayer(markerLayer)) {
-                map.addLayer(markerLayer);
-            }
+        if (map.hasLayer(heatmapLayer)) {
+            map.removeLayer(heatmapLayer);
         }
-        else {
-            if (map.hasLayer(markerLayer)) {
-                map.removeLayer(markerLayer);
-            }
-            if (!map.hasLayer(heatmapLayer)) {
-                map.addLayer(heatmapLayer);
-                heatmapLayer.setData(testData);
-            }
+        if (!map.hasLayer(markerLayer)) {
+            map.removeLayer(markerLayer);
         }
+
     }
 
     /**
@@ -148,6 +138,7 @@
             automaticViewChange();
             map.on('zoomend', automaticViewChange);
         } else if (currentView === "Heatmap") {
+
             map.off('zoomend', automaticViewChange);
             if (map.hasLayer(markerLayer)) {
                 map.removeLayer(markerLayer);
