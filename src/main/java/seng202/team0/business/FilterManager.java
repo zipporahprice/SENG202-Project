@@ -311,6 +311,7 @@ public class FilterManager {
         }
 
         // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
+        // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
         if (modesSelected.size() == 0 || severitiesSelected.size() == 0 || weathersSelected.size() == 0
                 || regionsSelected.size() == 0 || holidaysSelected.size() == 0) {
             return "1 = 0";
