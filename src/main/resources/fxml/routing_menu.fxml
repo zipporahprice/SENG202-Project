@@ -35,7 +35,8 @@
             </StackPane.margin>
             <padding>
                 <Insets left="10.0" />
-            </padding></Button>
+            </padding>
+        </Button>
         <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="99.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <font>
                 <Font name="System Bold" size="15.0" />

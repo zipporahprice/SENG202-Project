@@ -21,17 +21,8 @@ function initMap() {
     baseLayer= new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
-    var crashesJSON = javaScriptBridge.crashes();
 
-
-    var crashes = JSON.parse(crashesJSON);
-    var testData = {
-        max: 10,
-        data: crashes
-    };
-
-
-
+    // Setup layers
     var cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
         // if scaleRadius is false it will be the constant radius used in pixels
@@ -51,38 +42,28 @@ function initMap() {
         valueField: 'count'
     };
     heatmapLayer = new HeatmapOverlay(cfg);
-
     markerLayer = L.markerClusterGroup();
 
-    for (var i = 0; i < crashes.length; i++) {
-        var a = crashes[i];
-        var severity = getSeverityStringFromValue(a.severity);
-        var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity });
-        marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
-            "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
-            "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
-            "<p><strong>Severity:</strong> " + severity + "</p>" +
-            "<p><strong>Year:</strong> " + a.crashyear + "</p>" + // Add year
-            "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
-            "</div>"
-        );
-        markerLayer.addLayer(marker);
-    }
-
+    // Setup map
     let mapOptions = {
         center: [-41.0, 172.0],
         zoom: 5.5,
         layers:[baseLayer, heatmapLayer]
     };
-    heatmapLayer.setData(testData);
-
     map = new L.map('map', mapOptions);
 
+    // Initialise layers and setup callbacks
     setFilteringViewport();
-    map.on('zoomend', setFilteringViewport);
-
+    setData();
     updateView();
-    setInterval(updateView, 500);
+    map.on('zoomend', updateDataShown);
+    map.on('moveend', updateDataShown);
+}
+
+function updateDataShown() {
+    setFilteringViewport();
+    setData();
+    updateView();
 }
 
 function setFilteringViewport() {
@@ -234,6 +215,8 @@ function setData() {
     };
     markerLayer.clearLayers();
 
+    javaScriptBridge.outputPrint(crashes.length);
+
     for (var i = 0; i < crashes.length; i++) {
         var a = crashes[i];
         var severity = getSeverityStringFromValue(a.severity);
@@ -252,6 +235,3 @@ function setData() {
 
     heatmapLayer.setData(testData);
 }
-
-// TODO refresh of layers also closes pop up
-var intervalID = setInterval(setData, 2000);

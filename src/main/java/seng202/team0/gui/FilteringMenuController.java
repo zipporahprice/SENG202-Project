@@ -271,4 +271,8 @@ public class FilteringMenuController implements Initializable {
         updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
     }
 
+
+    public void updateDataWithFilters(ActionEvent actionEvent) {
+
+    }
 }
