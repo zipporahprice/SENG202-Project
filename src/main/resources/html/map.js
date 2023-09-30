@@ -78,8 +78,20 @@ function initMap() {
 
     map = new L.map('map', mapOptions);
 
+    setFilteringViewport();
+    map.on('zoomend', setFilteringViewport);
+
     updateView();
     setInterval(updateView, 500);
+}
+
+function setFilteringViewport() {
+    const bounds = map.getBounds();
+    const minLatitude = bounds.getSouth();
+    const minLongitude = bounds.getWest();
+    const maxLatitude = bounds.getNorth();
+    const maxLongitude = bounds.getEast();
+    javaScriptBridge.setFilterManagerViewport(minLatitude, minLongitude, maxLatitude, maxLongitude);
 }
 
 function automaticViewChange() {
@@ -98,7 +110,6 @@ function automaticViewChange() {
         }
         if (!map.hasLayer(heatmapLayer)) {
             map.addLayer(heatmapLayer);
-            heatmapLayer.setData(testData);
         }
     }
 }
@@ -222,6 +233,7 @@ function setData() {
         data: crashes
     };
     markerLayer.clearLayers();
+
     for (var i = 0; i < crashes.length; i++) {
         var a = crashes[i];
         var severity = getSeverityStringFromValue(a.severity);

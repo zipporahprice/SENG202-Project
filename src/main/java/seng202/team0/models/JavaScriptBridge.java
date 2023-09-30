@@ -104,4 +104,18 @@ public class JavaScriptBridge {
     public String currentView() {
         return SettingsMenuController.currentView;
     }
+
+    /**
+     * Sets the viewport variables in the FilterManager singleton class.
+     * @param minLatitude minimum latitude of the map view
+     * @param minLongitude minimum longitude of the map view
+     * @param maxLatitude maximum latitude of the map view
+     * @param maxLongitude maximum longitude of the map view
+     */
+    public void setFilterManagerViewport(double minLatitude, double minLongitude,
+                                         double maxLatitude, double maxLongitude) {
+        FilterManager filterManager = FilterManager.getInstance();
+        filterManager.setViewPortMin(minLatitude, minLongitude);
+        filterManager.setViewPortMax(maxLatitude, maxLongitude);
+    }
 }

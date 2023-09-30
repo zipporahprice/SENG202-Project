@@ -250,7 +250,7 @@ public class FilterManager {
      * @param maxLatitude maximum latitude of viewport
      * @param maxLongitude maximum longitude of viewport
      */
-    public void setViewPortLatitudes(double maxLatitude, double maxLongitude) {
+    public void setViewPortMax(double maxLatitude, double maxLongitude) {
         viewPortMax = new Location(maxLatitude, maxLongitude);
     }
 
@@ -348,9 +348,11 @@ public class FilterManager {
                     + CLOSE_PARENTHESES);
         }
 
-        where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
-            + viewPortMin.longitude + "AND maxX <= " + viewPortMax.longitude + "AND minY >= "
-            + viewPortMin.latitude + "AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
+        if (viewPortMin != null && viewPortMax != null) {
+            where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
+                    + viewPortMin.longitude + " AND maxX <= " + viewPortMax.longitude + " AND minY >= "
+                    + viewPortMin.latitude + " AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
+        }
 
         // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
         if (modesSelected.isEmpty() || severitiesSelected.isEmpty() || weathersSelected.isEmpty()
