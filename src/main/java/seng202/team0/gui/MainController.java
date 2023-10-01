@@ -107,7 +107,7 @@ public class MainController {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (menuPopulated.equals("routing")) {
+            if (!menuPopulated.equals("empty")) {
                 controller = loader.getController();
             }
 
@@ -123,7 +123,7 @@ public class MainController {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
-        if (menuPopulated.equals("routing")) { // !menuPopulated.equals("empty")
+        if (!menuPopulated.equals("empty")) {
             controller.updateManager();
         }
 
