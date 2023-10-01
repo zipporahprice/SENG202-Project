@@ -155,7 +155,7 @@
             <Insets left="590.0" top="503.0" />
         </StackPane.margin>
     </AnchorPane>
-    <Button fx:id="applyFiltersButton" mnemonicParsing="false" onAction="#updateDataWithFilters" prefHeight="43.0" prefWidth="500.0" styleClass="address-button-style" stylesheets="@style.css" text="Apply Filters" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+    <Button fx:id="applyFiltersButton" mnemonicParsing="false" disable="true" onAction="#updateDataWithFilters" prefHeight="43.0" prefWidth="500.0" styleClass="inactive-button" stylesheets="@style.css" text="Apply Filters" textFill="WHITE" StackPane.alignment="TOP_LEFT">
         <font>
             <Font name="System Bold" size="15.0" />
         </font>

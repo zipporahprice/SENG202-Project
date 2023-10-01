@@ -27,7 +27,8 @@ import java.util.Objects;
 public class MainController {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
-    public WebView webView;
+    @FXML
+    private WebView webView;
     @FXML
     private StackPane mainWindow;
     private Stage stage;
@@ -52,14 +53,11 @@ public class MainController {
      */
     void init(Stage stage) {
         this.stage = stage;
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(1000);
+        stage.setMinHeight(800);
         stage.setMaximized(true);
-        mapController = new MapController();
-        mapController.setWebView(webView);
-        mapController.init(stage);
-
         stage.sizeToScene();
+
         webEngine = webView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -68,6 +66,10 @@ public class MainController {
                         javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
                     }
                 });
+
+        mapController = new MapController();
+        mapController.setWebView(webView);
+        mapController.init(stage);
 
         loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
     }

@@ -11,7 +11,8 @@ let jsConnector = {
     addMarker: addMarker,
     displayRoute: displayRoute,
     removeRoute: removeRoute,
-    initMap: initMap
+    initMap: initMap,
+    setData: setData
 };
 
 /**
@@ -214,8 +215,6 @@ function setData() {
         data: crashes
     };
     markerLayer.clearLayers();
-
-    javaScriptBridge.outputPrint(crashes.length);
 
     for (var i = 0; i < crashes.length; i++) {
         var a = crashes[i];

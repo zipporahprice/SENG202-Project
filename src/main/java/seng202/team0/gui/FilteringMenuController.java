@@ -3,6 +3,7 @@ package seng202.team0.gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -10,14 +11,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
-import seng202.team0.models.Favourite;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class FilteringMenuController implements Initializable {
 
@@ -35,6 +34,8 @@ public class FilteringMenuController implements Initializable {
     private AnchorPane regionsPane;
     @FXML
     private AnchorPane holidayPane;
+    @FXML
+    private Button applyFiltersButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,6 +58,7 @@ public class FilteringMenuController implements Initializable {
         // Updates Filter Manager with the earliest year for crash query
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(sliderValue);
+        clickableApplyFiltersButton();
     }
 
     /**
@@ -74,6 +76,7 @@ public class FilteringMenuController implements Initializable {
 
         // Use helper function to set all checkboxes to the same state as all checkbox
         setCheckBoxesFromAllCheckBoxState(parent, allSelected);
+        clickableApplyFiltersButton();
     }
 
     /**
@@ -96,6 +99,7 @@ public class FilteringMenuController implements Initializable {
 
         assert allCheckBox != null;
         updateAllCheckBox(allCheckBox, checkBoxes);
+        clickableApplyFiltersButton();
     }
 
     /**
@@ -271,8 +275,23 @@ public class FilteringMenuController implements Initializable {
         updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
     }
 
+    /**
+     * OnAction event callback for "Apply Filters" button.
+     */
+    public void updateDataWithFilters() {
+        MainController.javaScriptConnector.call("setData");
+        notClickableApplyFiltersButton();
+    }
 
-    public void updateDataWithFilters(ActionEvent actionEvent) {
+    public void clickableApplyFiltersButton() {
+        applyFiltersButton.getStyleClass().remove("inactive-button");
+        applyFiltersButton.getStyleClass().add("address-button-add-style");
+        applyFiltersButton.setDisable(false);
+    }
 
+    public void notClickableApplyFiltersButton() {
+        applyFiltersButton.getStyleClass().remove("address-button-add-style");
+        applyFiltersButton.getStyleClass().add("inactive-button");
+        applyFiltersButton.setDisable(true);
     }
 }
