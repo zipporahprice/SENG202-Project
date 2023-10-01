@@ -1,7 +1,5 @@
 package seng202.team0.business;
 
-import java.util.ArrayList;
-
 /**
  * Singleton class for storing routing options from the FXML controller class.
  */
@@ -12,16 +10,21 @@ public class RouteManager {
     private String endLocation;
     private String stopLocation;
 
+    /**
+     * Initializer of the RouteManager class that sets default null values for
+     * Strings startLocation, endLocation, and stopLocation.
+     */
     private RouteManager() {
-
         startLocation = null;
-
         endLocation = null;
-
         stopLocation = null;
-
     }
 
+    /**
+     * Retrieves the singleton RouteManager instance.
+     *
+     * @return The singleton instance of RouteManager.
+     */
     public static RouteManager getInstance() {
         if (route == null) {
             route = new RouteManager();

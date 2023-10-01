@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class FilteringMenuController implements Initializable {
+public class FilteringMenuController implements Initializable, MenuController {
 
     @FXML
     private AnchorPane severityPane;
@@ -39,7 +39,7 @@ public class FilteringMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        updateCheckboxesWithFilterManager();
+        loadManager();
     }
 
 
@@ -254,7 +254,8 @@ public class FilteringMenuController implements Initializable {
      * Takes a Favourite object and updates
      * the FilterManager singleton class and the checkboxes on the GUI,
      */
-    public void updateCheckboxesWithFilterManager() {
+    @Override
+    public void loadManager() {
         FilterManager filters = FilterManager.getInstance();
 
         // Retrieve all updated filter data
@@ -273,6 +274,10 @@ public class FilteringMenuController implements Initializable {
         updateCheckboxesWithFilterList(weatherPane, weathersSelected);
         updateCheckboxesWithFilterList(regionsPane, regionsSelected);
         updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
+    }
+
+    @Override
+    public void updateManager() {
     }
 
     /**

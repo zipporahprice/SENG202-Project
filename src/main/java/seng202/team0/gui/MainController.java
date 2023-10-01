@@ -123,7 +123,7 @@ public class MainController {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
-        if (menuPopulated.equals("routing")) {
+        if (menuPopulated.equals("routing")) { // !menuPopulated.equals("empty")
             controller.updateManager();
         }
 
