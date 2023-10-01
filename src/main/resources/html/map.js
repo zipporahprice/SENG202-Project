@@ -210,6 +210,7 @@ function getMarkerIcon(severity) {
 function setData() {
     var crashesJSON = javaScriptBridge.crashes();
     var crashes = JSON.parse(crashesJSON);
+
     var testData = {
         max: 10,
         data: crashes
@@ -218,6 +219,7 @@ function setData() {
 
     for (var i = 0; i < crashes.length; i++) {
         var a = crashes[i];
+        javaScriptBridge.outputPrint(a.crash_year);
         var severity = getSeverityStringFromValue(a.severity);
         var markerIcon = getMarkerIcon(a.severity);
         var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity, icon: markerIcon });
@@ -225,7 +227,7 @@ function setData() {
             "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
             "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
             "<p><strong>Severity:</strong> " + severity + "</p>" +
-            "<p><strong>Year:</strong> " + a.year + "</p>" + // Add year
+            "<p><strong>Year:</strong> " + a.crash_year + "</p>" + // Add year
             "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
             "</div>"
         );
