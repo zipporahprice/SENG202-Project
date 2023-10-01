@@ -50,7 +50,7 @@ public class JavaScriptBridge {
                 double latitude = (double) crash1.get("latitude");
                 double longitude = (double) crash1.get("longitude");
                 int severity = (int) crash1.get("severity");
-                String year = (String) crash1.get("year");
+                String year = Integer.toString((Integer) crash1.get("crash_year"));
                 String weather = (String) crash1.get("weather");
                 return new CrashInfo(latitude, longitude, severity, year, weather);
             }
@@ -119,4 +119,6 @@ public class JavaScriptBridge {
         filterManager.setViewPortMin(minLatitude, minLongitude);
         filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
+
+    public void outputPrint(String printing) { System.out.println(printing);}
 }
