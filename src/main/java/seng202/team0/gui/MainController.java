@@ -107,7 +107,7 @@ public class MainController {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (!menuPopulated.equals("empty")) {
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
                 controller = loader.getController();
             }
 
@@ -123,7 +123,7 @@ public class MainController {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
-        if (!menuPopulated.equals("empty")) {
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
             controller.updateManager();
         }
 
@@ -143,6 +143,9 @@ public class MainController {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
 
+        } else if (Objects.equals("import", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFXML("/fxml/import_window.fxml");
         }
 
     }
