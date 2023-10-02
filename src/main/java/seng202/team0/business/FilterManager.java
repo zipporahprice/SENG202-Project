@@ -44,6 +44,7 @@ public class FilterManager {
     private static FilterManager filters;
     private List<Integer> severitiesSelected;
     private Integer earliestYear;
+    private Integer latestYear;
     private List<String> modesSelected;
     private List<String> weathersSelected;
     private List<String> regionsSelected;
@@ -62,6 +63,8 @@ public class FilterManager {
         );
 
         earliestYear = 2000;
+
+        latestYear = 2020;
 
         modesSelected = new ArrayList<>(Arrays.asList(
                 "bicycle_involved",
@@ -129,12 +132,16 @@ public class FilterManager {
      */
     public Integer getEarliestYear() { return earliestYear; }
 
+    public Integer getLatestYear() { return latestYear; }
+
     /**
      * Sets the earliest year for filtering crash data.
      *
      * @param year The earliest year to set.
      */
     public void setEarliestYear(Integer year) { earliestYear = year; }
+
+    public void setLatestYear(Integer year) { latestYear = year; }
 
     /**
      * Retrieves the list of selected transportation modes for filtering crash data.
@@ -226,6 +233,10 @@ public class FilterManager {
      * @return A location of (minLatitude, minLongitude).
      */
     public Location getViewPortMin() { return this.viewPortMin; }
+
+    public void updateEarliestYear(int newEarliestYear) {
+        earliestYear = newEarliestYear;
+    }
 
     /**
      * Sets the viewport minimum location for filtering crash data.
@@ -328,6 +339,10 @@ public class FilterManager {
 
         if (getEarliestYear() != null) {
             where.add(startOfClauses.get("crash_year") + getEarliestYear());
+        }
+
+        if (getLatestYear() != null) {
+            where.add("crash_year BETWEEN " + getEarliestYear() + " AND "+ getLatestYear());
         }
 
         if (getWeathersSelected().size() > 0) {
