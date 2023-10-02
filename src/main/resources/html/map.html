@@ -66,7 +66,7 @@
         var cfg = {
             // radius should be small ONLY if scaleRadius is true (or small radius is intended)
             // if scaleRadius is false it will be the constant radius used in pixels
-            "radius": 0.1,
+            'radius': .1,
             "maxOpacity": .4,
             // scales the radius based on map zoom
             "scaleRadius": true,
@@ -105,20 +105,51 @@
             zoom: 5.5,
             layers:[baseLayer]
         };
-        heatmapLayer.setData(testData);
-
         map = new L.map('map', mapOptions);
 
+
+
+        heatmapLayer.setData(testData);
+
+
+        map.on('zoomend', function() {
+            adjustHeatmapRadiusBasedOnZoom();
+        });
         updateView();
         setInterval(updateView, 500);
+
     }
 
+    function adjustHeatmapRadiusBasedOnZoom() {
+        let zoomLevel = map.getZoom();
+
+        let newRadius;
+        if (zoomLevel >= 17) {
+            newRadius = 0.0002;  // For street-level detail
+        } else if (zoomLevel >= 15 && zoomLevel < 17) {
+            newRadius = 0.001; // For street-level detail
+        } else if (zoomLevel >= 13) {
+            newRadius = 0.005;  // For neighborhood-level detail
+        }
+        else if (zoomLevel >= 10) {
+            newRadius = 0.01;  // For neighborhood-level detail
+        }  else {
+            newRadius = 0.1;  // For city-level detail
+        }
+
+        heatmapLayer.cfg.radius=newRadius;
+        heatmapLayer._update();
+    }
+
+
     function automaticViewChange() {
+
         var zoomLevel = map.getZoom();
+
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
+        if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
 
