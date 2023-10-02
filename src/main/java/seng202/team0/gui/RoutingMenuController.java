@@ -12,10 +12,12 @@ import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.FavouriteDAO;
+import seng202.team0.repository.SQLiteQueryBuilder;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Filter;
 
 public class RoutingMenuController implements Initializable {
 
@@ -218,6 +220,85 @@ public class RoutingMenuController implements Initializable {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c;
+    }
+
+    /**
+     * Takes in two locations of a start and end location and queries the database
+     * for an average severity of crashes within a 1km radius along the line between
+     * the two locations
+     * @param startLocation location the route segment starts at
+     * @param endLocation location the route segment ends at
+     * @return double of average severity
+     */
+    public double crossProductQuery(Location startLocation, Location endLocation) {
+        double start_long_rad = Math.toRadians(startLocation.longitude);
+        double start_lat_rad = Math.toRadians(startLocation.latitude);
+        double end_long_rad = Math.toRadians(endLocation.longitude);
+        double end_lat_rad = Math.toRadians(endLocation.latitude);
+
+        double start_x = Math.cos(start_lat_rad) * Math.cos(start_long_rad);
+        double start_y = Math.cos(start_lat_rad) * Math.sin(start_long_rad);
+        double start_z = Math.sin(start_lat_rad);
+
+        double end_x = Math.cos(end_lat_rad) * Math.cos(end_long_rad);
+        double end_y = Math.cos(end_lat_rad) * Math.sin(end_long_rad);
+        double end_z = Math.sin(end_lat_rad);
+
+        Map<String, Number> constantsTable = new LinkedHashMap<>();
+        constantsTable.put("start_x", start_x);
+        constantsTable.put("start_y", start_y);
+        constantsTable.put("start_z", start_z);
+        constantsTable.put("end_x", end_x);
+        constantsTable.put("end_y", end_y);
+        constantsTable.put("end_z", end_z);
+
+        double minLon = Math.min(startLocation.longitude, endLocation.longitude);
+        double maxLon = Math.max(startLocation.longitude, endLocation.longitude);
+        double minLat = Math.min(startLocation.latitude, endLocation.latitude);
+        double maxLat = Math.max(startLocation.latitude, endLocation.latitude);
+
+        // One kilometre in degrees
+        double oneKilometreInDegrees = 0.008;
+        double distance = 1;
+
+        String tableName = "locations";
+        String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
+                                + tableName + ".start_y) * (" + tableName + ".end_z - " + tableName + ".start_z) - (SIN(RADIANS(latitude)) - "
+                                + tableName + ".start_z) * (" + tableName + ".end_y - " + tableName + ".start_y), 2) + POWER((SIN(RADIANS(latitude)) - "
+                                + tableName + ".start_z) * (" + tableName + ".end_x - " + tableName + ".start_x) - (COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
+                                + tableName + ".start_x) * (" + tableName + ".end_z - " + tableName + ".start_z), 2) + POWER((COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
+                                + tableName + ".start_x) * (" + tableName + ".end_y - " + tableName + ".start_y) - (COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
+                                + tableName + ".start_y) * (" + tableName + ".end_x - " + tableName + ".start_x), 2))";
+        String lineMagnitude = "SQRT(POWER(" + tableName + ".end_x - " + tableName + ".start_x, 2) + POWER("
+                                + tableName + ".end_y - " + tableName + ".start_y, 2) + POWER("
+                                + tableName + ".end_z - " + tableName + ".start_z, 2))";
+        String aSinTheta = "(ASIN(" + crossProductMagnitude + "/" + lineMagnitude + ")";
+        String worldDistance = aSinTheta + " * 6371.0) <= " + distance;
+
+        FilterManager filterManager = FilterManager.getInstance();
+        Location previousMin = filterManager.getViewPortMin();
+        Location previousMax = filterManager.getViewPortMax();
+
+        filterManager.setViewPortMin(new Location(minLat - oneKilometreInDegrees, minLon - oneKilometreInDegrees));
+        filterManager.setViewPortMax(new Location(maxLat + oneKilometreInDegrees, maxLon + oneKilometreInDegrees));
+
+        String filterWhere = filterManager.toString();
+
+        filterManager.setViewPortMin(previousMin);
+        filterManager.setViewPortMax(previousMax);
+
+        String select = "AVG(severity)";
+        String from = "crashes";
+        String where = filterWhere + " AND " + worldDistance;
+
+        List severityList = SQLiteQueryBuilder.create()
+                            .with(tableName, constantsTable)
+                            .select(select)
+                            .from(from)
+                            .where(where)
+                            .build();
+
+        return (double) severityList.get(0);
     }
 
     @FXML

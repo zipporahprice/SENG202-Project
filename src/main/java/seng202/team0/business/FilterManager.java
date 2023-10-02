@@ -230,11 +230,10 @@ public class FilterManager {
     /**
      * Sets the viewport minimum location for filtering crash data.
      *
-     * @param minLatitude minimum latitude of viewport
-     * @param minLongitude minimum longitude of viewport
+     * @param minimum Location object of minimum latitude and longitude
      */
-    public void setViewPortMin(double minLatitude, double minLongitude) {
-        viewPortMin = new Location(minLatitude, minLongitude);
+    public void setViewPortMin(Location minimum) {
+        viewPortMin = minimum;
     }
 
     /**
@@ -247,11 +246,10 @@ public class FilterManager {
     /**
      * Sets the viewport maximum location for filtering crash data.
      *
-     * @param maxLatitude maximum latitude of viewport
-     * @param maxLongitude maximum longitude of viewport
+     * @param maximum Location object of maximum latitude and longitude
      */
-    public void setViewPortMax(double maxLatitude, double maxLongitude) {
-        viewPortMax = new Location(maxLatitude, maxLongitude);
+    public void setViewPortMax(Location maximum) {
+        viewPortMax = maximum;
     }
 
     /**
@@ -314,6 +312,12 @@ public class FilterManager {
     public String toString() {
         List<String> where = new ArrayList<>();
 
+        if (viewPortMin != null && viewPortMax != null) {
+            where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
+                    + viewPortMin.longitude + " AND maxX <= " + viewPortMax.longitude + " AND minY >= "
+                    + viewPortMin.latitude + " AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
+        }
+
         if (getSeveritiesSelected().size() > 0) {
             where.add(startOfClauses.get("severity") +
                     getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
@@ -346,12 +350,6 @@ public class FilterManager {
             where.add(startOfClauses.get("holiday") +
                     getHolidaysSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
                     + CLOSE_PARENTHESES);
-        }
-
-        if (viewPortMin != null && viewPortMax != null) {
-            where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
-                    + viewPortMin.longitude + " AND maxX <= " + viewPortMax.longitude + " AND minY >= "
-                    + viewPortMin.latitude + " AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
         }
 
         // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine

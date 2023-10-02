@@ -4,9 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Builder class of SQL queries for the SQLite database.
@@ -45,6 +44,28 @@ public class SQLiteQueryBuilder {
      */
     public static SQLiteQueryBuilder create() {
         return new SQLiteQueryBuilder();
+    }
+
+    /**
+     * Takes a table name and a mapping from variable name to variable and appends
+     * a 'WITH' statement to the current query.
+     * @param tableName name of the Common Table Expression
+     * @param valuesMap Map object mapping from variable name and to variable value.
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
+    public SQLiteQueryBuilder with(String tableName, Map<String, Number> valuesMap) {
+        StringJoiner variableNames = new StringJoiner(", ");
+        StringJoiner variableValues = new StringJoiner(", ");
+
+        for (Map.Entry<String, Number> entry : valuesMap.entrySet()) {
+            variableNames.add(entry.getKey());
+            variableValues.add(String.valueOf(entry.getValue()));
+        }
+
+        query.append("WITH ").append(tableName).append("(")
+                .append(variableNames).append(") AS (VALUES (").append(variableValues).append(")) ");
+
+        return this;
     }
 
     /**
