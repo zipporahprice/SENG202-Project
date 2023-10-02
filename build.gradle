@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id "org.openjfx.javafxplugin" version "0.0.14"
     id 'jacoco'
+    id 'checkstyle'
 }
 
 archivesBaseName = 'seng202_teamX'
@@ -98,6 +99,19 @@ application {
     mainClass = "${mainClassName}"
 }
 
+checkstyle {
+    toolVersion '10.12.4'
+    configFile file("config/checkstyle/google_checks.xml")
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
 javafx {
     version = "${javafxVersion}"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
@@ -135,6 +149,14 @@ tasks.named("check") {
     dependsOn test, cucumber
 
     finalizedBy jacocoTestReport
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        html.required = true
+        xml.required = false
+        html.stylesheet resources.text.fromFile('config/checkstyle/checkstyle-noframes-severity-sorted.xsl')
+    }
 }
 
 jar {
