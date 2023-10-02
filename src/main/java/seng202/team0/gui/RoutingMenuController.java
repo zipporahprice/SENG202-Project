@@ -43,7 +43,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
-                System.out.println("Selected: " + selectedItem);
                 try {
                     loadRoute();  // Assuming this method uses the selected item
                 } catch (SQLException e) {
@@ -113,7 +112,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
-        System.out.println(favouriteID);
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);

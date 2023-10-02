@@ -95,7 +95,7 @@ public class MainController {
             mainWindow.getChildren().add(helpViewParent);
             AnchorPane.setRightAnchor(helpViewParent,0d);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

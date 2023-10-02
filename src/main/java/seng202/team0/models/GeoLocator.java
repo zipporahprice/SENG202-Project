@@ -32,7 +32,7 @@ public class GeoLocator {
 
     public Location getLocation(String address) {
         String logMessage = String.format("Requesting geolocation from Nominatim for address: %s, New Zealand", address);
-        System.out.println(logMessage);
+        log.error(logMessage);
         address = address.replace(' ', '+');
         try {
             // Creating the http request
