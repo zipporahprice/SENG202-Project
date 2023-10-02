@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.business.RouteManager;
+import seng202.team0.business.SettingsManager;
 import seng202.team0.gui.MainWindow;
 import seng202.team0.io.CrashCSVImporter;
 import seng202.team0.repository.DatabaseManager;
@@ -48,6 +50,12 @@ public class App {
 
         // Initialise FilterManager singleton class
         FilterManager.getInstance();
+
+        // Initialise RouteManager singleton class
+        RouteManager.getInstance();
+
+        // Initialise SettingsManager singleton class
+        SettingsManager.getInstance();
 
         // Initialises GUI
         MainWindow.main(args);

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -38,6 +39,7 @@ public class MainController {
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
+    private MenuController controller;
 
 
     /**
@@ -105,6 +107,10 @@ public class MainController {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
+            if (!menuPopulated.equals("empty")) {
+                controller = loader.getController();
+            }
+
         } catch (IOException ioException) {
             log.error(ioException);
         }
@@ -117,18 +123,26 @@ public class MainController {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
+        if (!menuPopulated.equals("empty")) {
+            controller.updateManager();
+        }
+
         if (Objects.equals(menuPopulated, menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
             menuPopulated = "empty";
+            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
+
         } else if (Objects.equals("routing", menuChoice)) {
+            menuPopulated = menuChoice;
             loadMenuDisplayFromFXML("/fxml/routing_menu.fxml");
-            menuPopulated = menuChoice;
+
         } else if (Objects.equals("filtering", menuChoice)) {
+            menuPopulated = menuChoice;
             loadMenuDisplayFromFXML("/fxml/filtering_menu.fxml");
-            menuPopulated = menuChoice;
+
         } else if (Objects.equals("settings", menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
             menuPopulated = menuChoice;
+            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
+
         }
 
     }
