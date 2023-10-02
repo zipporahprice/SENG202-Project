@@ -119,6 +119,4 @@ public class JavaScriptBridge {
         filterManager.setViewPortMin(minLatitude, minLongitude);
         filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
-
-    public void outputPrint(String printing) { System.out.println(printing);}
 }
