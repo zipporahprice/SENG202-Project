@@ -219,7 +219,6 @@ function setData() {
 
     for (var i = 0; i < crashes.length; i++) {
         var a = crashes[i];
-        javaScriptBridge.outputPrint(a.crash_year);
         var severity = getSeverityStringFromValue(a.severity);
         var markerIcon = getMarkerIcon(a.severity);
         var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity, icon: markerIcon });
