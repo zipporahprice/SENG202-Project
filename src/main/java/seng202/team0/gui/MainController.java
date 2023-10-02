@@ -99,6 +99,19 @@ public class MainController {
         }
     }
 
+    public void loadGraphs() {
+        try {
+            FXMLLoader graphsLoader = new FXMLLoader(getClass().getResource("/fxml/graph_window.fxml"));
+            Parent graphsViewParent = graphsLoader.load();
+
+            mainWindow.getChildren().clear();
+            mainWindow.getChildren().add(graphsViewParent);
+            AnchorPane.setRightAnchor(graphsViewParent, 0d);
+        } catch (IOException e) {
+            log.error(e);
+        }
+    }
+
     /**
      * Loads menu display in FXML file into menuDisplayPane
      */
