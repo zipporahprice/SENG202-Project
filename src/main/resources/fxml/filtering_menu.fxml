@@ -89,13 +89,13 @@
             <Label layoutX="90.0" layoutY="14.0" text="Date Range" textFill="WHITE" />
 
             <!-- Slider for selecting the starting date between 2000 - 2023 -->
-            <Slider fx:id="startDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="45.0" max="2023" min="2000" onDragDone="#sliderStartValueChange" onKeyReleased="#sliderStartValueChange" onMouseDragged="#sliderStartValueChange" prefWidth="222.0" value="2010.0" />
+            <Slider fx:id="startDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="45.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2010.0" />
             <Label layoutX="14.0" layoutY="29.0" text="2000" textFill="WHITE" />
             <Label fx:id="startYearLabel" layoutX="109.0" layoutY="12.0" text="2010" textFill="WHITE" />
             <Label layoutX="198.0" layoutY="29.0" text="2023" textFill="WHITE" />
 
             <!-- Slider for selecting the ending date between 2000 - 2023 -->
-            <Slider fx:id="endDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="105.0" max="2023" min="2000" onDragDone="#sliderEndValueChange" onKeyReleased="#sliderEndValueChange" onMouseDragged="#sliderEndValueChange" prefWidth="222.0" value="2013.0" />
+            <Slider fx:id="endDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="105.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2013.0" />
             <Label layoutX="14.0" layoutY="89.0" text="2000" textFill="WHITE" />
             <Label fx:id="endYearLabel" layoutX="109.0" layoutY="72.0" text="2013" textFill="WHITE" />
             <Label layoutX="198.0" layoutY="89.0" text="2023" textFill="WHITE" />
@@ -120,7 +120,7 @@
                     <CheckBox fx:id="nelsonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Nelson" textFill="WHITE" userData="Nelson" />
                 </children>
             </VBox>
-            <VBox fx:id="rightRegionVBox" layoutX="143.0" layoutY="76.0" spacing="15.0">
+            <VBox fx:id="rightRegionVBox" layoutX="143.0" layoutY="86.0" spacing="15.0">
                 <children>
                     <CheckBox fx:id="northlandCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Northland" textFill="WHITE" userData="Northland" />
                     <CheckBox fx:id="otagoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Otago" textFill="WHITE" userData="Otago" />
@@ -140,7 +140,7 @@
             </VBox>
         </children>
         <StackPane.margin>
-            <Insets left="590.0" top="132.0" />
+            <Insets left="590.0" top="152.0" />
         </StackPane.margin>
     </AnchorPane>
     <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
@@ -158,7 +158,7 @@
             </VBox>
         </children>
         <StackPane.margin>
-            <Insets left="590.0" top="503.0" />
+            <Insets left="590.0" top="513.0" />
         </StackPane.margin>
     </AnchorPane>
     <Button fx:id="applyFiltersButton" mnemonicParsing="false" disable="true" onAction="#updateDataWithFilters" prefHeight="43.0" prefWidth="500.0" styleClass="inactive-button" stylesheets="@style.css" text="Apply Filters" textFill="WHITE" StackPane.alignment="TOP_LEFT">
@@ -166,7 +166,7 @@
             <Font name="System Bold" size="15.0" />
         </font>
         <StackPane.margin>
-            <Insets left="335.0" top="640.0" />
+            <Insets left="335.0" top="670.0" />
         </StackPane.margin>
     </Button>
 </StackPane>
