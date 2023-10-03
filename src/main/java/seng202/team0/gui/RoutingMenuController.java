@@ -4,12 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.FavouriteDAO;
@@ -18,9 +16,6 @@ import seng202.team0.repository.SQLiteQueryBuilder;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Filter;
-import java.util.stream.Collectors;
 
 public class RoutingMenuController implements Initializable {
 
@@ -306,11 +301,7 @@ public class RoutingMenuController implements Initializable {
         } else {
             return 0;
         }
-//        if (subString.equals("null")) {
-//            return 0;
-//        } else {
-//            return Double.parseDouble(severityString);
-//        }
+
     }
 
     @FXML
@@ -330,13 +321,13 @@ public class RoutingMenuController implements Initializable {
     }
 
     public void updateRatingLabel(String rating) {
-        ratingText.setText(rating);
+        ratingText.setText("Rating: "+ rating);
     }
 
-    public static void doStuff() throws SQLException {
+    public static void ratingUpdate() throws SQLException {
         List<Location> coordinates = JavaScriptBridge.finalOutput;
         double rating = getOverlappingPoints(coordinates);
-        RoutingMenuController.controller.updateRatingLabel(Double.toString(rating));
+        RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating)));
 
     }
 
