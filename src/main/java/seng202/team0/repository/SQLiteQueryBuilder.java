@@ -62,9 +62,11 @@ public class SQLiteQueryBuilder {
             variableValues.add(String.valueOf(entry.getValue()));
         }
 
-        query.append("WITH ").append(tableName).append("(")
-                .append(variableNames).append(") AS (VALUES (").append(variableValues).append(")) ");
-
+        query.append("WITH ").append(tableName).append(" AS (SELECT ")
+                .append(String.join(", ", valuesMap.entrySet().stream()
+                        .map(e -> e.getValue().toString() + " AS " + e.getKey())
+                        .collect(Collectors.toList())))
+                .append(") ");
         return this;
     }
 

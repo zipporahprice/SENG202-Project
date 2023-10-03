@@ -1,5 +1,6 @@
 package seng202.team0.models;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -10,7 +11,7 @@ import seng202.team0.gui.FilteringMenuController;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 import seng202.team0.repository.CrashDAO;
-
+import seng202.team0.gui.RoutingMenuController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,8 @@ import java.util.List;
 public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
+
+    public static List<Location> finalOutput = new ArrayList<>();
 
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
@@ -121,4 +124,43 @@ public class JavaScriptBridge {
         filterManager.setViewPortMin(minimum);
         filterManager.setViewPortMax(maximum);
     }
+
+    public void printOutput(Object string1) {
+        System.out.println(string1);
+    }
+
+    public void sendCoordinates(String coordinatesJson) {
+        JSONParser parser = new JSONParser();
+        try {
+            // Parse the JSON string to a JSONArray
+            Object obj = parser.parse(coordinatesJson);
+            JSONArray jsonArray = (JSONArray) obj;
+
+            // Create a List to hold Coordinate objects
+            List<Location> coordinates = new ArrayList<>();
+
+            // Iterate over the items in the JSONArray
+            for (Object aJsonArray : jsonArray) {
+                // Cast each item in the array to a JSONObject
+                JSONObject coordJson = (JSONObject) aJsonArray;
+
+                // Extract latitude and longitude from the JSONObject
+                double lat = (double) coordJson.get("lat");
+                double lng = (double) coordJson.get("lng");
+
+                // Add a new Coordinate object to the list
+                coordinates.add(new Location(lat, lng)); // Ensure you have a Coordinate class with a constructor that accepts lat and lng
+            }
+
+            // Now you have a List of Coordinates in Java
+            // Do something with the coordinates...
+
+            finalOutput = coordinates;
+            RoutingMenuController.doStuff();
+        } catch (ParseException | SQLException e) {
+            // Handle JSON parsing exceptions
+            e.printStackTrace();
+        }
+    }
+
 }

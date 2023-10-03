@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -17,7 +18,9 @@ import seng202.team0.repository.SQLiteQueryBuilder;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Filter;
+import java.util.stream.Collectors;
 
 public class RoutingMenuController implements Initializable {
 
@@ -37,6 +40,9 @@ public class RoutingMenuController implements Initializable {
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
 
+    private static List<Location> matchedPoints;
+    public static RoutingMenuController controller;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
@@ -52,6 +58,8 @@ public class RoutingMenuController implements Initializable {
                 }
             }
         });
+
+        controller = this;
     }
 
     private void displayRoute(Route... routes) {
@@ -167,37 +175,22 @@ public class RoutingMenuController implements Initializable {
      * segments and crash points using the Haversine formula, and identifies crash points that fall
      * within the specified danger radius of the route segments.
      *
-     * @param route        The route for which overlapping crash points are to be identified.
-     * @param dangerRadius The radius within which crash points are considered overlapping with the route.
      * @return A list of CrashInfo objects representing crash points that overlap with the route.
      * @throws SQLException If an SQL-related error occurs during database query execution.
      */
-    public List<CrashInfo> getOverlappingPoints(Route route, double dangerRadius) throws SQLException {
-        List<CrashInfo> overlappingPoints = new ArrayList<>();
-        CrashManager crashManager = new CrashManager();
-        List<CrashInfo> crashPoints = crashManager.getCrashLocations().stream().map(crash -> {
-            HashMap crash1 = (HashMap) crash;
-            double latitude = (double) crash1.get("latitude");
-            double longitude = (double) crash1.get("longitude");
-            int severity = (int) crash1.get("severity");
-            return new CrashInfo(latitude, longitude, severity);
-        }).toList();
-        for (int i = 0; i < route.route.size() - 1; i++) {
-            Location start = route.route.get(i);
-            Location end = route.route.get(i + 1);
-
-            for (CrashInfo crashPoint : crashPoints) {
-                double distToStart = haversineDistance(start, crashPoint);
-                double distToEnd = haversineDistance(end, crashPoint);
-
-                if (distToStart < dangerRadius || distToEnd < dangerRadius) {
-                    // Check if crash point is along the extended line of the segment
-                    overlappingPoints.add(crashPoint);
-                }
-            }
+    public static double getOverlappingPoints(List<Location> coordinates) throws SQLException {
+        double totalValue = 0;
+        double totalDistance = 0;
+        for (int i = 0; i < coordinates.size()-50; i+=50) {
+            Location segmentStart = coordinates.get(i);
+            Location segmentEnd = coordinates.get(i+50);
+            double distance = haversineDistance(segmentStart, segmentEnd);
+            double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
+            totalDistance += distance;
+            totalValue += averageSeverity / distance;
         }
-
-        return overlappingPoints;
+        //TODO store average severities in a list to look at coloring route segments.
+        return totalValue * totalDistance/10000;
     }
     /**
      * Calculates the Haversine distance between two geographic coordinates using the Haversine formula.
@@ -208,19 +201,21 @@ public class RoutingMenuController implements Initializable {
      * @param loc2 The second location with latitude and longitude coordinates.
      * @return The Haversine distance between the two locations in meters.
      */
-    public double haversineDistance(Location loc1, CrashInfo loc2) {
+    public static double haversineDistance(Location loc1, Location loc2) {
         double R = 6371000; // Earth radius in meters
-        double dLat = Math.toRadians(loc2.lat - loc1.latitude);
-        double dLon = Math.toRadians(loc2.lng - loc1.longitude);
+        double dLat = Math.toRadians(loc2.latitude - loc1.latitude);
+        double dLon = Math.toRadians(loc2.longitude - loc1.longitude);
 
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(loc1.latitude)) * Math.cos(Math.toRadians(loc2.lat))
+                + Math.cos(Math.toRadians(loc1.latitude)) * Math.cos(Math.toRadians(loc2.latitude))
                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c;
     }
+
+
 
     /**
      * Takes in two locations of a start and end location and queries the database
@@ -230,7 +225,7 @@ public class RoutingMenuController implements Initializable {
      * @param endLocation location the route segment ends at
      * @return double of average severity
      */
-    public double crossProductQuery(Location startLocation, Location endLocation) {
+    public static double crossProductQuery(Location startLocation, Location endLocation) {
         double start_long_rad = Math.toRadians(startLocation.longitude);
         double start_lat_rad = Math.toRadians(startLocation.latitude);
         double end_long_rad = Math.toRadians(endLocation.longitude);
@@ -259,7 +254,7 @@ public class RoutingMenuController implements Initializable {
 
         // One kilometre in degrees
         double oneKilometreInDegrees = 0.008;
-        double distance = 1;
+        double distance = haversineDistance(startLocation, endLocation) / 4000;
 
         String tableName = "locations";
         String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
@@ -287,8 +282,8 @@ public class RoutingMenuController implements Initializable {
         filterManager.setViewPortMin(previousMin);
         filterManager.setViewPortMax(previousMax);
 
-        String select = "AVG(severity)";
-        String from = "crashes";
+        String select = "severity";
+        String from = "crashes, locations";
         String where = filterWhere + " AND " + worldDistance;
 
         List severityList = SQLiteQueryBuilder.create()
@@ -297,8 +292,25 @@ public class RoutingMenuController implements Initializable {
                             .from(from)
                             .where(where)
                             .build();
+        int totalSeverity = 0;
+        double total = 0;
 
-        return (double) severityList.get(0);
+        for (Object severityMap : severityList) {
+             HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
+             totalSeverity += (int) map.get("severity");
+             total += 1;
+        }
+
+        if (total > 0) {
+            return totalSeverity / total;
+        } else {
+            return 0;
+        }
+//        if (subString.equals("null")) {
+//            return 0;
+//        } else {
+//            return Double.parseDouble(severityString);
+//        }
     }
 
     @FXML
@@ -313,32 +325,23 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
-            int total = ratingGenerator(crashInfos);
-            ratingText.setText("Danger: "+ total + "/5");
-            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(route);
         }
     }
 
-
-    private int ratingGenerator(List<CrashInfo> crashInfos) {
-        int total = 0;
-        for (CrashInfo crash: crashInfos) {
-            total += crash.severity;
-        }
-        if (crashInfos.size() == 0) {
-            total = (total*10) - 10;
-        } else {
-            total = (total*10 / crashInfos.size()) - 10;
-        }
-        if (total > 5) {
-            total = 5;
-        } else if (total < 0) {
-            total = 0;
-        }
-        return total;
+    public void updateRatingLabel(String rating) {
+        ratingText.setText(rating);
     }
+
+    public static void doStuff() throws SQLException {
+        List<Location> coordinates = JavaScriptBridge.finalOutput;
+        double rating = getOverlappingPoints(coordinates);
+        RoutingMenuController.controller.updateRatingLabel(Double.toString(rating));
+
+    }
+
+
+
 
 
     private void generateRouteAction(Favourite favourite) throws SQLException {
@@ -352,11 +355,10 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
-            int total = ratingGenerator(crashInfos);
             displayRoute(route);
-            ratingText.setText("Danger: "+ total + "/5");
-            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
+            List<Location> coordinates = JavaScriptBridge.finalOutput;
+            double rating = getOverlappingPoints(coordinates);
+            ratingText.setText("Danger: "+ rating + "/5");
         }
     }
 

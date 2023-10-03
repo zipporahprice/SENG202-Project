@@ -147,19 +147,30 @@ function displayRoute(routesIn) {
     removeRoute();
 
     var routesArray = JSON.parse(routesIn);
-    console.log(routesArray);
 
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
-        console.log(waypoints);
         var newRoute = L.Routing.control({
             waypoints: waypoints,
             routeWhileDragging: true
         }).addTo(map);
+
+        newRoute.on('routeselected', function (e) {
+            var route = e.route;
+            var coordinates = route.coordinates;
+
+            // Convert coordinates array to JSON string
+            var coordinatesJson = JSON.stringify(coordinates);
+
+            // Send JSON string to Java via the bridge
+            javaScriptBridge.sendCoordinates(coordinatesJson);
+        });
+
         routes.push(newRoute);
     });
 }
+
 
 /**
  * Removes the current route being displayed (will not do anything if there is no route currently displayed)
