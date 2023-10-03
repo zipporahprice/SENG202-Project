@@ -59,12 +59,35 @@ function initMap() {
     updateView();
     map.on('zoomend', updateDataShown);
     map.on('moveend', updateDataShown);
+
 }
 
 function updateDataShown() {
+
     setFilteringViewport();
     setData();
     updateView();
+}
+
+function adjustHeatmapRadiusBasedOnZoom() {
+    let zoomLevel = map.getZoom();
+
+    let newRadius;
+    if (zoomLevel >= 17) {
+        newRadius = 0.0002;  // For street-level detail
+    } else if (zoomLevel >= 15 && zoomLevel < 17) {
+        newRadius = 0.001; // For street-level detail
+    } else if (zoomLevel >= 13) {
+        newRadius = 0.005;  // For neighborhood-level detail
+    }
+    else if (zoomLevel >= 10) {
+        newRadius = 0.01;  // For neighborhood-level detail
+    }  else {
+        newRadius = 0.1;  // For city-level detail
+    }
+
+    heatmapLayer.cfg.radius=newRadius;
+
 }
 
 function setFilteringViewport() {
@@ -77,23 +100,13 @@ function setFilteringViewport() {
 }
 
 function automaticViewChange() {
-    var zoomLevel = map.getZoom();
-    if (zoomLevel >= 12) {
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
-        }
-    }
-    else {
+
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
-        }
-    }
 }
 
 /**
@@ -110,12 +123,13 @@ function updateView() {
         automaticViewChange();
         map.on('zoomend', automaticViewChange);
     } else if (currentView === "Heatmap") {
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
+
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
         map.addLayer(heatmapLayer);
-        heatmapLayer.setData(testData);
     } else {
         map.off('zoomend', automaticViewChange);
         if (map.hasLayer(heatmapLayer)) {
