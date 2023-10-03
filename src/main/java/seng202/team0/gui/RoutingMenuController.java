@@ -56,7 +56,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), "bicycle");
     }
 
     /**
