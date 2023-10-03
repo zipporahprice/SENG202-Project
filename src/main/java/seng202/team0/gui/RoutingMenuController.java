@@ -45,6 +45,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
+        carButton.setUserData("car");
+        bikeButton.setUserData("bike");
+        walkingButton.setUserData("walking");
 
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
@@ -59,10 +62,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    private void displayRoute(Route... routes) { // String transportMode,
+    private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), "walking"); // transportMode
+        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), modeChoice);
     }
 
     /**
@@ -128,7 +131,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             // Generates a route and makes sure stops is cleared
             stops.clear();
-            generateRouteAction(favourite); // , transportMode);
+            generateRouteAction(favourite);
 
             startLocation.setText(favourite.getStartAddress());
             endLocation.setText(favourite.getEndAddress());
@@ -230,7 +233,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void generateRouteAction() throws SQLException {
         Location start = getStart();
         Location end = getEnd();
-        // String transportMode = getMode();
 
         if (start != null && end != null) {
             List<Location> routeLocations = new ArrayList<>();
@@ -243,12 +245,8 @@ public class RoutingMenuController implements Initializable, MenuController {
             int total = ratingGenerator(crashInfos);
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-            displayRoute(route); //, transportMode); // TODO
+            displayRoute(route);
         }
-    }
-
-    private void getMode() {
-        // TODO get the transport mode from the gui (add to gui)
     }
 
     private int ratingGenerator(List<CrashInfo> crashInfos) {
@@ -283,27 +281,42 @@ public class RoutingMenuController implements Initializable, MenuController {
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
             int total = ratingGenerator(crashInfos);
-            displayRoute(route); //, transportMode); // TODO
+            displayRoute(route);
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
         }
     }
 
+    /**
+     * Toggles between the transport mode buttons.
+     * When one button is selected, the previously selected button (if any) is deselected.
+     *
+     * @param event
+     */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
-        String modeChoice = (String) chosenButton.getUserData();
+        modeChoice = (String) chosenButton.getUserData();
 
         if (Objects.equals(chosenButton, selectedButton)) {
-            selectedButton = null; // deselects button
+            selectedButton = null;
             chosenButton.getStyleClass().remove("clickedButtonColor");
-            chosenButton.getStyleClass().add("sideBarColor");
+            chosenButton.getStyleClass().add("hamburgerStyle");
+        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton!=null) {
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("hamburgerStyle");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("hamburgerStyle");
+            chosenButton.getStyleClass().add("clickedButtonColor");
         } else {
-            selectedButton = chosenButton; // selects a different button
-            chosenButton.getStyleClass().remove("sideBarColor");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
         }
     }
 
+    /**
+     * Loads the route data stored from the RouteManager into the routing menu.
+     */
     @Override
     public void loadManager() {
         RouteManager route = RouteManager.getInstance();
@@ -319,6 +332,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         stopLocation.setText(stopLoc);
     }
 
+    /**
+     * Updates the RouteManager's stored data with data currently in the routing menu.
+     */
     @Override
     public void updateManager() {
         RouteManager route = RouteManager.getInstance();

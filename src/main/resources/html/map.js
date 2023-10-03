@@ -171,7 +171,7 @@ function getMode(transportMode) {
         case "car":
             mode = 'mapbox/driving';
             break;
-        case "bicycle":
+        case "bike":
             mode = 'mapbox/cycling';
             break;
         case "walking":

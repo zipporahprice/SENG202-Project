@@ -82,7 +82,7 @@
                 <Insets left="335.0" top="540.0" />
             </StackPane.margin>
         </AnchorPane>
-      <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="sideBarColor" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+      <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
 
           <graphic>
               <ImageView fitHeight="40.0" fitWidth="44.0" preserveRatio="true">
@@ -95,7 +95,7 @@
               <Insets left="335.0" top="10.0" />
           </StackPane.margin>
       </Button>
-      <Button id="bikeButton" fx:id="bikeButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="sideBarColor" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+      <Button id="bikeButton" fx:id="bikeButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <graphic>
             <ImageView fitHeight="48.0" fitWidth="62.0" preserveRatio="true">
                <image>
@@ -107,7 +107,7 @@
             <Insets left="430.0" top="10.0" />
          </StackPane.margin>
       </Button>
-      <Button id="walkingButton" fx:id="walkingButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="sideBarColor" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+      <Button id="walkingButton" fx:id="walkingButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <graphic>
             <ImageView fitHeight="52.0" fitWidth="49.0" preserveRatio="true">
                <image>
