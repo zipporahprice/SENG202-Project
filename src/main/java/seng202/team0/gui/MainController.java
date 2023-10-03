@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -27,7 +28,8 @@ import java.util.Objects;
 public class MainController {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
-    public WebView webView;
+    @FXML
+    private WebView webView;
     @FXML
     private StackPane mainWindow;
     private Stage stage;
@@ -37,6 +39,7 @@ public class MainController {
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
+    private MenuController controller;
 
 
     /**
@@ -52,14 +55,11 @@ public class MainController {
      */
     void init(Stage stage) {
         this.stage = stage;
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(1000);
+        stage.setMinHeight(800);
         stage.setMaximized(true);
-        mapController = new MapController();
-        mapController.setWebView(webView);
-        mapController.init(stage);
-
         stage.sizeToScene();
+
         webEngine = webView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -68,6 +68,10 @@ public class MainController {
                         javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
                     }
                 });
+
+        mapController = new MapController();
+        mapController.setWebView(webView);
+        mapController.init(stage);
 
         loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
     }
@@ -91,7 +95,20 @@ public class MainController {
             mainWindow.getChildren().add(helpViewParent);
             AnchorPane.setRightAnchor(helpViewParent,0d);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
+        }
+    }
+
+    public void loadGraphs() {
+        try {
+            FXMLLoader graphsLoader = new FXMLLoader(getClass().getResource("/fxml/graph_window.fxml"));
+            Parent graphsViewParent = graphsLoader.load();
+
+            mainWindow.getChildren().clear();
+            mainWindow.getChildren().add(graphsViewParent);
+            AnchorPane.setRightAnchor(graphsViewParent, 0d);
+        } catch (IOException e) {
+            log.error(e);
         }
     }
 
@@ -103,6 +120,10 @@ public class MainController {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+                controller = loader.getController();
+            }
+
         } catch (IOException ioException) {
             log.error(ioException);
         }
@@ -115,18 +136,29 @@ public class MainController {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+            controller.updateManager();
+        }
+
         if (Objects.equals(menuPopulated, menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
             menuPopulated = "empty";
+            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
+
         } else if (Objects.equals("routing", menuChoice)) {
+            menuPopulated = menuChoice;
             loadMenuDisplayFromFXML("/fxml/routing_menu.fxml");
-            menuPopulated = menuChoice;
+
         } else if (Objects.equals("filtering", menuChoice)) {
+            menuPopulated = menuChoice;
             loadMenuDisplayFromFXML("/fxml/filtering_menu.fxml");
-            menuPopulated = menuChoice;
+
         } else if (Objects.equals("settings", menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
             menuPopulated = menuChoice;
+            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
+
+        } else if (Objects.equals("import", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFXML("/fxml/import_window.fxml");
         }
 
     }

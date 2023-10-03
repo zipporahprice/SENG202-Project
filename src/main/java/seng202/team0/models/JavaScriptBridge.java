@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.gui.FilteringMenuController;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 import seng202.team0.repository.CrashDAO;
@@ -49,7 +50,7 @@ public class JavaScriptBridge {
                 double latitude = (double) crash1.get("latitude");
                 double longitude = (double) crash1.get("longitude");
                 int severity = (int) crash1.get("severity");
-                String year = (String) crash1.get("year");
+                String year = Integer.toString((Integer) crash1.get("crash_year"));
                 String weather = (String) crash1.get("weather");
                 return new CrashInfo(latitude, longitude, severity, year, weather);
             }
@@ -103,5 +104,19 @@ public class JavaScriptBridge {
      */
     public String currentView() {
         return SettingsMenuController.currentView;
+    }
+
+    /**
+     * Sets the viewport variables in the FilterManager singleton class.
+     * @param minLatitude minimum latitude of the map view
+     * @param minLongitude minimum longitude of the map view
+     * @param maxLatitude maximum latitude of the map view
+     * @param maxLongitude maximum longitude of the map view
+     */
+    public void setFilterManagerViewport(double minLatitude, double minLongitude,
+                                         double maxLatitude, double maxLongitude) {
+        FilterManager filterManager = FilterManager.getInstance();
+        filterManager.setViewPortMin(minLatitude, minLongitude);
+        filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
 }

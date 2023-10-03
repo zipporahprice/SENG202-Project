@@ -1,6 +1,7 @@
 package seng202.team0.business;
 
 import seng202.team0.models.CrashSeverity;
+import seng202.team0.models.Location;
 import seng202.team0.models.Region;
 import seng202.team0.models.Weather;
 
@@ -36,16 +37,20 @@ public class FilterManager {
         put("weather", "weather IN (");
         put("region", "region IN (");
         put("holiday", "holiday IN (");
+        put("viewport", "object_id IN (");
     }};
 
     // Singleton instance of FilterManager
     private static FilterManager filters;
     private List<Integer> severitiesSelected;
     private Integer earliestYear;
+    private Integer latestYear;
     private List<String> modesSelected;
     private List<String> weathersSelected;
     private List<String> regionsSelected;
     private List<Integer> holidaysSelected;
+    private Location viewPortMin;
+    private Location viewPortMax;
 
     /**
      * Initializer of the FilterManager class that populates the filters
@@ -58,6 +63,8 @@ public class FilterManager {
         );
 
         earliestYear = 2000;
+
+        latestYear = 2020;
 
         modesSelected = new ArrayList<>(Arrays.asList(
                 "bicycle_involved",
@@ -125,12 +132,16 @@ public class FilterManager {
      */
     public Integer getEarliestYear() { return earliestYear; }
 
+    public Integer getLatestYear() { return latestYear; }
+
     /**
      * Sets the earliest year for filtering crash data.
      *
      * @param year The earliest year to set.
      */
     public void setEarliestYear(Integer year) { earliestYear = year; }
+
+    public void setLatestYear(Integer year) { latestYear = year; }
 
     /**
      * Retrieves the list of selected transportation modes for filtering crash data.
@@ -217,6 +228,44 @@ public class FilterManager {
     public void removeFromHolidays(int holiday) { holidaysSelected.remove(holiday); }
 
     /**
+     * Retrieves the location for the minimum point of the viewport for filtering crash data.
+     *
+     * @return A location of (minLatitude, minLongitude).
+     */
+    public Location getViewPortMin() { return this.viewPortMin; }
+
+    public void updateEarliestYear(int newEarliestYear) {
+        earliestYear = newEarliestYear;
+    }
+
+    /**
+     * Sets the viewport minimum location for filtering crash data.
+     *
+     * @param minLatitude minimum latitude of viewport
+     * @param minLongitude minimum longitude of viewport
+     */
+    public void setViewPortMin(double minLatitude, double minLongitude) {
+        viewPortMin = new Location(minLatitude, minLongitude);
+    }
+
+    /**
+     * Retrieves the location for the minimum point of the viewport for filtering crash data.
+     *
+     * @return A location of (maxLatitude, maxLongitude).
+     */
+    public Location getViewPortMax() { return this.viewPortMax; }
+
+    /**
+     * Sets the viewport maximum location for filtering crash data.
+     *
+     * @param maxLatitude maximum latitude of viewport
+     * @param maxLongitude maximum longitude of viewport
+     */
+    public void setViewPortMax(double maxLatitude, double maxLongitude) {
+        viewPortMax = new Location(maxLatitude, maxLongitude);
+    }
+
+    /**
      * Updates the filters based on a query string.
      * This method clears all existing filter lists and updates them with the filter values
      * extracted from the provided query string.
@@ -288,8 +337,8 @@ public class FilterManager {
 
         }
 
-        if (getEarliestYear() != null) {
-            where.add(startOfClauses.get("crash_year") + getEarliestYear());
+        if (getLatestYear() != null) {
+            where.add("crash_year BETWEEN " + getEarliestYear() + " AND "+ getLatestYear());
         }
 
         if (getWeathersSelected().size() > 0) {
@@ -310,9 +359,15 @@ public class FilterManager {
                     + CLOSE_PARENTHESES);
         }
 
-        // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
-        if (modesSelected.size() == 0 || severitiesSelected.size() == 0 || weathersSelected.size() == 0
-                || regionsSelected.size() == 0 || holidaysSelected.size() == 0) {
+        if (viewPortMin != null && viewPortMax != null) {
+            where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
+                    + viewPortMin.longitude + " AND maxX <= " + viewPortMax.longitude + " AND minY >= "
+                    + viewPortMin.latitude + " AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
+        }
+
+        // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
+        if (modesSelected.isEmpty() || severitiesSelected.isEmpty() || weathersSelected.isEmpty()
+                || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
             return "1 = 0";
         } else {
             return String.join(AND, where);

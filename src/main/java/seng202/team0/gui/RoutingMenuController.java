@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.business.RouteManager;
 import seng202.team0.models.*;
 import seng202.team0.repository.FavouriteDAO;
 
@@ -17,7 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-public class RoutingMenuController implements Initializable {
+public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private TextField startLocation;
@@ -42,7 +43,6 @@ public class RoutingMenuController implements Initializable {
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
-                System.out.println("Selected: " + selectedItem);
                 try {
                     loadRoute();  // Assuming this method uses the selected item
                 } catch (SQLException e) {
@@ -50,6 +50,7 @@ public class RoutingMenuController implements Initializable {
                 }
             }
         });
+        loadManager();
     }
 
     private void displayRoute(Route... routes) {
@@ -111,7 +112,6 @@ public class RoutingMenuController implements Initializable {
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
-        System.out.println(favouriteID);
         if (favouriteID != 0 && favouriteID != -1) {
             FavouriteDAO favourites = new FavouriteDAO();
             Favourite favourite = favourites.getOne(favouriteID);
@@ -277,6 +277,29 @@ public class RoutingMenuController implements Initializable {
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
         }
+    }
+
+    @Override
+    public void loadManager() {
+        RouteManager route = RouteManager.getInstance();
+
+        // retrieve all updated location data
+        String startLoc = route.getStartLocation();
+        String endLoc = route.getEndLocation();
+        String stopLoc = route.getStopLocation();
+
+        // update textFields according to data
+        startLocation.setText(startLoc);
+        endLocation.setText(endLoc);
+        stopLocation.setText(stopLoc);
+    }
+
+    @Override
+    public void updateManager() {
+        RouteManager route = RouteManager.getInstance();
+        route.setStartLocation(startLocation.getText());
+        route.setEndLocation(endLocation.getText());
+        route.setStopLocation(stopLocation.getText());
     }
 
 }
