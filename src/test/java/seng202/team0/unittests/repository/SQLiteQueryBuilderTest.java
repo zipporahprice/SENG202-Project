@@ -52,7 +52,7 @@ public class SQLiteQueryBuilderTest {
         map.put("end_lat", 83.68);
         map.put("end_long", 94.92);
 
-        String expectedQuery = "WITH constants(start_lat, start_long, end_lat, end_long) AS (VALUES (53.15, 52.15, 83.68, 94.92)) ";
+        String expectedQuery = "WITH constants AS (SELECT 53.15 AS start_lat, 52.15 AS start_long, 83.68 AS end_lat, 94.92 AS end_long) ";
         String query = builder.with("constants", map).getQuery();
         Assertions.assertEquals(expectedQuery, query);
     }

@@ -356,9 +356,7 @@ public class RoutingMenuController implements Initializable {
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
-            List<Location> coordinates = JavaScriptBridge.finalOutput;
-            double rating = getOverlappingPoints(coordinates);
-            ratingText.setText("Danger: "+ rating + "/5");
+
         }
     }
 
