@@ -30,8 +30,8 @@ public class GeoLocator {
      * @param address user input to find latitude and longitude for
      */
 
-    public Location getLocation(String address) { // takes string address from gui text box, put in mode
-        String logMessage = String.format("Requesting geolocation from Nominatim for address: %s, New Zealand", address); // + transport mode?
+    public Location getLocation(String address) {
+        String logMessage = String.format("Requesting geolocation from Nominatim for address: %s, New Zealand", address);
         log.error(logMessage);
         address = address.replace(' ', '+');
         try {
@@ -61,7 +61,7 @@ public class GeoLocator {
             log.error(ie);
             Thread.currentThread().interrupt();
         }
-        return new Location(0d, 0d); // location is the lat and long of the address
+        return new Location(0d, 0d);
     }
 
     private void showErrorAlert(String title, String message) {

@@ -149,36 +149,39 @@ function displayRoute(routesIn, transportMode) {
     var routesArray = JSON.parse(routesIn);
     console.log(routesArray);
 
+    var mode = getMode(transportMode);
 
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
 
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
         console.log(waypoints);
-        ////
-        var mode;
-        switch (transportMode) {
-            case "car":
-                mode = 'mapbox/driving';
-                break;
-            case "bicycle":
-                mode = 'mapbox/cycling';
-                break;
-            case "walking":
-                mode = 'mapbox/walking';
-                break;
-            default:
-                mode = 'mapbox/driving';
-                break;
-        }
         var newRoute = L.Routing.control({
             waypoints: waypoints,
             routeWhileDragging: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode })
-            /////
         }).addTo(map);
         routes.push(newRoute);
     });
+}
+
+function getMode(transportMode) {
+    var mode;
+    switch (transportMode) {
+        case "car":
+            mode = 'mapbox/driving';
+            break;
+        case "bicycle":
+            mode = 'mapbox/cycling';
+            break;
+        case "walking":
+            mode = 'mapbox/walking';
+            break;
+        default:
+            mode = 'mapbox/driving';
+            break;
+    }
+    return mode;
 }
 
 /**

@@ -5,9 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
@@ -32,9 +30,17 @@ public class RoutingMenuController implements Initializable, MenuController {
     private ComboBox<String> loadRoutesComboBox;
     @FXML
     private Label ratingText;
+    @FXML
+    private Button carButton;
+    @FXML
+    private Button bikeButton;
+    @FXML
+    private Button walkingButton;
 
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
+    private Button selectedButton = null;
+    private String modeChoice;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,10 +59,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    private void displayRoute(Route... routes) {
+    private void displayRoute(Route... routes) { // String transportMode,
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), "bicycle");
+        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), "walking"); // transportMode
     }
 
     /**
@@ -122,7 +128,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             // Generates a route and makes sure stops is cleared
             stops.clear();
-            generateRouteAction(favourite);
+            generateRouteAction(favourite); // , transportMode);
 
             startLocation.setText(favourite.getStartAddress());
             endLocation.setText(favourite.getEndAddress());
@@ -224,6 +230,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void generateRouteAction() throws SQLException {
         Location start = getStart();
         Location end = getEnd();
+        // String transportMode = getMode();
 
         if (start != null && end != null) {
             List<Location> routeLocations = new ArrayList<>();
@@ -236,10 +243,13 @@ public class RoutingMenuController implements Initializable, MenuController {
             int total = ratingGenerator(crashInfos);
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-            displayRoute(route);
+            displayRoute(route); //, transportMode); // TODO
         }
     }
 
+    private void getMode() {
+        // TODO get the transport mode from the gui (add to gui)
+    }
 
     private int ratingGenerator(List<CrashInfo> crashInfos) {
         int total = 0;
@@ -273,9 +283,24 @@ public class RoutingMenuController implements Initializable, MenuController {
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             List<CrashInfo> crashInfos = getOverlappingPoints(route,1000);
             int total = ratingGenerator(crashInfos);
-            displayRoute(route);
+            displayRoute(route); //, transportMode); // TODO
             ratingText.setText("Danger: "+ total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
+        }
+    }
+
+    public void toggleModeButton(ActionEvent event) {
+        Button chosenButton = (Button) event.getSource();
+        String modeChoice = (String) chosenButton.getUserData();
+
+        if (Objects.equals(chosenButton, selectedButton)) {
+            selectedButton = null; // deselects button
+            chosenButton.getStyleClass().remove("clickedButtonColor");
+            chosenButton.getStyleClass().add("sideBarColor");
+        } else {
+            selectedButton = chosenButton; // selects a different button
+            chosenButton.getStyleClass().remove("sideBarColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
         }
     }
 
