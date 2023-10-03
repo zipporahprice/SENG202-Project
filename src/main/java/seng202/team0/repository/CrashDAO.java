@@ -102,8 +102,8 @@ public class CrashDAO implements DAOInterface<Crash> {
             ps.setInt(5, crashToAdd.getSeverity().getValue());
             ps.setString(6, crashToAdd.getRegion().getName());
             ps.setString(7, crashToAdd.getWeather().getName());
-            ps.setFloat(8, crashToAdd.getLongitude());
-            ps.setFloat(9, crashToAdd.getLatitude());
+            ps.setDouble(8, crashToAdd.getLongitude());
+            ps.setDouble(9, crashToAdd.getLatitude());
             ps.setBoolean(10, crashToAdd.isBicycleInvolved());
             ps.setBoolean(11, crashToAdd.isBusInvolved());
             ps.setBoolean(12, crashToAdd.isCarInvolved());
