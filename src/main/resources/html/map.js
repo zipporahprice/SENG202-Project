@@ -63,7 +63,6 @@ function initMap() {
 }
 
 function updateDataShown() {
-
     setFilteringViewport();
     setData();
     updateView();
@@ -100,13 +99,24 @@ function setFilteringViewport() {
 }
 
 function automaticViewChange() {
+    var zoomLevel = map.getZoom();
+    if (zoomLevel >= 12) {
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
-
+        if (!map.hasLayer(markerLayer)) {
+            map.addLayer(markerLayer);
+        }
+    }
+    else {
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
+        if (!map.hasLayer(heatmapLayer)) {
+            map.addLayer(heatmapLayer);
+        }
+    }
+
 }
 
 /**
@@ -121,6 +131,7 @@ function updateView() {
 
     if (currentView === "Automatic") {
         automaticViewChange();
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.on('zoomend', automaticViewChange);
     } else if (currentView === "Heatmap") {
         map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
@@ -130,12 +141,23 @@ function updateView() {
             map.removeLayer(markerLayer);
         }
         map.addLayer(heatmapLayer);
-    } else {
+    } else if (currentView === "Crash Locations") {
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
         map.addLayer(markerLayer);
+    } else {
+        // Default with "None" showing
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
+        map.off('zoomend', automaticViewChange);
+        if (map.hasLayer(heatmapLayer)) {
+            map.removeLayer(heatmapLayer);
+        }
+        if (map.hasLayer(markerLayer)) {
+            map.removeLayer(markerLayer);
+        }
     }
 }
 
