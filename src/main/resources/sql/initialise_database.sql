@@ -52,8 +52,7 @@ CREATE TABLE IF NOT EXISTS users (
 --SPLIT
 INSERT INTO users (username, password) VALUES ('admin', '12345');
 --SPLIT
-CREATE TRIGGER insert_crash AFTER INSERT ON crashes
-BEGIN
+CREATE TRIGGER insert_crash AFTER INSERT ON crashes BEGIN
     INSERT INTO rtree_index(id, minX, maxX, minY, maxY)
     VALUES (NEW.object_id, NEW.longitude, NEW.longitude, NEW.latitude, NEW.latitude);
 END;
