@@ -25,9 +25,13 @@ public class FilteringMenuController implements Initializable, MenuController {
     @FXML
     private AnchorPane transportModePane;
     @FXML
-    private Slider dateSlider;
+    private Slider startDateSlider;
     @FXML
-    private Label currentYearLabel;
+    private Slider endDateSlider;
+    @FXML
+    private Label startYearLabel;
+    @FXML
+    private Label endYearLabel;
     @FXML
     private AnchorPane weatherPane;
     @FXML
@@ -50,16 +54,27 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     @FXML
     public void sliderValueChange() {
-        int sliderValue = (int)Math.round(dateSlider.getValue());
+        int startSliderValue = (int) Math.round(startDateSlider.getValue());
+        int endSliderValue = (int) Math.round(endDateSlider.getValue());
 
-        // Update year label for user
-        currentYearLabel.setText(Integer.toString(sliderValue));
+        // Update labels for user
+        startYearLabel.setText(Integer.toString(startSliderValue));
+        endYearLabel.setText(Integer.toString(endSliderValue));
 
-        // Updates Filter Manager with the earliest year for crash query
+        // Ensure that the start date is always less than or equal to the end date
+        if (startSliderValue > endSliderValue) {
+            startDateSlider.setValue(endSliderValue);
+            startYearLabel.setText(Integer.toString(endSliderValue));
+        }
+
+        // Updates Filter Manager with the date range for crash query
         FilterManager filters = FilterManager.getInstance();
-        filters.setEarliestYear(sliderValue);
+        filters.setEarliestYear(startSliderValue);
+        filters.setLatestYear(endSliderValue); // Assuming you've added a setLatestYear method to your FilterManager class
+
         clickableApplyFiltersButton();
     }
+
 
     /**
      * Handles the event triggered when an "All" CheckBox is selected or deselected.
@@ -262,6 +277,7 @@ public class FilteringMenuController implements Initializable, MenuController {
         List<Integer> severitiesSelected = filters.getSeveritiesSelected();
         List<String> modesSelected = filters.getModesSelected();
         int earliestYear = filters.getEarliestYear();
+        int latestYear = filters.getLatestYear();
         List<String> weathersSelected = filters.getWeathersSelected();
         List<String> regionsSelected = filters.getRegionsSelected();
         List<Integer> holidaysSelected = filters.getHolidaysSelected();
@@ -269,8 +285,10 @@ public class FilteringMenuController implements Initializable, MenuController {
         // Updating checkboxes according to filters
         updateCheckboxesWithFilterList(severityPane, severitiesSelected);
         updateCheckboxesWithFilterList(transportModePane, modesSelected);
-        dateSlider.setValue(earliestYear);
-        currentYearLabel.setText(Integer.toString(earliestYear));
+        startDateSlider.setValue(earliestYear);
+        startYearLabel.setText(Integer.toString(earliestYear));
+        endDateSlider.setValue(latestYear);
+        endYearLabel.setText(Integer.toString(latestYear));
         updateCheckboxesWithFilterList(weatherPane, weathersSelected);
         updateCheckboxesWithFilterList(regionsPane, regionsSelected);
         updateCheckboxesWithFilterList(holidayPane, holidaysSelected);
