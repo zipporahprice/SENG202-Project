@@ -337,10 +337,6 @@ public class FilterManager {
 
         }
 
-        if (getEarliestYear() != null) {
-            where.add(startOfClauses.get("crash_year") + getEarliestYear());
-        }
-
         if (getLatestYear() != null) {
             where.add("crash_year BETWEEN " + getEarliestYear() + " AND "+ getLatestYear());
         }
