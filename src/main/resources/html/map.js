@@ -23,8 +23,29 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
-    // Setup layers
-    var cfg = {
+    // Setup map
+    let mapOptions = {
+        center: [-41.0, 172.0],
+        zoom: 5.5,
+        layers:[baseLayer]
+    };
+    map = new L.map('map', mapOptions);
+
+    // Setup potential layers for views
+    updateHeatmap();
+    markerLayer = L.markerClusterGroup();
+
+    // Initialise layers and setup callbacks
+    updateDataShown();
+    map.on('zoomend', updateDataShown);
+    map.on('moveend', updateDataShown);
+    window.addEventListener('resize', updateHeatmap);
+}
+
+function updateHeatmap() {
+    const heatmapShowing = map.hasLayer(heatmapLayer);
+
+    const cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
         // if scaleRadius is false it will be the constant radius used in pixels
         "radius": 0.1,
@@ -43,23 +64,11 @@ function initMap() {
         valueField: 'count'
     };
     heatmapLayer = new HeatmapOverlay(cfg);
-    markerLayer = L.markerClusterGroup();
 
-    // Setup map
-    let mapOptions = {
-        center: [-41.0, 172.0],
-        zoom: 5.5,
-        layers:[baseLayer, heatmapLayer]
-    };
-    map = new L.map('map', mapOptions);
-
-    // Initialise layers and setup callbacks
-    setFilteringViewport();
-    setData();
-    updateView();
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
-
+    if (heatmapShowing) {
+        setData();
+        map.addLayer(heatmapLayer);
+    }
 }
 
 function updateDataShown() {
