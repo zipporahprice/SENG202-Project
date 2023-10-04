@@ -38,6 +38,16 @@ public class RoutingMenuController implements Initializable {
     private static List<Location> matchedPoints;
     public static RoutingMenuController controller;
 
+    /**
+     * Overriding initialize of Routing Menu display.
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resourceBundle
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
@@ -57,6 +67,10 @@ public class RoutingMenuController implements Initializable {
         controller = this;
     }
 
+    /**
+     * Used to display route on Leaflet Map in javascript code.
+     * @param routes route to display
+     */
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
@@ -66,6 +80,7 @@ public class RoutingMenuController implements Initializable {
     /**
      * Adds a location when the "Add Location" button is clicked.
      * Uses Geolocator class to turn the address into a lat, lng pair
+     * @return Location object of start location.
      */
 
     @FXML
@@ -79,6 +94,25 @@ public class RoutingMenuController implements Initializable {
         return newMarker;
     }
 
+    /**
+     * Adds a stop when the "Add Stop" button is clicked.
+     * @return Location object of stop location.
+     */
+    @FXML
+    private Location getStop() {
+        String address = stopLocation.getText().trim();
+        if (address.isEmpty()) {
+            return null;
+        }
+        Location newMarker = geolocator.getLocation(address);
+        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return newMarker;
+    }
+
+    /**
+     * Adds a location from the end destination text field.
+     * @return Location object of end location.
+     */
     @FXML
     private Location getEnd() {
         String address = endLocation.getText().trim();
@@ -90,10 +124,11 @@ public class RoutingMenuController implements Initializable {
         return newMarker;
     }
 
-
-
+    /**
+     * Callback event for "Save Route" button.
+     */
     @FXML
-    private void saveRoute() throws SQLException {
+    private void saveRoute() {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
@@ -105,6 +140,9 @@ public class RoutingMenuController implements Initializable {
     }
 
 
+    /**
+     * Callback event for displaying events in favourites combo box.
+     */
     @FXML
     private void displayRoutes() {
         FavouriteDAO favourites = new FavouriteDAO();
@@ -113,6 +151,10 @@ public class RoutingMenuController implements Initializable {
         loadRoutesComboBox.setItems(items);
     }
 
+    /**
+     * Listener function for when an option in the favourites combo box is selected.
+     * @throws SQLException exception for if an SQLite query goes wrong
+     */
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteID = loadRoutesComboBox.getSelectionModel().getSelectedIndex()+1;
@@ -134,21 +176,11 @@ public class RoutingMenuController implements Initializable {
         }
     }
 
-
+    /**
+     * Adds stop to "stops" list.
+     */
     @FXML
-    private Location getStop() {
-        String address = stopLocation.getText().trim();
-        if (address.isEmpty()) {
-            return null;
-        }
-        Location newMarker = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
-    }
-
-
-    @FXML
-    private void addStop() throws SQLException {
+    private void addStop() {
         Location stop = getStop();
         if (stop != null) {
             stops.add(stop);
@@ -156,8 +188,11 @@ public class RoutingMenuController implements Initializable {
         generateRouteAction();
     }
 
+    /**
+     * Removes stop from "stops" list
+     */
     @FXML
-    private void removeStop() throws SQLException {
+    private void removeStop() {
         if (stops.size() >= 1) {
             stops.remove(stops.size()-1);
             generateRouteAction();
@@ -171,9 +206,8 @@ public class RoutingMenuController implements Initializable {
      * within the specified danger radius of the route segments.
      *
      * @return A list of CrashInfo objects representing crash points that overlap with the route.
-     * @throws SQLException If an SQL-related error occurs during database query execution.
      */
-    public static double getOverlappingPoints(List<Location> coordinates) throws SQLException {
+    public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
         for (int i = 0; i < coordinates.size()-50; i+=50) {
@@ -187,6 +221,7 @@ public class RoutingMenuController implements Initializable {
         //TODO store average severities in a list to look at coloring route segments.
         return totalValue * totalDistance/10000;
     }
+
     /**
      * Calculates the Haversine distance between two geographic coordinates using the Haversine formula.
      * The Haversine formula is used to compute the distance between two points on the Earth's surface
@@ -304,8 +339,11 @@ public class RoutingMenuController implements Initializable {
 
     }
 
+    /**
+     * OnAction event callback function for "Generate Route" button
+     */
     @FXML
-    private void generateRouteAction() throws SQLException {
+    private void generateRouteAction() {
         Location start = getStart();
         Location end = getEnd();
 
@@ -320,22 +358,30 @@ public class RoutingMenuController implements Initializable {
         }
     }
 
+    /**
+     * Updates the ratingText label's text to the rating provided.
+     * @param rating string of numeric rating.
+     */
     public void updateRatingLabel(String rating) {
         ratingText.setText("Rating: "+ rating);
     }
 
+    /**
+     * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
+     * on the GUI's ratingText label through getting the overlapping points of each segment.
+     * @throws SQLException
+     */
     public static void ratingUpdate() throws SQLException {
         List<Location> coordinates = JavaScriptBridge.finalOutput;
         double rating = getOverlappingPoints(coordinates);
         RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating)));
-
     }
 
-
-
-
-
-    private void generateRouteAction(Favourite favourite) throws SQLException {
+    /**
+     * Overloaded function for handling route generation with favourites.
+     * @param favourite Favourite object with locations of route and filters.
+     */
+    private void generateRouteAction(Favourite favourite) {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 
