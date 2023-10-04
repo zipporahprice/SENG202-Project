@@ -5,9 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
@@ -32,13 +30,24 @@ public class RoutingMenuController implements Initializable, MenuController {
     private ComboBox<String> loadRoutesComboBox;
     @FXML
     private Label ratingText;
+    @FXML
+    private Button carButton;
+    @FXML
+    private Button bikeButton;
+    @FXML
+    private Button walkingButton;
 
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
+    private Button selectedButton = null;
+    private String modeChoice;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
+        carButton.setUserData("car");
+        bikeButton.setUserData("bike");
+        walkingButton.setUserData("walking");
 
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
@@ -56,7 +65,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
+        MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList), modeChoice);
     }
 
     /**
@@ -279,6 +288,36 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
+    /**
+     * Toggles between the transport mode buttons.
+     * When one button is selected, the previously selected button (if any) is deselected.
+     *
+     * @param event
+     */
+    public void toggleModeButton(ActionEvent event) {
+        Button chosenButton = (Button) event.getSource();
+        modeChoice = (String) chosenButton.getUserData();
+
+        if (Objects.equals(chosenButton, selectedButton)) {
+            selectedButton = null;
+            chosenButton.getStyleClass().remove("clickedButtonColor");
+            chosenButton.getStyleClass().add("hamburgerStyle");
+        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton!=null) {
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("hamburgerStyle");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("hamburgerStyle");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+        } else {
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("hamburgerStyle");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+        }
+    }
+
+    /**
+     * Loads the route data stored from the RouteManager into the routing menu.
+     */
     @Override
     public void loadManager() {
         RouteManager route = RouteManager.getInstance();
@@ -294,6 +333,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         stopLocation.setText(stopLoc);
     }
 
+    /**
+     * Updates the RouteManager's stored data with data currently in the routing menu.
+     */
     @Override
     public void updateManager() {
         RouteManager route = RouteManager.getInstance();
