@@ -6,11 +6,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.FilteringMenuController">
+<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.FilteringMenuController">
 
     <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
@@ -90,13 +91,23 @@
             <!-- Slider for selecting the starting date between 2000 - 2023 -->
             <Slider fx:id="startDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="77.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2010.0" />
             <Label layoutX="14.0" layoutY="61.0" text="2000" textFill="WHITE" />
-            <Label fx:id="startYearLabel" layoutX="109.0" layoutY="44.0" text="2010" textFill="WHITE" />
+         <HBox layoutX="85.0" layoutY="45.0" prefHeight="17.0" prefWidth="76.0">
+            <children>
+               <Label text="Earliest:" textFill="WHITE" />
+                  <Label fx:id="startYearLabel" alignment="CENTER" prefHeight="17.0" prefWidth="34.0" text="2010" textFill="WHITE" />
+            </children>
+         </HBox>
             <Label layoutX="198.0" layoutY="61.0" text="2023" textFill="WHITE" />
 
             <!-- Slider for selecting the ending date between 2000 - 2023 -->
             <Slider fx:id="endDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="147.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2013.0" />
             <Label layoutX="14.0" layoutY="130.0" text="2000" textFill="WHITE" />
-            <Label fx:id="endYearLabel" layoutX="109.0" layoutY="113.0" text="2013" textFill="WHITE" />
+         <HBox layoutX="90.0" layoutY="112.0" prefHeight="17.0" prefWidth="70.0">
+            <children>
+               <Label text="Latest:" textFill="WHITE" />
+                  <Label fx:id="endYearLabel" alignment="CENTER" prefHeight="17.0" prefWidth="33.0" text="2013" textFill="WHITE" />
+            </children>
+         </HBox>
             <Label layoutX="198.0" layoutY="130.0" text="2023" textFill="WHITE" />
 
         </children>
