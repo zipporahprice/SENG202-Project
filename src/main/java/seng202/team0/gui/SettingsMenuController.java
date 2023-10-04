@@ -12,7 +12,7 @@ public class SettingsMenuController implements Initializable, MenuController {
 
     @FXML
     private ChoiceBox viewChoiceBox;
-    public static String currentView = "Automatic";
+    public static String currentView = "None";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -20,7 +20,7 @@ public class SettingsMenuController implements Initializable, MenuController {
     }
 
     public void setViewOptions() {
-        viewChoiceBox.getItems().addAll("Automatic", "Heatmap", "Crash Locations");
+        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations");
         viewChoiceBox.setValue(currentView);// viewChoiceBox.setValue("Automatic");
         viewChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

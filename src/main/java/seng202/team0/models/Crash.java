@@ -19,8 +19,8 @@ public class Crash {
     private Region region;
     private Weather weather;
 
-    private float longitude;
-    private float latitude;
+    private double longitude;
+    private double latitude;
 
     private boolean bicycleInvolved;
     private boolean busInvolved;
@@ -35,7 +35,9 @@ public class Crash {
     private boolean truckInvolved;
     private CrashSeverity severity;
 
-    public Crash(int id, int speedLimit, int year, String location1, String location2, String severity, String region, String weather, float longitude, float lat,
+    private int severeInt;
+
+    public Crash(int id, int speedLimit, int year, String location1, String location2, String severity, String region, String weather, double longitude, double lat,
                  boolean bicycleInvolved, boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved, boolean motorcycleInvolved,
                  boolean parkedVehicleInvolved, boolean pedestrianInvolved, boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved){
         this.objectID = id;
@@ -59,6 +61,13 @@ public class Crash {
         this.schoolBusInvolved = schoolBusInvolved;
         this.trainInvolved = trainInvolved;
         this.truckInvolved = truckInvolved;
+
+    }
+
+    public Crash(double latitude, double longitude, int severity) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.severeInt = severity;
 
     }
 
@@ -139,7 +148,7 @@ public class Crash {
      *
      * @return The longitude coordinate of the crash location.
      */
-    public Float getLongitude(){
+    public Double getLongitude(){
         return longitude;
     }
 
@@ -148,7 +157,7 @@ public class Crash {
      *
      * @return The latitude coordinate of the crash location.
      */
-    public Float getLatitude(){
+    public Double getLatitude(){
         return latitude;
     }
 
@@ -157,7 +166,7 @@ public class Crash {
      *
      * @return A pair containing the longitude and latitude coordinates of the crash location.
      */
-    public Pair<Float,Float> getLongitudeAndLatitude(){
+    public Pair<Double,Double> getLongitudeAndLatitude(){
         Pair geoLocation = new Pair(longitude, latitude);
         return geoLocation;
     }
@@ -259,6 +268,15 @@ public class Crash {
      */
     public boolean isMopedInvolved() {
         return mopedInvolved;
+    }
+
+    /**
+     * Gets the integer value of severity
+     *
+     * @return severeInt
+     */
+    public int getSevereInt() {
+        return severeInt;
     }
 
     public static void main(String[] args) {

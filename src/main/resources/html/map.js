@@ -23,8 +23,29 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
-    // Setup layers
-    var cfg = {
+    // Setup map
+    let mapOptions = {
+        center: [-41.0, 172.0],
+        zoom: 5.5,
+        layers:[baseLayer]
+    };
+    map = new L.map('map', mapOptions);
+
+    // Setup potential layers for views
+    updateHeatmap();
+    markerLayer = L.markerClusterGroup();
+
+    // Initialise layers and setup callbacks
+    updateDataShown();
+    map.on('zoomend', updateDataShown);
+    map.on('moveend', updateDataShown);
+    window.addEventListener('resize', updateHeatmap);
+}
+
+function updateHeatmap() {
+    const heatmapShowing = map.hasLayer(heatmapLayer);
+
+    const cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
         // if scaleRadius is false it will be the constant radius used in pixels
         "radius": 0.1,
@@ -43,28 +64,38 @@ function initMap() {
         valueField: 'count'
     };
     heatmapLayer = new HeatmapOverlay(cfg);
-    markerLayer = L.markerClusterGroup();
 
-    // Setup map
-    let mapOptions = {
-        center: [-41.0, 172.0],
-        zoom: 5.5,
-        layers:[baseLayer, heatmapLayer]
-    };
-    map = new L.map('map', mapOptions);
-
-    // Initialise layers and setup callbacks
-    setFilteringViewport();
-    setData();
-    updateView();
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
+    if (heatmapShowing) {
+        setData();
+        map.addLayer(heatmapLayer);
+    }
 }
 
 function updateDataShown() {
     setFilteringViewport();
     setData();
     updateView();
+}
+
+function adjustHeatmapRadiusBasedOnZoom() {
+    let zoomLevel = map.getZoom();
+
+    let newRadius;
+    if (zoomLevel >= 17) {
+        newRadius = 0.0002;  // For street-level detail
+    } else if (zoomLevel >= 15 && zoomLevel < 17) {
+        newRadius = 0.001; // For street-level detail
+    } else if (zoomLevel >= 13) {
+        newRadius = 0.005;  // For neighborhood-level detail
+    }
+    else if (zoomLevel >= 10) {
+        newRadius = 0.01;  // For neighborhood-level detail
+    }  else {
+        newRadius = 0.1;  // For city-level detail
+    }
+
+    heatmapLayer.cfg.radius=newRadius;
+
 }
 
 function setFilteringViewport() {
@@ -94,6 +125,7 @@ function automaticViewChange() {
             map.addLayer(heatmapLayer);
         }
     }
+
 }
 
 /**
@@ -108,20 +140,33 @@ function updateView() {
 
     if (currentView === "Automatic") {
         automaticViewChange();
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.on('zoomend', automaticViewChange);
     } else if (currentView === "Heatmap") {
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
+
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
         map.addLayer(heatmapLayer);
-        heatmapLayer.setData(testData);
-    } else {
+    } else if (currentView === "Crash Locations") {
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
         map.addLayer(markerLayer);
+    } else {
+        // Default with "None" showing
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
+        map.off('zoomend', automaticViewChange);
+        if (map.hasLayer(heatmapLayer)) {
+            map.removeLayer(heatmapLayer);
+        }
+        if (map.hasLayer(markerLayer)) {
+            map.removeLayer(markerLayer);
+        }
     }
 }
 
