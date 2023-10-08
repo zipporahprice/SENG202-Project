@@ -67,6 +67,7 @@ public class MapController {
 
 
     }
+
     public JavaScriptBridge getJavaScriptBridge() {
         return javaScriptBridge;
     }
