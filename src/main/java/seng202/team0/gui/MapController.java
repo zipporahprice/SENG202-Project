@@ -15,6 +15,7 @@ import seng202.team0.models.JavaScriptBridge;
  * The controller class for managing the Map view in the application.
  * This class handles interactions between the JavaFX UI components and the WebView
  * used to display a map with JavaScript functionality.
+ *
  * @author Team 10
  */
 
@@ -57,7 +58,9 @@ public class MapController {
         this.stage = stage;
         javaScriptBridge = new JavaScriptBridge();
         geolocator = new GeoLocator();
-        //TextFields.bindAutoCompletion(startLocation.getEditor(), t -> getSuggestions(t.getUserText()));
+
+        //TextFields.bindAutoCompletion(startLocation
+        // .getEditor(),t -> getSuggestions(t.getUserText()));
         initMap();
         stage.sizeToScene();
 
@@ -81,8 +84,9 @@ public class MapController {
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource("html/map.html").toExternalForm());
         // Forwards console.log() output from any javascript to info log
-//        WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-//                System.out.println(String.format("Map WebView console log line: %d, message : %s", lineNumber, message)));
+        // WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
+        // System.out.println(String
+        //   .format("Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -91,7 +95,8 @@ public class MapController {
                         // set our bridge object
                         JSObject window = (JSObject) webEngine.executeScript("window");
                         window.setMember("javaScriptBridge", javaScriptBridge);
-                        // get a reference to the js object that has a reference to the js methods we need to use in java
+                        // get a reference to the js object that has a reference
+                        // to the js methods we need to use in java
                         javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
                         // call the javascript function to initialise the map
                         javaScriptConnector.call("initMap");

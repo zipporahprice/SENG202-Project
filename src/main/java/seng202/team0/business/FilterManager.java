@@ -1,12 +1,17 @@
 package seng202.team0.business;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Location;
 import seng202.team0.models.Region;
 import seng202.team0.models.Weather;
 
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Singleton class for storing filters from the FXML controller classes.
@@ -24,21 +29,21 @@ import java.util.stream.Collectors;
 public class FilterManager {
 
     // Connectors for changing FilterManager to a where clause string, and back
-    private final String AND = " AND ";
-    private final String QUOTE = "\"";
-    private final String OR = " OR ";
-    private final String COMMA = ", ";
-    private final String CLOSE_PARENTHESES = ")";
-    private final String EQUAL_ONE = " = 1";
+    private final String and = " AND ";
+    private final String quote = "\"";
+    private final String or = " OR ";
+    private final String comma = ", ";
+    private final String closeParenthesis = ")";
+    private final String equalOne = " = 1";
     private final HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
-        put("severity", "severity IN (");
-        put("transport_mode", "(");
-        put("crash_year", "crash_year >= ");
-        put("weather", "weather IN (");
-        put("region", "region IN (");
-        put("holiday", "holiday IN (");
-        put("viewport", "object_id IN (");
-    }};
+            put("severity", "severity IN (");
+            put("transport_mode", "(");
+            put("crash_year", "crash_year >= ");
+            put("weather", "weather IN (");
+            put("region", "region IN (");
+            put("holiday", "holiday IN (");
+            put("viewport", "object_id IN (");
+        }};
 
     // Singleton instance of FilterManager
     private static FilterManager filters;
@@ -87,7 +92,7 @@ public class FilterManager {
                 Arrays.stream(Region.values()).map(region -> region.getName()).toList()
         );
 
-        holidaysSelected = new ArrayList<>(Arrays.asList(0,1));
+        holidaysSelected = new ArrayList<>(Arrays.asList(0, 1));
     }
 
 
@@ -109,132 +114,173 @@ public class FilterManager {
      *
      * @return A list of selected severity levels.
      */
-    public List<Integer> getSeveritiesSelected() { return this.severitiesSelected; }
+    public List<Integer> getSeveritiesSelected() {
+        return this.severitiesSelected;
+    }
 
     /**
      * Adds a severity level to the list of selected severity levels.
      *
      * @param severity The severity level to add.
      */
-    public void addToSeverities(Integer severity) { severitiesSelected.add(severity); }
+    public void addToSeverities(Integer severity) {
+        severitiesSelected.add(severity);
+    }
 
     /**
      * Removes a severity level from the list of selected severity levels.
      *
      * @param severity The severity level to remove.
      */
-    public void removeFromSeverities(Integer severity) { severitiesSelected.remove(severity); }
+    public void removeFromSeverities(Integer severity) {
+        severitiesSelected.remove(severity);
+    }
 
     /**
      * Retrieves the earliest year for filtering crash data.
      *
      * @return The earliest year for filtering.
      */
-    public Integer getEarliestYear() { return earliestYear; }
+    public Integer getEarliestYear() {
+        return earliestYear;
+    }
 
-    public Integer getLatestYear() { return latestYear; }
+    public Integer getLatestYear() {
+        return latestYear;
+    }
 
     /**
      * Sets the earliest year for filtering crash data.
      *
      * @param year The earliest year to set.
      */
-    public void setEarliestYear(Integer year) { earliestYear = year; }
+    public void setEarliestYear(Integer year) {
+        earliestYear = year;
+    }
 
-    public void setLatestYear(Integer year) { latestYear = year; }
+    public void setLatestYear(Integer year) {
+        latestYear = year;
+    }
 
     /**
      * Retrieves the list of selected transportation modes for filtering crash data.
      *
      * @return A list of selected transportation modes.
      */
-    public List<String> getModesSelected() { return this.modesSelected; }
+    public List<String> getModesSelected() {
+        return this.modesSelected;
+    }
 
     /**
      * Adds a transportation mode to the list of selected transportation modes.
      *
      * @param mode The transportation mode to add.
      */
-    public void addToModes(String mode) { modesSelected.add(mode); }
+    public void addToModes(String mode) {
+        modesSelected.add(mode);
+    }
 
     /**
      * Removes a transportation mode from the list of selected transportation modes.
      *
      * @param mode The transportation mode to remove.
      */
-    public void removeFromModes(String mode) { modesSelected.remove(mode); }
+    public void removeFromModes(String mode) {
+        modesSelected.remove(mode);
+    }
 
     /**
      * Retrieves the list of selected weather conditions for filtering crash data.
      *
      * @return A list of selected weather conditions.
      */
-    public List<String> getWeathersSelected() { return this.weathersSelected; }
+    public List<String> getWeathersSelected() {
+        return this.weathersSelected;
+    }
 
     /**
      * Adds a weather condition to the list of selected weather conditions.
      *
      * @param weather The weather condition to add.
      */
-    public void addToWeathers(String weather) { weathersSelected.add(weather); }
+    public void addToWeathers(String weather) {
+        weathersSelected.add(weather);
+    }
 
     /**
      * Removes a weather condition from the list of selected weather conditions.
      *
      * @param weather The weather condition to remove.
      */
-    public void removeFromWeathers(String weather) { weathersSelected.remove((Object)weather); }
+    public void removeFromWeathers(String weather) {
+        weathersSelected.remove((Object) weather);
+    }
 
     /**
      * Retrieves the list of selected regions for filtering crash data.
      *
      * @return A list of selected regions.
      */
-    public List<String> getRegionsSelected() { return this.regionsSelected; }
+    public List<String> getRegionsSelected() {
+        return this.regionsSelected;
+    }
 
     /**
      * Adds a region to the list of selected regions.
      *
      * @param region The region to add.
      */
-    public void addToRegions(String region) { regionsSelected.add(region); }
+    public void addToRegions(String region) {
+        regionsSelected.add(region);
+    }
 
     /**
      * Removes a region from the list of selected regions.
      *
      * @param region The region to remove.
      */
-    public void removeFromRegions(String region) { regionsSelected.remove(region); }
+    public void removeFromRegions(String region) {
+        regionsSelected.remove(region);
+    }
 
     /**
      * Retrieves the list of holidays (0 for No, 1 for Yes) for filtering crash data.
      *
      * @return A list of holidays (0 for No, 1 for Yes).
      */
-    public List<Integer> getHolidaysSelected() { return this.holidaysSelected; }
+    public List<Integer> getHolidaysSelected() {
+        return this.holidaysSelected;
+    }
 
     /**
      * Adds a holiday to the list of selected holidays (0 for No, 1 for Yes).
      *
      * @param holiday The holiday to add.
      */
-    public void addToHolidays(int holiday) { holidaysSelected.add(holiday); }
+    public void addToHolidays(int holiday) {
+        holidaysSelected.add(holiday);
+    }
 
     /**
      * Removes a holiday from the list of selected holidays (0 for No, 1 for Yes).
      *
      * @param holiday The holiday to remove.
      */
-    public void removeFromHolidays(int holiday) { holidaysSelected.remove(holiday); }
+    public void removeFromHolidays(int holiday) {
+        holidaysSelected.remove(holiday);
+    }
 
     /**
      * Retrieves the location for the minimum point of the viewport for filtering crash data.
      *
      * @return A location of (minLatitude, minLongitude).
      */
-    public Location getViewPortMin() { return this.viewPortMin; }
+    public Location getViewPortMin() {
+        return this.viewPortMin;
+    }
 
     public void updateEarliestYear(int newEarliestYear) {
+
         earliestYear = newEarliestYear;
     }
 
@@ -253,7 +299,9 @@ public class FilterManager {
      *
      * @return A location of (maxLatitude, maxLongitude).
      */
-    public Location getViewPortMax() { return this.viewPortMax; }
+    public Location getViewPortMax() {
+        return this.viewPortMax;
+    }
 
     /**
      * Sets the viewport maximum location for filtering crash data.
@@ -282,31 +330,37 @@ public class FilterManager {
         holidaysSelected.clear();
 
         if (!Objects.equals(query, "1 = 0")) {
-            String[] queryList = query.split(AND);
+            String[] queryList = query.split(and);
 
-            // TODO hacking the database with always false to return no rows, CHANGE TO SOMETHING BETTER
+            // TODO hacking the database with always false to return no rows.
             for (String filter : queryList) {
                 if (filter.startsWith(startOfClauses.get("severity"))) {
-                    String severitiesString = filter.substring(startOfClauses.get("severity").length(), filter.length() - 1);
-                    Arrays.stream(severitiesString.split(COMMA)).forEach(severityString ->
+                    String severitiesString = filter.substring(startOfClauses
+                            .get("severity").length(), filter.length() - 1);
+                    Arrays.stream(severitiesString.split(comma)).forEach(severityString ->
                             addToSeverities(Integer.parseInt(severityString)));
                 } else if (filter.startsWith(startOfClauses.get("transport_mode"))) {
-                    String transportModesString = filter.substring(startOfClauses.get("transport_mode").length(), filter.length() - 1);
-                    Arrays.stream(transportModesString.split(OR)).forEach(transportModeString ->
+                    String transportModesString = filter.substring(startOfClauses
+                            .get("transport_mode").length(), filter.length() - 1);
+                    Arrays.stream(transportModesString.split(or)).forEach(transportModeString ->
                             addToModes(transportModeString.split(" ")[0]));
                 } else if (filter.startsWith(startOfClauses.get("crash_year"))) {
-                    setEarliestYear(Integer.parseInt(filter.substring(startOfClauses.get("crash_year").length())));
+                    setEarliestYear(Integer.parseInt(filter.substring(startOfClauses
+                            .get("crash_year").length())));
                 } else if (filter.startsWith(startOfClauses.get("weather"))) {
-                    String weathersString = filter.substring(startOfClauses.get("weather").length(), filter.length() - 1);
-                    Arrays.stream(weathersString.split(COMMA)).forEach(weatherString ->
+                    String weathersString = filter.substring(startOfClauses
+                            .get("weather").length(), filter.length() - 1);
+                    Arrays.stream(weathersString.split(comma)).forEach(weatherString ->
                             addToWeathers(weatherString.substring(1, weatherString.length() - 1)));
                 } else if (filter.startsWith(startOfClauses.get("region"))) {
-                    String regionsString = filter.substring(startOfClauses.get("region").length(), filter.length() - 1);
-                    Arrays.stream(regionsString.split(COMMA)).forEach(regionString ->
+                    String regionsString = filter.substring(startOfClauses
+                            .get("region").length(), filter.length() - 1);
+                    Arrays.stream(regionsString.split(comma)).forEach(regionString ->
                             addToRegions(regionString.substring(1, regionString.length() - 1)));
                 } else if (filter.startsWith(startOfClauses.get("holiday"))) {
-                    String holidaysString = filter.substring(startOfClauses.get("holiday").length(), filter.length() - 1);
-                    Arrays.stream(holidaysString.split(COMMA)).forEach(holidayString ->
+                    String holidaysString = filter.substring(startOfClauses
+                            .get("holiday").length(), filter.length() - 1);
+                    Arrays.stream(holidaysString.split(comma)).forEach(holidayString ->
                             addToHolidays(Integer.parseInt(holidayString)));
                 }
             }
@@ -316,8 +370,10 @@ public class FilterManager {
 
     /**
      * Generates a query string based on the selected filters for retrieving crash data.
-     * This method constructs a query string based on the selected severity levels, transportation modes,
-     * earliest year, weather conditions, and regions. The query string is used to filter crash data.
+     * This method constructs a query string based on the selected
+     * severity levels, transportation modes,
+     * earliest year, weather conditions, and regions.
+     * The query string is used to filter crash data.
      *
      * @return A query string representing the selected filters for crash data retrieval.
      */
@@ -326,43 +382,51 @@ public class FilterManager {
         List<String> where = new ArrayList<>();
 
         if (getSeveritiesSelected().size() > 0) {
-            where.add(startOfClauses.get("severity") +
-                    getSeveritiesSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
-                    + CLOSE_PARENTHESES);
+            where.add(startOfClauses.get("severity")
+                    + getSeveritiesSelected().stream().map(Object::toString)
+                    .collect(Collectors.joining(comma))
+                    + closeParenthesis);
         }
 
         if (filters.getModesSelected().size() > 0) {
-            String modesCondition = filters.getModesSelected().stream().map(mode -> mode + EQUAL_ONE).collect(Collectors.joining(OR));
-            where.add(startOfClauses.get("transport_mode") + modesCondition + CLOSE_PARENTHESES);
+            String modesCondition = filters.getModesSelected().stream()
+                    .map(mode -> mode + equalOne).collect(Collectors.joining(or));
+            where.add(startOfClauses.get("transport_mode") + modesCondition + closeParenthesis);
 
         }
 
         if (getLatestYear() != null) {
-            where.add("crash_year BETWEEN " + getEarliestYear() + " AND "+ getLatestYear());
+            where.add("crash_year BETWEEN " + getEarliestYear() + " AND " + getLatestYear());
         }
 
         if (getWeathersSelected().size() > 0) {
-            where.add(startOfClauses.get("weather") +
-                    getWeathersSelected().stream().map(weather -> QUOTE+weather+QUOTE).collect(Collectors.joining(COMMA))
-                    + CLOSE_PARENTHESES);
+            where.add(startOfClauses.get("weather")
+                    +
+                    getWeathersSelected().stream().map(weather -> quote + weather + quote)
+                            .collect(Collectors.joining(comma))
+                    + closeParenthesis);
         }
 
         if (regionsSelected.size() > 0) {
-            where.add(startOfClauses.get("region") +
-                    getRegionsSelected().stream().map(region -> QUOTE+region+QUOTE).collect(Collectors.joining(COMMA))
-                    + CLOSE_PARENTHESES);
+            where.add(startOfClauses.get("region")
+                    + getRegionsSelected().stream().map(region -> quote + region + quote)
+                    .collect(Collectors.joining(comma))
+                    + closeParenthesis);
         }
 
         if (holidaysSelected.size() > 0) {
-            where.add(startOfClauses.get("holiday") +
-                    getHolidaysSelected().stream().map(Object::toString).collect(Collectors.joining(COMMA))
-                    + CLOSE_PARENTHESES);
+            where.add(startOfClauses.get("holiday")
+                    + getHolidaysSelected().stream().map(Object::toString)
+                    .collect(Collectors.joining(comma))
+                    + closeParenthesis);
         }
 
         if (viewPortMin != null && viewPortMax != null) {
             where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
-                    + viewPortMin.longitude + " AND maxX <= " + viewPortMax.longitude + " AND minY >= "
-                    + viewPortMin.latitude + " AND maxY <= " + viewPortMax.latitude + CLOSE_PARENTHESES);
+                    + viewPortMin.longitude + " AND maxX <= "
+                    + viewPortMax.longitude + " AND minY >= "
+                    + viewPortMin.latitude + " AND maxY <= "
+                    + viewPortMax.latitude + closeParenthesis);
         }
 
         // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
@@ -370,7 +434,7 @@ public class FilterManager {
                 || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
             return "1 = 0";
         } else {
-            return String.join(AND, where);
+            return String.join(and, where);
         }
     }
 }

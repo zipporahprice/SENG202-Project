@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.repository.CrashDAO;
 import seng202.team0.models.Crash;
 import seng202.team0.repository.DatabaseManager;
 
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 
 public class CrashDAOTest {
     private static CrashDAO testDAO;
-    private static CrashCSVImporter testImporter;
+    private static CrashCsvImporter testImporter;
     private static CrashManager testManager;
     private static File testFile;
 
@@ -35,7 +34,7 @@ public class CrashDAOTest {
     @BeforeEach
     void testCreate() {
         testDAO = new CrashDAO();
-        testImporter = new CrashCSVImporter();
+        testImporter = new CrashCsvImporter();
         testManager = new CrashManager();
         DatabaseManager.getInstance().resetDB();
 
@@ -67,7 +66,7 @@ public class CrashDAOTest {
      */
     @Test
     void testAddOne() {
-        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashCsvImporter importer = new CrashCsvImporter();
         List<Crash> sales = importer.crashListFromFile(testFile);
         Crash expectedCrash = sales.get(0);
         List beforeCrashes = testDAO.getAll();
@@ -82,7 +81,7 @@ public class CrashDAOTest {
      */
     @Test
     void testAddMultiple() {
-        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashCsvImporter importer = new CrashCsvImporter();
         List<Crash> crashes = importer.crashListFromFile(testFile);
         List beforeCrashes = testDAO.getAll();
         testDAO.addMultiple(crashes);

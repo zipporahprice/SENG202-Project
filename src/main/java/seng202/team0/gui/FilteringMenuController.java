@@ -1,5 +1,10 @@
 package seng202.team0.gui;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,12 +17,13 @@ import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
+/**
+ * The FilteringMenuController class is responsible for managing interactions with filter options.
+ * It implements two interfaces, 'Initializable' and 'MenuController' to handle
+ * initialization and updates on filter settings.
+ *
+ * @author Team10
+ */
 public class FilteringMenuController implements Initializable, MenuController {
 
     @FXML
@@ -50,7 +56,8 @@ public class FilteringMenuController implements Initializable, MenuController {
     /**
      * Handles the change in the slider value and updates the user interface accordingly.
      * This method is called when the user interacts with a slider to select a value.
-     * It rounds the slider value to an integer, updates the year label, and sets the earliest year filter.
+     * It rounds the slider value to an integer, updates the year label,
+     * and sets the earliest year filter.
      */
     @FXML
     public void sliderValueChange() {
@@ -70,7 +77,7 @@ public class FilteringMenuController implements Initializable, MenuController {
         // Updates Filter Manager with the date range for crash query
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
-        filters.setLatestYear(endSliderValue); // Assuming you've added a setLatestYear method to your FilterManager class
+        filters.setLatestYear(endSliderValue);
 
         clickableApplyFiltersButton();
     }
@@ -78,7 +85,8 @@ public class FilteringMenuController implements Initializable, MenuController {
 
     /**
      * Handles the event triggered when an "All" CheckBox is selected or deselected.
-     * This method is typically used to select or deselect all other related CheckBoxes within the same group.
+     * This method is typically used to select or deselect
+     * all other related CheckBoxes within the same group.
      *
      * @param event The ActionEvent triggered by the "All" CheckBox.
      */
@@ -118,8 +126,9 @@ public class FilteringMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Updates the state of an "All" CheckBox based on the selection state of a list of related CheckBoxes.
-     * If all related CheckBoxes are selected, the "All" CheckBox is also selected; otherwise, it is deselected.
+     * Updates the state of an "All" CheckBox based on the selection state of related CheckBoxes.
+     * If all related CheckBoxes are selected, the "All" CheckBox is also selected;
+     * otherwise, it is deselected.
      *
      * @param allCheckBox The "All" CheckBox to update.
      * @param checkBoxes  The list of related CheckBoxes to check for selection.
@@ -136,7 +145,7 @@ public class FilteringMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Adds or removes a filter item based on the state of a CheckBox and its associated parent AnchorPane.
+     * Adds/removes a filter based on the state of a CheckBox and its associated parent AnchorPane.
      * This method is used to manage and update filtering options based on user selections.
      *
      * @param checkBox The CheckBox representing the filter item.
@@ -194,8 +203,9 @@ public class FilteringMenuController implements Initializable, MenuController {
     /**
      * Takes an AnchorPane object and searches through for the allCheckBox and a list
      * of all other checkBoxes in the AnchorPane (reflective of all option checkboxes).
+     *
      * @param parent AnchorPane object to search through
-     * @return Pair with types CheckBox and List of CheckBox corresponding to allCheckBox and checkBoxes
+     * @return Pair with types CheckBox and List of CheckBox objects
      */
     private Pair<CheckBox, List<CheckBox>> getAllCheckBoxAndCheckBoxList(AnchorPane parent) {
         CheckBox allCheckBox = null;
@@ -221,6 +231,7 @@ public class FilteringMenuController implements Initializable, MenuController {
     /**
      * Takes an AnchorPane and searches through for the CheckBox objects
      * to set as the same state as given in allCheckBoxState.
+     *
      * @param parent AnchorPane object to search through
      * @param allCheckBoxState Boolean value to set each CheckBox to
      */
@@ -257,7 +268,7 @@ public class FilteringMenuController implements Initializable, MenuController {
 
         // Updates checkboxes according to the list of filter values
         for (CheckBox checkBox : checkBoxes) {
-            checkBox.setSelected(filterListStrings.contains((String)checkBox.getUserData()));
+            checkBox.setSelected(filterListStrings.contains((String) checkBox.getUserData()));
         }
 
         // Updates all checkbox to see if updated filters should have the box checked
@@ -266,7 +277,7 @@ public class FilteringMenuController implements Initializable, MenuController {
 
 
     /**
-     * Takes a Favourite object and updates
+     * Takes a Favourite object and updates.
      * the FilterManager singleton class and the checkboxes on the GUI,
      */
     @Override
@@ -276,11 +287,11 @@ public class FilteringMenuController implements Initializable, MenuController {
         // Retrieve all updated filter data
         List<Integer> severitiesSelected = filters.getSeveritiesSelected();
         List<String> modesSelected = filters.getModesSelected();
-        int earliestYear = filters.getEarliestYear();
-        int latestYear = filters.getLatestYear();
-        List<String> weathersSelected = filters.getWeathersSelected();
-        List<String> regionsSelected = filters.getRegionsSelected();
-        List<Integer> holidaysSelected = filters.getHolidaysSelected();
+        final int earliestYear = filters.getEarliestYear();
+        final int latestYear = filters.getLatestYear();
+        final List<String> weathersSelected = filters.getWeathersSelected();
+        final List<String> regionsSelected = filters.getRegionsSelected();
+        final List<Integer> holidaysSelected = filters.getHolidaysSelected();
 
         // Updating checkboxes according to filters
         updateCheckboxesWithFilterList(severityPane, severitiesSelected);
@@ -306,12 +317,24 @@ public class FilteringMenuController implements Initializable, MenuController {
         notClickableApplyFiltersButton();
     }
 
+    /**
+     * Makes the "Apply Filters" button clickable by updating its style and enabling it.
+     * This method removes the "inactive-button" style class, adds the
+     * "address-button-add-style" style class,
+     * and sets the button to be enabled, allowing user interaction.
+     */
     public void clickableApplyFiltersButton() {
         applyFiltersButton.getStyleClass().remove("inactive-button");
         applyFiltersButton.getStyleClass().add("address-button-add-style");
         applyFiltersButton.setDisable(false);
     }
 
+    /**
+     * Makes the "Apply Filters" button not clickable by updating its style and disabling it.
+     * This method removes the "address-button-add-style" style class,
+     * adds the "inactive-button" style class,
+     * and sets the button to be disabled, preventing user interaction.
+     */
     public void notClickableApplyFiltersButton() {
         applyFiltersButton.getStyleClass().remove("address-button-add-style");
         applyFiltersButton.getStyleClass().add("inactive-button");

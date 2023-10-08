@@ -1,6 +1,9 @@
 package seng202.team0.gui;
 
+import java.io.IOException;
+import java.util.Objects;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,9 +14,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import javafx.event.ActionEvent;
-import java.io.IOException;
-import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,7 +74,7 @@ public class MainController {
         mapController.setWebView(webView);
         mapController.init(stage);
 
-        loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
+        loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
     }
 
 
@@ -87,23 +87,27 @@ public class MainController {
     @FXML
     public void loadHelp() {
         try {
-            FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
-            Parent helpViewParent = helpLoader.load();
+            FXMLLoader helpLoad = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
+            Parent helpViewParent = helpLoad.load();
 
             // TODO maybe take out of function and put into something you can call for all loaders
             mainWindow.getChildren().clear();
 
             mainWindow.getChildren().add(helpViewParent);
-            AnchorPane.setRightAnchor(helpViewParent,0d);
+            AnchorPane.setRightAnchor(helpViewParent, 0d);
         } catch (IOException e) {
             log.error(e);
         }
     }
 
+    /**
+     * Loads the graph display.
+     */
     public void loadGraphs() {
         try {
-            FXMLLoader graphsLoader = new FXMLLoader(getClass().getResource("/fxml/graph_window.fxml"));
-            Parent graphsViewParent = graphsLoader.load();
+            FXMLLoader loadGraphs = new FXMLLoader(getClass()
+                    .getResource("/fxml/graph_window.fxml"));
+            Parent graphsViewParent = loadGraphs.load();
 
             mainWindow.getChildren().clear();
             mainWindow.getChildren().add(graphsViewParent);
@@ -114,9 +118,9 @@ public class MainController {
     }
 
     /**
-     * Loads menu display in FXML file into menuDisplayPane
+     * Loads menu display in FXML file into menuDisplayPane.
      */
-    private void loadMenuDisplayFromFXML(String filePath) {
+    private void loadMenuDisplayFromFxml(String filePath) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
         try {
             StackPane menuDisplay = loader.load();
@@ -143,23 +147,23 @@ public class MainController {
 
         if (Objects.equals(menuPopulated, menuChoice)) {
             menuPopulated = "empty";
-            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
+            loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
 
         } else if (Objects.equals("routing", menuChoice)) {
             menuPopulated = menuChoice;
-            loadMenuDisplayFromFXML("/fxml/routing_menu.fxml");
+            loadMenuDisplayFromFxml("/fxml/routing_menu.fxml");
 
         } else if (Objects.equals("filtering", menuChoice)) {
             menuPopulated = menuChoice;
-            loadMenuDisplayFromFXML("/fxml/filtering_menu.fxml");
+            loadMenuDisplayFromFxml("/fxml/filtering_menu.fxml");
 
         } else if (Objects.equals("settings", menuChoice)) {
             menuPopulated = menuChoice;
-            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
+            loadMenuDisplayFromFxml("/fxml/settings_menu.fxml");
 
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
-            loadMenuDisplayFromFXML("/fxml/import_window.fxml");
+            loadMenuDisplayFromFxml("/fxml/import_window.fxml");
         }
 
     }

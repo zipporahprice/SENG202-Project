@@ -2,15 +2,9 @@ package seng202.team0.unittests.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import seng202.team0.io.CrashCSVImporter;
-import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
 import seng202.team0.repository.SQLiteQueryBuilder;
 
-import java.io.File;
-import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 
 /**

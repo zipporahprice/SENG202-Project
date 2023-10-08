@@ -3,7 +3,7 @@ package seng202.team0.integrationtests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
@@ -15,7 +15,7 @@ public class DatabaseIntegration {
     @Test
     void addCrashesToDb() throws SQLException {
         DatabaseManager database = new DatabaseManager(null);
-        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashCsvImporter importer = new CrashCsvImporter();
         CrashManager manager = new CrashManager();
 
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/crash_data_10k.csv");

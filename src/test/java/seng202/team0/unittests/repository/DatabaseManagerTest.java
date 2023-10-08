@@ -3,7 +3,7 @@ package seng202.team0.unittests.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 import seng202.team0.repository.CrashDAO;
 import seng202.team0.repository.DatabaseManager;
@@ -54,7 +54,7 @@ public class DatabaseManagerTest {
     void testResetDB() {
         // Add crashes to database
         CrashDAO crashDAO = new CrashDAO();
-        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
         List<Crash> crashes = importer.crashListFromFile(testFile);

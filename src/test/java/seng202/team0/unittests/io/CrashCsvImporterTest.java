@@ -1,10 +1,9 @@
 package seng202.team0.unittests.io;
 
-import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 
 import java.io.File;
@@ -20,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  */
 
-public class CrashCSVImporterTest {
+public class CrashCsvImporterTest {
 
-    private static CrashCSVImporter testImporter;
+    private static CrashCsvImporter testImporter;
 
     @BeforeEach
     void initialiseImporter() {
-        testImporter = new CrashCSVImporter();
+        testImporter = new CrashCsvImporter();
     }
 
     @Test

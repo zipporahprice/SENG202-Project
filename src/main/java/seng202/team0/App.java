@@ -7,7 +7,7 @@ import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
 import seng202.team0.business.SettingsManager;
 import seng202.team0.gui.MainWindow;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class App {
         List crashes = manager.getCrashLocations();
         if (crashes.size() == 0) {
             try {
-                CrashCSVImporter importer = new CrashCSVImporter();
+                CrashCsvImporter importer = new CrashCsvImporter();
                 // TODO replace with full file
                 InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("files/crash_data_10k.csv");
                 File tempFile = File.createTempFile("tempCSV", ".csv");

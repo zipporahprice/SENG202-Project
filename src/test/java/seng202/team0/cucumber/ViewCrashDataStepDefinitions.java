@@ -6,7 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.repository.CrashDAO;
@@ -27,7 +27,7 @@ public class ViewCrashDataStepDefinitions {
         // Database setup
         DatabaseManager.getInstance().resetDB();
         CrashDAO crashDAO = new CrashDAO();
-        CrashCSVImporter importer = new CrashCSVImporter();
+        CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
         List<Crash> crashes = importer.crashListFromFile(testFile);
