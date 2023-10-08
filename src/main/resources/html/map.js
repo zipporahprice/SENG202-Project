@@ -40,6 +40,8 @@ function initMap() {
     map.on('zoomend', updateDataShown);
     map.on('moveend', updateDataShown);
     window.addEventListener('resize', updateHeatmap);
+
+    mapIsReady();
 }
 
 function updateHeatmap() {
@@ -75,6 +77,10 @@ function updateDataShown() {
     setFilteringViewport();
     setData();
     updateView();
+}
+
+function mapIsReady() {
+        javaScriptBridge.mapLoaded();
 }
 
 function adjustHeatmapRadiusBasedOnZoom() {
@@ -280,7 +286,7 @@ function setData() {
     var crashes = JSON.parse(crashesJSON);
 
     var testData = {
-        max: 10,
+        max: 200,
         data: crashes
     };
     markerLayer.clearLayers();

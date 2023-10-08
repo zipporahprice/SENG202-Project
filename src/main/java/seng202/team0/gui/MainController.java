@@ -1,13 +1,16 @@
 package seng202.team0.gui;
 
-import java.io.IOException;
-import java.util.Objects;
+import javafx.animation.FadeTransition;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -18,6 +21,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import seng202.team0.models.JavaScriptBridge;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
+import java.io.IOException;
+
+import java.util.Objects;
 
 /**
  * Controller for the main.fxml window
@@ -26,13 +39,18 @@ import org.apache.logging.log4j.Logger;
  */
 
 
-public class MainController {
+public class MainController implements JavaScriptBridge.JavaScriptListener{
 
     private static final Logger log = LogManager.getLogger(MainController.class);
+    public StackPane loadingScreen;
+    public Label loadingPercentageLabel;
     @FXML
     private WebView webView;
     @FXML
     private StackPane mainWindow;
+
+    @FXML
+    private ProgressBar progressBar;
     private Stage stage;
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
@@ -41,6 +59,11 @@ public class MainController {
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
     private MenuController controller;
+
+    private JavaScriptBridge javaScriptBridge;
+
+    private Timeline progressBarTimeline;
+
 
 
     /**
@@ -61,20 +84,63 @@ public class MainController {
         stage.setMaximized(true);
         stage.sizeToScene();
 
+        loadingScreen.setVisible(true);
         webEngine = webView.getEngine();
-        webEngine.getLoadWorker().stateProperty().addListener(
-                (ov, oldState, newState) -> {
-                    // if javascript loads successfully
-                    if (newState == Worker.State.SUCCEEDED) {
-                        javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
-                    }
-                });
-
         mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
-
+        javaScriptBridge = mapController.getJavaScriptBridge();
+        javaScriptBridge.setListener(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
+        initProgressBarTimeline();
+
+
+    }
+
+    private void initProgressBarTimeline() {
+        progressBarTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(1), // Adjust this based on expected average loading time
+                        new KeyValue(progressBar.progressProperty(), 1.0)
+                )
+        );
+        progressBarTimeline.setCycleCount(1);
+
+        // Listen to the progress property of the ProgressBar
+        progressBar.progressProperty().addListener((obs, oldVal, newVal) -> {
+            int progressPercentage = (int) (newVal.doubleValue() * 100);
+            loadingPercentageLabel.setText(progressPercentage + "%");
+        });
+
+        progressBarTimeline.play();
+
+        webEngine.getLoLoading screenadWorker().stateProperty().addListener((ov, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
+
+                // Stop the ongoing Timeline and fill the ProgressBar to 100%
+                progressBarTimeline.stop();
+                animateProgressBarToFull(progressBar);
+            }
+        });
+    }
+
+    private void animateProgressBarToFull(ProgressBar progressBar) {
+        // Duration of the animation (e.g., 500ms)
+        final Duration duration = Duration.millis(500);
+        // Create a new timeline for the animation
+        final Timeline timeline = new Timeline();
+
+        // KeyValue defines a value at a specific point in time for a specific property
+        // Here, we're saying "at the end of the animation, set the progress property to 1.0"
+        KeyValue keyValue = new KeyValue(progressBar.progressProperty(), 1.0);
+
+        // KeyFrame defines a specific point in the timeline
+        // Here, we're saying "at the end of the duration, apply the keyValue"
+        KeyFrame keyFrame = new KeyFrame(duration, keyValue);
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
 
 
@@ -164,7 +230,37 @@ public class MainController {
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/import_window.fxml");
-        }
+        }Loading screen
 
+    }
+
+    private void fadeOutLoadingScreen() {
+        FadeTransition fadeTransition = new FadeTransition();
+
+        // Set the node you want to fade out
+        fadeTransition.setNode(loadingScreen);
+
+        // Set the duration of the fade out
+        fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
+
+        // Set the starting and ending opacity values
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+
+        fadeTransition.setDelay(Duration.millis(1500));
+
+        // Add an action to be processed once the animation is done
+        fadeTransition.setOnFinished(event -> {
+            loadingScreen.setVisible(false);
+        });
+
+        // Start the fade out
+        fadeTransition.play();
+    }
+    @Override
+    public void mapLoaded() {
+
+        System.out.println("Hello");
+        fadeOutLoadingScreen();
     }
 }
