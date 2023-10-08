@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 
 import java.sql.SQLException;
