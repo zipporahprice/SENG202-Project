@@ -13,8 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.App;
 
-import java.io.IOException;
-
 public class GraphController {
 
     private static final Logger log = LogManager.getLogger(App.class);

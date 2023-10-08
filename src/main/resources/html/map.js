@@ -25,8 +25,8 @@ function initMap() {
 
     // Setup map
     let mapOptions = {
-        center: [-41.0, 172.0],
-        zoom: 5.5,
+        center: [-43.5, 172.5],
+        zoom: 11,
         layers:[baseLayer]
     };
     map = new L.map('map', mapOptions);

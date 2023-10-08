@@ -5,22 +5,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.Objects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 
 /**
  * Controller for the main.fxml window
+ *
  * @author Team10
  */
 
@@ -79,7 +80,7 @@ public class MainController {
 
     /**
      * Loads and displays the help window within the main application window.
-     * This method uses JavaFX's FXMLLoader to load the content of the help window from an FXML file.
+     * This method uses JavaFX's FXMLLoader to load the help window from an FXML file.
      * It clears the existing content in the main window and adds the help window's content.
      * The help window is anchored to the right side of the main window.
      */
