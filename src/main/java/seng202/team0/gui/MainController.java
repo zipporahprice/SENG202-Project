@@ -114,7 +114,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener{
 
         progressBarTimeline.play();
 
-        webEngine.getLoLoading screenadWorker().stateProperty().addListener((ov, oldState, newState) -> {
+        webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
 
@@ -230,7 +230,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener{
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/import_window.fxml");
-        }Loading screen
+        }
 
     }
 
