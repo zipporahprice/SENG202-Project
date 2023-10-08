@@ -85,7 +85,7 @@
       <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
 
           <graphic>
-              <ImageView fitHeight="40.0" fitWidth="44.0" preserveRatio="true">
+              <ImageView fitHeight="43.0" fitWidth="49.0" preserveRatio="true">
                   <image>
                       <Image url="@images/car.png" />
                   </image>
@@ -97,7 +97,7 @@
       </Button>
       <Button id="bikeButton" fx:id="bikeButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <graphic>
-            <ImageView fitHeight="48.0" fitWidth="62.0" preserveRatio="true">
+            <ImageView fitHeight="52.0" fitWidth="70.0" preserveRatio="true">
                <image>
                   <Image url="@images/bike.png" />
                </image>
@@ -109,7 +109,7 @@
       </Button>
       <Button id="walkingButton" fx:id="walkingButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <graphic>
-            <ImageView fitHeight="52.0" fitWidth="49.0" preserveRatio="true">
+            <ImageView fitHeight="56.0" fitWidth="64.0" preserveRatio="true">
                <image>
                   <Image url="@images/man-walking.png" />
                </image>
