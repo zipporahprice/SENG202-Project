@@ -1,5 +1,7 @@
 package seng202.team0.models;
 
+import com.sun.tools.javac.Main;
+import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -28,6 +30,14 @@ public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
 
+    private JavaScriptListener listener;
+
+    private MainController mainController;
+
+
+    public void setListener(JavaScriptListener listener) {
+        this.listener = listener;
+    }
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
      *
@@ -106,6 +116,8 @@ public class JavaScriptBridge {
         return SettingsMenuController.currentView;
     }
 
+
+
     /**
      * Sets the viewport variables in the FilterManager singleton class.
      * @param minLatitude minimum latitude of the map view
@@ -121,4 +133,19 @@ public class JavaScriptBridge {
     }
 
     public void printSomething() {System.out.println("YAY ME");}
+
+    public void mapLoaded() {
+        System.out.println("Please make it here");
+        if (listener != null) {
+            System.out.println("Here???");
+            listener.mapLoaded();
+        }
+        System.out.println("Here though right?");
+
+    }
+
+    public static interface JavaScriptListener {
+        void mapLoaded();
+    }
 }
+

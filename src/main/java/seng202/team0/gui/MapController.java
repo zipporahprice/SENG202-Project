@@ -24,6 +24,7 @@ public class MapController {
     private WebView webView;
 
 
+
     private Stage stage;
 
     private GeoLocator geolocator;
@@ -62,6 +63,9 @@ public class MapController {
         stage.sizeToScene();
 
 
+    }
+    public JavaScriptBridge getJavaScriptBridge() {
+        return javaScriptBridge;
     }
 
     /**

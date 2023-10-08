@@ -40,6 +40,8 @@ function initMap() {
     map.on('zoomend', updateDataShown);
     map.on('moveend', updateDataShown);
     window.addEventListener('resize', updateHeatmap);
+
+    mapIsReady();
 }
 
 function updateHeatmap() {
@@ -75,6 +77,10 @@ function updateDataShown() {
     setFilteringViewport();
     setData();
     updateView();
+}
+
+function mapIsReady() {
+        javaScriptBridge.mapLoaded();
 }
 
 function adjustHeatmapRadiusBasedOnZoom() {

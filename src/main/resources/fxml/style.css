@@ -98,3 +98,7 @@
 .address-button-remove-style:pressed {
     -fx-opacity: 0.7;
 }
+
+.red-pane {
+    -fx-background-color: black;
+}
