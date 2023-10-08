@@ -100,5 +100,5 @@
 }
 
 .red-pane {
-    -fx-background-color: black;
+-fx-background-color: linear-gradient(to right,rgba(46,54,255,1) 0%, rgba(99,121,241,1) 0%, rgba(126,155,234,1) 9%, rgba(138,170,231,1) 13%, rgba(146,180,229,1) 17%, rgba(158,196,226,1) 23%, rgba(170,211,223,1) 31%);
 }

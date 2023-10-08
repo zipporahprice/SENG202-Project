@@ -286,7 +286,7 @@ function setData() {
     var crashes = JSON.parse(crashesJSON);
 
     var testData = {
-        max: 10,
+        max: 200,
         data: crashes
     };
     markerLayer.clearLayers();
