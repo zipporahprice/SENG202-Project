@@ -25,7 +25,7 @@
          </effect>
       </Region>
 
-      <Button fx:id="quitButton" layoutX="10.0" layoutY="664.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css">
+      <Button fx:id="quitButton" layoutX="10.0" layoutY="664.0" mnemonicParsing="false" onAction="#quitApp" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css">
          <graphic>
             <ImageView fitHeight="34.0" fitWidth="67.0">
                <image>
