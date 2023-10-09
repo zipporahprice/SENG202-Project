@@ -2,11 +2,17 @@ package seng202.team0.models;
 
 /**
  * Enumeration representing different levels of crash severity.
+ *
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
  */
 public enum CrashSeverity {
     NONINJURY(1), MINOR(2), SERIOUS(4), FATAL(8);
     private final int value;
-
     CrashSeverity(int value) {
         this.value = value;
     }
@@ -35,8 +41,4 @@ public enum CrashSeverity {
     public int getValue() {
         return value;
     }
-
-
-
-
 }

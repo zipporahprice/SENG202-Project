@@ -1,10 +1,5 @@
 package seng202.team0.models;
 
-import com.sun.tools.javac.Main;
-import javafx.application.Platform;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
@@ -20,7 +15,14 @@ import java.util.List;
  * Provides a bridge between JavaScript and Java for handling crash data.
  * This class retrieves crash data, converts it to a JSON format, and exposes it
  * to JavaScript for integration with web applications.
- * @author toddv
+ *
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
@@ -127,8 +129,6 @@ public class JavaScriptBridge {
         filterManager.setViewPortMin(minLatitude, minLongitude);
         filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
-
-    public void printSomething() {System.out.println("YAY ME");}
 
     public void mapLoaded() {
         System.out.println("Please make it here");

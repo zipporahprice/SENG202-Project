@@ -14,13 +14,16 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Provides geolocation functionality using the Nominatim Geolocation API.
  *
- * @author Team 10
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
  */
 public class GeoLocator {
     private static final Logger log = LogManager.getLogger(App.class);

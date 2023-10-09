@@ -5,7 +5,12 @@ import javafx.util.Pair;
 /**
  * Represents a crash event with various attributes such as speed limit, year, location, severity, and more.
  *
- * @author Team 10
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
  */
 public class Crash {
 
@@ -37,6 +42,31 @@ public class Crash {
 
     private int severeInt;
 
+    /**
+     * Constructs a Crash object with relevant crash information.
+     *
+     * @param id                        Crash ID.
+     * @param speedLimit                Speed limit at the crash location.
+     * @param year                      Year of the crash.
+     * @param location1                 First crash location.
+     * @param location2                 Second crash location.
+     * @param severity                  Severity of the crash.
+     * @param region                    Region where the crash occurred.
+     * @param weather                   Weather conditions at the time of the crash.
+     * @param longitude                 Longitude of the crash location.
+     * @param lat                       Latitude of the crash location.
+     * @param bicycleInvolved           Indicates bicycle involvement.
+     * @param busInvolved               Indicates bus involvement.
+     * @param carInvolved               Indicates car involvement.
+     * @param holiday                   Indicates if it occurred on a holiday.
+     * @param mopedInvolved             Indicates moped involvement.
+     * @param motorcycleInvolved        Indicates motorcycle involvement.
+     * @param parkedVehicleInvolved     Indicates parked vehicle involvement.
+     * @param pedestrianInvolved        Indicates pedestrian involvement.
+     * @param schoolBusInvolved         Indicates school bus involvement.
+     * @param trainInvolved             Indicates train involvement.
+     * @param truckInvolved             Indicates truck involvement.
+     */
     public Crash(int id, int speedLimit, int year, String location1, String location2, String severity, String region, String weather, double longitude, double lat,
                  boolean bicycleInvolved, boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved, boolean motorcycleInvolved,
                  boolean parkedVehicleInvolved, boolean pedestrianInvolved, boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved){
@@ -64,6 +94,12 @@ public class Crash {
 
     }
 
+    /**
+     * Constructor of Crash object but only with location and severity parameters.
+     * @param latitude                  Latitude of the crash location.
+     * @param longitude                 Longitude of the crash location.
+     * @param severity                  Severity of the crash.
+     */
     public Crash(double latitude, double longitude, int severity) {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -277,9 +313,5 @@ public class Crash {
      */
     public int getSevereInt() {
         return severeInt;
-    }
-
-    public static void main(String[] args) {
-
     }
 }

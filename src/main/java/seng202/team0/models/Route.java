@@ -1,11 +1,18 @@
 package seng202.team0.models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Simple class representing a route as any number of positions
+ *
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class Route {
     public List<Location> route = new ArrayList<>();
