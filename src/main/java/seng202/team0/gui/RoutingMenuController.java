@@ -8,15 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
@@ -61,6 +66,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Button walkingButton;
 
+    @FXML
+    private Button removeRoute;
+
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
@@ -89,9 +97,22 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route
-                .routesToJSONArray(routesList), modeChoice);
+        if(modeChoice== null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No Mode of Transport Selected!" +
+                    "\nPlease Select a mode of Transport");
+
+            alert.showAndWait();
+            return;
+        } else {
+            MainController.javaScriptConnector.call("displayRoute", Route
+                    .routesToJSONArray(routesList), modeChoice);
+        }
     }
+    
+
 
     /**
      * Adds a location when the "Add Location" button is clicked.
@@ -282,8 +303,42 @@ public class RoutingMenuController implements Initializable, MenuController {
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(route);
         }
+
+
+
     }
 
+    /**
+     * Calls the JS function, removeRoute.
+     * When the corresponding button is pressed in the
+     * GUI, this method is called and
+     * the route is removed
+     */
+    @FXML
+    private void removeRoute() {
+
+        if ((startLocation.getText() == null || startLocation.getText().isEmpty()) ||
+                (endLocation.getText() == null || endLocation.getText().isEmpty())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No route to remove!");
+            alert.showAndWait();
+
+            return;
+        }
+        MainController.javaScriptConnector.call("removeRoute");
+
+        if (selectedButton != null) {
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("hamburgerStyle");
+            selectedButton = null; // Reset the reference after resetting its styles
+        }
+
+        startLocation.setText("");
+        endLocation.setText("");
+
+    }
     private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
@@ -333,6 +388,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
+
         modeChoice = (String) chosenButton.getUserData();
 
         if (Objects.equals(chosenButton, selectedButton)) {
@@ -349,6 +405,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
+
         }
     }
 
