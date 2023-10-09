@@ -20,6 +20,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.application.Platform;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -250,6 +251,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
         // Start the fade out
         fadeTransition.play();
+    }
+
+    public void quitApp() {
+        Platform.exit();
     }
 
     @Override
