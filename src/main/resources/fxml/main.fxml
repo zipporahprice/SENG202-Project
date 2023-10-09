@@ -25,15 +25,20 @@
          </effect>
       </Region>
 
-      <Button fx:id="quitButton" layoutX="10.0" layoutY="664.0" mnemonicParsing="false" onAction="#quitApp" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css">
-         <graphic>
-            <ImageView fitHeight="34.0" fitWidth="67.0">
-               <image>
-                  <Image url="@images/quit_text.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <StackPane>
+         <Button fx:id="quitButton" onAction="#quitApp" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <graphic>
+               <ImageView fitHeight="34.0" fitWidth="67.0">
+                  <image>
+                     <Image url="@images/quit_text.png" />
+                  </image>
+               </ImageView>
+            </graphic>
+            <StackPane.margin>
+               <Insets top="1250.0" right="2350.0"/>
+            </StackPane.margin>
+         </Button>
+      </StackPane>
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
