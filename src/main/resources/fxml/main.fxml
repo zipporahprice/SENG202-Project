@@ -25,6 +25,16 @@
          </effect>
       </Region>
 
+      <Button fx:id="quitButton" layoutX="10.0" layoutY="664.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css">
+         <graphic>
+            <ImageView fitHeight="34.0" fitWidth="67.0">
+               <image>
+                  <Image url="@images/quit_text.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
 
@@ -93,6 +103,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </StackPane.margin>
       </AnchorPane>
+
       <StackPane fx:id="loadingScreen" prefHeight="150.0" prefWidth="200.0">
          <children>
             <Region prefHeight="200.0" prefWidth="200.0" styleClass="red-pane" stylesheets="@style.css" />
