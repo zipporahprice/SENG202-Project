@@ -61,7 +61,22 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     private Timeline progressBarTimeline;
 
+    private RoutingMenuController routingMenuController;
 
+
+    public MainController() {
+        this.routingMenuController = new RoutingMenuController();
+
+        // Add a listener to the property
+        this.routingMenuController.functionCalledProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showToast(stage, "Hello", 500);
+
+                // Reset the property
+                routingMenuController.functionCalledProperty().set(false);
+            }
+        });
+    }
 
     /**
      * Initializes the main stage, UI components, and the map controller.
@@ -90,7 +105,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         javaScriptBridge.setListener(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
         initProgressBarTimeline();
-        loadRoutingMenu();
 
 
     }
@@ -122,31 +136,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
             e.printStackTrace();
         }
     }
-    void loadRoutingMenu() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/routing_menu.fxml"));
-            Parent routingMenu = loader.load();
 
-            // Get the RoutingMenuController
-            RoutingMenuController routingController = loader.getController();
-            routingController.setMainController(this);  // passing the reference of MainController
-
-            // ... (Code to add routingMenu to your scene or other UI container)
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getStage(Stage stage) {
-        this.stage  = stage;
-    }
-    public void getToastInfo(String message, int millis) {
-        if(stage == null) {
-            log.error("Stage provided to init method is null.");
-            return;
-        }
-        showToast(stage,message,millis);
-    }
 
     private void initProgressBarTimeline() {
         progressBarTimeline = new Timeline(

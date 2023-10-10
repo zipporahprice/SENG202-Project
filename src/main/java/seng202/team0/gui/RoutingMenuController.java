@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.sun.tools.javac.Main;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,6 +74,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
+    private final BooleanProperty functionCalledProperty = new SimpleBooleanProperty(false);
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -79,6 +83,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
+        removeRoute.setVisible(false);
+
+
 
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
@@ -93,9 +100,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    public void setMainController(MainController mainController) {
-        this.controller = mainController;
+    public BooleanProperty functionCalledProperty() {
+        return functionCalledProperty;
     }
+
 
     private void displayRoute(int safetyScore, Route... routes) {
         List<Route> routesList = new ArrayList<>();
@@ -110,6 +118,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             alert.showAndWait();
             return;
         } else {
+            //functionCalledProperty.set(true);
             MainController.javaScriptConnector.call("displayRoute", Route
                     .routesToJsonArray(routesList), modeChoice, safetyScore);
         }
@@ -306,7 +315,12 @@ public class RoutingMenuController implements Initializable, MenuController {
             ratingText.setText("Danger: " + total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(total, route);
+
         }
+
+
+
+        removeRoute.setVisible(true);
 
 
 
@@ -340,19 +354,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
 
-        if ((startLocation.getText() == null || startLocation.getText().isEmpty())
-                || (endLocation.getText() == null || endLocation.getText().isEmpty())) {
 
-
-                controller.getToastInfo("No route to remove", 500);
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Error");
-//            alert.setHeaderText(null);
-//            alert.setContentText("No route to remove!");
-//            alert.showAndWait();
-
-            return;
-        }
         MainController.javaScriptConnector.call("removeRoute");
 
         if (selectedButton != null) {
@@ -363,6 +365,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         startLocation.setText("");
         endLocation.setText("");
+        removeRoute.setVisible(false);
 
     }
 
@@ -445,5 +448,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setEndLocation(endLocation.getText());
         route.setStopLocation(stopLocation.getText());
     }
+
+
 
 }

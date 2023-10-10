@@ -119,7 +119,7 @@
                 <Insets left="10.0" />
             </padding>
         </Button>
-      <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Remove Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+      <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Clear Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
