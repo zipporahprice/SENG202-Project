@@ -7,11 +7,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.business.CrashManager;
@@ -74,13 +78,25 @@ public class DatabaseManager {
         return manager;
     }
 
-    // TODO copy in initialiseInstanceWithUrl, did not copy as did not see a need for function
-
     /**
-     *  WARNING Sets the current singleton instance to null.
+     * Initialises database and checks if populated.
      */
-    public static void removeInstance() {
-        manager = null;
+    public void initialiseDatabase() {
+        CrashManager manager = new CrashManager();
+        List crashes = manager.getCrashLocations();
+        if (crashes.size() == 0) {
+            try {
+                CrashCsvImporter importer = new CrashCsvImporter();
+                // TODO replace with full file
+                InputStream stream = Thread.currentThread().getContextClassLoader()
+                        .getResourceAsStream("files/crash_data_10k.csv");
+                File tempFile = File.createTempFile("tempCSV", ".csv");
+                Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                manager.addAllCrashesFromFile(importer, tempFile);
+            } catch (IOException e) {
+                log.error(e);
+            }
+        }
     }
 
     /**
