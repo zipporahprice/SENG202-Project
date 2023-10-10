@@ -86,9 +86,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    private void displayRoute(Route... routes) {
+    private void displayRoute(int safetyScore, Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
+        System.out.println(safetyScore);
         MainController.javaScriptConnector.call("displayRoute", Route
                 .routesToJSONArray(routesList), modeChoice);
     }
@@ -280,7 +281,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             int total = ratingGenerator(crashInfos);
             ratingText.setText("Danger: " + total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-            displayRoute(route);
+            displayRoute(total, route);
         }
     }
 
@@ -297,7 +298,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             List<Crash> crashInfos = getOverlappingPoints(route, 1000);
             int total = ratingGenerator(crashInfos);
-            displayRoute(route);
+            displayRoute(total, route);
             ratingText.setText("Danger: " + total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
         }
