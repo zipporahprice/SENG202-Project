@@ -227,7 +227,7 @@ function getColorForSafetyScore(score) {
     if (score >= 3.0) return 'orange';  // moderately safe
     if (score >= 2.0) return 'green'; // safest
     if (score >= 1.0) return 'pink'; // impossible to die
-    return 'red';
+    return 'red'; // default if safety score is null
 }
 
 function getMode(transportMode) {
