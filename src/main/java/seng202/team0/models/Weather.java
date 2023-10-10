@@ -13,12 +13,11 @@ public enum Weather {
     HEAVYRAIN("Heavy Rain"),
     MISTORFOG("Mist or Fog"),
     SNOW("Snow"),
-//    HAILORSLEET("Hail or sleet"),
     NULL("Null");
 
     private final String name;
 
-    Weather (String name) {
+    Weather(String name) {
         this.name = name;
     }
 
@@ -26,19 +25,19 @@ public enum Weather {
      * Converts a string representation of weather into the corresponding Weather enum constant.
      *
      * @param stringWeather The string representation of the weather.
-     * @return The Weather enum constant representing the given weather string, or null if not found.
+     * @return The Weather enum constant, or null if not found.
      */
     public static Weather stringToWeather(String stringWeather) {
-        switch(stringWeather) {
+        switch (stringWeather) {
             case "Fine": return Weather.FINE;
             case "Light rain": return Weather.LIGHTRAIN;
             case "Heavy rain": return Weather.HEAVYRAIN;
             case "Mist or Fog": return Weather.MISTORFOG;
             case "Snow": return Weather.SNOW;
-//            case "Hail or sleet": return Weather.HAILORSLEET;
             default: return Weather.NULL;
         }
     }
+
     /**
      * Gets the name of the weather.
      *

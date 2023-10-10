@@ -22,7 +22,7 @@ public class RouteTest {
         List<Location> points = Arrays.asList(new Location(40.7128, -74.0060));
         Route route = new Route(points);
         String expectedJson = "[{\"lat\": 40.712800, \"lng\": -74.006000}]";
-        Assertions.assertEquals(expectedJson, route.toJSONArray(), "The JSON output should match the expected format.");
+        Assertions.assertEquals(expectedJson, route.toJsonArray(), "The JSON output should match the expected format.");
     }
 
     @Test
@@ -34,7 +34,7 @@ public class RouteTest {
 
         List<Route> routes = Arrays.asList(route1, route2);
         String expectedJson = "[[{\"lat\": 40.712800, \"lng\": -74.006000}], [{\"lat\": 34.052200, \"lng\": -118.243700}]]";
-        Assertions.assertEquals(expectedJson, Route.routesToJSONArray(routes), "The JSON output should match the expected format for multiple routes.");
+        Assertions.assertEquals(expectedJson, Route.routesToJsonArray(routes), "The JSON output should match the expected format for multiple routes.");
     }
 }
 

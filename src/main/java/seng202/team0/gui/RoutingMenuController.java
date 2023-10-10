@@ -104,7 +104,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             return;
         } else {
             MainController.javaScriptConnector.call("displayRoute", Route
-                    .routesToJSONArray(routesList), modeChoice);
+                    .routesToJsonArray(routesList), modeChoice);
         }
     }
     
