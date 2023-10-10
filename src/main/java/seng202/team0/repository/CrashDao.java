@@ -1,13 +1,17 @@
 package seng202.team0.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class that communicates with the SQLite database's crashes table through SQL queries.
@@ -21,19 +25,19 @@ import java.util.List;
  * @author Zipporah Price
  *
  */
-public class CrashDAO implements DAOInterface<Crash> {
-    private static final Logger log = LogManager.getLogger(CrashDAO.class);
+public class CrashDao implements DaoInterface<Crash> {
+    private static final Logger log = LogManager.getLogger(CrashDao.class);
     private final DatabaseManager databaseManager;
 
     /**
-     * Creates a new CrashDAO object and gets a reference to the database
+     * Creates a new CrashDAO object and gets a reference to the database.
      */
-    public CrashDAO() {
+    public CrashDao() {
         this.databaseManager = DatabaseManager.getInstance();
     }
 
     /**
-     * Gets all crashes from crashes table in the SQLite database
+     * Gets all crashes from crashes table in the SQLite database.
      *
      * @return List of all crashes from SQLite database
      */
@@ -60,7 +64,7 @@ public class CrashDAO implements DAOInterface<Crash> {
     }
 
     /**
-     * Gets an individual crash from database by id
+     * Gets an individual crash from database by id.
      *
      * @param id id of crash to get
      * @return crash from database that matches id
@@ -90,6 +94,7 @@ public class CrashDAO implements DAOInterface<Crash> {
 
     /**
      * Adds given point to the prepared statement. Used by addOne and addMultiple functions.
+     *
      * @param ps Prepared statement to add values into
      * @param crashToAdd Crash object to add to database
      */
@@ -121,19 +126,20 @@ public class CrashDAO implements DAOInterface<Crash> {
     }
 
     /**
-     * Adds one crash to database
+     * Adds one crash to database.
+     *
      * @param crashToAdd Crash object to add
      */
     @Override
     public void addOne(Crash crashToAdd) {
         // SQL statement for adding
-        String sql = "INSERT INTO crashes (speed_limit, crash_year, " +
-                "crash_location1, crash_location2, severity, region, weather, " +
-                "longitude, latitude, bicycle_involved, bus_involved, " +
-                "car_involved, holiday, moped_involved, motorcycle_involved, " +
-                "parked_vehicle_involved, pedestrian_involved, " +
-                "school_bus_involved, train_involved, truck_involved) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO crashes (speed_limit, crash_year, "
+                + "crash_location1, crash_location2, severity, region, weather, "
+                + "longitude, latitude, bicycle_involved, bus_involved, "
+                + "car_involved, holiday, moped_involved, motorcycle_involved, "
+                + "parked_vehicle_involved, pedestrian_involved, "
+                + "school_bus_involved, train_involved, truck_involved) "
+                + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (Connection conn = databaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -145,18 +151,19 @@ public class CrashDAO implements DAOInterface<Crash> {
     }
 
     /**
-     * Adds a list of Crash objects to the SQLite database
+     * Adds a list of Crash objects to the SQLite database.
+     *
      * @param toAdd Crashes to add
      */
     public void addMultiple(List<Crash> toAdd) {
         try {
-            String sql = "INSERT OR IGNORE INTO crashes (speed_limit, crash_year, " +
-                    "crash_location1, crash_location2, severity, region, weather, " +
-                    "longitude, latitude, bicycle_involved, bus_involved, " +
-                    "car_involved, holiday, moped_involved, motorcycle_involved, " +
-                    "parked_vehicle_involved, pedestrian_involved, " +
-                    "school_bus_involved, train_involved, truck_involved) " +
-                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            String sql = "INSERT OR IGNORE INTO crashes (speed_limit, crash_year, "
+                    + "crash_location1, crash_location2, severity, region, weather, "
+                    + "longitude, latitude, bicycle_involved, bus_involved, "
+                    + "car_involved, holiday, moped_involved, motorcycle_involved, "
+                    + "parked_vehicle_involved, pedestrian_involved, "
+                    + "school_bus_involved, train_involved, truck_involved) "
+                    + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
             Connection conn = databaseManager.connect();
             PreparedStatement ps = conn.prepareStatement(sql);
             conn.setAutoCommit(false);
@@ -176,6 +183,7 @@ public class CrashDAO implements DAOInterface<Crash> {
     // TODO Not implemented. Implement when able to import crashes from personal csv file
     /**
      * Deletes the corresponding objectId row in the crashes table in SQlite database.
+     *
      * @param objectId Id of object to delete
      */
     @Override
@@ -187,6 +195,7 @@ public class CrashDAO implements DAOInterface<Crash> {
     /**
      * Takes a Crash object with updates values and updates the corresponding
      * objectId row in the crashes table in the SQLite database.
+     *
      * @param toUpdate Crash that needs to be updated
      */
     @Override
@@ -197,6 +206,7 @@ public class CrashDAO implements DAOInterface<Crash> {
     /**
      * Takes a ResultSet object and creates a Crash object
      * from the data of the row with corresponding column names.
+     *
      * @param rs ResultSet from executing SQL query
      * @return Crash object with the current row result set is at
      */

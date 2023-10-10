@@ -3,7 +3,7 @@ package seng202.team0.unittests.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team0.repository.DatabaseManager;
-import seng202.team0.repository.SQLiteQueryBuilder;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import java.util.List;
  *
  */
 
-public class SQLiteQueryBuilderTest {
+public class SqliteQueryBuilderTest {
 
     /**
      * Tests create function.
      */
     @Test
     void testCreate() {
-        SQLiteQueryBuilder builder = SQLiteQueryBuilder.create();
-        Assertions.assertTrue(builder instanceof SQLiteQueryBuilder);
+        SqliteQueryBuilder builder = SqliteQueryBuilder.create();
+        Assertions.assertTrue(builder instanceof SqliteQueryBuilder);
     }
 
     /**
@@ -30,7 +30,7 @@ public class SQLiteQueryBuilderTest {
      */
     @Test
     void testSelect() {
-        SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().select("id, ltd, lng");
+        SqliteQueryBuilder builder = SqliteQueryBuilder.create().select("id, ltd, lng");
         Assertions.assertEquals("SELECT id, ltd, lng ", builder.getQuery());
     }
 
@@ -39,7 +39,7 @@ public class SQLiteQueryBuilderTest {
      */
     @Test
     void testFrom() {
-        SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().from("crashes");
+        SqliteQueryBuilder builder = SqliteQueryBuilder.create().from("crashes");
         Assertions.assertEquals("FROM crashes ", builder.getQuery());
     }
 
@@ -48,7 +48,7 @@ public class SQLiteQueryBuilderTest {
      */
     @Test
     void testWhere() {
-        SQLiteQueryBuilder builder = SQLiteQueryBuilder.create().where("age > 30, speed > 30");
+        SqliteQueryBuilder builder = SqliteQueryBuilder.create().where("age > 30, speed > 30");
         Assertions.assertEquals("WHERE age > 30, speed > 30 ", builder.getQuery());
     }
 
@@ -58,9 +58,9 @@ public class SQLiteQueryBuilderTest {
     @Test
     void testBuild() {
         // Reset to make sure nothing in database
-        DatabaseManager.getInstance().resetDB();
+        DatabaseManager.getInstance().resetDb();
 
-        List crashes = SQLiteQueryBuilder.create()
+        List crashes = SqliteQueryBuilder.create()
                                         .select("object_id, longitude, latitude")
                                         .from("crashes")
                                         .where("")
@@ -74,7 +74,7 @@ public class SQLiteQueryBuilderTest {
      */
     @Test
     void testGetQuery() {
-        String query = SQLiteQueryBuilder.create().getQuery();
+        String query = SqliteQueryBuilder.create().getQuery();
         Assertions.assertEquals(query, "");
     }
 

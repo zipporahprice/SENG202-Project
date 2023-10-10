@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDAO;
-import seng202.team0.repository.SQLiteQueryBuilder;
+import seng202.team0.repository.CrashDao;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * Manages operations related to Crash data, including importing Crash data from CSV files,
@@ -25,10 +25,10 @@ import seng202.team0.repository.SQLiteQueryBuilder;
 
 public class CrashManager {
     private static final Logger log = LogManager.getLogger(CrashManager.class);
-    private final CrashDAO crashDao;
+    private final CrashDao crashDao;
 
     public CrashManager() {
-        crashDao = new CrashDAO();
+        crashDao = new CrashDao();
     }
 
     /**
@@ -67,13 +67,13 @@ public class CrashManager {
         String where = FilterManager.getInstance().toString();
 
         if (where.length() == 0) {
-            return SQLiteQueryBuilder
+            return SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
                     .build();
         } else {
-            return SQLiteQueryBuilder
+            return SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)

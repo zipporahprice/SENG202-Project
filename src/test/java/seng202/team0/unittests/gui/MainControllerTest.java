@@ -3,9 +3,8 @@ package seng202.team0.unittests.gui;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
-import seng202.team0.repository.SQLiteQueryBuilder;
+import seng202.team0.repository.SqliteQueryBuilder;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ public class MainControllerTest {
         severitiesSelected.add(4);
         severitiesSelected.add(8);
 
-        List crashes = SQLiteQueryBuilder
+        List crashes = SqliteQueryBuilder
                 .create()
                 .select("object_id")
                 .from("crashes")
@@ -49,7 +48,7 @@ public class MainControllerTest {
         weatherSelected.add("Snow");
         weatherSelected.add("Null");
 
-        List crashes = SQLiteQueryBuilder
+        List crashes = SqliteQueryBuilder
                 .create()
                 .select("object_id")
                 .from("crashes")
