@@ -48,6 +48,9 @@ public class App {
             }
         }
 
+        // Initialise databaseManager
+        DatabaseManager.getInstance();
+
         // Initialise FilterManager singleton class
         FilterManager.getInstance();
 

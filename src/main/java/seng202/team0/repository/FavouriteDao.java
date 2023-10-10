@@ -1,13 +1,17 @@
 package seng202.team0.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Favourite;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class that communicates with the favourites table in the database through SQL queries.
@@ -21,17 +25,20 @@ import java.util.List;
  * @author Zipporah Price
  *
  */
-public class FavouriteDAO implements DAOInterface<Favourite> {
-    private static final Logger log = LogManager.getLogger(FavouriteDAO.class);
+public class FavouriteDao implements DaoInterface<Favourite> {
+    private static final Logger log = LogManager.getLogger(FavouriteDao.class);
     private final DatabaseManager databaseManager;
 
     /**
-     * Creates a new FavouriteDAO object and creates reference to database
+     * Creates a new FavouriteDAO object and creates reference to database.
      */
-    public FavouriteDAO() { this.databaseManager = DatabaseManager.getInstance(); }
+    public FavouriteDao() {
+        this.databaseManager = DatabaseManager.getInstance();
+    }
 
     /**
-     * Gets all favourite routes from the database
+     * Gets all favourite routes from the database.
+     *
      * @return List of Favourite objects
      */
     @Override
@@ -54,7 +61,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     }
 
     /**
-     * Gets one Favourite object from the database using given ID
+     * Gets one Favourite object from the database using given ID.
+     *
      * @param id int identifier for a Favourite object
      * @return Favourite object corresponding to id
      */
@@ -81,7 +89,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     }
 
     /**
-     * Adds a given Favourite object to a prepared statement
+     * Adds a given Favourite object to a prepared statement.
+     *
      * @param ps PreparedStatement being added to
      * @param toAdd Favourite object to be added
      */
@@ -100,14 +109,15 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     }
 
     /**
-     * Adds a single given Favourite to the database
+     * Adds a single given Favourite to the database.
+     *
      * @param toAdd Favourite object to be added
      */
     @Override
     public void addOne(Favourite toAdd) {
         try {
-            String sql = "INSERT INTO favourites (start_address, end_address, start_lat, start_lng," +
-                    "end_lat, end_lng, filters) values (?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO favourites (start_address, end_address, start_lat, start_lng,"
+                    + "end_lat, end_lng, filters) values (?,?,?,?,?,?,?);";
             Connection conn = databaseManager.connect();
             PreparedStatement ps = conn.prepareStatement(sql);
             addToPreparedStatement(ps, toAdd);
@@ -119,13 +129,15 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
 
     // TODO think about use for this. Will a user want to import a previous favourites csv file?
     /**
-     * Adds a given list of Favourite objects to the database
+     * Adds a given list of Favourite objects to the database.
+     *
      * @param toAdd List of Favourites to be added
      */
     public void addMultiple(List<Favourite> toAdd) {
         try {
-            String sql = "INSERT OR IGNORE INTO favourites (start_address, end_address, start_lat, start_long" +
-                    "end_lat, end_long, filters) values (?,?,?,?,?,?,?);";
+            String sql = "INSERT OR IGNORE INTO favourites"
+                    + " (start_address, end_address, start_lat, start_long"
+                    + "end_lat, end_long, filters) values (?,?,?,?,?,?,?);";
             Connection conn = databaseManager.connect();
             PreparedStatement ps = conn.prepareStatement(sql);
             conn.setAutoCommit(false);
@@ -140,7 +152,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     }
 
     /**
-     * Deletes a single Favourite object from the database using given objectId
+     * Deletes a single Favourite object from the database using given objectId.
+     *
      * @param id ID of Favourite to be deleted
      */
     @Override
@@ -157,7 +170,8 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
 
     // TODO Implement if we want to give users functionality to update a saved Favourite
     /**
-     * Updates a given Favourite within the database
+     * Updates a given Favourite within the database.
+     *
      * @param toUpdate Favourite object to be updated
      */
     @Override
@@ -168,6 +182,7 @@ public class FavouriteDAO implements DAOInterface<Favourite> {
     /**
      * Takes a ResultSet object and creates a Favourite object
      * from the data of the row with corresponding column names.
+     *
      * @param rs ResultSet from executing SQL query
      * @return Favourite object with the current row result set is at
      */

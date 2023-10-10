@@ -26,7 +26,7 @@ import seng202.team0.models.Favourite;
 import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
-import seng202.team0.repository.FavouriteDAO;
+import seng202.team0.repository.FavouriteDao;
 
 /**
  * The `RoutingMenuController` class manages user
@@ -148,14 +148,14 @@ public class RoutingMenuController implements Initializable, MenuController {
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude());
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), filters);
-        FavouriteDAO favorites = new FavouriteDAO();
+        FavouriteDao favorites = new FavouriteDao();
         favorites.addOne(favourite);
     }
 
 
     @FXML
     private void displayRoutes() {
-        FavouriteDAO favourites = new FavouriteDAO();
+        FavouriteDao favourites = new FavouriteDao();
         List<Favourite> favouritesList = favourites.getAll();
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList
                 .stream().map(favourite -> {
@@ -168,7 +168,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void loadRoute() throws SQLException {
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
         if (favouriteId != 0 && favouriteId != -1) {
-            FavouriteDAO favourites = new FavouriteDAO();
+            FavouriteDao favourites = new FavouriteDao();
             Favourite favourite = favourites.getOne(favouriteId);
 
             // Update FilterManager class with the filters associated to the favourite route

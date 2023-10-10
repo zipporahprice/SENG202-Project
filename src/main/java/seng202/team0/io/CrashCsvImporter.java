@@ -23,7 +23,7 @@ import seng202.team0.models.Crash;
 
 public class CrashCsvImporter {
 
-    private static final Logger log = LogManager.getLogger(App.class);
+    private static final Logger log = LogManager.getLogger(CrashCsvImporter.class);
 
     /**
      * List of all the crashes as Point objects from the given file object.

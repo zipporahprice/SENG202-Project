@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
 import seng202.team0.io.CrashCsvImporter;
-import seng202.team0.repository.CrashDAO;
+import seng202.team0.repository.CrashDao;
 import seng202.team0.models.Crash;
 import seng202.team0.repository.DatabaseManager;
 
@@ -22,8 +22,8 @@ import java.util.List;
  *
  */
 
-public class CrashDAOTest {
-    private static CrashDAO testDAO;
+public class CrashDaoTest {
+    private static CrashDao testDAO;
     private static CrashCsvImporter testImporter;
     private static CrashManager testManager;
     private static File testFile;
@@ -33,10 +33,10 @@ public class CrashDAOTest {
      */
     @BeforeEach
     void testCreate() {
-        testDAO = new CrashDAO();
+        testDAO = new CrashDao();
         testImporter = new CrashCsvImporter();
         testManager = new CrashManager();
-        DatabaseManager.getInstance().resetDB();
+        DatabaseManager.getInstance().resetDb();
 
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         testFile = new File(newUrl.getPath());
