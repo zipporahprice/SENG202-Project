@@ -46,6 +46,8 @@ function initMap() {
     drawControl = new L.Control.Draw({
         edit: {
             featureGroup: drawnItems,
+            remove: false,
+            edit: false
         },
         draw: {
             circle: false,
@@ -352,39 +354,7 @@ function drawingModeOn() {
     map.addControl(drawControl);
     map.off('zoomend');
     map.off('moveend');
-    map.on('draw:created', function (event) {
-        // Remove previous drawings
-        drawnItems.clearLayers();
-
-        // Add new drawing
-        const layer = event.layer;
-        drawnItems.addLayer(layer);
-
-        if (layer instanceof L.Rectangle) {
-            const latLngs = layer.getBounds(); // Get the coordinates within the shape
-            const southwest = latLngs.getSouthWest();
-            const northeast = latLngs.getNorthEast();
-
-            const southwestLat = southwest.lat;
-            const southwestLng = southwest.lng;
-            const northeastLat = northeast.lat;
-            const northeastLng = northeast.lng;
-
-            javaScriptBridge.setFilterManagerViewport(southwestLat, southwestLng, northeastLat, northeastLng);
-        }
-
-        // TODO for implementing a circle
-        // else if (layer instanceof L.Circle) {
-        //     const center = layer.getLatLng();
-        //     const radius = layer.getRadius();
-        //
-        //     const centerLat = center.lat;
-        //     const centerLng = center.lng;
-        //
-        //     let latLngString = centerLat + " " + centerLng + " " + radius;
-        //     javaScriptBridge.printThings(latLngString);
-        // }
-    });
+    map.on('draw:created', handleNewDrawing);
 }
 
 function drawingModeOff() {
@@ -395,4 +365,38 @@ function drawingModeOff() {
     setFilteringViewport();
     map.on('zoomend', updateDataShown);
     map.on('moveend', updateDataShown);
+}
+
+function handleNewDrawing(event) {
+    // Remove previous drawings
+    drawnItems.clearLayers();
+
+    // Add new drawing
+    const layer = event.layer;
+    drawnItems.addLayer(layer);
+
+    if (layer instanceof L.Rectangle) {
+        const latLngs = layer.getBounds(); // Get the coordinates within the shape
+        const southwest = latLngs.getSouthWest();
+        const northeast = latLngs.getNorthEast();
+
+        const southwestLat = southwest.lat;
+        const southwestLng = southwest.lng;
+        const northeastLat = northeast.lat;
+        const northeastLng = northeast.lng;
+
+        javaScriptBridge.setFilterManagerViewport(southwestLat, southwestLng, northeastLat, northeastLng);
+    }
+
+    // TODO for implementing a circle
+    // else if (layer instanceof L.Circle) {
+    //     const center = layer.getLatLng();
+    //     const radius = layer.getRadius();
+    //
+    //     const centerLat = center.lat;
+    //     const centerLng = center.lng;
+    //
+    //     let latLngString = centerLat + " " + centerLng + " " + radius;
+    //     javaScriptBridge.printThings(latLngString);
+    // }
 }
