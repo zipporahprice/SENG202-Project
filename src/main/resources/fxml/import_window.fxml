@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefHeight="100.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.ImportMenuController">
+<StackPane prefHeight="102.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.ImportMenuController">
 
-<AnchorPane fx:id="importPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
+<AnchorPane fx:id="importPane" maxHeight="117.0" maxWidth="250.0" prefHeight="101.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
     <children>
         <Label layoutX="81.0" layoutY="14.0" text="CSV File Options" textFill="WHITE" />
-        <Button fx:id="importButton" layoutX="55.0" layoutY="48.0" mnemonicParsing="false" onAction="#openFileChooserDialog" text="Import" />
-        <Button layoutX="144.0" layoutY="48.0" mnemonicParsing="false" text="Export" />
+        <Button fx:id="importDataButton" layoutX="35.0" layoutY="48.0" mnemonicParsing="false" onAction="#openFileChooserDialog" text="Import Data" />
+        <Button fx:id="resetDataButton" layoutX="135.0" layoutY="48.0" mnemonicParsing="false" onAction="#resetDatabase" prefHeight="25.0" prefWidth="80.0" text="Reset Data" />
     </children>
     <StackPane.margin>
         <Insets left="335.0" top="10.0" />
