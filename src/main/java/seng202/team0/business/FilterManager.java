@@ -69,7 +69,7 @@ public class FilterManager {
 
         earliestYear = 2000;
 
-        latestYear = 2020;
+        latestYear = 2023;
 
         modesSelected = new ArrayList<>(Arrays.asList(
                 "bicycle_involved",
