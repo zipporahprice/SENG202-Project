@@ -300,7 +300,7 @@ function setData() {
             "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
             "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
             "<p><strong>Severity:</strong> " + severity + "</p>" +
-            "<p><strong>Year:</strong> " + a.crash_year + "</p>" + // Add year
+            "<p><strong>Year:</strong> " + a.crashYear + "</p>" + // Add year
             "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
             "</div>"
         );
