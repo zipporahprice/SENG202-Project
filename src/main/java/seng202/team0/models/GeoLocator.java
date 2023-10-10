@@ -1,5 +1,10 @@
 package seng202.team0.models;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,11 +12,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import seng202.team0.App;
 
 /**
@@ -35,19 +35,20 @@ public class GeoLocator {
      */
 
     public Location getLocation(String address) {
-        String logMessage = String.format("Requesting geolocation from Nominatim for address:" +
-                " %s, New Zealand", address);
+        String logMessage = String.format("Requesting geolocation from Nominatim for address:"
+                + " %s, New Zealand", address);
         log.error(logMessage);
         address = address.replace(' ', '+');
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
-                    URI.create("https://nominatim.openstreetmap.org/search?q=" +
-                            address + ",+New+Zealand&format=json")
+                    URI.create("https://nominatim.openstreetmap.org/search?q="
+                            + address + ",+New+Zealand&format=json")
             ).build();
             // Getting the response
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
             // Parsing the json response to get the latitude and longitude co-ordinates
             JSONParser parser = new JSONParser();
             JSONArray results = (JSONArray) parser.parse(response.body());
@@ -126,9 +127,10 @@ public class GeoLocator {
     }
 
     /*Need to check out the API usage policies before getting into this*/
-//    public Collection<String> getAddressSuggestions(String userInput) {
-//        // Call the Nominatim API similarly to getLocation but fetch multiple results and return them
-//        // For now, let's assume it returns a dummy list for simplicity
-//        return Arrays.asList("123 Main St", "456 Elm St");
-//    }
+    //    public Collection<String> getAddressSuggestions(String userInput) {
+    //        // Call the Nominatim API similarly to getLocation but fetch
+    //        multiple results and return them
+    //        // For now, let's assume it returns a dummy list for simplicity
+    //        return Arrays.asList("123 Main St", "456 Elm St");
+    //    }
 }

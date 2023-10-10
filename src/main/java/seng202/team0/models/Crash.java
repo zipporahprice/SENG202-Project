@@ -67,10 +67,11 @@ public class Crash {
      * @param trainInvolved             Indicates train involvement.
      * @param truckInvolved             Indicates truck involvement.
      */
-    public Crash(int id, int speedLimit, int year, String location1, String location2, String severity,
-                 String region, String weather, double longitude, double lat, boolean bicycleInvolved,
-                 boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved,
-                 boolean motorcycleInvolved, boolean parkedVehicleInvolved, boolean pedestrianInvolved,
+    public Crash(int id, int speedLimit, int year, String location1, String location2,
+                 String severity, String region, String weather, double longitude, double lat,
+                 boolean bicycleInvolved, boolean busInvolved, boolean carInvolved,
+                 boolean holiday, boolean mopedInvolved, boolean motorcycleInvolved,
+                 boolean parkedVehicleInvolved, boolean pedestrianInvolved,
                  boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved) {
         this.objectId = id;
         this.speedLimit = speedLimit;

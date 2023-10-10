@@ -50,7 +50,7 @@ public class Route {
      * @param routes list of route objects
      * @return list of route objects as a JSON array of arrays
      */
-    public static String routesToJSONArray(List<Route> routes) {
+    public static String routesToJsonArray(List<Route> routes) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[");
         routes.forEach(route -> stringBuilder.append(route.toJsonArray()).append(", "));
