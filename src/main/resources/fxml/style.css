@@ -48,7 +48,7 @@
 }
 
 .address-button-style {
-    -fx-background-color:  linear-gradient(to left, rgba(0,77,182,1) 0%, rgba(9,112,202,1) 27%, rgba(23,163,231,1) 67%, rgba(34,205,255,1) 100%);
+    -fx-background-color:  linear-gradient(to right, rgba(0,77,182,1) 0%, rgba(9,112,202,1) 27%, rgba(23,163,231,1) 67%, rgba(34,205,255,1) 100%);
     -fx-background-radius: 30px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
     -fx-background-position: left;
