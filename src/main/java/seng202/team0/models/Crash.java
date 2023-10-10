@@ -3,7 +3,7 @@ package seng202.team0.models;
 import javafx.util.Pair;
 
 /**
- * Represents a crash event with various attributes such as speed limit, year, location, severity, and more.
+ * Represents a crash event with attributes such as year, location, severity.
  *
  * @author Angelica Silva
  * @author Christopher Wareing
@@ -14,7 +14,7 @@ import javafx.util.Pair;
  */
 public class Crash {
 
-    private int objectID;
+    private int objectId;
     private int speedLimit;
     private int crashYear;
 
@@ -67,10 +67,12 @@ public class Crash {
      * @param trainInvolved             Indicates train involvement.
      * @param truckInvolved             Indicates truck involvement.
      */
-    public Crash(int id, int speedLimit, int year, String location1, String location2, String severity, String region, String weather, double longitude, double lat,
-                 boolean bicycleInvolved, boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved, boolean motorcycleInvolved,
-                 boolean parkedVehicleInvolved, boolean pedestrianInvolved, boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved){
-        this.objectID = id;
+    public Crash(int id, int speedLimit, int year, String location1, String location2, String severity,
+                 String region, String weather, double longitude, double lat, boolean bicycleInvolved,
+                 boolean busInvolved, boolean carInvolved, boolean holiday, boolean mopedInvolved,
+                 boolean motorcycleInvolved, boolean parkedVehicleInvolved, boolean pedestrianInvolved,
+                 boolean schoolBusInvolved, boolean trainInvolved, boolean truckInvolved) {
+        this.objectId = id;
         this.speedLimit = speedLimit;
         this.crashYear = year;
         this.crashLocation1 = location1;
@@ -96,6 +98,7 @@ public class Crash {
 
     /**
      * Constructor of Crash object but only with location and severity parameters.
+     *
      * @param latitude                  Latitude of the crash location.
      * @param longitude                 Longitude of the crash location.
      * @param severity                  Severity of the crash.
@@ -112,8 +115,8 @@ public class Crash {
      *
      * @return The object ID of the crash.
      */
-    public int getObjectId(){
-        return objectID;
+    public int getObjectId() {
+        return objectId;
     }
 
     /**
@@ -121,7 +124,7 @@ public class Crash {
      *
      * @return The speed limit at the crash location.
      */
-    public int getSpeedLimit(){
+    public int getSpeedLimit() {
         return speedLimit;
     }
 
@@ -130,7 +133,7 @@ public class Crash {
      *
      * @return The year of the crash.
      */
-    public int getCrashYear(){
+    public int getCrashYear() {
         return crashYear;
     }
 
@@ -139,7 +142,7 @@ public class Crash {
      *
      * @return The description of the first crash location.
      */
-    public String getCrashLocation1(){
+    public String getCrashLocation1() {
         return crashLocation1;
     }
 
@@ -148,7 +151,7 @@ public class Crash {
      *
      * @return The description of the second crash location.
      */
-    public String getCrashLocation2(){
+    public String getCrashLocation2() {
         return crashLocation2;
     }
 
@@ -166,7 +169,7 @@ public class Crash {
      *
      * @return The region of the crash.
      */
-    public Region getRegion(){
+    public Region getRegion() {
         return region;
     }
 
@@ -175,7 +178,7 @@ public class Crash {
      *
      * @return The weather conditions at the time of the crash.
      */
-    public Weather getWeather(){
+    public Weather getWeather() {
         return weather;
     }
 
@@ -184,7 +187,7 @@ public class Crash {
      *
      * @return The longitude coordinate of the crash location.
      */
-    public Double getLongitude(){
+    public Double getLongitude() {
         return longitude;
     }
 
@@ -193,7 +196,7 @@ public class Crash {
      *
      * @return The latitude coordinate of the crash location.
      */
-    public Double getLatitude(){
+    public Double getLatitude() {
         return latitude;
     }
 
@@ -202,7 +205,7 @@ public class Crash {
      *
      * @return A pair containing the longitude and latitude coordinates of the crash location.
      */
-    public Pair<Double,Double> getLongitudeAndLatitude(){
+    public Pair<Double, Double> getLongitudeAndLatitude() {
         Pair geoLocation = new Pair(longitude, latitude);
         return geoLocation;
     }
@@ -212,7 +215,7 @@ public class Crash {
      *
      * @return True if bicycles were involved, false otherwise.
      */
-    public boolean isBicycleInvolved(){
+    public boolean isBicycleInvolved() {
         return bicycleInvolved;
     }
 
@@ -307,7 +310,7 @@ public class Crash {
     }
 
     /**
-     * Gets the integer value of severity
+     * Gets the integer value of severity.
      *
      * @return severeInt
      */

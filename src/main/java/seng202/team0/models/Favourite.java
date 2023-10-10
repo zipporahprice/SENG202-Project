@@ -1,7 +1,7 @@
 package seng202.team0.models;
 
 /**
- * Represents a crash event with various attributes such as speed limit, year, location, severity, and more.
+ * Represents a crash event with attributes such as year, location, severity.
  *
  * @author Angelica Silva
  * @author Christopher Wareing
@@ -24,6 +24,7 @@ public class Favourite {
 
     /**
      * Constructs a Favourite object with relevant favourite route information.
+     *
      * @param startAddress The starting address.
      * @param endAddress   The ending address.
      * @param startLat     Latitude of the starting location.
@@ -32,7 +33,8 @@ public class Favourite {
      * @param endLong      Longitude of the ending location.
      * @param filters      Route filters.
      */
-    public Favourite(String startAddress, String endAddress, double startLat, double startLong, double endLat, double endLong, String filters) {
+    public Favourite(String startAddress, String endAddress, double startLat, double startLong,
+                     double endLat, double endLong, String filters) {
         this.startAddress = startAddress;
         this.endAddress = endAddress;
         this.startLat = startLat;
@@ -93,14 +95,17 @@ public class Favourite {
      *
      * @return The start address.
      */
-    public String getStartAddress() {return startAddress;}
+    public String getStartAddress() {
+        return startAddress;
+    }
 
     /**
      * Get the end address associated with the favourite.
      *
      * @return The end address.
      */
-    public String getEndAddress() {return endAddress;}
-
+    public String getEndAddress() {
+        return endAddress;
+    }
 
 }
