@@ -26,8 +26,8 @@ public class GeoLocationTest {
         GeoLocator locator = new GeoLocator();
         Location calcLocation = locator.getLocation(address);
         assertNotNull(calcLocation);  // Ensure the location is not null before proceeding
-        assertEquals(-43.488116649999995, calcLocation.latitude, delta);
-        assertEquals(172.54213544359874, calcLocation.longitude, delta);
+        assertEquals(-43.488116649999995, calcLocation.getLatitude(), delta);
+        assertEquals(172.54213544359874, calcLocation.getLongitude(), delta);
     }
 
     @Test

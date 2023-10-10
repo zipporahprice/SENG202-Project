@@ -12,9 +12,9 @@ package seng202.team0.models;
  *
  */
 public class Location {
-    public double latitude;
+    private double latitude;
 
-    public double longitude;
+    private double longitude;
 
     /**
      * Creates a position by using the longitude and latitude of that position
@@ -24,5 +24,21 @@ public class Location {
     public Location(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    /**
+     * Returns the latitude value of the location
+     * @return latitude
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Returns the longitude value of the location
+     * @return longitude
+     */
+    public double getLongitude() {
+        return longitude;
     }
 }

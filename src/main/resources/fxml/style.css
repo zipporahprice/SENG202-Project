@@ -52,6 +52,10 @@
     -fx-background-radius: 30px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
     -fx-background-position: left;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
 }
 
 .address-button-add-style {

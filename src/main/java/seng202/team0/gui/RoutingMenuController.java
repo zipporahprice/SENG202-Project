@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
@@ -61,6 +62,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Button walkingButton;
 
+    @FXML
+    private Button removeRoute;
+
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
@@ -89,9 +93,22 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        MainController.javaScriptConnector.call("displayRoute", Route
-                .routesToJSONArray(routesList), modeChoice);
+        if(modeChoice == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No Mode of Transport Selected!" +
+                    "\nPlease Select a mode of Transport");
+
+            alert.showAndWait();
+            return;
+        } else {
+            MainController.javaScriptConnector.call("displayRoute", Route
+                    .routesToJSONArray(routesList), modeChoice);
+        }
     }
+    
+
 
     /**
      * Adds a location when the "Add Location" button is clicked.
@@ -127,10 +144,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
-        String startAddress = geolocator.getAddress(start.latitude, start.longitude);
-        String endAddress = geolocator.getAddress(end.latitude, end.longitude);
+        String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude());
+        String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude());
         Favourite favourite = new Favourite(startAddress, endAddress,
-                start.latitude, start.longitude, end.latitude, end.longitude, filters);
+                start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), filters);
         FavouriteDAO favorites = new FavouriteDAO();
         favorites.addOne(favourite);
     }
@@ -251,11 +268,11 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     public double haversineDistance(Location loc1, Crash loc2) {
         double r = 6371000; // Earth radius in meters
-        double deltaLat = Math.toRadians(loc2.getLatitude() - loc1.latitude);
-        double deltaLon = Math.toRadians(loc2.getLongitude() - loc1.longitude);
+        double deltaLat = Math.toRadians(loc2.getLatitude() - loc1.getLatitude());
+        double deltaLon = Math.toRadians(loc2.getLongitude() - loc1.getLongitude());
 
         double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
-                + Math.cos(Math.toRadians(loc1.latitude))
+                + Math.cos(Math.toRadians(loc1.getLatitude()))
                 * Math.cos(Math.toRadians(loc2.getLatitude()))
                 * Math.sin(deltaLon  / 2) * Math.sin(deltaLon / 2);
 
@@ -282,8 +299,42 @@ public class RoutingMenuController implements Initializable, MenuController {
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(route);
         }
+
+
+
     }
 
+    /**
+     * Calls the JS function, removeRoute.
+     * When the corresponding button is pressed in the
+     * GUI, this method is called and
+     * the route is removed
+     */
+    @FXML
+    private void removeRoute() {
+
+        if ((startLocation.getText().equals(null) || startLocation.getText().isEmpty()) ||
+                (endLocation.getText().equals(null)|| endLocation.getText().isEmpty())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No route to remove!");
+            alert.showAndWait();
+
+            return;
+        }
+        MainController.javaScriptConnector.call("removeRoute");
+
+        if (selectedButton != null) {
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("hamburgerStyle");
+            selectedButton = null; // Reset the reference after resetting its styles
+        }
+
+        startLocation.setText("");
+        endLocation.setText("");
+
+    }
     private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
@@ -333,6 +384,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
+
         modeChoice = (String) chosenButton.getUserData();
 
         if (Objects.equals(chosenButton, selectedButton)) {
@@ -349,6 +401,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
+
         }
     }
 

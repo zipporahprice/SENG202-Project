@@ -56,4 +56,10 @@ public class RouteManager {
         stopLocation = location;
     }
 
+    public void clearRoute() {
+        startLocation = null;
+        endLocation = null;
+        stopLocation = null;
+    }
+
 }

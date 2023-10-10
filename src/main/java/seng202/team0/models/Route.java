@@ -33,7 +33,7 @@ public class Route {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[");
         route.forEach(pos -> stringBuilder.append(
-                String.format("{\"lat\": %f, \"lng\": %f}, ", pos.latitude, pos.longitude)));
+                String.format("{\"lat\": %f, \"lng\": %f}, ", pos.getLatitude(), pos.getLongitude())));
         if (stringBuilder.length() > 2)
             stringBuilder.setLength(stringBuilder.length() - 2);
         stringBuilder.append("]");

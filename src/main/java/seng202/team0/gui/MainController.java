@@ -95,13 +95,12 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private void initProgressBarTimeline() {
         progressBarTimeline = new Timeline(
                 new KeyFrame(
-                        Duration.seconds(1), // Adjust this based on expected average loading time
+                        Duration.seconds(1),
                         new KeyValue(progressBar.progressProperty(), 1.0)
                 )
         );
         progressBarTimeline.setCycleCount(1);
 
-        // Listen to the progress property of the ProgressBar
         progressBar.progressProperty().addListener((obs, oldVal, newVal) -> {
             int progressPercentage = (int) (newVal.doubleValue() * 100);
             loadingPercentageLabel.setText(progressPercentage + "%");
@@ -112,8 +111,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
-
-                // Stop the ongoing Timeline and fill the ProgressBar to 100%
                 progressBarTimeline.stop();
                 animateProgressBarToFull(progressBar);
             }
@@ -121,17 +118,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
     private void animateProgressBarToFull(ProgressBar progressBar) {
-        // Duration of the animation (e.g., 500ms)
         final Duration duration = Duration.millis(500);
-        // Create a new timeline for the animation
         final Timeline timeline = new Timeline();
-
-        // KeyValue defines a value at a specific point in time for a specific property
-        // Here, we're saying "at the end of the animation, set the progress property to 1.0"
         KeyValue keyValue = new KeyValue(progressBar.progressProperty(), 1.0);
 
-        // KeyFrame defines a specific point in the timeline
-        // Here, we're saying "at the end of the duration, apply the keyValue"
         KeyFrame keyFrame = new KeyFrame(duration, keyValue);
 
         timeline.getKeyFrames().add(keyFrame);
@@ -232,19 +222,15 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private void fadeOutLoadingScreen() {
         FadeTransition fadeTransition = new FadeTransition();
 
-        // Set the node you want to fade out
         fadeTransition.setNode(loadingScreen);
 
-        // Set the duration of the fade out
         fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
 
-        // Set the starting and ending opacity values
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
 
         fadeTransition.setDelay(Duration.millis(1500));
 
-        // Add an action to be processed once the animation is done
         fadeTransition.setOnFinished(event -> {
             loadingScreen.setVisible(false);
         });

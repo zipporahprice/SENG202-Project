@@ -11,45 +11,34 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
+<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
 
     <children>
-        <TextField fx:id="startLocation" maxHeight="75.0" maxWidth="300.0" onAction="#getStart" prefHeight="75.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+        <TextField fx:id="startLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStart" prefHeight="50.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
                 <Insets left="335.0" top="100.0" />
             </StackPane.margin></TextField>
-        <TextField fx:id="endLocation" maxHeight="75.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+        <TextField fx:id="endLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="180.0" />
+                <Insets left="335.0" top="155.0" />
             </StackPane.margin></TextField>
-        <TextField fx:id="stopLocation" maxHeight="75.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+        <TextField fx:id="stopLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="260.0" />
+                <Insets left="335.0" top="210.0" />
             </StackPane.margin></TextField>
-        <Button fx:id="generateRoute" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-            <font>
-                <Font name="System Bold" size="15.0" />
-            </font>
-            <StackPane.margin>
-                <Insets left="335.0" top="340.0" />
-            </StackPane.margin>
-            <padding>
-                <Insets left="10.0" />
-            </padding>
-        </Button>
-        <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="99.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="135.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
             <StackPane.margin>
                 <Insets left="335.0" top="390.0" />
             </StackPane.margin></Button>
-        <Button fx:id="removeStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="148.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="removeStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="135.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
             <StackPane.margin>
-                <Insets left="465.0" top="390.0" />
+                <Insets left="480.0" top="390.0" />
             </StackPane.margin>
         </Button>
         <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-remove-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
@@ -117,6 +106,28 @@
          </graphic>
          <StackPane.margin>
             <Insets left="525.0" top="10.0" />
+         </StackPane.margin>
+      </Button>
+        <Button fx:id="generateRoute" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+            <StackPane.margin>
+                <Insets left="335.0" top="267.0" />
+            </StackPane.margin>
+            <padding>
+                <Insets left="10.0" />
+            </padding>
+        </Button>
+      <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Remove Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+         <StackPane.margin>
+            <Insets left="335.0" top="320.0" />
          </StackPane.margin>
       </Button>
     </children>
