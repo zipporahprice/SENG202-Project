@@ -1,7 +1,8 @@
 package seng202.team0.models;
 
 /**
- * class for User model object
+ * Class for User model object.
+ *
  * @author Angelica Silva
  */
 public class User {
@@ -11,7 +12,8 @@ public class User {
     // TODO think about making usernames unique, and passwords encrypted text
 
     /**
-     * constructor, creates new User object
+     * Constructor, creates new User object.
+     *
      * @param id user id
      * @param username username
      * @param password plaintext
@@ -23,7 +25,8 @@ public class User {
     }
 
     /**
-     * constructor without id param, creates new User object
+     * Constructor without id param, creates new User object.
+     *
      * @param username username
      * @param password plaintext
      */
@@ -33,28 +36,38 @@ public class User {
     }
 
     /**
-     * sets User id for  database
+     * Sets User id for database.
+     *
      * @param id id to set
      */
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * gets user's id
+     * Gets user's id.
+     *
      * @return user id
      */
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
     /**
-     * gets user's username
+     * Gets user's username.
+     *
      * @return username
      */
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     /**
-     * gets user's password
+     * Gets user's password.
+     *
      * @return password
      */
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 }
