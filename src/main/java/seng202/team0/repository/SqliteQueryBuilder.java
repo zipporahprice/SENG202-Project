@@ -1,12 +1,15 @@
 package seng202.team0.repository;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Builder class of SQL queries for the SQLite database.
@@ -22,8 +25,8 @@ import java.util.List;
  *
  */
 
-public class SQLiteQueryBuilder {
-    private static final Logger log = LogManager.getLogger(SQLiteQueryBuilder.class);
+public class SqliteQueryBuilder {
+    private static final Logger log = LogManager.getLogger(SqliteQueryBuilder.class);
     private final DatabaseManager databaseManager;
     private static StringBuilder query;
     private final List<String> selectedColumns;
@@ -32,7 +35,7 @@ public class SQLiteQueryBuilder {
      * Private instantiate that allows future connections to the database,
      * creates an empty query, and an empty list for columns selected to move to.
      */
-    private SQLiteQueryBuilder() {
+    private SqliteQueryBuilder() {
         this.databaseManager = DatabaseManager.getInstance();
         query = new StringBuilder();
         this.selectedColumns = new ArrayList<>();
@@ -41,23 +44,25 @@ public class SQLiteQueryBuilder {
     /**
      * Create function creates a new instance of the class.
      * Done for readability with function chaining.
+     *
      * @return SQLiteQueryBuilder instance to chain methods
      */
-    public static SQLiteQueryBuilder create() {
-        return new SQLiteQueryBuilder();
+    public static SqliteQueryBuilder create() {
+        return new SqliteQueryBuilder();
     }
 
     /**
-     * Takes a comma separated string of columns and appends to current query
+     * Takes a comma separated string of columns and appends to current query.
+     *
      * @param columns Comma separated string of columns or "*" denoting all columns of table
      * @return SQLiteQueryBuilder instance to chain methods
      */
-    public SQLiteQueryBuilder select(String columns) {
+    public SqliteQueryBuilder select(String columns) {
         query.append("SELECT ").append(columns).append(" ");
-        String[] columns_without_commas = columns.split(",");
+        String[] columnsWithoutCommas = columns.split(",");
 
         // Adding columns to selectedColumns
-        for (String column : columns_without_commas) {
+        for (String column : columnsWithoutCommas) {
             selectedColumns.add(column.trim());
         }
 
@@ -65,12 +70,13 @@ public class SQLiteQueryBuilder {
     }
 
     /**
-     * Takes a table name to query data from
-     * Note: Updates selected columns list from the table's metadata if all columns selected
+     * Takes a table name to query data from.
+     * Note: Updates selected columns list from the table's metadata if all columns selected.
+     *
      * @param table String of table name
      * @return SQLiteQueryBuilder instance to chain methods
      */
-    public SQLiteQueryBuilder from(String table) {
+    public SqliteQueryBuilder from(String table) {
         query.append("FROM ").append(table).append(" ");
 
         // If "*" is selected, update columns to all columns of the table
@@ -92,11 +98,12 @@ public class SQLiteQueryBuilder {
     }
 
     /**
-     * Takes a comma separated string of conditions and appends to current query
+     * Takes a comma separated string of conditions and appends to current query.
+     *
      * @param conditions Comma separated string of conditions
      * @return SQLiteQueryBuilder instance to chain methods
      */
-    public SQLiteQueryBuilder where(String conditions) {
+    public SqliteQueryBuilder where(String conditions) {
         query.append("WHERE ").append(conditions).append(" ");
         return this;
     }
@@ -104,6 +111,7 @@ public class SQLiteQueryBuilder {
     // TODO have a think about how we want the data to come back to us as, currently have as a list
     /**
      * Takes the query in the builder object and returns a list of all data points in a List object.
+     *
      * @return List of all data points from the current query string
      */
     public List build() {
@@ -114,7 +122,7 @@ public class SQLiteQueryBuilder {
             while (rs.next()) {
                 // TODO have as object since we do not know if type is string, int, etc.
                 HashMap temp = new HashMap<String, Object>();
-                for (String column: selectedColumns) {
+                for (String column : selectedColumns) {
                     temp.put(column, rs.getObject(column));
                 }
                 data.add(temp);
@@ -127,7 +135,8 @@ public class SQLiteQueryBuilder {
     }
 
     /**
-     * Getter method for query
+     * Getter method for query.
+     *
      * @return Query string at the current state of method chaining
      */
     public String getQuery() {

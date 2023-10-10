@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDAO;
+import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.DatabaseManager;
 
 import java.io.File;
@@ -48,12 +48,12 @@ public class DatabaseManagerTest {
     }
 
     /**
-     * Test resetDB function.
+     * Test resetDb function.
      */
     @Test
     void testResetDB() {
         // Add crashes to database
-        CrashDAO crashDAO = new CrashDAO();
+        CrashDao crashDAO = new CrashDao();
         CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
@@ -65,7 +65,7 @@ public class DatabaseManagerTest {
         Assertions.assertTrue(crashDAO.getAll().size() > 0);
 
         // Reset database
-        manager.resetDB();
+        manager.resetDb();
 
         // Look into database and make sure crashes table are empty
         Assertions.assertTrue(crashDAO.getAll().size() == 0);

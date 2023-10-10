@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.models.Favourite;
 import seng202.team0.repository.DatabaseManager;
-import seng202.team0.repository.FavouriteDAO;
+import seng202.team0.repository.FavouriteDao;
 
 import java.io.File;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 public class FavouriteDAOTest {
-    private static FavouriteDAO testDAO;
+    private static FavouriteDao testDAO;
     private static File testFile;
     private static Favourite testFavourite = new Favourite("Hello", "It's Me",
                                             17.25, 16.34, 13.45, 14.68, "filters");
@@ -29,8 +29,8 @@ public class FavouriteDAOTest {
      */
     @BeforeEach
     void testCreate() {
-        testDAO = new FavouriteDAO();
-        DatabaseManager.getInstance().resetDB();
+        testDAO = new FavouriteDao();
+        DatabaseManager.getInstance().resetDb();
 
         // Add one so that get tests work
         testDAO.addOne(testFavourite);

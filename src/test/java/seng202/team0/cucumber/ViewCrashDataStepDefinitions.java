@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Assertions;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 import seng202.team0.models.JavaScriptBridge;
-import seng202.team0.repository.CrashDAO;
+import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.DatabaseManager;
-import seng202.team0.repository.SQLiteQueryBuilder;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.io.File;
 import java.net.URL;
@@ -25,8 +25,8 @@ public class ViewCrashDataStepDefinitions {
         // TODO figure out how to do the visual-based acceptance tests
 
         // Database setup
-        DatabaseManager.getInstance().resetDB();
-        CrashDAO crashDAO = new CrashDAO();
+        DatabaseManager.getInstance().resetDb();
+        CrashDao crashDAO = new CrashDao();
         CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
@@ -54,7 +54,7 @@ public class ViewCrashDataStepDefinitions {
         String whereClause = "latitude BETWEEN " + minLat + " AND " + maxLat +
                 " AND longitude BETWEEN " + minLng + " AND " + maxLng;
 
-        List crashesFromDatabase = SQLiteQueryBuilder.create()
+        List crashesFromDatabase = SqliteQueryBuilder.create()
                 .select("object_id").from("crashes")
                 .where(whereClause).build();
 
