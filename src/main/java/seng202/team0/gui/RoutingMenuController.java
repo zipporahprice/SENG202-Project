@@ -13,10 +13,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
@@ -93,12 +93,12 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        if(modeChoice == null) {
+        if (modeChoice == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("No Mode of Transport Selected!" +
-                    "\nPlease Select a mode of Transport");
+            alert.setContentText("No Mode of Transport Selected!"
+                    + "\nPlease Select a mode of Transport");
 
             alert.showAndWait();
             return;
@@ -112,7 +112,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     /**
      * Adds a location when the "Add Location" button is clicked.
-     * Uses Geolocator class to turn the address into a lat, lng pair
+     * Uses Geolocator class to turn the address into a lat, lng pair.
      */
 
     @FXML
@@ -147,7 +147,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude());
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude());
         Favourite favourite = new Favourite(startAddress, endAddress,
-                start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), filters);
+                start.getLatitude(), start.getLongitude(), end.getLatitude(),
+                end.getLongitude(), filters);
         FavouriteDao favorites = new FavouriteDao();
         favorites.addOne(favourite);
     }
@@ -304,6 +305,25 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     }
 
+    private void generateRouteAction(Favourite favourite) throws SQLException {
+        Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
+        Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
+
+        if (start != null && end != null) {
+            List<Location> routeLocations = new ArrayList<>();
+            routeLocations.add(start);
+            routeLocations.addAll(stops);
+            routeLocations.add(end);
+
+            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
+            List<Crash> crashInfos = getOverlappingPoints(route, 1000);
+            int total = ratingGenerator(crashInfos);
+            displayRoute(route);
+            ratingText.setText("Danger: " + total + "/5");
+            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
+        }
+    }
+
     /**
      * Calls the JS function, removeRoute.
      * When the corresponding button is pressed in the
@@ -313,8 +333,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
 
-        if ((startLocation.getText().equals(null) || startLocation.getText().isEmpty()) ||
-                (endLocation.getText().equals(null)|| endLocation.getText().isEmpty())) {
+        if ((startLocation.getText().equals(null) || startLocation.getText().isEmpty())
+                || (endLocation.getText().equals(null) || endLocation.getText().isEmpty())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -335,25 +355,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         endLocation.setText("");
 
     }
-    private void generateRouteAction(Favourite favourite) throws SQLException {
-        Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
-        Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
-
-        if (start != null && end != null) {
-            List<Location> routeLocations = new ArrayList<>();
-            routeLocations.add(start);
-            routeLocations.addAll(stops);
-            routeLocations.add(end);
-
-            Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<Crash> crashInfos = getOverlappingPoints(route, 1000);
-            int total = ratingGenerator(crashInfos);
-            displayRoute(route);
-            ratingText.setText("Danger: " + total + "/5");
-            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-        }
-    }
-
 
     private int ratingGenerator(List<Crash> crashInfos) {
         int total = 0;
