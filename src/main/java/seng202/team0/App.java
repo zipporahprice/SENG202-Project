@@ -49,6 +49,8 @@ public class App {
                 log.error(e);
             }
         }
+        // Initialises GUI
+        MainWindow.main(args);
 
         // Initialise FilterManager singleton class
         FilterManager.getInstance();
@@ -59,7 +61,7 @@ public class App {
         // Initialise SettingsManager singleton class
         SettingsManager.getInstance();
 
-        // Initialises GUI
-        MainWindow.main(args);
+
+
     }
 }

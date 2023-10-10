@@ -33,6 +33,9 @@ public class MainWindow extends Application {
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        baseController.getStage(primaryStage);
+
     }
 
     /**

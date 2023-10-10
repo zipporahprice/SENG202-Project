@@ -12,18 +12,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.Message;
 import seng202.team0.models.JavaScriptBridge;
 
 
@@ -86,8 +90,62 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         javaScriptBridge.setListener(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
         initProgressBarTimeline();
+        loadRoutingMenu();
 
 
+    }
+
+    private void showToast(Stage stage, String message, int millis) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/toast.fxml"));
+            StackPane root = loader.load();
+
+            ToastController toastController = loader.getController();
+
+            Stage toastStage = new Stage();
+
+            toastStage.initOwner(stage);
+            toastStage.setResizable(false);
+            toastStage.initStyle(StageStyle.TRANSPARENT);
+
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            toastStage.setScene(scene);
+            toastStage.show();
+
+            toastStage.setX(stage.getX() + stage.getWidth()/2 - toastStage.getWidth()/2);
+            toastStage.setY(stage.getY()+stage.getHeight()/1.5);
+
+            toastController.showMessage(message,millis);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    void loadRoutingMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/routing_menu.fxml"));
+            Parent routingMenu = loader.load();
+
+            // Get the RoutingMenuController
+            RoutingMenuController routingController = loader.getController();
+            routingController.setMainController(this);  // passing the reference of MainController
+
+            // ... (Code to add routingMenu to your scene or other UI container)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getStage(Stage stage) {
+        this.stage  = stage;
+    }
+    public void getToastInfo(String message, int millis) {
+        if(stage == null) {
+            log.error("Stage provided to init method is null.");
+            return;
+        }
+        showToast(stage,message,millis);
     }
 
     private void initProgressBarTimeline() {

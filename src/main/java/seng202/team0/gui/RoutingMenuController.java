@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import com.sun.tools.javac.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,6 +67,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Button removeRoute;
 
+    private MainController controller;
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
@@ -88,6 +91,10 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         });
         loadManager();
+    }
+
+    public void setMainController(MainController mainController) {
+        this.controller = mainController;
     }
 
     private void displayRoute(int safetyScore, Route... routes) {
@@ -333,13 +340,16 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
 
-        if ((startLocation.getText().equals(null) || startLocation.getText().isEmpty())
-                || (endLocation.getText().equals(null) || endLocation.getText().isEmpty())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("No route to remove!");
-            alert.showAndWait();
+        if ((startLocation.getText() == null || startLocation.getText().isEmpty())
+                || (endLocation.getText() == null || endLocation.getText().isEmpty())) {
+
+
+                controller.getToastInfo("No route to remove", 500);
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Error");
+//            alert.setHeaderText(null);
+//            alert.setContentText("No route to remove!");
+//            alert.showAndWait();
 
             return;
         }
