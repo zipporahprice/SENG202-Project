@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team0.business.CrashManager;
+import seng202.team0.io.CrashCsvImporter;
 
 /**
  * Class instantiating and initialising SQLite database.
@@ -181,4 +183,16 @@ public class DatabaseManager {
             log.error(e);
         }
     }
+
+    /**
+     * Adds all the file data from the chosen to the database.
+     *
+     * @param file the file user chooses
+     */
+    public void importFile(File file) {
+        CrashManager manager = new CrashManager();
+        CrashCsvImporter importer = new CrashCsvImporter();
+        manager.addAllCrashesFromFile(importer, file);
+    }
+
 }
