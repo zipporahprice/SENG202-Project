@@ -1,4 +1,4 @@
-let map, baseLayer, heatmapLayer, markerLayer;
+let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl;
 var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 let markers = [];
 var routes = [];
@@ -12,7 +12,9 @@ let jsConnector = {
     displayRoute: displayRoute,
     removeRoute: removeRoute,
     initMap: initMap,
-    setData: setData
+    setData: setData,
+    drawingModeOn: drawingModeOn,
+    drawingModeOff: drawingModeOff
 };
 
 /**
@@ -27,13 +29,34 @@ function initMap() {
     let mapOptions = {
         center: [-43.5, 172.5],
         zoom: 11,
-        layers:[baseLayer]
+        layers:[baseLayer],
+        zoomControl: false
     };
     map = new L.map('map', mapOptions);
+
+    // Adding zoom control to bottom right
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
 
     // Setup potential layers for views
     updateHeatmap();
     markerLayer = L.markerClusterGroup();
+    drawnItems = new L.FeatureGroup();
+    drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems,
+        },
+        draw: {
+            circle: false,
+            rectangle: true,
+            polygon: false,
+            polyline: false,
+            marker: false,
+            circlemarker: false
+        },
+        position: 'topright'
+    });
 
     // Initialise layers and setup callbacks
     updateDataShown();
@@ -322,4 +345,54 @@ function setData() {
     }
 
     heatmapLayer.setData(testData);
+}
+
+function drawingModeOn() {
+    map.addLayer(drawnItems);
+    map.addControl(drawControl);
+    map.off('zoomend');
+    map.off('moveend');
+    map.on('draw:created', function (event) {
+        // Remove previous drawings
+        drawnItems.clearLayers();
+
+        // Add new drawing
+        const layer = event.layer;
+        drawnItems.addLayer(layer);
+
+        if (layer instanceof L.Rectangle) {
+            const latLngs = layer.getBounds(); // Get the coordinates within the shape
+            const southwest = latLngs.getSouthWest();
+            const northeast = latLngs.getNorthEast();
+
+            const southwestLat = southwest.lat;
+            const southwestLng = southwest.lng;
+            const northeastLat = northeast.lat;
+            const northeastLng = northeast.lng;
+
+            javaScriptBridge.setFilterManagerViewport(southwestLat, southwestLng, northeastLat, northeastLng);
+        }
+
+        // TODO for implementing a circle
+        // else if (layer instanceof L.Circle) {
+        //     const center = layer.getLatLng();
+        //     const radius = layer.getRadius();
+        //
+        //     const centerLat = center.lat;
+        //     const centerLng = center.lng;
+        //
+        //     let latLngString = centerLat + " " + centerLng + " " + radius;
+        //     javaScriptBridge.printThings(latLngString);
+        // }
+    });
+}
+
+function drawingModeOff() {
+    map.removeLayer(drawnItems);
+    drawnItems.clearLayers();
+    map.removeControl(drawControl);
+    map.off('draw-created');
+    setFilteringViewport();
+    map.on('zoomend', updateDataShown);
+    map.on('moveend', updateDataShown);
 }

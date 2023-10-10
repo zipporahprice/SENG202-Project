@@ -86,8 +86,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         javaScriptBridge.setListener(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
         initProgressBarTimeline();
-
-
     }
 
     private void initProgressBarTimeline() {
@@ -194,6 +192,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
             controller.updateManager();
         }
 
+        if (menuPopulated.equals("rateArea")) {
+            MainController.javaScriptConnector.call("drawingModeOff");
+        }
+
         if (Objects.equals(menuPopulated, menuChoice)) {
             menuPopulated = "empty";
             loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
@@ -213,8 +215,12 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/import_window.fxml");
-        }
 
+        } else if (Objects.equals("rateArea", menuChoice)) {
+            menuPopulated = menuChoice;
+            MainController.javaScriptConnector.call("drawingModeOn");
+            loadMenuDisplayFromFxml("/fxml/rating_area_menu.fxml");
+        }
     }
 
     private void fadeOutLoadingScreen() {
