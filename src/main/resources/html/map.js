@@ -210,7 +210,14 @@ function displayRoute(routesIn, transportMode) {
         var newRoute = L.Routing.control({
             waypoints: waypoints,
             routeWhileDragging: true,
-            router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode })
+            router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
+            lineOptions: {
+                styles: [
+                    {color: 'red', opacity: 0.15, weight: 9},
+                    {color: 'white', opacity: 0.8, weight: 6},
+                    {color: 'blue', opacity: 1, weight: 2}     // center line
+                ]
+            }
         }).addTo(map);
         routes.push(newRoute);
     });
