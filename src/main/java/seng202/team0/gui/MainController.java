@@ -6,6 +6,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +21,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.application.Platform;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,8 +32,6 @@ import seng202.team0.models.JavaScriptBridge;
  *
  * @author Team10
  */
-
-
 public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
