@@ -93,7 +93,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        if(modeChoice== null) {
+        if(modeChoice == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -144,10 +144,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
-        String startAddress = geolocator.getAddress(start.latitude, start.longitude);
-        String endAddress = geolocator.getAddress(end.latitude, end.longitude);
+        String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude());
+        String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude());
         Favourite favourite = new Favourite(startAddress, endAddress,
-                start.latitude, start.longitude, end.latitude, end.longitude, filters);
+                start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), filters);
         FavouriteDAO favorites = new FavouriteDAO();
         favorites.addOne(favourite);
     }
@@ -268,11 +268,11 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     public double haversineDistance(Location loc1, Crash loc2) {
         double r = 6371000; // Earth radius in meters
-        double deltaLat = Math.toRadians(loc2.getLatitude() - loc1.latitude);
-        double deltaLon = Math.toRadians(loc2.getLongitude() - loc1.longitude);
+        double deltaLat = Math.toRadians(loc2.getLatitude() - loc1.getLatitude());
+        double deltaLon = Math.toRadians(loc2.getLongitude() - loc1.getLongitude());
 
         double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
-                + Math.cos(Math.toRadians(loc1.latitude))
+                + Math.cos(Math.toRadians(loc1.getLatitude()))
                 * Math.cos(Math.toRadians(loc2.getLatitude()))
                 * Math.sin(deltaLon  / 2) * Math.sin(deltaLon / 2);
 
@@ -313,8 +313,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
 
-        if ((startLocation.getText() == null || startLocation.getText().isEmpty()) ||
-                (endLocation.getText() == null || endLocation.getText().isEmpty())) {
+        if ((startLocation.getText().equals(null) || startLocation.getText().isEmpty()) ||
+                (endLocation.getText().equals(null)|| endLocation.getText().isEmpty())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);

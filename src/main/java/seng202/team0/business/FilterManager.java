@@ -423,10 +423,10 @@ public class FilterManager {
 
         if (viewPortMin != null && viewPortMax != null) {
             where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
-                    + viewPortMin.longitude + " AND maxX <= "
-                    + viewPortMax.longitude + " AND minY >= "
-                    + viewPortMin.latitude + " AND maxY <= "
-                    + viewPortMax.latitude + closeParenthesis);
+                    + viewPortMin.getLongitude() + " AND maxX <= "
+                    + viewPortMax.getLongitude() + " AND minY >= "
+                    + viewPortMin.getLatitude() + " AND maxY <= "
+                    + viewPortMax.getLatitude() + closeParenthesis);
         }
 
         // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
