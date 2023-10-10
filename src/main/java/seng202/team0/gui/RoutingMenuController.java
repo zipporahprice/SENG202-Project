@@ -91,7 +91,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Collections.addAll(routesList, routes);
         System.out.println(safetyScore);
         MainController.javaScriptConnector.call("displayRoute", Route
-                .routesToJSONArray(routesList), modeChoice);
+                .routesToJSONArray(routesList), modeChoice, safetyScore);
     }
 
     /**
