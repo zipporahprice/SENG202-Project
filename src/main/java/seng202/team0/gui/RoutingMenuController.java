@@ -89,7 +89,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void displayRoute(int safetyScore, Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
-        System.out.println(safetyScore);
         MainController.javaScriptConnector.call("displayRoute", Route
                 .routesToJSONArray(routesList), modeChoice, safetyScore);
     }
