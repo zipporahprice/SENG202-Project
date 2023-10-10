@@ -11,7 +11,7 @@
 <AnchorPane fx:id="importPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
     <children>
         <Label layoutX="81.0" layoutY="14.0" text="CSV File Options" textFill="WHITE" />
-        <Button layoutX="55.0" layoutY="48.0" mnemonicParsing="false" text="Import" />
+        <Button fx:id="importButton" layoutX="55.0" layoutY="48.0" mnemonicParsing="false" onAction="#openFileChooserDialog" text="Import" />
         <Button layoutX="144.0" layoutY="48.0" mnemonicParsing="false" text="Export" />
     </children>
     <StackPane.margin>
