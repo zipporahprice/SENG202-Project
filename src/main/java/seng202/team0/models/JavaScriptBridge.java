@@ -1,14 +1,14 @@
 package seng202.team0.models;
 
 import com.google.gson.Gson;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -36,6 +36,7 @@ public class JavaScriptBridge {
     public void setListener(JavaScriptListener listener) {
         this.listener = listener;
     }
+
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
      *
@@ -43,7 +44,6 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String crashes() {
-        // TODO currently hard coding difference in having filters or not, have a think about how to not do this
         List crashList = crashData.getCrashLocations().stream().map(crash -> {
             if (crash instanceof Crash) {
                 Crash crash1 = (Crash) crash;
@@ -71,6 +71,7 @@ public class JavaScriptBridge {
         return json;
 
     }
+
     /**
      * Represents crash information containing latitude and longitude.
      */
@@ -85,7 +86,7 @@ public class JavaScriptBridge {
         public double lng;
         public int severity;
 
-        public String crash_year; // Add year
+        public String crashYear; // Add year
         public String weather;
 
         /**
@@ -98,7 +99,7 @@ public class JavaScriptBridge {
             this.lat = lat;
             this.lng = lng;
             this.severity = severity;
-            this.crash_year = year;
+            this.crashYear = year;
             this.weather = weather;
 
         }
@@ -118,6 +119,7 @@ public class JavaScriptBridge {
 
     /**
      * Sets the viewport variables in the FilterManager singleton class.
+     *
      * @param minLatitude minimum latitude of the map view
      * @param minLongitude minimum longitude of the map view
      * @param maxLatitude maximum latitude of the map view
@@ -130,16 +132,18 @@ public class JavaScriptBridge {
         filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
 
+    /**
+     * Calls mapLoaded function in the MainController class.
+     */
     public void mapLoaded() {
-        System.out.println("Please make it here");
         if (listener != null) {
-            System.out.println("Here???");
             listener.mapLoaded();
         }
-        System.out.println("Here though right?");
-
     }
 
+    /**
+     * Creates an interface for the listener to call relevant methods.
+     */
     public static interface JavaScriptListener {
         void mapLoaded();
     }
