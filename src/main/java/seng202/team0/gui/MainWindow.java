@@ -32,10 +32,6 @@ public class MainWindow extends Application {
         primaryStage.setTitle("SafeTrip");
         Scene scene = new Scene(root, 1000, 800);
         primaryStage.setScene(scene);
-
-        // Temporary
-        primaryStage.setResizable(false);
-
         primaryStage.show();
     }
 

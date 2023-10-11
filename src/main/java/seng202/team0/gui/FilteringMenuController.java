@@ -298,7 +298,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      * OnAction event callback for "Apply Filters" button.
      */
     public void updateDataWithFilters() {
-        MainController.javaScriptConnector.call("setData");
+        MainController.javaScriptConnector.call("updateDataShown");
         notClickableApplyFiltersButton();
     }
 

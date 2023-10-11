@@ -31,7 +31,7 @@ let jsConnector = {
     displayRoute: displayRoute,
     removeRoute: removeRoute,
     initMap: initMap,
-    updateView: updateView,
+    updateDataShown: updateDataShown,
     drawingModeOn: drawingModeOn,
     drawingModeOff: drawingModeOff
 };
@@ -59,7 +59,7 @@ function initMap() {
     }).addTo(map);
 
     // Setup potential layers for views
-    updateHeatmap();
+    newHeatmap();
     markerLayer = L.markerClusterGroup();
     drawnItems = new L.FeatureGroup();
     drawControl = new L.Control.Draw({
@@ -81,19 +81,24 @@ function initMap() {
 
     // Initialise layers and setup callbacks
     updateDataShown();
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
-    window.addEventListener('resize', updateHeatmap);
+    map.on('zoomend', updateEnabled);
+    map.on('moveend', updateEnabled);
+    window.addEventListener('resize', newHeatmap);
 
     mapIsReady();
 }
 
-function updateHeatmap() {
+function updateEnabled() {
+    javaScriptBridge.enableRefreshButton();
+}
+
+function newHeatmap() {
     const heatmapShowing = map.hasLayer(heatmapLayer);
 
     heatmapLayer = new HeatmapOverlay(heatmapCfg);
 
     if (heatmapShowing) {
+        setHeatmapData();
         map.addLayer(heatmapLayer);
     }
 }
@@ -105,7 +110,7 @@ function updateDataShown() {
 }
 
 function mapIsReady() {
-        javaScriptBridge.mapLoaded();
+    javaScriptBridge.mapLoaded();
 }
 
 function adjustHeatmapRadiusBasedOnZoom() {
@@ -336,6 +341,7 @@ var end = 0;
 
 function resetLayers() {
     start = performance.now();
+    newHeatmap()
     markerLayer.clearLayers();
 }
 

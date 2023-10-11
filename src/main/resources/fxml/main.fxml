@@ -134,5 +134,10 @@
             </ImageView>
          </children>
       </StackPane>
+      <Button fx:id="refreshButton" disable="true" onAction="#refreshData" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css" text="Refresh" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
    </children>
 </StackPane>

@@ -1,19 +1,13 @@
 package seng202.team0.models;
 
-import com.google.gson.Gson;
-
-import java.awt.*;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.controlsfx.control.Rating;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
+
+import java.sql.SQLException;
+import java.util.HashMap;
 
 
 
@@ -69,40 +63,6 @@ public class JavaScriptBridge {
         System.out.println(stringBuilder);
 
         return stringBuilder.toString();
-    }
-
-    /**
-     * Represents crash information containing latitude and longitude.
-     */
-    protected static class CrashInfo {
-        /**
-         * The latitude of the crash location.
-         */
-        public double lat;
-        /**
-         * The longitude of the crash location.
-         */
-        public double lng;
-        public int severity;
-
-        public String crashYear; // Add year
-        public String weather;
-
-        /**
-         * Constructs a CrashInfo object with latitude and longitude.
-         *
-         * @param lat The latitude of the crash location.
-         * @param lng The longitude of the crash location.
-         */
-        public CrashInfo(double lat, double lng, int severity, String year, String weather) {
-            this.lat = lat;
-            this.lng = lng;
-            this.severity = severity;
-            this.crashYear = year;
-            this.weather = weather;
-
-        }
-
     }
 
     /**
@@ -163,5 +123,13 @@ public class JavaScriptBridge {
     }
 
     public void printTime(double time) {System.out.println(time);};
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public void enableRefreshButton() {
+        mainController.enableRefresh();
+    }
 }
 

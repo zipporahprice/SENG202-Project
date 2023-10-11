@@ -48,6 +48,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
     private MapController mapController;
+
+    @FXML
+    private Button refreshButton;
+
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
@@ -86,6 +90,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         mapController.init(stage);
         javaScriptBridge = mapController.getJavaScriptBridge();
         javaScriptBridge.setListener(this);
+        javaScriptBridge.setMainController(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
         initProgressBarTimeline();
     }
@@ -246,6 +251,19 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
         // Start the fade out
         fadeTransition.play();
+    }
+
+    public void enableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void disableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void refreshData() {
+        MainController.javaScriptConnector.call("updateDataShown");
+        disableRefresh();
     }
 
     public void quitApp() {
