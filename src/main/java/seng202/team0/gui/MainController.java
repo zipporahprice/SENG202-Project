@@ -64,20 +64,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private RoutingMenuController routingMenuController;
 
 
-    public MainController() {
-        this.routingMenuController = new RoutingMenuController();
-
-        // Add a listener to the property
-        this.routingMenuController.functionCalledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                showToast(stage, "Hello", 500);
-
-                // Reset the property
-                routingMenuController.functionCalledProperty().set(false);
-            }
-        });
-    }
-
     /**
      * Initializes the main stage, UI components, and the map controller.
      * This method sets up the primary stage, initializes a GeoLocator, maximizes
@@ -109,35 +95,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     }
 
-    private void showToast(Stage stage, String message, int millis) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/toast.fxml"));
-            StackPane root = loader.load();
 
-            ToastController toastController = loader.getController();
-
-            Stage toastStage = new Stage();
-
-            toastStage.initOwner(stage);
-            toastStage.setResizable(false);
-            toastStage.initStyle(StageStyle.TRANSPARENT);
-
-            Scene scene = new Scene(root);
-            scene.setFill(Color.TRANSPARENT);
-            toastStage.setScene(scene);
-            toastStage.show();
-
-            toastStage.setX(stage.getX() + stage.getWidth()/2 - toastStage.getWidth()/2);
-            toastStage.setY(stage.getY()+stage.getHeight()/1.5);
-
-            toastController.showMessage(message,millis);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
+    /**
+     * Initializes and manages the progress bar and its animation timeline.
+     * This is for the loading screen
+     */
     private void initProgressBarTimeline() {
         progressBarTimeline = new Timeline(
                 new KeyFrame(
@@ -163,6 +125,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         });
     }
 
+    /**
+     * Animates a JavaFX ProgressBar to reach full (100%) progress.
+     *
+     * @param progressBar The ProgressBar to be animated.
+     */
     private void animateProgressBarToFull(ProgressBar progressBar) {
         final Duration duration = Duration.millis(500);
         final Timeline timeline = new Timeline();
@@ -265,34 +232,36 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     }
 
+    /**
+     * Fades out a loading screen using a FadeTransition animation.
+     */
     private void fadeOutLoadingScreen() {
         FadeTransition fadeTransition = new FadeTransition();
-
         fadeTransition.setNode(loadingScreen);
-
         fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
-
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
-
         fadeTransition.setDelay(Duration.millis(1500));
-
         fadeTransition.setOnFinished(event -> {
             loadingScreen.setVisible(false);
         });
-
         // Start the fade out
         fadeTransition.play();
     }
 
+    /**
+     * Quits or exits the JavaFX application.
+     */
     public void quitApp() {
         Platform.exit();
     }
 
+    /**
+     * This method is called when the map has finished loading.
+     * It initiates the fading out of the loading screen.
+     */
     @Override
     public void mapLoaded() {
-
-        System.out.println("Hello");
         fadeOutLoadingScreen();
     }
 }

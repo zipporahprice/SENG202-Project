@@ -8,20 +8,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import com.sun.tools.javac.Main;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
+import javafx.util.Pair;
+import org.controlsfx.control.PopOver;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
@@ -31,6 +32,7 @@ import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.FavouriteDao;
+
 
 /**
  * The `RoutingMenuController` class manages user
@@ -66,6 +68,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Button walkingButton;
 
+    @FXML Button generateRoute;
+
     @FXML
     private Button removeRoute;
 
@@ -74,16 +78,25 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
-    private final BooleanProperty functionCalledProperty = new SimpleBooleanProperty(false);
+
+    private PopOver popOver;
 
 
+    /**
+     * Initializes the JavaFX controller when the associated FXML file is loaded.
+     * Creates an instance of the GeoLocater Class which is used to
+     * find the locations and create the routes
+
+     * @param url            The location of the FXML file.
+     * @param resourceBundle The resource bundle.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
-        removeRoute.setVisible(false);
+        removeRoute.setDisable(true);
 
 
 
@@ -100,61 +113,130 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    public BooleanProperty functionCalledProperty() {
-        return functionCalledProperty;
+
+    /**
+     * Displays a notification message near the specified button when it is pressed.
+     *
+     * @param btn     The button for which the notification is displayed.
+     * @param message The message to be displayed in the notification.
+     */
+    private void showNotificationOnButtonPress(Button btn, String message) {
+        if (popOver != null && popOver.isShowing()) {
+            popOver.hide();
+        }
+        Label label = new Label(message);
+        label.setFont(new Font(20.0));
+        label.setPadding(new Insets(5));
+        popOver = new PopOver(label);
+        popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+        popOver.show(walkingButton);
+
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5),
+                popOver.getSkin().getNode());
+
+        fadeOut.setDelay(Duration.millis(1500));
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> popOver.hide());
+        fadeOut.play();
+
+
+
     }
 
-
+    /**
+     * Displays a route or routes based on safety score, mode choice, and an array of routes.
+     *
+     * @param safetyScore The safety score associated with the route.
+     * @param routes      An array of Route objects to display.
+     */
     private void displayRoute(int safetyScore, Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         if (modeChoice == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("No Mode of Transport Selected!"
-                    + "\nPlease Select a mode of Transport");
-
-            alert.showAndWait();
-            return;
+            showNotificationOnButtonPress(generateRoute, "Please select a transport option");
         } else {
-            //functionCalledProperty.set(true);
             MainController.javaScriptConnector.call("displayRoute", Route
                     .routesToJsonArray(routesList), modeChoice, safetyScore);
         }
     }
-    
+
+    /**
+     * Displays a popover near a TextField with a specified message and fade-out duration.
+     *
+     * @param message   The message to be displayed in the popover.
+     * @param textField The TextField near which the popover should be displayed.
+     * @param time      The duration (in seconds) for the fade-out animation.
+     */
+    private void showPopOver(String message, TextField textField, double time) {
+        Label label = new Label(message);
+        popOver = new PopOver(label);
+        popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+        popOver.show(textField);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(time),
+                popOver.getSkin().getNode());
+
+        fadeOut.setDelay(Duration.millis(1500));
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> popOver.hide());
+        fadeOut.play();
+
+    }
 
 
     /**
-     * Adds a location when the "Add Location" button is clicked.
-     * Uses Geolocator class to turn the address into a lat, lng pair.
+     * Retrieves the start location based on user input from a TextField.
+     *
+     * @return The start Location object, or null if the input is empty or invalid.
      */
-
     @FXML
     private Location getStart() {
         String address = startLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        String errorMessage = geolocator.handleAddress(address);
+        if (errorMessage != null) {
+            showPopOver(errorMessage, startLocation, 5);
+        }
+        Pair<Location, String> result = geolocator.getLocation(address);
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        Location newMarker = result.getKey();
+
         return newMarker;
     }
 
+    /**
+     * Retrieves the end location based on user input from a TextField.
+     *
+     * @return The end Location object, or null if the input is empty or invalid.
+     */
     @FXML
     private Location getEnd() {
         String address = endLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        String errorMessage = geolocator.handleAddress(address);
+        if (errorMessage != null) {
+            showPopOver(errorMessage, endLocation, 5);
+        }
+
+        Pair<Location, String> result = geolocator.getLocation(address);
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        Location newMarker = result.getKey();
+
         return newMarker;
     }
 
-
-
+    /**
+     * Saves a route or favorite location to a database.
+     *
+     * @throws SQLException If a database error occurs during the save operation.
+     */
     @FXML
     private void saveRoute() throws SQLException {
         Location start = getStart();
@@ -170,6 +252,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
 
+    /**
+     * Populates the ComboBox with a list of saved routes or favorite locations.
+     */
     @FXML
     private void displayRoutes() {
         FavouriteDao favourites = new FavouriteDao();
@@ -181,6 +266,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadRoutesComboBox.setItems(items);
     }
 
+    /**
+     * Loads a selected route or favorite location from the ComboBox.
+     *
+     * @throws SQLException If a database error occurs during the loading operation.
+     */
     @FXML
     private void loadRoute() throws SQLException {
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
@@ -202,18 +292,34 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
 
+    /**
+     * Retrieves a stop location based on user input from a TextField.
+     *
+     * @return The stop Location object, or null if the input is empty or invalid.
+     */
+
     @FXML
     private Location getStop() {
         String address = stopLocation.getText().trim();
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        String errorMessage = geolocator.handleAddress(address);
+        if (errorMessage != null) {
+            showPopOver(errorMessage, stopLocation, 8);
+        }
+        Pair<Location, String> result = geolocator.getLocation(address);
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        Location newMarker = result.getKey();
+
         return newMarker;
     }
 
-
+    /**
+     * Adds a stop location to the collection and generates a route action.
+     *
+     * @throws SQLException If a database error occurs during the operation.
+     */
     @FXML
     private void addStop() throws SQLException {
         Location stop = getStop();
@@ -223,6 +329,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         generateRouteAction();
     }
 
+    /**
+     * Removes the last stop from the collection and generates a route.
+     *
+     * @throws SQLException If a database error occurs during the route generation.
+     */
     @FXML
     private void removeStop() throws SQLException {
         if (stops.size() >= 1) {
@@ -298,11 +409,15 @@ public class RoutingMenuController implements Initializable, MenuController {
         return r * c;
     }
 
+    /**
+     * Generates a route, calculates its danger rating, and updates the UI.
+     *
+     * @throws SQLException If a database error occurs during the process.
+     */
     @FXML
     private void generateRouteAction() throws SQLException {
         Location start = getStart();
         Location end = getEnd();
-
         if (start != null && end != null) {
             List<Location> routeLocations = new ArrayList<>();
             routeLocations.add(start);
@@ -315,17 +430,17 @@ public class RoutingMenuController implements Initializable, MenuController {
             ratingText.setText("Danger: " + total + "/5");
             numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
             displayRoute(total, route);
-
+            removeRoute.setDisable(false);
         }
-
-
-
-        removeRoute.setVisible(true);
-
-
-
     }
 
+    /**
+     * Generates a route, calculates its danger rating, and updates 
+     * the UI based on a favorite location (Favourite object).
+     *
+     * @param favourite The favorite location containing start and end coordinates.
+     * @throws SQLException If a database error occurs during the process.
+     */
     private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
@@ -353,23 +468,23 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     @FXML
     private void removeRoute() {
-
-
         MainController.javaScriptConnector.call("removeRoute");
-
-        if (selectedButton != null) {
-            selectedButton.getStyleClass().remove("clickedButtonColor");
-            selectedButton.getStyleClass().add("hamburgerStyle");
-            selectedButton = null; // Reset the reference after resetting its styles
-        }
-
         startLocation.setText("");
         endLocation.setText("");
-        removeRoute.setVisible(false);
+        modeChoice = null;
+        selectedButton.getStyleClass().remove("clickedButtonColor");
+        selectedButton.getStyleClass().add("hamburgerStyle");
+        removeRoute.setDisable(true);
 
     }
 
 
+    /**
+     * Calculates a danger rating based on information about crashes.
+     *
+     * @param crashInfos A list of Crash objects containing crash information.
+     * @return The danger rating as an integer.
+     */
     private int ratingGenerator(List<Crash> crashInfos) {
         int total = 0;
         for (Crash crash : crashInfos) {
