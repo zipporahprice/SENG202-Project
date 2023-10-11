@@ -435,7 +435,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Generates a route, calculates its danger rating, and updates 
+     * Generates a route, calculates its danger rating, and updates
      * the UI based on a favorite location (Favourite object).
      *
      * @param favourite The favorite location containing start and end coordinates.
