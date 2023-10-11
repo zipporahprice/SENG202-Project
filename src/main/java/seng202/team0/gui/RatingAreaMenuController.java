@@ -1,6 +1,7 @@
 package seng202.team0.gui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
@@ -71,7 +72,13 @@ public class RatingAreaMenuController implements MenuController {
             ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity));
             numCrashesAreaLabel.setText("Number of crashes in area: " + total);
         } else {
-            // Alert stuff here!
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No bounding area drawn!"
+                    + "\nPlease draw area before rating area.");
+
+            alert.showAndWait();
         }
 
     }
