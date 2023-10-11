@@ -15,7 +15,10 @@
 
     <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="82.0" layoutY="14.0" text="Transport mode" textFill="WHITE" />
+            <Label alignment="CENTER" layoutX="67.0" layoutY="14.0" text="Transport Mode" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
             <VBox layoutX="23.0" layoutY="53.0" spacing="15.0">
                 <CheckBox fx:id="bicycleCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bicycle" textFill="WHITE" userData="bicycle_involved" />
                 <CheckBox fx:id="busCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Bus" textFill="WHITE" userData="bus_involved" />
@@ -32,8 +35,14 @@
                     <CheckBox fx:id="truckCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Truck" textFill="WHITE" userData="truck_involved" />
                 </children>
             </VBox>
-         <Button layoutX="149.0" layoutY="228.0" mnemonicParsing="false" onAction="#clearAllFilters" text="Clear" />
-         <Button layoutX="38.0" layoutY="228.0" mnemonicParsing="false" onAction="#selectAllFilters" text="Select All" />
+         <Button layoutX="132.0" layoutY="228.0" mnemonicParsing="false" onAction="#clearAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Clear" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+         <Button layoutX="47.0" layoutY="228.0" mnemonicParsing="false" onAction="#selectAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Select All" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="11.0" />
+            </font></Button>
         </children>
         <StackPane.margin>
             <Insets left="335.0" top="10.0" />
@@ -41,7 +50,10 @@
     </AnchorPane>
     <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="214.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="101.0" layoutY="14.0" text="Weather" textFill="WHITE" />
+            <Label layoutX="97.0" layoutY="14.0" text="Weather" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
             <VBox fx:id="weatherVBox" layoutX="41.0" layoutY="42.0" prefHeight="150.0" prefWidth="99.0" spacing="5.0">
                 <children>
                     <CheckBox fx:id="fineCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Fine" textFill="WHITE" userData="Fine" />
@@ -53,8 +65,14 @@
                 </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0" />
-         <Button layoutX="172.0" layoutY="128.0" mnemonicParsing="false" onAction="#clearAllFilters" text="Clear" />
-         <Button layoutX="161.0" layoutY="69.0" mnemonicParsing="false" onAction="#selectAllFilters" text="Select All" />
+         <Button layoutX="151.0" layoutY="100.0" mnemonicParsing="false" onAction="#clearAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Clear" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+         <Button layoutX="151.0" layoutY="65.0" mnemonicParsing="false" onAction="#selectAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Select All" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
         </children>
         <StackPane.margin>
             <Insets left="335.0" top="291.0" />
@@ -62,7 +80,10 @@
     </AnchorPane>
     <AnchorPane fx:id="severityPane" maxHeight="144.0" maxWidth="250.0" prefHeight="144.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" translateY="40.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE" />
+            <Label layoutX="101.0" layoutY="14.0" text="Severity" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
             <VBox layoutX="38.0" layoutY="42.0" spacing="5.0">
                 <children>
                     <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" userData="1" />
@@ -72,8 +93,14 @@
                 </children>
             </VBox>
             <VBox layoutX="156.0" layoutY="42.0" spacing="5.0" />
-         <Button layoutX="156.0" layoutY="42.0" mnemonicParsing="false" onAction="#selectAllFilters" text="Select All" />
-         <Button layoutX="167.0" layoutY="85.0" mnemonicParsing="false" onAction="#clearAllFilters" text="Clear" />
+         <Button layoutX="146.0" layoutY="53.0" mnemonicParsing="false" onAction="#selectAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Select All" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+         <Button layoutX="146.0" layoutY="88.0" mnemonicParsing="false" onAction="#clearAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Clear" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
         </children>
         <StackPane.margin>
             <Insets left="335.0" top="476.0" />
@@ -81,7 +108,10 @@
     </AnchorPane>
     <AnchorPane fx:id="datePane" maxHeight="190.0" maxWidth="250.0" prefHeight="190.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="90.0" layoutY="14.0" text="Date Range" textFill="WHITE" />
+            <Label layoutX="86.0" layoutY="14.0" text="Date Range" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
 
             <!-- Slider for selecting the starting date between 2000 - 2023 -->
             <Slider fx:id="startDateSlider" blockIncrement="1.0" layoutX="14.0" layoutY="77.0" max="2023" min="2000" onDragDone="#sliderValueChange" onKeyReleased="#sliderValueChange" onMouseDragged="#sliderValueChange" prefWidth="222.0" value="2000.0" />
@@ -118,7 +148,10 @@
     </AnchorPane>
     <AnchorPane fx:id="regionsPane" maxHeight="395.0" maxWidth="250.0" prefHeight="390.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateY="53.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="106.0" layoutY="14.0" text="Region" textFill="WHITE" />
+            <Label layoutX="100.0" layoutY="14.0" text="Region" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
             <VBox fx:id="leftRegionVBox" layoutX="22.0" layoutY="57.0" spacing="15.0">
                 <children>
                     <CheckBox fx:id="aucklandCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Auckland" textFill="WHITE" userData="Auckland" />
@@ -145,8 +178,14 @@
                 </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0" />
-         <Button layoutX="165.0" layoutY="351.0" mnemonicParsing="false" onAction="#clearAllFilters" text="Clear" />
-         <Button layoutX="35.0" layoutY="351.0" mnemonicParsing="false" onAction="#selectAllFilters" text="Select All" />
+         <Button layoutX="132.0" layoutY="351.0" mnemonicParsing="false" onAction="#clearAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Clear" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+         <Button layoutX="48.0" layoutY="351.0" mnemonicParsing="false" onAction="#selectAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Select All" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
         </children>
         <StackPane.margin>
             <Insets left="590.0" top="152.0" />
@@ -163,18 +202,27 @@
          <Insets bottom="6909.0" />
       </opaqueInsets>
     </Button>
-    <AnchorPane fx:id="holidayPane" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateY="93.0" visible="true" StackPane.alignment="TOP_LEFT">
+    <AnchorPane fx:id="holidayPane" maxHeight="127.0" maxWidth="250.0" prefHeight="127.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateY="93.0" visible="true" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label layoutX="90.0" layoutY="14.0" text="Public Holiday" textFill="WHITE" />
+            <Label layoutX="74.0" layoutY="14.0" text="Public Holiday" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
             <VBox layoutX="148.0" layoutY="41.0" spacing="5.0" />
-            <VBox layoutX="50.0" layoutY="41.0" spacing="5.0">
+            <VBox layoutX="43.0" layoutY="55.0" spacing="5.0">
                 <children>
                     <CheckBox fx:id="yesHoliday" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Yes" textFill="WHITE" userData="1" wrapText="true" />
                     <CheckBox fx:id="noHoliday" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="No" textFill="WHITE" userData="0" wrapText="true" />
                 </children>
             </VBox>
-         <Button layoutX="152.0" layoutY="74.0" mnemonicParsing="false" onAction="#clearAllFilters" text="Clear" />
-         <Button layoutX="141.0" layoutY="37.0" mnemonicParsing="false" onAction="#selectAllFilters" text="Select All" />
+         <Button layoutX="146.0" layoutY="82.0" mnemonicParsing="false" onAction="#clearAllFilters" prefHeight="25.0" prefWidth="67.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Clear" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
+         <Button layoutX="147.0" layoutY="47.0" mnemonicParsing="false" onAction="#selectAllFilters" prefHeight="25.0" prefWidth="70.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Select All" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font></Button>
         </children>
         <StackPane.margin>
             <Insets left="590.0" top="513.0" />

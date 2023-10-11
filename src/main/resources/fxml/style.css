@@ -32,6 +32,10 @@
     -fx-background-color: #2c2c2c;
     -fx-background-radius: 40px;
 }
+.filterButtonColor{
+    -fx-background-color: #3c3c3c;
+    -fx-background-radius: 40px;
+}
 .feathered-border-pane {
     -fx-background-color: transparent;
     -fx-border-width: 5px;
@@ -60,6 +64,19 @@
     -fx-font-weight: bold;
     -fx-font-size: 15;
     -fx-alignment: center-left;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box .list-view .list-cell {
+    -fx-text-fill: black;
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color : #5F9EA0;
+    -fx-text-fill: white;
 }
 
 .address-button-add-style {
