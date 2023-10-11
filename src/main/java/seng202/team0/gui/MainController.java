@@ -56,6 +56,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private JavaScriptBridge javaScriptBridge;
 
     private Timeline progressBarTimeline;
+    private Button selectedButton = null;
+    //private String menuChoice;
 
 
 
@@ -165,6 +167,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
+        toggleMenuButton(menuButton);
+
         if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals(("help"))) {
             controller.updateManager();
         }
@@ -201,6 +205,26 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("help", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
+        }
+    }
+
+
+    public void toggleMenuButton(Button chosenButton) {
+        if (Objects.equals(chosenButton, selectedButton)) { // deselects
+            selectedButton = null;
+            chosenButton.getStyleClass().remove("clickedButtonColor");
+            chosenButton.getStyleClass().add("menuButtonColor");
+        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) { // deselects and selects new
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("menuButtonColor");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+        } else { // just selects new
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+
         }
     }
 
