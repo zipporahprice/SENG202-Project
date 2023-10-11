@@ -121,7 +121,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        Location newMarker = geolocator.getLocation(address, "Start");
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
@@ -132,7 +132,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        Location newMarker = geolocator.getLocation(address, "End");
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
@@ -144,8 +144,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
-        String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude());
-        String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude());
+        String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude(), "Start");
+        String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude(), "End");
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(),
                 end.getLongitude(), filters);
@@ -192,7 +192,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        Location newMarker = geolocator.getLocation(address);
+        Location newMarker = geolocator.getLocation(address, "Stop");
         //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
