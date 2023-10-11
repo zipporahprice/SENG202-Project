@@ -266,8 +266,8 @@ function displayRoute(routesIn, transportMode, safetyScore) {
 function getColorForSafetyScore(score) {
     if (score >= 4.0) return 'red';   // least safe
     if (score >= 3.0) return 'orange';  // moderately safe
-    if (score >= 2.0) return 'green'; // safest
-    if (score >= 1.0) return 'pink'; // impossible to die
+    if (score >= 2.0) return 'yellow'; // safest
+    if (score >= 0.0) return 'green';
     return 'red'; // default if safety score is null
 }
 
