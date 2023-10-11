@@ -65,9 +65,9 @@
             </Button>
             <Button fx:id="settingsButton" layoutX="9.0" layoutY="319.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="settings">
                <graphic>
-                  <ImageView fitHeight="44.0" fitWidth="200.0">
+                  <ImageView fitHeight="40.0" fitWidth="260.0">
                      <image>
-                        <Image url="@images/settings.png" />
+                        <Image url="@images/change_view.png" />
                      </image>
                   </ImageView>
                </graphic>
