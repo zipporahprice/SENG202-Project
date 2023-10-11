@@ -1,6 +1,8 @@
 package seng202.team0.models;
 
 import com.google.gson.Gson;
+
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,32 +50,25 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String crashes() {
-        List crashList = crashData.getCrashLocations().stream().map(crash -> {
-            if (crash instanceof Crash) {
-                Crash crash1 = (Crash) crash;
-                double latitude = crash1.getLatitude();
-                double longitude = crash1.getLongitude();
-                int severity = crash1.getSeverity().getValue();
-                String year = Integer.toString(crash1.getCrashYear());
-                String weather = crash1.getWeather().toString();
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            } else {
-                HashMap crash1 = (HashMap) crash;
-                double latitude = (double) crash1.get("latitude");
-                double longitude = (double) crash1.get("longitude");
-                int severity = (int) crash1.get("severity");
-                String year = Integer.toString((Integer) crash1.get("crash_year"));
-                String weather = (String) crash1.get("weather");
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            }
-        }).toList();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("resetLayers();");
 
-        Gson gson = new Gson();
+        crashData.getCrashLocations().stream().forEach(crash -> {
+            HashMap crash1 = (HashMap) crash;
+            double latitude = (double) crash1.get("latitude");
+            double longitude = (double) crash1.get("longitude");
+            int severity = (int) crash1.get("severity");
+            String year = Integer.toString((Integer) crash1.get("crash_year"));
+            String weather = (String) crash1.get("weather");
 
-        String json = gson.toJson(crashList);
+            stringBuilder.append(String.format("addPoint(%f,%f,%d,%s,'%s');", latitude, longitude, severity, year, weather));
+        });
 
-        return json;
+        stringBuilder.append("setHeatmapData();");
 
+        System.out.println(stringBuilder);
+
+        return stringBuilder.toString();
     }
 
     /**
@@ -166,5 +161,7 @@ public class JavaScriptBridge {
     public static interface JavaScriptListener {
         void mapLoaded();
     }
+
+    public void printTime(double time) {System.out.println(time);};
 }
 
