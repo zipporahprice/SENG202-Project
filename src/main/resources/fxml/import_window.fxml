@@ -11,15 +11,15 @@
 
 <AnchorPane fx:id="importPane" maxHeight="117.0" maxWidth="250.0" prefHeight="92.0" prefWidth="256.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
     <children>
-        <Label layoutX="55.0" layoutY="14.0" text="CSV File Options" textFill="WHITE">
+        <Label layoutX="69.0" layoutY="14.0" text="CSV File Options" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
-        <Button fx:id="importDataButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" onAction="#openFileChooserDialog" styleClass="filterButtonColor" stylesheets="@style.css" text="Import Data" textFill="WHITE">
+        <Button fx:id="importDataButton" layoutX="26.0" layoutY="48.0" mnemonicParsing="false" onAction="#openFileChooserDialog" prefHeight="25.0" prefWidth="96.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Import Data" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font></Button>
-        <Button fx:id="resetDataButton" layoutX="132.0" layoutY="48.0" mnemonicParsing="false" onAction="#resetDatabase" prefHeight="25.0" prefWidth="80.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Reset Data" textFill="WHITE">
+        <Button fx:id="resetDataButton" layoutX="133.0" layoutY="48.0" mnemonicParsing="false" onAction="#resetDatabase" prefHeight="25.0" prefWidth="96.0" styleClass="filterButtonColor" stylesheets="@style.css" text="Reset Data" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font></Button>

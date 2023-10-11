@@ -35,9 +35,7 @@
 .filterButtonColor{
     -fx-background-color: #3c3c3c;
     -fx-background-radius: 40px;
-    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
 }
 .feathered-border-pane {
     -fx-background-color: transparent;
