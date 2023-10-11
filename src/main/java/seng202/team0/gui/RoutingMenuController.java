@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import com.sun.tools.javac.Main;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +28,8 @@ import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.FavouriteDao;
+
+import org.controlsfx.control.Notifications;
 
 /**
  * The `RoutingMenuController` class manages user
@@ -74,8 +73,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
-    private final BooleanProperty functionCalledProperty = new SimpleBooleanProperty(false);
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -100,22 +97,15 @@ public class RoutingMenuController implements Initializable, MenuController {
         loadManager();
     }
 
-    public BooleanProperty functionCalledProperty() {
-        return functionCalledProperty;
-    }
-
 
     private void displayRoute(int safetyScore, Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         if (modeChoice == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("No Mode of Transport Selected!"
-                    + "\nPlease Select a mode of Transport");
-
-            alert.showAndWait();
+            Notifications.create()
+                    .title("Error")
+                    .text("Please Click on A Transport Option!")
+                    .showInformation();
             return;
         } else {
             //functionCalledProperty.set(true);

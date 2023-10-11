@@ -64,19 +64,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private RoutingMenuController routingMenuController;
 
 
-    public MainController() {
-        this.routingMenuController = new RoutingMenuController();
-
-        // Add a listener to the property
-        this.routingMenuController.functionCalledProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                showToast(stage, "Hello", 500);
-
-                // Reset the property
-                routingMenuController.functionCalledProperty().set(false);
-            }
-        });
-    }
 
     /**
      * Initializes the main stage, UI components, and the map controller.
@@ -109,33 +96,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     }
 
-    private void showToast(Stage stage, String message, int millis) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/toast.fxml"));
-            StackPane root = loader.load();
-
-            ToastController toastController = loader.getController();
-
-            Stage toastStage = new Stage();
-
-            toastStage.initOwner(stage);
-            toastStage.setResizable(false);
-            toastStage.initStyle(StageStyle.TRANSPARENT);
-
-            Scene scene = new Scene(root);
-            scene.setFill(Color.TRANSPARENT);
-            toastStage.setScene(scene);
-            toastStage.show();
-
-            toastStage.setX(stage.getX() + stage.getWidth()/2 - toastStage.getWidth()/2);
-            toastStage.setY(stage.getY()+stage.getHeight()/1.5);
-
-            toastController.showMessage(message,millis);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void initProgressBarTimeline() {
