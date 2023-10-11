@@ -35,6 +35,9 @@
 .filterButtonColor{
     -fx-background-color: #3c3c3c;
     -fx-background-radius: 40px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
 }
 .feathered-border-pane {
     -fx-background-color: transparent;
@@ -66,16 +69,11 @@
     -fx-alignment: center-left;
 }
 
-.combo-box .list-cell {
+.combo-box > .list-cell {
     -fx-text-fill: white;
 }
 
-.combo-box .list-view .list-cell {
-    -fx-text-fill: black;
-}
-
-.combo-box .list-view .list-cell:hover {
-    -fx-background-color : #5F9EA0;
+.choice-box > .label {
     -fx-text-fill: white;
 }
 

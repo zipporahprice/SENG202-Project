@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="586.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="636.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <AnchorPane fx:id="settingsPane" maxHeight="651.0" maxWidth="341.0" prefHeight="585.0" prefWidth="341.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
         <StackPane.margin>
             <Insets left="335.0" top="10.0" />
@@ -17,31 +17,31 @@
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label alignment="CENTER" layoutX="25.0" layoutY="163.0" prefHeight="27.0" prefWidth="287.0" text="Data Filtering:" textFill="WHITE">
+         <Label alignment="CENTER" layoutX="25.0" layoutY="177.0" prefHeight="27.0" prefWidth="287.0" text="Data Filtering:" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label alignment="CENTER" layoutX="25.0" layoutY="414.0" prefHeight="27.0" prefWidth="287.0" text="Data Importing:" textFill="WHITE">
+         <Label alignment="CENTER" layoutX="25.0" layoutY="452.0" prefHeight="27.0" prefWidth="287.0" text="Data Importing:" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
          <Label alignment="CENTER" layoutX="27.0" layoutY="41.0" prefHeight="42.0" prefWidth="287.0" text="• Enter a start and end location (and any stops) into the designated fields.  " textAlignment="CENTER" textFill="WHITE" wrapText="true" />
          <Label alignment="CENTER" layoutX="27.0" layoutY="83.0" prefHeight="27.0" prefWidth="287.0" text="• Click 'Generate Route' to show the route." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="110.0" prefHeight="42.0" prefWidth="287.0" text="• Select 'Save Route' to save a route for later use, and load this route with the 'Select Saved Route' option." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="191.0" prefHeight="42.0" prefWidth="287.0" text="• Use the checkboxes to filter the crash data shown on the map view by the corresponding values." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="442.0" prefHeight="42.0" prefWidth="287.0" text="• You can load your own crash data files into the app to be visualised by using the 'Import Data' option." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="484.0" prefHeight="42.0" prefWidth="287.0" text="• Files must be in a compatible csv format to be loaded." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="526.0" prefHeight="27.0" prefWidth="287.0" text="• 'Reset Data' clears database of current data." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="249.0" prefHeight="27.0" prefWidth="287.0" text="Changing Map View:" textFill="WHITE">
+         <Label alignment="CENTER" layoutX="27.0" layoutY="110.0" prefHeight="55.0" prefWidth="287.0" text="• Select 'Save Route' to save a route for later use, and load this route with the 'Select Saved Route' option." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="204.0" prefHeight="55.0" prefWidth="287.0" text="• Use the checkboxes to filter the crash data shown on the map view by the corresponding values." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="479.0" prefHeight="55.0" prefWidth="287.0" text="• You can load your own crash data files into the app to be visualised by using the 'Import Data' option." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="534.0" prefHeight="42.0" prefWidth="287.0" text="• Files must be in a compatible csv format to be loaded." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="576.0" prefHeight="36.0" prefWidth="287.0" text="• 'Reset Data' clears database of current data." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="272.0" prefHeight="27.0" prefWidth="287.0" text="Changing Map View:" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label alignment="CENTER" layoutX="27.0" layoutY="277.0" prefHeight="42.0" prefWidth="287.0" text="• 'Heatmap' view uses colours to visualise the density of crashes in different areas." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="319.0" prefHeight="42.0" prefWidth="287.0" text="• 'Crash Locations' view shows crash events as individual or clustered points." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="361.0" prefHeight="42.0" prefWidth="287.0" text="• 'Automatic' uses the heatmap view when zoomed out and the crash locations view when zoomed in." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="301.0" prefHeight="42.0" prefWidth="287.0" text="• 'Heatmap' view uses colours to visualise the density of crashes in different areas." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="343.0" prefHeight="42.0" prefWidth="287.0" text="• 'Crash Locations' view shows crash events as individual or clustered points." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="385.0" prefHeight="55.0" prefWidth="287.0" text="• 'Automatic' uses the heatmap view when zoomed out and the crash locations view when zoomed in." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
       </children>
     </AnchorPane>
 
