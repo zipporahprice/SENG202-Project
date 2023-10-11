@@ -126,29 +126,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         timeline.play();
     }
 
-
-    /**
-     * Loads and displays the help window within the main application window.
-     * This method uses JavaFX's FXMLLoader to load the help window from an FXML file.
-     * It clears the existing content in the main window and adds the help window's content.
-     * The help window is anchored to the right side of the main window.
-     */
-    @FXML
-    public void loadHelp() {
-        try {
-            FXMLLoader helpLoad = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
-            Parent helpViewParent = helpLoad.load();
-
-            // TODO maybe take out of function and put into something you can call for all loaders
-            mainWindow.getChildren().clear();
-
-            mainWindow.getChildren().add(helpViewParent);
-            AnchorPane.setRightAnchor(helpViewParent, 0d);
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
-
     /**
      * Loads the graph display.
      */
@@ -174,7 +151,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals("help")) {
                 controller = loader.getController();
             }
 
@@ -190,7 +167,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
-        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals(("help"))) {
             controller.updateManager();
         }
 
@@ -213,8 +190,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/import_window.fxml");
+        } else if (Objects.equals("help", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
         }
-
     }
 
     private void fadeOutLoadingScreen() {
