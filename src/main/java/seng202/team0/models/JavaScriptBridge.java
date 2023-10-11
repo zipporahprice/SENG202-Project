@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -25,7 +27,9 @@ public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
 
-    public static List<Location> finalOutput = new ArrayList<>();
+    private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
+    private static long index;
+
 
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
@@ -128,9 +132,12 @@ public class JavaScriptBridge {
     public void sendCoordinates(String coordinatesJson) {
         JSONParser parser = new JSONParser();
         try {
-            // Parse the JSON string to a JSONArray
-            Object obj = parser.parse(coordinatesJson);
-            JSONArray jsonArray = (JSONArray) obj;
+            // Parse the JSON string to a JSONObject
+            JSONObject routeObj = (JSONObject) parser.parse(coordinatesJson);
+
+            // Extract routeId and coordinates
+            long routeId = (long) routeObj.get("routeId");
+            JSONArray jsonArray = (JSONArray) routeObj.get("coordinates");
 
             // Create a List to hold Coordinate objects
             List<Location> coordinates = new ArrayList<>();
@@ -147,16 +154,46 @@ public class JavaScriptBridge {
                 // Add a new Coordinate object to the list
                 coordinates.add(new Location(lat, lng)); // Ensure you have a Coordinate class with a constructor that accepts lat and lng
             }
+            index = routeId;
+            processRoute(routeId, coordinates);
+            RoutingMenuController.ratingUpdate();
 
             // Now you have a List of Coordinates in Java
             // Do something with the coordinates...
 
-            finalOutput = coordinates;
-            RoutingMenuController.ratingUpdate();
-        } catch (ParseException | SQLException e) {
+        } catch (ParseException e) {
             // Handle JSON parsing exceptions
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    public static long getIndex() {
+        return index;
+    }
+
+
+    private void processRoute(long routeId, List<Location> coordinates) {
+        // Here, handle the coordinates associated with the given routeId
+        // This can involve storing the coordinates, analyzing them, etc.
+
+        // Example: You might store the coordinates in a Map where the key is the routeId
+        routeMap.put(routeId, coordinates);
+
+
+        // Now, you can retrieve and handle the coordinates of each route separately
+        // For example, for analysis, drawing, or other processing
+
+        // Printing routeId
+
+    }
+
+    public static Map<Long, List<Location>> getRouteMap() throws SQLException {
+        return routeMap;
+    }
+
+
+
 
 }

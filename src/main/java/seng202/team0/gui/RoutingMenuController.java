@@ -17,6 +17,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
+
 public class RoutingMenuController implements Initializable {
 
     @FXML
@@ -71,7 +73,7 @@ public class RoutingMenuController implements Initializable {
      * Used to display route on Leaflet Map in javascript code.
      * @param routes route to display
      */
-    private void displayRoute(Route... routes) {
+    private void displayRoute(Route... routes) throws SQLException {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         MainController.javaScriptConnector.call("displayRoute", Route.routesToJSONArray(routesList));
@@ -180,7 +182,7 @@ public class RoutingMenuController implements Initializable {
      * Adds stop to "stops" list.
      */
     @FXML
-    private void addStop() {
+    private void addStop() throws SQLException {
         Location stop = getStop();
         if (stop != null) {
             stops.add(stop);
@@ -192,7 +194,7 @@ public class RoutingMenuController implements Initializable {
      * Removes stop from "stops" list
      */
     @FXML
-    private void removeStop() {
+    private void removeStop() throws SQLException {
         if (stops.size() >= 1) {
             stops.remove(stops.size()-1);
             generateRouteAction();
@@ -210,16 +212,16 @@ public class RoutingMenuController implements Initializable {
     public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
-        for (int i = 0; i < coordinates.size()-50; i+=50) {
+        for (int i = 0; i < coordinates.size()-1; i+=1) {
             Location segmentStart = coordinates.get(i);
-            Location segmentEnd = coordinates.get(i+50);
+            Location segmentEnd = coordinates.get(i+1);
             double distance = haversineDistance(segmentStart, segmentEnd);
             double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
             totalDistance += distance;
-            totalValue += averageSeverity / distance;
+            totalValue += averageSeverity / totalDistance;
         }
         //TODO store average severities in a list to look at coloring route segments.
-        return totalValue * totalDistance/10000;
+        return totalValue * totalDistance;
     }
 
     /**
@@ -284,7 +286,7 @@ public class RoutingMenuController implements Initializable {
 
         // One kilometre in degrees
         double oneKilometreInDegrees = 0.008;
-        double distance = haversineDistance(startLocation, endLocation) / 4000;
+        double distance = 100;
 
         String tableName = "locations";
         String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
@@ -343,7 +345,7 @@ public class RoutingMenuController implements Initializable {
      * OnAction event callback function for "Generate Route" button
      */
     @FXML
-    private void generateRouteAction() {
+    private void generateRouteAction() throws SQLException {
         Location start = getStart();
         Location end = getEnd();
 
@@ -372,16 +374,21 @@ public class RoutingMenuController implements Initializable {
      * @throws SQLException
      */
     public static void ratingUpdate() throws SQLException {
-        List<Location> coordinates = JavaScriptBridge.finalOutput;
-        double rating = getOverlappingPoints(coordinates);
-        RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating)));
+        List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+        if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
+            double rating = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
+            RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating))); // Update the UI
+        } else {
+            System.out.println("No coordinates available for routeId: 0");
+        }
     }
+
 
     /**
      * Overloaded function for handling route generation with favourites.
      * @param favourite Favourite object with locations of route and filters.
      */
-    private void generateRouteAction(Favourite favourite) {
+    private void generateRouteAction(Favourite favourite) throws SQLException {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 

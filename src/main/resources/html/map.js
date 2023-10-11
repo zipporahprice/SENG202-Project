@@ -148,28 +148,69 @@ function displayRoute(routesIn) {
 
     var routesArray = JSON.parse(routesIn);
 
-    routesArray.forEach(waypointsIn => {
+    var currentRouteIndex = 0; // Starting index at 0
+    var routeIndexMap = new Map(); // Map to hold routeId as key and currentRouteIndex as value
+
+    routesArray.forEach((waypointsIn, index) => {
         var waypoints = [];
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
+
         var newRoute = L.Routing.control({
             waypoints: waypoints,
-            routeWhileDragging: true
+            routeWhileDragging: true,
+            showAlternatives: true
         }).addTo(map);
 
-        newRoute.on('routeselected', function (e) {
+        newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
 
-            // Convert coordinates array to JSON string
-            var coordinatesJson = JSON.stringify(coordinates);
+            // Generating or retrieving a unique identifier for the route.
+            // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
+            var routeId = getRouteIdentifier(route);
 
-            // Send JSON string to Java via the bridge
+            // Check if this routeId has been selected before
+            if (!routeIndexMap.has(routeId)) {
+                // If not, add it to the map with the current index as its value
+                routeIndexMap.set(routeId, currentRouteIndex);
+                // Increment the current index for the next new route
+                currentRouteIndex += 1;
+            }
+
+            // Retrieve the index associated with the routeId from the map
+            var indexToSend = routeIndexMap.get(routeId);
+
+            // Prepare and send the coordinates
+            var coordinatesJson = JSON.stringify({
+                routeId: indexToSend, // Use the index retrieved from the map
+                coordinates: coordinates
+            });
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });
 
         routes.push(newRoute);
     });
 }
+
+function getRouteIdentifier(route) {
+    // Assuming route.coordinates is an array of coordinate objects
+    // And each coordinate can be represented as a string
+    // You should replace this logic with the actual properties of your route objects
+    if (!route || !route.coordinates) return null;
+
+    // Convert each coordinate to a string and concatenate them
+    // Ensure this provides a unique and consistent identifier for each route
+    return route.coordinates.map(coord => coordToString(coord)).join(',');
+}
+
+function coordToString(coord) {
+    // Convert coordinate object to a string
+    // Replace this with the actual structure of your coordinate objects
+    return `${coord.lat},${coord.lng}`; // Assuming a coord object has lat and lng properties
+}
+
+
+
 
 
 /**
