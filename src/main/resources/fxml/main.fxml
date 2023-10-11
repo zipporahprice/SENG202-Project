@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
 <StackPane fx:id="mainWindow" minHeight="400" minWidth="600" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
@@ -28,7 +29,7 @@
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
 
-      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="573.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <AnchorPane maxHeight="-Infinity" maxWidth="318.0" prefHeight="642.0" prefWidth="318.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <children>
             <ImageView fitHeight="43.0" fitWidth="187.0" layoutX="32.0" layoutY="26.0">
                <image>
@@ -88,6 +89,15 @@
                      </image>
                   </ImageView>
                </graphic></Button>
+            <Button fx:id="rateAreaButton" layoutX="9.0" layoutY="560.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="rateArea">
+               <graphic>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Rate Area">
+                     <font>
+                        <Font size="37.0" />
+                     </font>
+                  </Text>
+               </graphic>
+            </Button>
          </children>
          <StackPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.controlsfx.control.Rating;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.business.RatingAreaManager;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 
@@ -130,6 +134,21 @@ public class JavaScriptBridge {
         FilterManager filterManager = FilterManager.getInstance();
         filterManager.setViewPortMin(minLatitude, minLongitude);
         filterManager.setViewPortMax(maxLatitude, maxLongitude);
+    }
+
+    /**
+     * Sets the viewport variables in the FilterManager singleton class.
+     *
+     * @param minLatitude minimum latitude of the map view
+     * @param minLongitude minimum longitude of the map view
+     * @param maxLatitude maximum latitude of the map view
+     * @param maxLongitude maximum longitude of the map view
+     */
+    public void setRatingAreaManagerBoundingBox(double minLatitude, double minLongitude,
+                                         double maxLatitude, double maxLongitude) {
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        ratingAreaManager.setBoundingBoxMin(minLatitude, minLongitude);
+        ratingAreaManager.setBoundingBoxMax(maxLatitude, maxLongitude);
     }
 
     /**
