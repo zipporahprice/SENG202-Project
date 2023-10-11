@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <StackPane prefHeight="216.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RatingAreaMenuController">
@@ -12,9 +13,18 @@
 
    <AnchorPane fx:id="outputPane" maxHeight="144.0" maxWidth="280.0" prefHeight="144.0" prefWidth="280.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
       <children>
-         <Label fx:id="ratingAreaText" layoutX="101.0" layoutY="14.0" text="Danger:" textFill="WHITE" />
-         <Label fx:id="numCrashesAreaLabel" layoutX="10.0" layoutY="40.0" text="Number of crashes in area:" textFill="WHITE" />
-         <Text fill="WHITE" layoutX="20.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Draw tool in top right corner of the screen." underline="true" />
+         <Label fx:id="ratingAreaText" layoutX="101.0" layoutY="14.0" text="Danger:" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
+         <Label fx:id="numCrashesAreaLabel" layoutX="12.0" layoutY="43.0" text="Number of crashes in area:" textFill="WHITE">
+            <font>
+               <Font size="15.0" />
+            </font></Label>
+         <Text fill="WHITE" layoutX="12.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Draw tool in top right corner of the screen." underline="true" wrappingWidth="239.4182891845703">
+            <font>
+               <Font size="13.0" />
+            </font></Text>
       </children>
       <StackPane.margin>
          <Insets left="335.0" top="10.0" />

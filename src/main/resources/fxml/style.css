@@ -22,6 +22,10 @@
 .clickedButtonColor{
     -fx-background-color: linear-gradient(to right, rgba(143,138,255,1) 0%, rgba(116,182,250,1) 48%, rgba(0,212,255,1) 100%);
     -fx-background-radius: 32px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
 }
 
 .menuButtonColor{

@@ -111,6 +111,9 @@
                </image>
             </ImageView>
          </graphic>
+         <StackPane.margin>
+            <Insets bottom="10.0" left="10.0" />
+         </StackPane.margin>
       </Button>
 
       <StackPane fx:id="loadingScreen" prefHeight="150.0" prefWidth="200.0" visible="false">

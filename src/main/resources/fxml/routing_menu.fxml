@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
+<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
 
     <children>
         <TextField fx:id="startLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStart" prefHeight="50.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
@@ -20,11 +20,11 @@
             </StackPane.margin></TextField>
         <TextField fx:id="endLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="155.0" />
+                <Insets left="335.0" top="159.0" />
             </StackPane.margin></TextField>
-        <TextField fx:id="stopLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+        <TextField fx:id="stopLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add Stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="210.0" />
+                <Insets left="335.0" top="218.0" />
             </StackPane.margin></TextField>
         <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="135.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <font>
@@ -51,11 +51,11 @@
             <minHeight>43.0</minHeight>
             <minWidth>280.0</minWidth>
             <font>
-                <Font name="System Bold" size="14.0" />
+                <Font name="System Bold" size="15.0" />
             </font>
             <textFill>#FFFFFF</textFill>
         </Button>
-        <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select saved route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+        <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select Saved Route" styleClass="address-button-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
                 <Insets left="335.0" top="490.0" />
             </StackPane.margin>
@@ -65,8 +65,14 @@
         </ComboBox>
         <AnchorPane fx:id="outputPane" maxHeight="144.0" maxWidth="280.0" prefHeight="144.0" prefWidth="280.0" styleClass="sideBarColor" stylesheets="@style.css" visible="true" StackPane.alignment="TOP_LEFT">
             <children>
-                <Label fx:id="ratingText" layoutX="101.0" layoutY="14.0" text="Danger:" textFill="WHITE" />
-                <Label fx:id="numCrashesLabel" layoutX="10.0" layoutY="40.0" text="Number of crashes on route:" textFill="WHITE" />
+                <Label fx:id="ratingText" layoutX="101.0" layoutY="14.0" text="Danger:" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font></Label>
+                <Label fx:id="numCrashesLabel" layoutX="10.0" layoutY="40.0" text="Number of crashes on route:" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             </children>
             <StackPane.margin>
                 <Insets left="335.0" top="540.0" />
@@ -114,7 +120,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
             <StackPane.margin>
-                <Insets left="335.0" top="267.0" />
+                <Insets left="335.0" top="282.0" />
             </StackPane.margin>
             <padding>
                 <Insets left="10.0" />
@@ -128,7 +134,7 @@
             <Insets left="10.0" />
          </padding>
          <StackPane.margin>
-            <Insets left="335.0" top="320.0" />
+            <Insets left="335.0" top="332.0" />
          </StackPane.margin>
       </Button>
     </children>
