@@ -352,8 +352,6 @@ function setData() {
 function drawingModeOn() {
     map.addLayer(drawnItems);
     map.addControl(drawControl);
-    map.off('zoomend');
-    map.off('moveend');
     map.on('draw:created', handleNewDrawing);
 }
 
@@ -362,9 +360,6 @@ function drawingModeOff() {
     drawnItems.clearLayers();
     map.removeControl(drawControl);
     map.off('draw-created');
-    setFilteringViewport();
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
 }
 
 function handleNewDrawing(event) {
@@ -385,7 +380,7 @@ function handleNewDrawing(event) {
         const northeastLat = northeast.lat;
         const northeastLng = northeast.lng;
 
-        javaScriptBridge.setFilterManagerViewport(southwestLat, southwestLng, northeastLat, northeastLng);
+        javaScriptBridge.setRatingAreaManagerBoundingBox(southwestLat, southwestLng, northeastLat, northeastLng);
     }
 
     // TODO for implementing a circle
