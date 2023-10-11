@@ -336,11 +336,7 @@ function getMarkerIcon(severity) {
     });
 }
 
-var start = 0;
-var end = 0;
-
 function resetLayers() {
-    start = performance.now();
     newHeatmap()
     markerLayer.clearLayers();
 }
@@ -367,8 +363,6 @@ function setHeatmapData() {
         data: crashes
     }
     heatmapLayer.setData(testData);
-    end = performance.now();
-    javaScriptBridge.printTime(end - start);
 }
 
 function drawingModeOn() {

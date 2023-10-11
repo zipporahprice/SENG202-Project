@@ -60,8 +60,6 @@ public class JavaScriptBridge {
 
         stringBuilder.append("setHeatmapData();");
 
-        System.out.println(stringBuilder);
-
         return stringBuilder.toString();
     }
 

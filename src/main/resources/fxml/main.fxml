@@ -116,6 +116,12 @@
          </StackPane.margin>
       </Button>
 
+      <Button fx:id="refreshButton" disable="true" onAction="#refreshData" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css" text="Refresh" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+
       <StackPane fx:id="loadingScreen" prefHeight="150.0" prefWidth="200.0" visible="false">
          <children>
             <Region prefHeight="200.0" prefWidth="200.0" styleClass="red-pane" stylesheets="@style.css" />
@@ -134,10 +140,5 @@
             </ImageView>
          </children>
       </StackPane>
-      <Button fx:id="refreshButton" disable="true" onAction="#refreshData" prefHeight="67.0" prefWidth="110.0" styleClass="menuButtonColor" stylesheets="@style.css" text="Refresh" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
    </children>
 </StackPane>
