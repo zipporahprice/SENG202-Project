@@ -55,7 +55,6 @@ public class SettingsMenuController implements Initializable, MenuController {
                             // Other cases.
                             break;
                     }
-//                MainController.javaScriptConnector.call("updateView");
                 });
     }
 
