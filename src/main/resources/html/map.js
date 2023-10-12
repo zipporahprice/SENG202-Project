@@ -63,7 +63,21 @@ function initMap() {
 
     setHeatmapData();
 
-    markerLayer = L.markerClusterGroup();
+    markerLayer = L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            var averageSeverity = calculateAverageSeverity(cluster);
+            var clusterColor = getColorBasedOnSeverity(averageSeverity);
+
+
+            return L.divIcon({
+                html: '<div class="markers-style ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
+                className: 'marker-style',
+                iconSize: L.point(32, 32)
+            });
+
+        }
+    });
+
     drawnItems = new L.FeatureGroup();
     drawControl = new L.Control.Draw({
         edit: {
@@ -359,10 +373,40 @@ function resetLayers() {
     markerLayer.clearLayers();
 }
 
+function getColorBasedOnSeverity(averageSeverity) {
+    if (averageSeverity >= 1 && averageSeverity < 2) {
+        return 'green'; // Low severity, green color
+    } else if (averageSeverity >= 2 && averageSeverity < 3) {
+        return 'yellow'; // Moderate severity, yellow color
+    } else if (averageSeverity >= 3 && averageSeverity < 4) {
+        return 'orange'; // High severity, orange color
+    } else if (averageSeverity == null) {
+        return 'black';
+    } else {
+        console.log(averageSeverity);
+        return 'red'; // Very high severity, red color
+    }
+}
+
+
+function calculateAverageSeverity(cluster) {
+    var childMarkers = cluster.getAllChildMarkers();
+    if (childMarkers == 0) {
+        return 0;
+    }
+    var totalSeverity = 0;
+
+    // Calculate the total severity within the cluster
+    for (var i = 0; i < childMarkers.length; i++) {
+        totalSeverity += childMarkers[i].options.severity;
+    }
+    return totalSeverity/childMarkers.length;
+}
+
 function addPoint(lat, lng, severity, year, weather) {
     const severityString = getSeverityStringFromValue(severity);
     const markerIcon = getMarkerIcon(severity);
-    var marker = L.marker(new L.LatLng(lat, lng), { title: severityString, icon: markerIcon });
+    var marker = L.marker(new L.LatLng(lat, lng), { title: severityString, icon: markerIcon, severity : severity });
     marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
         "<p><strong>Latitude:</strong> " + lat + "</p>" +
         "<p><strong>Longitude:</strong> " + lng + "</p>" +

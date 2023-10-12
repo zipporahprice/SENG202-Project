@@ -88,7 +88,7 @@ public class DatabaseManager {
                 CrashCsvImporter importer = new CrashCsvImporter();
                 // TODO replace with full file
                 InputStream stream = Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("files/crash_data_10k.csv");
+                        .getResourceAsStream("files/crash_data.csv");
                 File tempFile = File.createTempFile("tempCSV", ".csv");
                 Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 manager.addAllCrashesFromFile(importer, tempFile);
