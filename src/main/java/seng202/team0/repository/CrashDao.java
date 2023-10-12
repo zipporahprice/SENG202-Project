@@ -11,6 +11,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
+import seng202.team0.models.CrashSeverity;
 
 
 /**
@@ -218,7 +219,7 @@ public class CrashDao implements DaoInterface<Crash> {
                     rs.getInt("crash_year"),
                     rs.getString("crash_location1"),
                     rs.getString("crash_location2"),
-                    rs.getString("severity"),
+                    CrashSeverity.intToString(rs.getInt("severity")),
                     rs.getString("region"),
                     rs.getString("weather"),
                     rs.getFloat("longitude"),

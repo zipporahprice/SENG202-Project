@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team0.models.Crash;
+import seng202.team0.models.CrashSeverity;
+import seng202.team0.models.Favourite;
 
 /**
  * Builder class of SQL queries for the SQLite database.
@@ -30,6 +33,7 @@ public class SqliteQueryBuilder {
     private final DatabaseManager databaseManager;
     private static StringBuilder query;
     private final List<String> selectedColumns;
+    private String allColumnsFromTable = null;
 
     /**
      * Private instantiate that allows future connections to the database,
@@ -81,6 +85,8 @@ public class SqliteQueryBuilder {
 
         // If "*" is selected, update columns to all columns of the table
         if (selectedColumns.contains("*")) {
+            allColumnsFromTable = table;
+
             try (Connection conn = databaseManager.connect()) {
                 DatabaseMetaData metaData = conn.getMetaData();
                 ResultSet rs = metaData.getColumns(null, null, table, null);
@@ -114,16 +120,19 @@ public class SqliteQueryBuilder {
      *
      * @return List of all data points from the current query string
      */
-    public List build() {
-        List data = new ArrayList<HashMap>();
+    public List<Object> build() {
+        List<Object> data = new ArrayList<>();
         try (Connection conn = databaseManager.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query.toString())) {
             while (rs.next()) {
-                // TODO have as object since we do not know if type is string, int, etc.
-                HashMap temp = new HashMap<String, Object>();
-                for (String column : selectedColumns) {
-                    temp.put(column, rs.getObject(column));
+                Object temp = null;
+                if (allColumnsFromTable == null) {
+                    temp = resultAsHashmap(rs);
+                } else if (allColumnsFromTable.equals("crashes")) {
+                    temp = resultsAsCrash(rs);
+                } else if (allColumnsFromTable.equals("favourites")) {
+                    temp = resultsAsFavourite(rs);
                 }
                 data.add(temp);
             }
@@ -132,6 +141,70 @@ public class SqliteQueryBuilder {
         }
 
         return data;
+    }
+
+    /**
+     * Takes in a result set from query and returns the current row as a Hashmap.
+     * @param rs Result set from query.
+     * @return HashMap with column names as the key and value as an Object.
+     */
+    private HashMap<String, Object> resultAsHashmap(ResultSet rs) {
+        try {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            for (String column : selectedColumns) {
+                hashMap.put(column, rs.getObject(column));
+            }
+            return hashMap;
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
+    }
+
+    private Crash resultsAsCrash(ResultSet rs) {
+        try {
+            return new Crash(
+                    rs.getInt("object_id"),
+                    rs.getInt("speed_limit"),
+                    rs.getInt("crash_year"),
+                    rs.getString("crash_location1"),
+                    rs.getString("crash_location2"),
+                    CrashSeverity.intToString(rs.getInt("severity")),
+                    rs.getString("region"),
+                    rs.getString("weather"),
+                    rs.getFloat("longitude"),
+                    rs.getFloat("latitude"),
+                    rs.getBoolean("bicycle_involved"),
+                    rs.getBoolean("bus_involved"),
+                    rs.getBoolean("car_involved"),
+                    rs.getBoolean("holiday"),
+                    rs.getBoolean("moped_involved"),
+                    rs.getBoolean("motorcycle_involved"),
+                    rs.getBoolean("parked_vehicle_involved"),
+                    rs.getBoolean("pedestrian_involved"),
+                    rs.getBoolean("school_bus_involved"),
+                    rs.getBoolean("train_involved"),
+                    rs.getBoolean("truck_involved"));
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
+    }
+
+    private Favourite resultsAsFavourite(ResultSet rs) {
+        try {
+            return new Favourite(
+                    rs.getString("start_address"),
+                    rs.getString("end_address"),
+                    rs.getFloat("start_lat"),
+                    rs.getFloat("start_lng"),
+                    rs.getFloat("end_lat"),
+                    rs.getFloat("end_lng"),
+                    rs.getString("filters"));
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+            return null;
+        }
     }
 
     /**
