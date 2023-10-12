@@ -28,6 +28,7 @@ import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
+import seng202.team0.business.RatingAreaManager;
 import seng202.team0.models.JavaScriptBridge;
 
 
@@ -198,6 +199,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
         if (menuPopulated.equals("rateArea")) {
             MainController.javaScriptConnector.call("drawingModeOff");
+            RatingAreaManager.getInstance().clearBoundingBoxes();
         }
 
         if (Objects.equals(menuPopulated, menuChoice)) {

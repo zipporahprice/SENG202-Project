@@ -78,4 +78,12 @@ public class RatingAreaManager {
             boundingBoxMax = new Location(maxLatitude, maxLongitude);
         }
     }
+
+    /**
+     * Clears the stored bounding boxes.
+     */
+    public void clearBoundingBoxes() {
+        boundingBoxMax = null;
+        boundingBoxMin = null;
+    }
 }

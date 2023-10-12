@@ -37,20 +37,20 @@ public class RatingAreaMenuController implements MenuController {
      * rates the area based on severity and crashes.
      */
     public void rateArea() {
-        String select = "severity";
-        String from = "crashes";
-
-        FilterManager filterManager = FilterManager.getInstance();
-        String filterWhere = filterManager.toString();
-        String[] filterList = filterWhere.split(" AND ");
-        String filterWhereWithoutViewport = String.join(" AND ",
-                Arrays.copyOf(filterList, filterList.length - 1));
-
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         Location boundingBoxMin = ratingAreaManager.getBoundingBoxMin();
         Location boundingBoxMax = ratingAreaManager.getBoundingBoxMax();
 
         if (boundingBoxMax != null && boundingBoxMin != null) {
+            String select = "AVG(severity), COUNT()";
+            String from = "crashes";
+
+            FilterManager filterManager = FilterManager.getInstance();
+            String filterWhere = filterManager.toString();
+            String[] filterList = filterWhere.split(" AND ");
+            String filterWhereWithoutViewport = String.join(" AND ",
+                    Arrays.copyOf(filterList, filterList.length - 1));
+
             String where = "object_id IN (SELECT id FROM rtree_index WHERE minX >= "
                     + boundingBoxMin.getLongitude() + " AND maxX <= "
                     + boundingBoxMax.getLongitude() + " AND minY >= "
@@ -64,21 +64,17 @@ public class RatingAreaMenuController implements MenuController {
                     .where(filterWhereWithoutViewport + " AND " + where)
                     .buildGetter();
 
-            int totalSeverity = 0;
-            int total = 0;
+            HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);
 
-            for (Object severityMap : severityList) {
-                HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
-                totalSeverity += (int) map.get("severity");
-                total += 1;
-            }
-
-            double averageSeverity = 0;
+            double averageSeverity = (double) resultHashMap.get("AVG(severity)");
+            int total = (int) resultHashMap.get("COUNT()");
             if (total > 0) {
-                averageSeverity = totalSeverity / total;
+                // Actual average severity will range from 1 to 8
+                // Score rating massaged to be out of 10 and in a range from 0 to 10.
+                averageSeverity = ((averageSeverity - 1.0) / 7.0) * 10;
             }
 
-            ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity));
+            ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity) + " / 10");
             numCrashesAreaLabel.setText("Number of crashes in area: " + total);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
