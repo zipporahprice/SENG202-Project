@@ -29,7 +29,8 @@ public class SettingsMenuController implements Initializable, MenuController {
 
     /**
      * Populates the view choice options in the ChoiceBox
-     * Available options include "None," "Automatic," "Heatmap," "Crash Locations," and "Heatmap & Crash Locations."
+     * Available options include
+     * "None," "Automatic," "Heatmap," "Crash Locations," and "Heatmap & Crash Locations."
      */
     public void setViewOptions() {
         viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations",
