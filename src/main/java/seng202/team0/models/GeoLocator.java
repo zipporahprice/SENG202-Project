@@ -84,16 +84,6 @@ public class GeoLocator {
         alert.showAndWait();
     }
 
-    /**
-     * Handles an address by retrieving additional information.
-     *
-     * @param address The address to handle.
-     * @return Additional information or a message related to the address.
-     */
-    public String handleAddress(String address) {
-        Pair<Location, String> result = getLocation(address);
-        return result.getValue();
-    }
 
 
 
@@ -121,7 +111,8 @@ public class GeoLocator {
 
             if (result.isEmpty()) {
                 showErrorAlert("Invalid " + location + " Address",
-                        "The " + location.toLowerCase() + " provided is invalid or couldn't be found.");
+                        "The " + location.toLowerCase()
+                                + " provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 

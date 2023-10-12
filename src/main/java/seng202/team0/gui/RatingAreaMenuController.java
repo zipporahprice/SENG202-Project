@@ -1,5 +1,8 @@
 package seng202.team0.gui;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -8,10 +11,12 @@ import seng202.team0.business.RatingAreaManager;
 import seng202.team0.models.Location;
 import seng202.team0.repository.SqliteQueryBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
+/**
+ * The RatingAreaMenuController class is a controller responsible for managing
+ * the user interface for rating a specific area based on crash severities and
+ * a defined bounding box.
+ * Implements the MenuController interface.
+ */
 public class RatingAreaMenuController implements MenuController {
     @FXML
     public Label ratingAreaText;
@@ -28,6 +33,16 @@ public class RatingAreaMenuController implements MenuController {
 
     }
 
+    /**
+     * Calculates and displays the rating of a specific area based on crash data and filterS.
+     * This method performs the following steps:
+     * 1. Retrieves filter conditions.
+     * 2. Gets the bounding box for the area.
+     * 3. If a bounding box exists, retrieves crash data within that area.
+     * 4. Calculates the average severity of crashes.
+     * 5. Displays the area rating and the number of crashes.
+     * 6. Shows an error message if no bounding area is defined.
+     */
     public void rateArea() {
         String select = "severity";
         String from = "crashes";
@@ -35,7 +50,8 @@ public class RatingAreaMenuController implements MenuController {
         FilterManager filterManager = FilterManager.getInstance();
         String filterWhere = filterManager.toString();
         String[] filterList = filterWhere.split(" AND ");
-        String filterWhereWithoutViewport = String.join(" AND ", Arrays.copyOf(filterList, filterList.length - 1));
+        String filterWhereWithoutViewport = String.join(" AND ",
+                Arrays.copyOf(filterList, filterList.length - 1));
 
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         Location boundingBoxMin = ratingAreaManager.getBoundingBoxMin();

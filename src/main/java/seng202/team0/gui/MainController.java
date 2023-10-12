@@ -171,7 +171,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals("help")) {
+            if (!menuPopulated.equals("empty")
+                    && !menuPopulated.equals("import") && !menuPopulated.equals("help")) {
                 controller = loader.getController();
             }
 
@@ -184,12 +185,13 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
      * Toggles the menu display dependent on the button clicked.
      */
     public void toggleMenuDisplay(ActionEvent event) {
-        Button menuButton = (Button) event.getSource();
-        String menuChoice = (String) menuButton.getUserData();
+        final Button menuButton = (Button) event.getSource();
+        final String menuChoice = (String) menuButton.getUserData();
 
         toggleMenuButton(menuButton);
 
-        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals(("help"))) {
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
+                && !menuPopulated.equals(("help"))) {
             controller.updateManager();
         }
 
@@ -229,12 +231,18 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
 
+    /**
+     * Toggles the style of a menu button.
+     *
+     * @param chosenButton The button to toggle.
+     */
     public void toggleMenuButton(Button chosenButton) {
         if (Objects.equals(chosenButton, selectedButton)) { // deselects
             selectedButton = null;
             chosenButton.getStyleClass().remove("clickedButtonColor");
             chosenButton.getStyleClass().add("menuButtonColor");
-        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) { // deselects and selects new
+        } else if (!Objects.equals(chosenButton, selectedButton)
+                && selectedButton != null) { // deselects and selects new
             selectedButton.getStyleClass().remove("clickedButtonColor");
             selectedButton.getStyleClass().add("menuButtonColor");
             selectedButton = chosenButton;

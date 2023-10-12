@@ -198,15 +198,15 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        String errorMessage = geolocator.handleAddress(address);
-        if (errorMessage != null) {
-            showPopOver(errorMessage, startLocation, 5);
+        Pair<Location, String> startResult = geolocator.getLocation(address);
+        Location startMarker = startResult.getKey();
+        String errorMessageStart = startResult.getValue();
+        if (errorMessageStart != null) {
+            showPopOver(errorMessageStart, startLocation, 5);
+            return null; // You might want to return null here if there was an error.
         }
-        Pair<Location, String> result = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        Location newMarker = result.getKey();
-
-        return newMarker;
+        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
+        return startMarker;
     }
 
     /**
@@ -220,15 +220,14 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        String errorMessage = geolocator.handleAddress(address);
+        Pair<Location, String> endResult = geolocator.getLocation(address);
+        Location newMarker = endResult.getKey();
+        String errorMessage = endResult.getValue();
         if (errorMessage != null) {
             showPopOver(errorMessage, endLocation, 5);
+            return null; // You might want to return null here if there was an error.
         }
-
-        Pair<Location, String> result = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        Location newMarker = result.getKey();
-
+        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
 
@@ -242,7 +241,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
-        String startAddress = geolocator.getAddress(start.getLatitude(), start.getLongitude(), "Start");
+        String startAddress = geolocator.getAddress(start.getLatitude(),
+                start.getLongitude(), "Start");
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude(), "End");
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(),
@@ -304,14 +304,14 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (address.isEmpty()) {
             return null;
         }
-        String errorMessage = geolocator.handleAddress(address);
+        Pair<Location, String> endResult = geolocator.getLocation(address);
+        Location newMarker = endResult.getKey();
+        String errorMessage = endResult.getValue();
         if (errorMessage != null) {
-            showPopOver(errorMessage, stopLocation, 8);
+            showPopOver(errorMessage, stopLocation, 5);
+            return null; // You might want to return null here if there was an error.
         }
-        Pair<Location, String> result = geolocator.getLocation(address);
-        //javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        Location newMarker = result.getKey();
-
+        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
         return newMarker;
     }
 

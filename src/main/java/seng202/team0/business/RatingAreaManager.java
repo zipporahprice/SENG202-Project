@@ -2,6 +2,15 @@ package seng202.team0.business;
 
 import seng202.team0.models.Location;
 
+/**
+ * The RatingAreaManager class is responsible for managing the bounding box
+ * used to rate areas. It ensures that there is only one instance of this class
+ * and provides methods to set and retrieve the minimum and maximum points of
+ * the bounding box for rating an area.
+ *
+ * @author Neil Alombro
+ */
+
 public class RatingAreaManager {
 
     private static RatingAreaManager ratingAreaManager;
