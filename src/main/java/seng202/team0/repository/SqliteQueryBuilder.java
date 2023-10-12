@@ -1,11 +1,8 @@
 package seng202.team0.repository;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +30,8 @@ public class SqliteQueryBuilder {
     private final DatabaseManager databaseManager;
     private static StringBuilder query;
     private final List<String> selectedColumns;
-    private String allColumnsFromTable = null;
+    private boolean allColumnsFromTable = false;
+    private String table;
 
     /**
      * Private instantiate that allows future connections to the database,
@@ -53,6 +51,34 @@ public class SqliteQueryBuilder {
      */
     public static SqliteQueryBuilder create() {
         return new SqliteQueryBuilder();
+    }
+
+    /**
+     * Takes a table to append to and appends to current query.
+     *
+     * @param table table to append to
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
+    public SqliteQueryBuilder insert(String table) {
+        String columns = "";
+
+        if (table.equals("favourites")) {
+            columns = " (start_address, end_address, start_lat, start_lng, " +
+                    "end_lat, end_lng, filters) values (?,?,?,?,?,?,?)";
+        } else if (table.equals("crashes")) {
+            columns = " (speed_limit, crash_year, "
+                    + "crash_location1, crash_location2, severity, region, weather, "
+                    + "longitude, latitude, bicycle_involved, bus_involved, "
+                    + "car_involved, holiday, moped_involved, motorcycle_involved, "
+                    + "parked_vehicle_involved, pedestrian_involved, "
+                    + "school_bus_involved, train_involved, truck_involved) "
+                    + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        }
+
+        query.append("INSERT INTO " ).append(table).append(columns);
+        this.table = table;
+
+        return this;
     }
 
     /**
@@ -81,11 +107,12 @@ public class SqliteQueryBuilder {
      * @return SQLiteQueryBuilder instance to chain methods
      */
     public SqliteQueryBuilder from(String table) {
+        this.table = table;
         query.append("FROM ").append(table).append(" ");
 
         // If "*" is selected, update columns to all columns of the table
         if (selectedColumns.contains("*")) {
-            allColumnsFromTable = table;
+            allColumnsFromTable = true;
 
             try (Connection conn = databaseManager.connect()) {
                 DatabaseMetaData metaData = conn.getMetaData();
@@ -114,25 +141,106 @@ public class SqliteQueryBuilder {
         return this;
     }
 
+    public void buildSetter(List<?> objectsToAdd) {
+        try (Connection conn = databaseManager.connect();
+             PreparedStatement ps = conn.prepareStatement(query.toString());){
+            conn.setAutoCommit(false);
+
+            if (!objectsToAdd.isEmpty()) {
+                Object firstElement = objectsToAdd.get(0);
+                if (firstElement instanceof Crash) {
+                    for (Object crash : objectsToAdd) {
+                        addCrashToPreparedStatement(ps, (Crash) crash);
+                        ps.addBatch();
+                    }
+                } else if (firstElement instanceof Favourite) {
+                    for (Object favourite : objectsToAdd) {
+                        addFavouriteToPreparedStatement(ps, (Favourite) favourite);
+                        ps.addBatch();
+                    }
+                }
+            }
+
+            ps.executeBatch();
+            conn.commit();
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+
+    }
+
+    /**
+     * Adds given point to the prepared statement. Used by addOne and addMultiple functions.
+     *
+     * @param ps Prepared statement to add values into
+     * @param crashToAdd Crash object to add to database
+     */
+    private void addCrashToPreparedStatement(PreparedStatement ps, Crash crashToAdd) {
+        try {
+            ps.setInt(1, crashToAdd.getSpeedLimit());
+            ps.setInt(2, crashToAdd.getCrashYear());
+            ps.setString(3, crashToAdd.getCrashLocation1());
+            ps.setString(4, crashToAdd.getCrashLocation2());
+            ps.setInt(5, crashToAdd.getSeverity().getValue());
+            ps.setString(6, crashToAdd.getRegion().getName());
+            ps.setString(7, crashToAdd.getWeather().getName());
+            ps.setDouble(8, crashToAdd.getLongitude());
+            ps.setDouble(9, crashToAdd.getLatitude());
+            ps.setBoolean(10, crashToAdd.isBicycleInvolved());
+            ps.setBoolean(11, crashToAdd.isBusInvolved());
+            ps.setBoolean(12, crashToAdd.isCarInvolved());
+            ps.setBoolean(13, crashToAdd.isHoliday());
+            ps.setBoolean(14, crashToAdd.isMopedInvolved());
+            ps.setBoolean(15, crashToAdd.isMotorcycleInvolved());
+            ps.setBoolean(16, crashToAdd.isParkedVehicleInvolved());
+            ps.setBoolean(17, crashToAdd.isPedestrianInvolved());
+            ps.setBoolean(18, crashToAdd.isSchoolBusInvolved());
+            ps.setBoolean(19, crashToAdd.isTrainInvolved());
+            ps.setBoolean(20, crashToAdd.isTruckInvolved());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
+
+    /**
+     * Adds a given Favourite object to a prepared statement.
+     *
+     * @param ps PreparedStatement being added to
+     * @param toAdd Favourite object to be added
+     */
+    public void addFavouriteToPreparedStatement(PreparedStatement ps, Favourite toAdd) {
+        try {
+            ps.setString(1, toAdd.getStartAddress());
+            ps.setString(2, toAdd.getEndAddress());
+            ps.setDouble(3, toAdd.getStartLat());
+            ps.setDouble(4, toAdd.getStartLong());
+            ps.setDouble(5, toAdd.getEndLat());
+            ps.setDouble(6, toAdd.getEndLong());
+            ps.setString(7, toAdd.getFilters());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
+    }
+
     // TODO have a think about how we want the data to come back to us as, currently have as a list
     /**
      * Takes the query in the builder object and returns a list of all data points in a List object.
      *
      * @return List of all data points from the current query string
      */
-    public List<Object> build() {
+    public List<Object> buildGetter() {
         List<Object> data = new ArrayList<>();
         try (Connection conn = databaseManager.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query.toString())) {
             while (rs.next()) {
                 Object temp = null;
-                if (allColumnsFromTable == null) {
-                    temp = resultAsHashmap(rs);
-                } else if (allColumnsFromTable.equals("crashes")) {
-                    temp = resultsAsCrash(rs);
-                } else if (allColumnsFromTable.equals("favourites")) {
-                    temp = resultsAsFavourite(rs);
+                if (allColumnsFromTable) {
+                    if (table.equals("crashes")) {
+                        temp = resultsAsCrash(rs);
+                    } else if (table.equals("favourites")) {
+                        temp = resultsAsFavourite(rs);
+                    }
                 }
                 data.add(temp);
             }

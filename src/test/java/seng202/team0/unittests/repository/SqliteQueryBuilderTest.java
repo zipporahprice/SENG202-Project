@@ -64,7 +64,7 @@ public class SqliteQueryBuilderTest {
                                         .select("object_id, longitude, latitude")
                                         .from("crashes")
                                         .where("")
-                                        .build();
+                                        .buildGetter();
 
         Assertions.assertTrue(crashes.size() == 0);
     }

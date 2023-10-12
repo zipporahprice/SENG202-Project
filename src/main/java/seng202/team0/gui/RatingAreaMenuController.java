@@ -53,7 +53,7 @@ public class RatingAreaMenuController implements MenuController {
                     .select(select)
                     .from(from)
                     .where(filterWhereWithoutViewport + " AND " + where)
-                    .build();
+                    .buildGetter();
 
             int totalSeverity = 0;
             int total = 0;

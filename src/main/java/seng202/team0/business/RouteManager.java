@@ -67,7 +67,7 @@ public class RouteManager {
         List favourites = SqliteQueryBuilder.create()
                                             .select(columns)
                                             .from(table)
-                                            .build();
+                                            .buildGetter();
     }
 
     /**

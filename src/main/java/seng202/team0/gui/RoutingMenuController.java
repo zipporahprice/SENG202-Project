@@ -141,7 +141,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
 
     @FXML
-    private void saveRoute() throws SQLException {
+    private void saveRoute() {
         Location start = getStart();
         Location end = getEnd();
         String filters = FilterManager.getInstance().toString();
@@ -150,8 +150,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(),
                 end.getLongitude(), filters);
-        FavouriteDao favorites = new FavouriteDao();
-        favorites.addOne(favourite);
+
+        List<Favourite> favourites = new ArrayList<>();
+        favourites.add(favourite);
+
+        SqliteQueryBuilder.create().insert("favourites").buildSetter(favourites);
     }
 
 
@@ -160,7 +163,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         List<Object> favouritesList = SqliteQueryBuilder.create()
                                                         .select("*")
                                                         .from("favourites")
-                                                        .build();
+                                                        .buildGetter();
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList
                 .stream().map(favourite -> {
                     Favourite favouriteCasted = (Favourite) favourite;
@@ -177,7 +180,7 @@ public class RoutingMenuController implements Initializable, MenuController {
                                                             .select("*")
                                                             .from("favourites")
                                                             .where("id = " + favouriteId)
-                                                            .build();
+                                                            .buildGetter();
 
             Favourite favourite = (Favourite) favouriteList.get(0);
 

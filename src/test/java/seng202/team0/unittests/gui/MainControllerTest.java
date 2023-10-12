@@ -26,7 +26,7 @@ public class MainControllerTest {
                 .select("object_id")
                 .from("crashes")
                 .where("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")")
-                .build();
+                .buildGetter();
 
         List expectedCrashes = null;
 
@@ -53,7 +53,7 @@ public class MainControllerTest {
                 .select("object_id")
                 .from("crashes")
                 .where("weather IN (" + weatherSelected.stream().collect(Collectors.joining(", ")) + ")")
-                .build();
+                .buildGetter();
 
         List expectedCrashes  = null;
         CrashManager manager = new CrashManager();

@@ -1,15 +1,11 @@
 package seng202.team0.cucumber;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import seng202.team0.business.CrashManager;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.DatabaseManager;
 import seng202.team0.repository.SqliteQueryBuilder;
@@ -54,7 +50,7 @@ public class ViewCrashDataStepDefinitions {
 
         List crashesFromDatabase = SqliteQueryBuilder.create()
                 .select("object_id").from("crashes")
-                .where(whereClause).build();
+                .where(whereClause).buildGetter();
 
         Assertions.assertTrue(crashesFromDatabase.size() > 0);
     }

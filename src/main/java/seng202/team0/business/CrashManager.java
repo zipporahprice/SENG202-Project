@@ -39,8 +39,8 @@ public class CrashManager {
      * @param file File to be imported
      */
     public void addAllCrashesFromFile(CrashCsvImporter importer, File file) {
-        List<Crash> sales = importer.crashListFromFile(file);
-        crashDao.addMultiple(sales);
+        List<Crash> crashes = importer.crashListFromFile(file);
+        SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
     }
 
     /**
@@ -50,7 +50,8 @@ public class CrashManager {
      * @return The Crash object associated with the specified ID, or null if no such Crash is found.
      */
     public Crash getCrash(int id) {
-        return crashDao.getOne(id);
+        return (Crash) SqliteQueryBuilder.create().select("*").from("crashes")
+                .where("object_id = "+ id).buildGetter().get(0);
     }
 
     /**
@@ -71,14 +72,14 @@ public class CrashManager {
                     .create()
                     .select(select)
                     .from(from)
-                    .build();
+                    .buildGetter();
         } else {
             return SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
                     .where(where)
-                    .build();
+                    .buildGetter();
         }
     }
 }
