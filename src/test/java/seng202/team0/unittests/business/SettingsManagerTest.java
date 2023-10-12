@@ -9,7 +9,14 @@ public class SettingsManagerTest {
     @Test
     void testGetInstance() {
         SettingsManager settingsManager = SettingsManager.getInstance();
-        Assertions.assertTrue(settingsManager instanceof SettingsManager);
+        Assertions.assertNotNull(settingsManager);
+    }
+
+    @Test
+    void testSingleton() {
+        SettingsManager settingsManager1 = SettingsManager.getInstance();
+        SettingsManager settingsManager2 = SettingsManager.getInstance();
+        Assertions.assertEquals(settingsManager1, settingsManager2);
     }
 
 }

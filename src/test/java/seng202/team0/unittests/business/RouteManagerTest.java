@@ -9,7 +9,30 @@ public class RouteManagerTest {
     @Test
     void testGetInstance() {
         RouteManager routeManager = RouteManager.getInstance();
-        Assertions.assertTrue(routeManager instanceof RouteManager);
+        Assertions.assertNotNull(routeManager);
+    }
+
+    @Test
+    void testSingleton() {
+        RouteManager routeManager1 = RouteManager.getInstance();
+        RouteManager routeManager2 = RouteManager.getInstance();
+        Assertions.assertEquals(routeManager1, routeManager2);
+    }
+
+    @Test
+    void testStartLocationUpdates() {
+        RouteManager routeManager = RouteManager.getInstance();
+        routeManager.setStartLocation("123 ABC Lane");
+        routeManager = RouteManager.getInstance();
+        Assertions.assertEquals("123 ABC Lane", routeManager.getStartLocation());
+    }
+
+    @Test
+    void testStopLocationUpdates() {
+        RouteManager routeManager = RouteManager.getInstance();
+        routeManager.setStopLocation("321 Queen Street");
+        routeManager = RouteManager.getInstance();
+        Assertions.assertEquals("321 Queen Street", routeManager.getStopLocation());
     }
 
 }

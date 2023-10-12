@@ -3,13 +3,21 @@ package seng202.team0.unittests.business;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.FilterManager;
+import seng202.team0.business.RatingAreaManager;
 
 public class FilterManagerTest {
 
     @Test
     void testGetInstance() {
         FilterManager filters = FilterManager.getInstance();
-        Assertions.assertTrue(filters instanceof FilterManager);
+        Assertions.assertNotNull(filters);
+    }
+
+    @Test
+    void testSingleton() {
+        FilterManager filters1 = FilterManager.getInstance();
+        FilterManager filters2 = FilterManager.getInstance();
+        Assertions.assertEquals(filters1, filters2);
     }
 
     @Test

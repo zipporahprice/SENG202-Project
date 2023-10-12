@@ -2,6 +2,8 @@ package seng202.team0.business;
 
 /**
  * Singleton class for storing routing options from the FXML controller class.
+ *
+ * @author Zipporah Price
  */
 public class RouteManager {
 
@@ -54,15 +56,6 @@ public class RouteManager {
 
     public void setStopLocation(String location) {
         stopLocation = location;
-    }
-
-    /**
-     * Clears the route.
-     */
-    public void clearRoute() {
-        startLocation = null;
-        endLocation = null;
-        stopLocation = null;
     }
 
 }
