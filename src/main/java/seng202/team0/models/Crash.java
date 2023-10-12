@@ -258,7 +258,7 @@ public class Crash {
         }
 
         /**
-         * Sets if a crash occurred on a holiday
+         * Sets if a crash occurred on a holiday.
          *
          * @param holiday Boolean indicating if crash was on a holiday.
          * @return Builder instance for method chaining.

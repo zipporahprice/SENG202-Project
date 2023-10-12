@@ -363,7 +363,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             double latitude = (double) crash1.get("latitude");
             double longitude = (double) crash1.get("longitude");
             int severity = (int) crash1.get("severity");
-            return new Crash.Builder(latitude,longitude,severity).build();
+            return new Crash.Builder(latitude, longitude, severity).build();
         }).toList();
         for (int i = 0; i < route.route.size() - 1; i++) {
             Location start = route.route.get(i);
