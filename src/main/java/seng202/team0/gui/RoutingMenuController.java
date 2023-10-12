@@ -1,33 +1,20 @@
 package seng202.team0.gui;
 
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
-import seng202.team0.models.Crash;
-import seng202.team0.models.Favourite;
-import seng202.team0.models.GeoLocator;
-import seng202.team0.models.Location;
-import seng202.team0.models.Route;
-import seng202.team0.repository.FavouriteDao;
+import seng202.team0.models.*;
 import seng202.team0.repository.SqliteQueryBuilder;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * The `RoutingMenuController` class manages user

@@ -6,7 +6,6 @@ import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.DatabaseManager;
 import seng202.team0.repository.SqliteQueryBuilder;
 
@@ -23,17 +22,15 @@ public class ViewCrashDataStepDefinitions {
 
         // Database setup
         DatabaseManager.getInstance().resetDb();
-        CrashDao crashDAO = new CrashDao();
         CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
         List<Crash> crashes = importer.crashListFromFile(testFile);
-        crashDAO.addMultiple(crashes);
+        SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
     }
     @When("The user selects crash")
     public void userSelectsCrash() {
-        CrashDao crashDao = new CrashDao();
-        crashSelected = crashDao.getAll().get(0);
+        crashSelected = (Crash) SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().get(0);
     }
 
     @Then("The user will see information on the crash")

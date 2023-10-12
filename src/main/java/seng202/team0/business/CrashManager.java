@@ -1,13 +1,13 @@
 package seng202.team0.business;
 
-import java.io.File;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.SqliteQueryBuilder;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Manages operations related to Crash data, including importing Crash data from CSV files,
@@ -25,11 +25,6 @@ import seng202.team0.repository.SqliteQueryBuilder;
 
 public class CrashManager {
     private static final Logger log = LogManager.getLogger(CrashManager.class);
-    private final CrashDao crashDao;
-
-    public CrashManager() {
-        crashDao = new CrashDao();
-    }
 
     /**
      * Saves a file of sales to the repository layer.

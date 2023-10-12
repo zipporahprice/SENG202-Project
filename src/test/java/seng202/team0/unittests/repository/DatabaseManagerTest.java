@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDao;
 import seng202.team0.repository.DatabaseManager;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.io.File;
 import java.net.URL;
@@ -53,21 +53,20 @@ public class DatabaseManagerTest {
     @Test
     void testResetDB() {
         // Add crashes to database
-        CrashDao crashDAO = new CrashDao();
         CrashCsvImporter importer = new CrashCsvImporter();
         URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
         File testFile = new File(newUrl.getPath());
         List<Crash> crashes = importer.crashListFromFile(testFile);
-        crashDAO.addMultiple(crashes);
+        SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
 
         // See if it was successful in adding the crashes to be able to see
         // if removal is successful with reset
-        Assertions.assertTrue(crashDAO.getAll().size() > 0);
+        Assertions.assertTrue(SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().size() > 0);
 
         // Reset database
         manager.resetDb();
 
         // Look into database and make sure crashes table are empty
-        Assertions.assertTrue(crashDAO.getAll().size() == 0);
+        Assertions.assertTrue(SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().size() == 0);
     }
 }
