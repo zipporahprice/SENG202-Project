@@ -3,6 +3,12 @@ junit:
   script:
     - ./gradlew test
 
+#added checkstyle pipeline test here
+checkstyle:
+  stage: test
+  script:
+    - ./gradlew checkstyleMain
+
 generate_artifacts:
   stage: deploy
   script:
