@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.BoxBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.GraphController">
     <Region maxWidth="-Infinity" prefHeight="810.0" prefWidth="1424.0" style="-fx-background-color: linear-gradient(to right,rgba(46,54,255,1) 0%, rgba(99,121,241,1) 0%, rgba(126,155,234,1) 9%, rgba(138,170,231,1) 13%, rgba(146,180,229,1) 17%, rgba(158,196,226,1) 23%, rgba(170,211,223,1) 31%);;" StackPane.alignment="CENTER_LEFT">
@@ -24,6 +27,36 @@
                   <Label style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." />
               </VBox>
           </AnchorPane>
+         <AnchorPane fx:id="graphsPane" layoutX="229.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+               <ChoiceBox fx:id="chartChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css">
+                  <styleClass>
+                     <String fx:value="filterButtonColor" />
+                     <String fx:value="choice-box" />
+                  </styleClass>
+               </ChoiceBox>
+               <Label layoutX="88.0" layoutY="14.0" text="Chart type" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+         <AnchorPane fx:id="graphsDataPane" layoutX="539.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" visible="false" stylesheets="@style.css">
+            <children>
+               <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0"  stylesheets="@style.css">
+                  <styleClass>
+                     <String fx:value="filterButtonColor" />
+                     <String fx:value="choice-box" />
+                  </styleClass>
+               </ChoiceBox>
+               <Label layoutX="88.0" layoutY="14.0" text="Chart data" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
       </children>
    </AnchorPane>
 

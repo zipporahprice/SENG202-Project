@@ -17,7 +17,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,9 +46,22 @@ public class GraphController implements Initializable {
     private Connection connection;
     private DatabaseManager databaseManager;
     private String columnOfInterest;
+    @FXML
+    private ChoiceBox chartChoiceBox;
+    private String currentChart = "Pie Graph";
+
+    @FXML
+    private ChoiceBox chartDataChoiceBox;
+    private String currentChartData = "Region";
+    @FXML
+    private AnchorPane graphsDataPane;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        setChartOptions();
+        setPieChartDataOptions();
 
         columnOfInterest = "weather";
         //TODO need to account for severity, transport type, year, holiday??
@@ -97,6 +112,77 @@ public class GraphController implements Initializable {
         return result;
     }
 
+    public void setChartOptions() {
+        System.out.println("set chart options");
+        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
+        chartChoiceBox.setValue(currentChart);
+        if (currentChart.equals("Pie Graph")) {
+            graphsDataPane.setVisible(true);
+            //todo set line graph pane visibility false
+        } else {
+            graphsDataPane.setVisible(false);
+            //TODO set line graph data options
+        }
+        chartChoiceBox.getSelectionModel()
+                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        currentChart = (String) newValue;
+                    }
+                    // Adjusted for the new option.
+                    switch (currentChart) {
+                        case "Pie Graph":
+                            // Code to show the Pie Graph.
+                            //TODO refactor newPieChart into here.
+                            graphsDataPane.setVisible(true);
+                            //todo set line graph pane visibility false
+                            break;
+                        case "Line Graph":
+                            // Code to show Line Graph.
+                            graphsDataPane.setVisible(false);
+                            //todo set line graph pane visibility true
+
+                            break;
+                        default:
+                            // Other cases.
+                            log.error("uh oh wrong choiceBox option");
+                            break;
+                    }
+                });
+    }
+
+    public void setPieChartDataOptions() {
+        chartDataChoiceBox.getItems().addAll("Region", "Severity", "Vehicle type", "Weather", "Year");
+        chartDataChoiceBox.setValue(currentChartData);
+        chartDataChoiceBox.getSelectionModel()
+                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        currentChartData = (String) newValue;
+                    }
+                    // Adjusted for the new option.
+                    switch (currentChartData) {
+                        case "Region":
+                            // Code to show the regions pie chart.
+                            break;
+                        case "Severity":
+                            // Code to show severity pie chart.
+                            //TODO refactor newPieChart into here.
+                            break;
+                        case "Vehicle type":
+                            //code to show vehicle type pie chart.
+                            break;
+                        case "Weather":
+                            //code to show weather pie chart
+                            break;
+                        case "Year":
+                            //code to show the year data pie chart
+                            break;
+                        default:
+                            // Other cases.
+                            log.error("uh oh wrong choiceBox option");
+                            break;
+                    }
+                });
+    }
 
 
     /**
