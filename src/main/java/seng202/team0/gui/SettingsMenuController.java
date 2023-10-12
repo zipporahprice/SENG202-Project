@@ -31,44 +31,44 @@ public class SettingsMenuController implements Initializable, MenuController {
      * Populates the view choice options in the ChoiceBox
      * Available options include "None," "Automatic," "Heatmap," and "Crash Locations."
      */
-    public void setViewOptions() {
-        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations");
-        viewChoiceBox.setValue(currentView); // viewChoiceBox.setValue("Automatic");
-        viewChoiceBox.getSelectionModel()
-                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        currentView = (String) newValue;
-                    }
-//                    MainController.javaScriptConnector.call("updateView");
-                });
-    }
-
 //    public void setViewOptions() {
-//        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations", "Heatmap & Crash Locations");
-//        viewChoiceBox.setValue(currentView);
+//        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations");
+//        viewChoiceBox.setValue(currentView); // viewChoiceBox.setValue("Automatic");
 //        viewChoiceBox.getSelectionModel()
 //                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //                    if (newValue != null) {
 //                        currentView = (String) newValue;
 //                    }
-//                    // Adjusted for the new option.
-//                    switch (currentView) {
-//                        case "Heatmap":
-//                            // Code to show the Heatmap.
-//                            break;
-//                        case "Crash Locations":
-//                            // Code to show Crash Locations.
-//                            break;
-//                        case "Heatmap & Crash Locations":
-//                            // Code to show both Heatmap and Crash Locations.
-//                            break;
-//                        default:
-//                            // Other cases.
-//                            break;
-//                    }
-////                MainController.javaScriptConnector.call("updateView");
+////                    MainController.javaScriptConnector.call("updateView");
 //                });
 //    }
+
+    public void setViewOptions() {
+        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations", "Heatmap & Crash Locations");
+        viewChoiceBox.setValue(currentView);
+        viewChoiceBox.getSelectionModel()
+                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        currentView = (String) newValue;
+                    }
+                    // Adjusted for the new option.
+                    switch (currentView) {
+                        case "Heatmap":
+                            // Code to show the Heatmap.
+                            break;
+                        case "Crash Locations":
+                            // Code to show Crash Locations.
+                            break;
+                        case "Heatmap & Crash Locations":
+                            // Code to show both Heatmap and Crash Locations.
+                            break;
+                        default:
+                            // Other cases.
+                            break;
+                    }
+//                MainController.javaScriptConnector.call("updateView");
+                });
+    }
 
 
     @Override

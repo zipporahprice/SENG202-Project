@@ -194,7 +194,9 @@ function updateView() {
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
-        map.addLayer(heatmapLayer);
+        if (!map.hasLayer(heatmapLayer)) {
+            map.addLayer(heatmapLayer);
+        }
     } else if (currentView === "Crash Locations") {
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
@@ -202,7 +204,19 @@ function updateView() {
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
-        map.addLayer(markerLayer);
+        if (!map.hasLayer(markerLayer)) {
+            map.addLayer(markerLayer);
+        }
+    } else if (currentView === "Heatmap & Crash Locations") {
+        map.off('zoomend', automaticViewChange);
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
+
+        if (!map.hasLayer(heatmapLayer)) {
+            map.addLayer(heatmapLayer);
+        }
+        if (!map.hasLayer(markerLayer)) {
+            map.addLayer(markerLayer);
+        }
     } else {
         // Default with "None" showing
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
@@ -216,6 +230,7 @@ function updateView() {
         }
     }
 }
+
 
 
 /**
