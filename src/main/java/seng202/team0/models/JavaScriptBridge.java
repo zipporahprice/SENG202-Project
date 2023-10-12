@@ -1,13 +1,13 @@
 package seng202.team0.models;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 
-import java.sql.SQLException;
-import java.util.HashMap;
 
 
 
@@ -55,7 +55,8 @@ public class JavaScriptBridge {
             String year = Integer.toString((Integer) crash1.get("crash_year"));
             String weather = (String) crash1.get("weather");
 
-            stringBuilder.append(String.format("addPoint(%f,%f,%d,%s,'%s');", latitude, longitude, severity, year, weather));
+            stringBuilder.append(String.format("addPoint(%f,%f,%d,%s,'%s');",
+                    latitude, longitude, severity, year, weather));
         });
 
         stringBuilder.append("setHeatmapData();");
@@ -120,7 +121,9 @@ public class JavaScriptBridge {
         void mapLoaded();
     }
 
-    public void printTime(double time) {System.out.println(time);};
+    public void printTime(double time) {
+        System.out.println(time);
+    }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;

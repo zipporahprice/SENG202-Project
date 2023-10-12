@@ -78,6 +78,8 @@ public class FilteringMenuController implements Initializable, MenuController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
         filters.setLatestYear(endSliderValue);
+        // TODO here is where we can set class variables
+        //  as the year instead of updating the manager every time
 
         clickableApplyFiltersButton();
     }
@@ -208,8 +210,8 @@ public class FilteringMenuController implements Initializable, MenuController {
         List<CheckBox> checkBoxes = new ArrayList<>();
 
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof CheckBox checkBox) {
                         checkBoxes.add(checkBox);
                     }
@@ -229,8 +231,8 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     private void setCheckBoxesToState(AnchorPane parent, Boolean state) {
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof  CheckBox checkBox) {
                         checkBox.setSelected(state);
                         addToFilters(checkBox, parent);
@@ -292,6 +294,7 @@ public class FilteringMenuController implements Initializable, MenuController {
 
     @Override
     public void updateManager() {
+        // TODO store the data in the manager
     }
 
     /**
