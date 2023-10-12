@@ -8,7 +8,7 @@ checkstyle:
   stage: test
   script:
     - ./gradlew checkstyleMain
-    - if [ -s build/reports/checkstyle/main.xml ]; then exit 1; fi
+    - if grep -q '<error ' build/reports/checkstyle/main.xml; then exit 1; fi
 
 
 generate_artifacts:
