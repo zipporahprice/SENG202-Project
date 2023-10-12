@@ -2,13 +2,8 @@ package seng202.team0.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.sql.*;
+import java.util.*;
 import java.util.logging.Filter;
 
 import javafx.collections.FXCollections;
@@ -51,49 +46,38 @@ public class GraphController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<PieChart.Data> pieChartTestData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Car", 20),
-                        new PieChart.Data("Bike", 13),
-                        new PieChart.Data("Bus", 17),
-                        new PieChart.Data("Pedestrian", 25),
-                        new PieChart.Data("Helicopter", 15),
-                        new PieChart.Data("Truck", 10)
-                );
-        pieChartTest.setData(pieChartTestData);
+        ObservableList<PieChart.Data> pieChartSQLTest = newPieChart();
+
+        pieChartTest.setData(pieChartSQLTest);
         pieChartTest.setTitle("Test Pie Graph");
 
-    }
 
+    }
     private ObservableList<PieChart.Data> newPieChart() {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        List dbList = (ObservableList<PieChart.Data>) SqliteQueryBuilder.create().select("region, COUNT(*)").from("crashes").groupBy("region").build();
+        List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
+                .select("region, COUNT(*)")
+                .from("crashes")
+                .groupBy("region")
+                .build();
 
-        for (Object item : result) {
-            System.out.println(item);
+        ArrayList<String> sliceNames = new ArrayList<>();
+        ArrayList<Double> sliceCounts = new ArrayList<>();
+
+        for (HashMap<String, Object> hash : dbList) {
+            String region = (String) hash.get("region");
+            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+
+            sliceNames.add(region);
+            sliceCounts.add(count);
+
+            System.out.println("Region: " + region + "  Count: " + count);
         }
-//        String sqlQuery = "SELECT region FROM crashes"; //TODO figure out what query to do
-//
-//        // Connect to database and gets the corresponding Favourite
-//        try (Connection conn = databaseManager.connect();
-//             PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
-//            try (ResultSet rs = ps.executeQuery()) {
-//                while (rs.next()) {
-//                    result.add(new PieChart.Data(rs.getString(1), rs.getDouble(2)));
-//                    //TODO change columnIndexes, I have no idea what the table looks like.
-//                }
-//            }
-//        } catch (AssertionError | SQLException sqlException) {
-//            log.error(sqlException);
-//            return null;
-//        }
 
-//        for (Object filter : filterList) {
-//            double percentage = 0.0;
-//            result.add(new PieChart.Data(filter.toString(), percentage));
-//        }
-
+        for (int i = 0; i < sliceNames.size(); i++) {
+            result.add(new PieChart.Data(sliceNames.get(i), sliceCounts.get(i)));
+        }
 
         return result;
     }
