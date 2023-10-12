@@ -43,15 +43,6 @@ CREATE TABLE IF NOT EXISTS favourites (
      end_lng DOUBLE,
      filters TEXT);
 --SPLIT
-DROP TABLE IF EXISTS users;
---SPLIT
-CREATE TABLE IF NOT EXISTS users (
-     id INTEGER PRIMARY KEY AUTOINCREMENT,
-     username TEXT,
-     password TEXT);
---SPLIT
-INSERT INTO users (username, password) VALUES ('admin', '12345');
---SPLIT
 CREATE TRIGGER insert_crash AFTER INSERT ON crashes BEGIN
     INSERT INTO rtree_index(id, minX, maxX, minY, maxY)
     VALUES (NEW.object_id, NEW.longitude, NEW.longitude, NEW.latitude, NEW.latitude);
