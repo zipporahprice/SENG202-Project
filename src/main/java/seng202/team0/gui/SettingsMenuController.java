@@ -43,6 +43,34 @@ public class SettingsMenuController implements Initializable, MenuController {
                 });
     }
 
+//    public void setViewOptions() {
+//        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations", "Heatmap & Crash Locations");
+//        viewChoiceBox.setValue(currentView);
+//        viewChoiceBox.getSelectionModel()
+//                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//                    if (newValue != null) {
+//                        currentView = (String) newValue;
+//                    }
+//                    // Adjusted for the new option.
+//                    switch (currentView) {
+//                        case "Heatmap":
+//                            // Code to show the Heatmap.
+//                            break;
+//                        case "Crash Locations":
+//                            // Code to show Crash Locations.
+//                            break;
+//                        case "Heatmap & Crash Locations":
+//                            // Code to show both Heatmap and Crash Locations.
+//                            break;
+//                        default:
+//                            // Other cases.
+//                            break;
+//                    }
+////                MainController.javaScriptConnector.call("updateView");
+//                });
+//    }
+
+
     @Override
     public void updateManager() {
         SettingsManager settings = SettingsManager.getInstance();
