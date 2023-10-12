@@ -8,7 +8,8 @@ checkstyle:
   stage: test
   script:
     - ./gradlew checkstyleMain
-    - if grep -q '<error ' build/reports/checkstyle/main.xml; then exit 1; fi
+    - if grep -q '<span class="error">' build/reports/checkstyle/main.html; then exit 1; fi
+    - if grep -q '<span class="warning">' build/reports/checkstyle/main.html; then exit 1; fi
 
 
 generate_artifacts:
