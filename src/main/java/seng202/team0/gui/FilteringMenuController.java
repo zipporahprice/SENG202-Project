@@ -292,7 +292,7 @@ public class FilteringMenuController implements Initializable, MenuController {
                 .map(Object::toString)
                 .toList();
 
-//         Updates checkboxes according to the list of filter values
+        // Updates checkboxes according to the list of filter values
         for (CheckBox checkBox : checkBoxes) {
             checkBox.setSelected(filterListStrings.contains((String) checkBox.getUserData()));
         }
