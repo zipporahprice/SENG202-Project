@@ -1,15 +1,19 @@
 package seng202.team0.repository;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
 import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Favourite;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Builder class of SQL queries for the SQLite database.
@@ -63,8 +67,8 @@ public class SqliteQueryBuilder {
         String columns = "";
 
         if (table.equals("favourites")) {
-            columns = " (start_address, end_address, start_lat, start_lng, " +
-                    "end_lat, end_lng, filters) values (?,?,?,?,?,?,?)";
+            columns = " (start_address, end_address, start_lat, start_lng, "
+                    + "end_lat, end_lng, filters) values (?,?,?,?,?,?,?)";
         } else if (table.equals("crashes")) {
             columns = " (speed_limit, crash_year, "
                     + "crash_location1, crash_location2, severity, region, weather, "
@@ -75,7 +79,7 @@ public class SqliteQueryBuilder {
                     + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         }
 
-        query.append("INSERT INTO " ).append(table).append(columns);
+        query.append("INSERT INTO ").append(table).append(columns);
         this.table = table;
 
         return this;
@@ -159,12 +163,14 @@ public class SqliteQueryBuilder {
     }
 
     /**
+     * Takes the query in the builder object and a list of objects
+     * and adds it to the given table in the query.
      *
-     * @param objectsToAdd
+     * @param objectsToAdd Crash or Favourite objects to add.
      */
     public void buildSetter(List<?> objectsToAdd) {
         try (Connection conn = databaseManager.connect();
-             PreparedStatement ps = conn.prepareStatement(query.toString());){
+             PreparedStatement ps = conn.prepareStatement(query.toString());) {
             conn.setAutoCommit(false);
 
             if (!objectsToAdd.isEmpty()) {
@@ -275,6 +281,7 @@ public class SqliteQueryBuilder {
 
     /**
      * Takes in a result set from query and returns the current row as a Hashmap.
+     *
      * @param rs Result set from query.
      * @return HashMap with column names as the key and value as an Object.
      */

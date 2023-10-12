@@ -1,13 +1,12 @@
 package seng202.team0.business;
 
+import java.io.File;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 import seng202.team0.repository.SqliteQueryBuilder;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * Manages operations related to Crash data, including importing Crash data from CSV files,
@@ -46,7 +45,7 @@ public class CrashManager {
      */
     public Crash getCrash(int id) {
         return (Crash) SqliteQueryBuilder.create().select("*").from("crashes")
-                .where("object_id = "+ id).buildGetter().get(0);
+                .where("object_id = " + id).buildGetter().get(0);
     }
 
     /**

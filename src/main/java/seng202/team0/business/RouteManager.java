@@ -1,8 +1,7 @@
 package seng202.team0.business;
 
-import seng202.team0.repository.SqliteQueryBuilder;
-
 import java.util.List;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * Singleton class for storing routing options from the FXML controller class.
@@ -62,14 +61,21 @@ public class RouteManager {
         stopLocation = location;
     }
 
-    public void getFavourites() {
+    /**
+     * Gets favourites from the SQLite database.
+     *
+     * @return a list of favourites
+     */
+    public List<?> getFavourites() {
         String columns = "*";
         String table = "favourites";
 
-        List favourites = SqliteQueryBuilder.create()
+        List<?> favourites = SqliteQueryBuilder.create()
                                             .select(columns)
                                             .from(table)
                                             .buildGetter();
+
+        return favourites;
     }
 
     /**
