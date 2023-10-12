@@ -52,7 +52,8 @@ public class MainControllerTest {
                 .create()
                 .select("object_id")
                 .from("crashes")
-                .where("weather IN (" + weatherSelected.stream().collect(Collectors.joining(", ")) + ")")
+                .where("weather IN (" + weatherSelected.stream().map(s -> "'" + s + "'")
+                        .collect(Collectors.joining(", ")) + ")")
                 .build();
 
         List expectedCrashes  = null;
