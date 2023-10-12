@@ -104,7 +104,7 @@ public class GeoLocator {
      * @param lng The longitude coordinate.
      * @return Address corresponding to provided latitude and longitude, else "No Address Found".
      */
-    public String getAddress(Double lat, Double lng) {
+    public String getAddress(Double lat, Double lng, String location) {
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
@@ -120,8 +120,8 @@ public class GeoLocator {
             JSONObject result = (JSONObject) parser.parse(response.body());
 
             if (result.isEmpty()) {
-                showErrorAlert("Invalid Address",
-                        "The address provided is invalid or couldn't be found.");
+                showErrorAlert("Invalid " + location + " Address",
+                        "The " + location.toLowerCase() + " provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 

@@ -78,27 +78,32 @@ public class FilteringMenuController implements Initializable, MenuController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
         filters.setLatestYear(endSliderValue);
+        // TODO here is where we can set class variables as the year instead of updating the manager every time
 
         clickableApplyFiltersButton();
     }
 
+    /**
+     * With the corresponding anchor pane, this onAction event function selects all filters.
+     *
+     * @param event ActionEvent object to get the corresponding AnchorPane
+     */
+    public void selectAllFilters(ActionEvent event) {
+        Button selectAllButton = (Button) event.getSource();
+        AnchorPane parent = (AnchorPane) selectAllButton.getParent();
+        setCheckBoxesToState(parent, true);
+        clickableApplyFiltersButton();
+    }
 
     /**
-     * Handles the event triggered when an "All" CheckBox is selected or deselected.
-     * This method is typically used to select or deselect
-     * all other related CheckBoxes within the same group.
+     * With the corresponding anchor pane, this onAction event function deselects all filters.
      *
-     * @param event The ActionEvent triggered by the "All" CheckBox.
+     * @param event ActionEvent object to get the corresponding AnchorPane
      */
-    @FXML
-    public void handleAllCheckBoxEvent(ActionEvent event) {
-        // Initialise parent to search through and what to set
-        CheckBox allCheckBox = (CheckBox) event.getSource();
-        AnchorPane parent = (AnchorPane) allCheckBox.getParent().getParent();
-        boolean allSelected = allCheckBox.isSelected();
-
-        // Use helper function to set all checkboxes to the same state as all checkbox
-        setCheckBoxesFromAllCheckBoxState(parent, allSelected);
+    public void clearAllFilters(ActionEvent event) {
+        Button selectAllButton = (Button) event.getSource();
+        AnchorPane parent = (AnchorPane) selectAllButton.getParent();
+        setCheckBoxesToState(parent, false);
         clickableApplyFiltersButton();
     }
 
@@ -115,13 +120,6 @@ public class FilteringMenuController implements Initializable, MenuController {
         AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
 
         addToFilters(checkBox, parent);
-        // Runs helper function to get all checkbox and list of other checkboxes
-        Pair<CheckBox, List<CheckBox>> result = getAllCheckBoxAndCheckBoxList(parent);
-        CheckBox allCheckBox = result.getLeft();
-        List<CheckBox> checkBoxes = result.getRight();
-
-        assert allCheckBox != null;
-        updateAllCheckBox(allCheckBox, checkBoxes);
         clickableApplyFiltersButton();
     }
 
@@ -207,43 +205,36 @@ public class FilteringMenuController implements Initializable, MenuController {
      * @param parent AnchorPane object to search through
      * @return Pair with types CheckBox and List of CheckBox objects
      */
-    private Pair<CheckBox, List<CheckBox>> getAllCheckBoxAndCheckBoxList(AnchorPane parent) {
-        CheckBox allCheckBox = null;
+    private List<CheckBox> getCheckBoxList(AnchorPane parent) {
         List<CheckBox> checkBoxes = new ArrayList<>();
 
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox) {
-                for (Object childCheckBox : ((VBox) child).getChildren()) {
-                    if (childCheckBox instanceof  CheckBox) {
-                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
-                            checkBoxes.add((CheckBox) childCheckBox);
-                        } else {
-                            allCheckBox = (CheckBox) childCheckBox;
-                        }
+            if (child instanceof VBox vBox) {
+                for (Object childCheckBox : vBox.getChildren()) {
+                    if (childCheckBox instanceof CheckBox checkBox) {
+                        checkBoxes.add(checkBox);
                     }
                 }
             }
         }
 
-        return Pair.of(allCheckBox, checkBoxes);
+        return checkBoxes;
     }
 
     /**
      * Takes an AnchorPane and searches through for the CheckBox objects
-     * to set as the same state as given in allCheckBoxState.
+     * to set as the same state as given in state parameter.
      *
      * @param parent AnchorPane object to search through
-     * @param allCheckBoxState Boolean value to set each CheckBox to
+     * @param state Boolean value to set each CheckBox to
      */
-    private void setCheckBoxesFromAllCheckBoxState(AnchorPane parent, Boolean allCheckBoxState) {
+    private void setCheckBoxesToState(AnchorPane parent, Boolean state) {
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox) {
-                for (Object childCheckBox : ((VBox) child).getChildren()) {
-                    if (childCheckBox instanceof  CheckBox) {
-                        if (!Objects.equals(((CheckBox) childCheckBox).getText(), "All")) {
-                            ((CheckBox) childCheckBox).setSelected(allCheckBoxState);
-                            addToFilters((CheckBox) childCheckBox, parent);
-                        }
+            if (child instanceof VBox vBox) {
+                for (Object childCheckBox : vBox.getChildren()) {
+                    if (childCheckBox instanceof  CheckBox checkBox) {
+                        checkBox.setSelected(state);
+                        addToFilters(checkBox, parent);
                     }
                 }
             }
@@ -259,9 +250,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     private void updateCheckboxesWithFilterList(AnchorPane parent, List filterList) {
         // Runs helper function to get all checkbox and list of other checkboxes
-        Pair<CheckBox, List<CheckBox>> result = getAllCheckBoxAndCheckBoxList(parent);
-        CheckBox allCheckBox = result.getLeft();
-        List<CheckBox> checkBoxes = result.getRight();
+        List<CheckBox> checkBoxes = getCheckBoxList(parent);
         List<String> filterListStrings = filterList.stream()
                 .map(Object::toString)
                 .toList();
@@ -270,9 +259,6 @@ public class FilteringMenuController implements Initializable, MenuController {
         for (CheckBox checkBox : checkBoxes) {
             checkBox.setSelected(filterListStrings.contains((String) checkBox.getUserData()));
         }
-
-        // Updates all checkbox to see if updated filters should have the box checked
-        updateAllCheckBox(allCheckBox, checkBoxes);
     }
 
 
@@ -307,13 +293,14 @@ public class FilteringMenuController implements Initializable, MenuController {
 
     @Override
     public void updateManager() {
+        // TODO store the data in the manager
     }
 
     /**
      * OnAction event callback for "Apply Filters" button.
      */
     public void updateDataWithFilters() {
-        MainController.javaScriptConnector.call("setData");
+        MainController.javaScriptConnector.call("updateDataShown");
         notClickableApplyFiltersButton();
     }
 

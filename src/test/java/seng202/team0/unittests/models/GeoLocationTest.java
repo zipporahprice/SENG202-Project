@@ -18,7 +18,7 @@ public class GeoLocationTest {
      * obtained from {@code getLocation} to the expected longitude and latitude values.
      * A delta of 0.00001 is used for comparison to account for minor discrepancies.</p>
      *
-     * @see GeoLocator#getLocation(String)
+     * @see GeoLocator#getLocation(String, String)
      */
 
     @Test
@@ -40,7 +40,7 @@ public class GeoLocationTest {
 
         GeoLocator locator = new GeoLocator();
 
-        String addressGotten= locator.getAddress(lat,lng);
+        String addressGotten= locator.getAddress(lat,lng,"Start");
 
         assertEquals(addressGotten, "30 Durey Road Canterbury");
     }

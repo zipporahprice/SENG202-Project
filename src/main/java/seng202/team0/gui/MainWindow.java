@@ -30,7 +30,7 @@ public class MainWindow extends Application {
         baseController.init(primaryStage);
 
         primaryStage.setTitle("SafeTrip");
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 1000, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
 

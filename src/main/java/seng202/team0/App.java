@@ -1,19 +1,6 @@
 package seng202.team0;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import seng202.team0.business.CrashManager;
-import seng202.team0.business.FilterManager;
-import seng202.team0.business.RouteManager;
-import seng202.team0.business.SettingsManager;
 import seng202.team0.gui.MainWindow;
-import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.repository.DatabaseManager;
 
 /**
@@ -22,8 +9,6 @@ import seng202.team0.repository.DatabaseManager;
  * @author seng202 teaching team
  */
 public class App {
-
-    private static final Logger log = LogManager.getLogger(App.class);
 
     /**
      * Entry point which runs the javaFX application.
@@ -52,14 +37,7 @@ public class App {
         // Initialises GUI
         MainWindow.main(args);
 
-        // Initialise FilterManager singleton class
-        FilterManager.getInstance();
-
-        // Initialise RouteManager singleton class
-        RouteManager.getInstance();
-
-        // Initialise SettingsManager singleton class
-        SettingsManager.getInstance();
+        DatabaseManager.getInstance().initialiseDatabase();
 
 
 

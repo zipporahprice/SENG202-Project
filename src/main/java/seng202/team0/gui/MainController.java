@@ -52,6 +52,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
     private MapController mapController;
+
+    @FXML
+    private Button refreshButton;
+
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
@@ -60,6 +64,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private JavaScriptBridge javaScriptBridge;
 
     private Timeline progressBarTimeline;
+    private Button selectedButton = null;
+    //private String menuChoice;
 
     private RoutingMenuController routingMenuController;
 
@@ -89,10 +95,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         mapController.init(stage);
         javaScriptBridge = mapController.getJavaScriptBridge();
         javaScriptBridge.setListener(this);
+        javaScriptBridge.setMainController(this);
         loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
         initProgressBarTimeline();
-
-
     }
 
 
@@ -141,29 +146,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         timeline.play();
     }
 
-
-    /**
-     * Loads and displays the help window within the main application window.
-     * This method uses JavaFX's FXMLLoader to load the help window from an FXML file.
-     * It clears the existing content in the main window and adds the help window's content.
-     * The help window is anchored to the right side of the main window.
-     */
-    @FXML
-    public void loadHelp() {
-        try {
-            FXMLLoader helpLoad = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
-            Parent helpViewParent = helpLoad.load();
-
-            // TODO maybe take out of function and put into something you can call for all loaders
-            mainWindow.getChildren().clear();
-
-            mainWindow.getChildren().add(helpViewParent);
-            AnchorPane.setRightAnchor(helpViewParent, 0d);
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
-
     /**
      * Loads the graph display.
      */
@@ -189,7 +171,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals("help")) {
                 controller = loader.getController();
             }
 
@@ -205,8 +187,14 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         Button menuButton = (Button) event.getSource();
         String menuChoice = (String) menuButton.getUserData();
 
-        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")) {
+        toggleMenuButton(menuButton);
+
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import") && !menuPopulated.equals(("help"))) {
             controller.updateManager();
+        }
+
+        if (menuPopulated.equals("rateArea")) {
+            MainController.javaScriptConnector.call("drawingModeOff");
         }
 
         if (Objects.equals(menuPopulated, menuChoice)) {
@@ -228,8 +216,36 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("import", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/import_window.fxml");
-        }
 
+        } else if (Objects.equals("rateArea", menuChoice)) {
+            menuPopulated = menuChoice;
+            MainController.javaScriptConnector.call("drawingModeOn");
+            loadMenuDisplayFromFxml("/fxml/rating_area_menu.fxml");
+
+        } else if (Objects.equals("help", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
+        }
+    }
+
+
+    public void toggleMenuButton(Button chosenButton) {
+        if (Objects.equals(chosenButton, selectedButton)) { // deselects
+            selectedButton = null;
+            chosenButton.getStyleClass().remove("clickedButtonColor");
+            chosenButton.getStyleClass().add("menuButtonColor");
+        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) { // deselects and selects new
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("menuButtonColor");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+        } else { // just selects new
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+
+        }
     }
 
     /**
@@ -249,9 +265,19 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         fadeTransition.play();
     }
 
-    /**
-     * Quits or exits the JavaFX application.
-     */
+    public void enableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void disableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void refreshData() {
+        MainController.javaScriptConnector.call("updateDataShown");
+        disableRefresh();
+    }
+
     public void quitApp() {
         Platform.exit();
     }

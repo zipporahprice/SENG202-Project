@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
+import seng202.team0.business.CrashManager;
 import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
 import seng202.team0.models.JavaScriptBridge;
@@ -35,11 +36,8 @@ public class ViewCrashDataStepDefinitions {
     }
     @When("The user selects crash")
     public void userSelectsCrash() {
-        JavaScriptBridge bridge = new JavaScriptBridge();
-        String crashesString = bridge.crashes();
-        Gson gson = new Gson();
-        List<Crash> crashList = gson.fromJson(crashesString, new TypeToken<List<Crash>>() {}.getType());
-        crashSelected = crashList.get(0);
+        CrashDao crashDao = new CrashDao();
+        crashSelected = crashDao.getAll().get(0);
     }
 
     @Then("The user will see information on the crash")
