@@ -12,18 +12,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.Message;
 import seng202.team0.models.JavaScriptBridge;
 
 
@@ -63,6 +67,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private Button selectedButton = null;
     //private String menuChoice;
 
+    private RoutingMenuController routingMenuController;
 
 
     /**
@@ -95,6 +100,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         initProgressBarTimeline();
     }
 
+
+    /**
+     * Initializes and manages the progress bar and its animation timeline.
+     * This is for the loading screen
+     */
     private void initProgressBarTimeline() {
         progressBarTimeline = new Timeline(
                 new KeyFrame(
@@ -120,6 +130,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         });
     }
 
+    /**
+     * Animates a JavaFX ProgressBar to reach full (100%) progress.
+     *
+     * @param progressBar The ProgressBar to be animated.
+     */
     private void animateProgressBarToFull(ProgressBar progressBar) {
         final Duration duration = Duration.millis(500);
         final Timeline timeline = new Timeline();
@@ -242,22 +257,19 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         }
     }
 
+    /**
+     * Fades out a loading screen using a FadeTransition animation.
+     */
     private void fadeOutLoadingScreen() {
         FadeTransition fadeTransition = new FadeTransition();
-
         fadeTransition.setNode(loadingScreen);
-
         fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
-
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
-
         fadeTransition.setDelay(Duration.millis(1500));
-
         fadeTransition.setOnFinished(event -> {
             loadingScreen.setVisible(false);
         });
-
         // Start the fade out
         fadeTransition.play();
     }
@@ -279,10 +291,12 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         Platform.exit();
     }
 
+    /**
+     * This method is called when the map has finished loading.
+     * It initiates the fading out of the loading screen.
+     */
     @Override
     public void mapLoaded() {
-
-        System.out.println("Hello");
         fadeOutLoadingScreen();
     }
 }

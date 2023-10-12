@@ -33,6 +33,8 @@ public class MainWindow extends Application {
         Scene scene = new Scene(root, 1000, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     /**

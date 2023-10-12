@@ -78,6 +78,7 @@ public class FilteringMenuController implements Initializable, MenuController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
         filters.setLatestYear(endSliderValue);
+        // TODO here is where we can set class variables as the year instead of updating the manager every time
 
         clickableApplyFiltersButton();
     }
@@ -292,6 +293,7 @@ public class FilteringMenuController implements Initializable, MenuController {
 
     @Override
     public void updateManager() {
+        // TODO store the data in the manager
     }
 
     /**

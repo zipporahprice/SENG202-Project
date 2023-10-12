@@ -6,13 +6,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import javafx.scene.control.Alert;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.PopOver;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import seng202.team0.App;
+
 
 /**
  * Provides geolocation functionality using the Nominatim Geolocation API.
@@ -27,6 +30,8 @@ import seng202.team0.App;
 public class GeoLocator {
     private static final Logger log = LogManager.getLogger(App.class);
 
+    private PopOver popOver;
+
     /**
      * Takes user input and searches for the address using Nominatim Geolocation API.
      * Returns the location.
@@ -34,7 +39,7 @@ public class GeoLocator {
      * @param address user input to find latitude and longitude for
      */
 
-    public Location getLocation(String address, String location) {
+    public Pair<Location, String> getLocation(String address) {
         String logMessage = String.format("Requesting geolocation from Nominatim for address:"
                 + " %s, New Zealand", address);
         log.error(logMessage);
@@ -63,14 +68,14 @@ public class GeoLocator {
             JSONObject bestResult = (JSONObject) results.get(0);
             double lat = Double.parseDouble((String) bestResult.get("lat"));
             double lng = Double.parseDouble((String) bestResult.get("lon"));
-            return new Location(lat, lng);
+            return new Pair<>(new Location(lat, lng), null);
         } catch (IOException | ParseException e) {
             log.error(e);
         } catch (InterruptedException ie) {
             log.error(ie);
             Thread.currentThread().interrupt();
         }
-        return new Location(0d, 0d);
+        return new Pair<>(new Location(0d, 0d), null);
     }
 
     private void showErrorAlert(String title, String message) {
@@ -80,6 +85,18 @@ public class GeoLocator {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * Handles an address by retrieving additional information.
+     *
+     * @param address The address to handle.
+     * @return Additional information or a message related to the address.
+     */
+    public String handleAddress(String address) {
+        Pair<Location, String> result = getLocation(address);
+        return result.getValue();
+    }
+
 
 
     /**
