@@ -27,6 +27,7 @@ import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.FavouriteDao;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * The `RoutingMenuController` class manages user
@@ -156,12 +157,15 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void displayRoutes() {
-        FavouriteDao favourites = new FavouriteDao();
-        List<Favourite> favouritesList = favourites.getAll();
+        List<Object> favouritesList = SqliteQueryBuilder.create()
+                                                        .select("*")
+                                                        .from("favourites")
+                                                        .build();
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList
                 .stream().map(favourite -> {
-                    return favourite.getStartAddress()
-                        + " to " + favourite.getEndAddress(); }).toList());
+                    Favourite favouriteCasted = (Favourite) favourite;
+                    return favouriteCasted.getStartAddress()
+                        + " to " + favouriteCasted.getEndAddress(); }).toList());
         loadRoutesComboBox.setItems(items);
     }
 
@@ -169,8 +173,13 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void loadRoute() throws SQLException {
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
         if (favouriteId != 0 && favouriteId != -1) {
-            FavouriteDao favourites = new FavouriteDao();
-            Favourite favourite = favourites.getOne(favouriteId);
+            List<Object> favouriteList = SqliteQueryBuilder.create()
+                                                            .select("*")
+                                                            .from("favourites")
+                                                            .where("id = " + favouriteId)
+                                                            .build();
+
+            Favourite favourite = (Favourite) favouriteList.get(0);
 
             // Update FilterManager class with the filters associated to the favourite route
             FilterManager filters = FilterManager.getInstance();
