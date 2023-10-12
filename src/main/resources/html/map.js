@@ -60,6 +60,9 @@ function initMap() {
 
     // Setup potential layers for views
     newHeatmap();
+
+    setHeatmapData();
+
     markerLayer = L.markerClusterGroup();
     drawnItems = new L.FeatureGroup();
     drawControl = new L.Control.Draw({

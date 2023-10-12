@@ -18,9 +18,10 @@ public class App {
      */
     public static void main(String[] args) {
         // Initialises database and checks if populated
-        MainWindow.main(args);
+
 
         DatabaseManager.getInstance().initialiseDatabase();
+        MainWindow.main(args);
 
 
 
