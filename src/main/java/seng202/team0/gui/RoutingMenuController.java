@@ -472,7 +472,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         startLocation.setText("");
         endLocation.setText("");
         modeChoice = null;
-        if(selectedButton !=null) {
+        if (selectedButton != null) {
             selectedButton.getStyleClass().remove("clickedButtonColor");
             selectedButton.getStyleClass().add("hamburgerStyle");
         }
