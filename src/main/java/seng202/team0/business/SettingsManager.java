@@ -2,6 +2,8 @@ package seng202.team0.business;
 
 /**
  * Singleton class for storing settings options from the FXML controller class.
+ *
+ * @author Zipporah Price
  */
 public class SettingsManager {
 
