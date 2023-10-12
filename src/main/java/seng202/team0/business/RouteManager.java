@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Singleton class for storing routing options from the FXML controller class.
+ *
+ * @author Zipporah Price
  */
 public class RouteManager {
 

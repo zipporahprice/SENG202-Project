@@ -29,19 +29,36 @@ public class SettingsMenuController implements Initializable, MenuController {
 
     /**
      * Populates the view choice options in the ChoiceBox
-     * Available options include "None," "Automatic," "Heatmap," and "Crash Locations."
+     * Available options include
+     * "None," "Automatic," "Heatmap," "Crash Locations," and "Heatmap & Crash Locations."
      */
     public void setViewOptions() {
-        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations");
-        viewChoiceBox.setValue(currentView); // viewChoiceBox.setValue("Automatic");
+        viewChoiceBox.getItems().addAll("None", "Automatic", "Heatmap", "Crash Locations",
+                "Heatmap & Crash Locations");
+        viewChoiceBox.setValue(currentView);
         viewChoiceBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         currentView = (String) newValue;
                     }
-//                    MainController.javaScriptConnector.call("updateView");
+                    // Adjusted for the new option.
+                    switch (currentView) {
+                        case "Heatmap":
+                            // Code to show the Heatmap.
+                            break;
+                        case "Crash Locations":
+                            // Code to show Crash Locations.
+                            break;
+                        case "Heatmap & Crash Locations":
+                            // Code to show both Heatmap and Crash Locations.
+                            break;
+                        default:
+                            // Other cases.
+                            break;
+                    }
                 });
     }
+
 
     @Override
     public void updateManager() {

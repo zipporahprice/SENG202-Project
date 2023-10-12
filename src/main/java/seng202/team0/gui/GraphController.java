@@ -1,29 +1,103 @@
 package seng202.team0.gui;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.App;
+import seng202.team0.business.FilterManager;
+import seng202.team0.repository.DatabaseManager;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * This class manages actions and views related to graphical representations of data.
  * It includes methods for initializing the window and handling navigation back to the main window.
  */
-public class GraphController {
+public class GraphController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(App.class);
     @FXML
-    public AnchorPane graphsWindow;
+    public PieChart pieChartMade;
 
     private Stage stage;
+
+    private FilterManager filters = FilterManager.getInstance();
+    private List<String> modesSelected = filters.getModesSelected();
+
+    private Connection connection;
+    private DatabaseManager databaseManager;
+    private String columnOfInterest;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        columnOfInterest = "weather";
+        //TODO need to account for severity, transport type, year, holiday??
+        ObservableList<PieChart.Data> pieChartSqlTestData = newPieChart(columnOfInterest);
+
+        pieChartMade.setData(pieChartSqlTestData);
+        pieChartMade.setTitle("Crashes in Aotearoa by " + columnOfInterest);
+        pieChartMade.setLegendVisible(false);
+        pieChartMade.setLabelsVisible(true);
+        pieChartMade.setLabelLineLength(16);
+
+        pieChartMade.getData().forEach(data -> {
+            String percentage = String.format("%.2f%%", (data.getPieValue() / 100));
+            String slice = data.getName();
+            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", " + slice);
+            Tooltip.install(data.getNode(), toolTipPercentRegion);
+        });
+
+    }
+
+    private ObservableList<PieChart.Data> newPieChart(String columnOfInterest) {
+        ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
+
+        List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
+                .select(columnOfInterest + ", COUNT(*)")
+                .from("crashes")
+                .groupBy(columnOfInterest)
+                .build();
+
+        ArrayList<String> sliceNames = new ArrayList<>();
+        ArrayList<Double> sliceCounts = new ArrayList<>();
+
+        for (HashMap<String, Object> hash : dbList) {
+            String column = (String) hash.get(columnOfInterest);
+            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+
+            sliceNames.add(column);
+            sliceCounts.add(count);
+
+            System.out.println("Region: " + column + "  Count: " + count);
+            //TODO remove print statement
+        }
+
+        for (int i = 0; i < sliceNames.size(); i++) {
+            result.add(new PieChart.Data(sliceNames.get(i), sliceCounts.get(i)));
+        }
+
+        return result;
+    }
+
+
 
     /**
      * Initialize the window.
@@ -66,4 +140,6 @@ public class GraphController {
             log.error(e);
         }
     }
+
+
 }

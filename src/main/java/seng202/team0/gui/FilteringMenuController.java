@@ -3,7 +3,6 @@ package seng202.team0.gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.tuple.Pair;
 import seng202.team0.business.FilterManager;
 
 /**
@@ -78,6 +76,8 @@ public class FilteringMenuController implements Initializable, MenuController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
         filters.setLatestYear(endSliderValue);
+        // TODO here is where we can set class variables
+        //  as the year instead of updating the manager every time
 
         clickableApplyFiltersButton();
     }
@@ -123,25 +123,6 @@ public class FilteringMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Updates the state of an "All" CheckBox based on the selection state of related CheckBoxes.
-     * If all related CheckBoxes are selected, the "All" CheckBox is also selected;
-     * otherwise, it is deselected.
-     *
-     * @param allCheckBox The "All" CheckBox to update.
-     * @param checkBoxes  The list of related CheckBoxes to check for selection.
-     */
-    private void updateAllCheckBox(CheckBox allCheckBox, List<CheckBox> checkBoxes) {
-        boolean allSelected = true;
-        for (CheckBox checkBox : checkBoxes) {
-            if (!checkBox.isSelected()) {
-                allSelected = false;
-                break;
-            }
-        }
-        allCheckBox.setSelected(allSelected);
-    }
-
-    /**
      * Adds/removes a filter based on the state of a CheckBox and its associated parent AnchorPane.
      * This method is used to manage and update filtering options based on user selections.
      *
@@ -149,51 +130,108 @@ public class FilteringMenuController implements Initializable, MenuController {
      * @param parent   The parent AnchorPane of the CheckBox.
      */
     private void addToFilters(CheckBox checkBox, AnchorPane parent) {
+        if (parent.equals(transportModePane)) {
+            addToTransport(checkBox);
+        } else if (parent.equals(weatherPane)) {
+            addToWeather(checkBox);
+        } else if (parent.equals(severityPane)) {
+            addToSeverity(checkBox);
+        } else if (parent.equals(regionsPane)) {
+            addToRegion(checkBox);
+        } else if (parent.equals(holidayPane)) {
+            addToHoliday(checkBox);
+        }
+    }
+
+    /**
+     * Takes a transport mode checkbox and checks if it has been selected.
+     * Either adds or removes this transport mode to the FilterManager's list of modes.
+     *
+     * @param checkBox Checkbox representing the transport mode.
+     */
+    private void addToTransport(CheckBox checkBox) {
         FilterManager filters = FilterManager.getInstance();
         Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getModesSelected().contains((String) toAdd)) {
+                filters.addToModes((String) toAdd);
+            }
+        } else {
+            filters.removeFromModes((String) toAdd);
+        }
+    }
 
-        if (parent.equals(transportModePane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getModesSelected().contains((String) toAdd)) {
-                    filters.addToModes((String) toAdd);
-                }
-            } else {
-                filters.removeFromModes((String) toAdd);
+    /**
+     * Takes a weather checkbox and checks if it has been selected.
+     * Either adds or removes this weather from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the weather type.
+     */
+    private void addToWeather(CheckBox checkBox) {
+        FilterManager filters = FilterManager.getInstance();
+        Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getWeathersSelected().contains((String) toAdd)) {
+                filters.addToWeathers((String) toAdd);
             }
-        } else if (parent.equals(weatherPane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getWeathersSelected().contains((String) toAdd)) {
-                    filters.addToWeathers((String) toAdd);
-                }
-            } else {
-                filters.removeFromWeathers((String) toAdd);
+        } else {
+            filters.removeFromWeathers((String) toAdd);
+        }
+    }
+
+    /**
+     * Takes a severity checkbox and checks if it has been selected.
+     * Either adds or removes this severity from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given severity.
+     */
+    private void addToSeverity(CheckBox checkBox) {
+        FilterManager filters = FilterManager.getInstance();
+        Object toAdd = checkBox.getUserData();
+        int severity = Integer.parseInt((String) toAdd);
+        if (checkBox.isSelected()) {
+            if (!filters.getSeveritiesSelected().contains(severity)) {
+                filters.addToSeverities(severity);
             }
-        } else if (parent.equals(severityPane)) {
-            int severity = Integer.parseInt((String) toAdd);
-            if (checkBox.isSelected()) {
-                if (!filters.getSeveritiesSelected().contains(severity)) {
-                    filters.addToSeverities(severity);
-                }
-            } else {
-                filters.removeFromSeverities(severity);
+        } else {
+            filters.removeFromSeverities(severity);
+        }
+    }
+
+    /**
+     * Takes a region checkbox and checks if it has been selected.
+     * Either adds or removes this region from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given region.
+     */
+    private void addToRegion(CheckBox checkBox) {
+        FilterManager filters = FilterManager.getInstance();
+        Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getRegionsSelected().contains((String) toAdd)) {
+                filters.addToRegions((String) toAdd);
             }
-        } else if (parent.equals(regionsPane)) {
-            if (checkBox.isSelected()) {
-                if (!filters.getRegionsSelected().contains((String) toAdd)) {
-                    filters.addToRegions((String) toAdd);
-                }
-            } else {
-                filters.removeFromRegions((String) toAdd);
+        } else {
+            filters.removeFromRegions((String) toAdd);
+        }
+    }
+
+    /**
+     * Takes a holiday checkbox and checks if it has been selected.
+     * Either adds or removes this holiday from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given holiday.
+     */
+    private void addToHoliday(CheckBox checkBox) {
+        FilterManager filters = FilterManager.getInstance();
+        Object toAdd = checkBox.getUserData();
+        int holiday = Integer.parseInt((String) toAdd);
+        if (checkBox.isSelected()) {
+            if (!filters.getHolidaysSelected().contains(holiday)) {
+                filters.addToHolidays(holiday);
             }
-        } else if (parent.equals(holidayPane)) {
-            int holiday = Integer.parseInt((String) toAdd);
-            if (checkBox.isSelected()) {
-                if (!filters.getHolidaysSelected().contains(holiday)) {
-                    filters.addToHolidays(holiday);
-                }
-            } else {
-                filters.removeFromHolidays(holiday);
-            }
+        } else {
+            filters.removeFromHolidays(holiday);
         }
     }
 
@@ -208,8 +246,8 @@ public class FilteringMenuController implements Initializable, MenuController {
         List<CheckBox> checkBoxes = new ArrayList<>();
 
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof CheckBox checkBox) {
                         checkBoxes.add(checkBox);
                     }
@@ -229,8 +267,8 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     private void setCheckBoxesToState(AnchorPane parent, Boolean state) {
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof  CheckBox checkBox) {
                         checkBox.setSelected(state);
                         addToFilters(checkBox, parent);
@@ -247,7 +285,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      * @param parent AnchorPane object corresponding to the list of filters
      * @param filterList List of values that could match with the userData variable of a CheckBox
      */
-    private void updateCheckboxesWithFilterList(AnchorPane parent, List filterList) {
+    private void updateCheckboxesWithFilterList(AnchorPane parent, List<?> filterList) {
         // Runs helper function to get all checkbox and list of other checkboxes
         List<CheckBox> checkBoxes = getCheckBoxList(parent);
         List<String> filterListStrings = filterList.stream()
@@ -292,6 +330,7 @@ public class FilteringMenuController implements Initializable, MenuController {
 
     @Override
     public void updateManager() {
+        // TODO store the data in the manager
     }
 
     /**

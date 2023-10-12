@@ -100,6 +100,23 @@ public class SqliteQueryBuilder {
     }
 
     /**
+     * takes a string of columns of interest and adds to current query.
+     *
+     * @param columns comma separated string showing all columns we want to group by
+     * @return instance to chain methods
+     */
+    public SqliteQueryBuilder groupBy(String columns) {
+        query.append("GROUP BY ").append(columns).append(" ");
+        String[] columnsWithoutCommas = columns.split(",");
+
+        for (String column : columnsWithoutCommas) {
+            selectedColumns.add(column.trim());
+        }
+
+        return this;
+    }
+
+    /**
      * Takes a table name to query data from.
      * Note: Updates selected columns list from the table's metadata if all columns selected.
      *

@@ -17,10 +17,9 @@ public class App {
      * @param args program arguments from command line
      */
     public static void main(String[] args) {
-
+        // Initialises database and checks if populated
         DatabaseManager.getInstance().initialiseDatabase();
 
-        // Initialises GUI
         MainWindow.main(args);
     }
 }
