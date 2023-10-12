@@ -87,7 +87,7 @@ function initMap() {
             edit: false
         },
         draw: {
-            circle: false,
+            circle: true,
             rectangle: true,
             polygon: false,
             polyline: false,
@@ -463,19 +463,16 @@ function handleNewDrawing(event) {
         const northeastLng = northeast.lng;
 
         javaScriptBridge.setRatingAreaManagerBoundingBox(southwestLat, southwestLng, northeastLat, northeastLng);
-    }
+    } else if (layer instanceof L.Circle) {
+        const center = layer.getLatLng();
+        const radius = layer.getRadius();
 
-    // TODO for implementing a circle
-    // else if (layer instanceof L.Circle) {
-    //     const center = layer.getLatLng();
-    //     const radius = layer.getRadius();
-    //
-    //     const centerLat = center.lat;
-    //     const centerLng = center.lng;
-    //
-    //     let latLngString = centerLat + " " + centerLng + " " + radius;
-    //     javaScriptBridge.printThings(latLngString);
-    // }
+        const centerLat = center.lat;
+        const centerLng = center.lng;
+
+        let latLngString = centerLat + " " + centerLng + " " + radius;
+        javaScriptBridge.printThings(latLngString);
+    }
 }
 
 function changeDrawingColourToRating(rating) {
