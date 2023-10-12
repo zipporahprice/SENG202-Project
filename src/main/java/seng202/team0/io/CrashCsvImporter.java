@@ -72,14 +72,12 @@ public class CrashCsvImporter {
      * @return Point object initialised with given crashVariables
      */
     public Crash crashFromString(String[] crashVariables) {
-        // TODO think about numbers not existing, ie empty string instead of check 0
 
         try {
             int objectId = changeEmptyToZero(crashVariables[0]);
             boolean bicycleInvolved = changeEmptyToZero(crashVariables[2]) > 0;
             boolean busInvolved = changeEmptyToZero(crashVariables[4]) > 0;
 
-            // TODO look at different type of car variables
             boolean carInvolved = changeEmptyToZero(crashVariables[5]) > 0;
             int crashYear = changeEmptyToZero(crashVariables[14]);
             String crashLocation1 = crashVariables[9];
@@ -99,16 +97,32 @@ public class CrashCsvImporter {
             boolean trainInvolved = changeEmptyToZero(crashVariables[57]) > 0;
             boolean truckInvolved = changeEmptyToZero(crashVariables[59]) > 0;
 
-            // TODO think about weatherA vs weatherB
             String weather = crashVariables[65];
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);
 
-            return new Crash(objectId, speedLimit, crashYear, crashLocation1, crashLocation2,
-                    severity, region, weather, longitude, latitude, bicycleInvolved,
-                    busInvolved, carInvolved, holiday, mopedInvolved,
-                    motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved,
-                    schoolBusInvolved, trainInvolved, truckInvolved);
+            return new Crash.Builder(objectId)
+                    .speedLimit(speedLimit)
+                    .year(crashYear)
+                    .location1(crashLocation1)
+                    .location2(crashLocation2)
+                    .severity(severity)
+                    .region(region)
+                    .weather(weather)
+                    .longitude(longitude)
+                    .latitude(latitude)
+                    .bicycleInvolved(bicycleInvolved)
+                    .busInvolved(busInvolved)
+                    .carInvolved(carInvolved)
+                    .holiday(holiday)
+                    .mopedInvolved(mopedInvolved)
+                    .motorcycleInvolved(motorcycleInvolved)
+                    .parkedVehicleInvolved(parkedVehicleInvolved)
+                    .pedestrianInvolved(pedestrianInvolved)
+                    .schoolBusInvolved(schoolBusInvolved)
+                    .trainInvolved(trainInvolved)
+                    .truckInvolved(truckInvolved)
+                    .build();
         } catch (NumberFormatException e) {
             log.error(e);
         }
