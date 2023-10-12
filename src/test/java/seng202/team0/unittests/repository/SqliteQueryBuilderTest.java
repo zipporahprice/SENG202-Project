@@ -1,10 +1,13 @@
 package seng202.team0.unittests.repository;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import seng202.team0.models.Favourite;
 import seng202.team0.repository.DatabaseManager;
 import seng202.team0.repository.SqliteQueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +19,30 @@ import java.util.List;
 
 public class SqliteQueryBuilderTest {
 
+    private SqliteQueryBuilder builder;
+
     /**
      * Tests create function.
      */
-    @Test
+    @BeforeEach
     void testCreate() {
-        SqliteQueryBuilder builder = SqliteQueryBuilder.create();
-        Assertions.assertTrue(builder instanceof SqliteQueryBuilder);
+        builder = SqliteQueryBuilder.create();
+    }
+
+    /**
+     * Tests insert function
+     */
+    @Test
+    void testInsert() {
+        builder.insert("crashes");
+        String expectedQuery = "INSERT INTO crashes (speed_limit, crash_year, "
+                + "crash_location1, crash_location2, severity, region, weather, "
+                + "longitude, latitude, bicycle_involved, bus_involved, "
+                + "car_involved, holiday, moped_involved, motorcycle_involved, "
+                + "parked_vehicle_involved, pedestrian_involved, "
+                + "school_bus_involved, train_involved, truck_involved) "
+                + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
     }
 
     /**
@@ -30,7 +50,7 @@ public class SqliteQueryBuilderTest {
      */
     @Test
     void testSelect() {
-        SqliteQueryBuilder builder = SqliteQueryBuilder.create().select("id, ltd, lng");
+        builder.select("id, ltd, lng");
         Assertions.assertEquals("SELECT id, ltd, lng ", builder.getQuery());
     }
 
@@ -39,7 +59,7 @@ public class SqliteQueryBuilderTest {
      */
     @Test
     void testFrom() {
-        SqliteQueryBuilder builder = SqliteQueryBuilder.create().from("crashes");
+        builder.from("crashes");
         Assertions.assertEquals("FROM crashes ", builder.getQuery());
     }
 
@@ -48,25 +68,39 @@ public class SqliteQueryBuilderTest {
      */
     @Test
     void testWhere() {
-        SqliteQueryBuilder builder = SqliteQueryBuilder.create().where("age > 30, speed > 30");
+        builder.where("age > 30, speed > 30");
         Assertions.assertEquals("WHERE age > 30, speed > 30 ", builder.getQuery());
     }
 
     /**
-     * Tests build function.
+     * Test buildSetter function.
      */
     @Test
-    void testBuild() {
+    void testBuildSetter() {
         // Reset to make sure nothing in database
         DatabaseManager.getInstance().resetDb();
 
-        List crashes = SqliteQueryBuilder.create()
-                                        .select("object_id, longitude, latitude")
-                                        .from("crashes")
-                                        .where("")
-                                        .buildGetter();
+        Favourite favourite = new Favourite("40 Little Oaks Drive", "University of Canterbury",
+                143.657, 34.534,141.657, 33.534, "");
+        List<Favourite> favourites = new ArrayList<>();
+        favourites.add(favourite);
 
-        Assertions.assertTrue(crashes.size() == 0);
+        builder.insert("favourites").buildSetter(favourites);
+        Assertions.assertTrue(SqliteQueryBuilder.create().select("*").from("favourites").buildGetter().size() > 0);
+    }
+
+
+    /**
+     * Tests buildGetter function.
+     */
+    @Test
+    void testBuildGetter() {
+        // Reset to make sure nothing in database
+        DatabaseManager.getInstance().resetDb();
+
+        List<?> crashes = builder.select("object_id, longitude, latitude").from("crashes").buildGetter();
+
+        Assertions.assertEquals(0, crashes.size());
     }
 
     /**

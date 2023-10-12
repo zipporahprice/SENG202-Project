@@ -1,15 +1,15 @@
 package seng202.team0.repository;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
 import seng202.team0.models.CrashSeverity;
 import seng202.team0.models.Favourite;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Builder class of SQL queries for the SQLite database.
@@ -141,6 +141,10 @@ public class SqliteQueryBuilder {
         return this;
     }
 
+    /**
+     *
+     * @param objectsToAdd
+     */
     public void buildSetter(List<?> objectsToAdd) {
         try (Connection conn = databaseManager.connect();
              PreparedStatement ps = conn.prepareStatement(query.toString());){
@@ -222,13 +226,12 @@ public class SqliteQueryBuilder {
         }
     }
 
-    // TODO have a think about how we want the data to come back to us as, currently have as a list
     /**
      * Takes the query in the builder object and returns a list of all data points in a List object.
      *
      * @return List of all data points from the current query string
      */
-    public List<Object> buildGetter() {
+    public List<?> buildGetter() {
         List<Object> data = new ArrayList<>();
         try (Connection conn = databaseManager.connect();
              Statement stmt = conn.createStatement();
@@ -241,6 +244,8 @@ public class SqliteQueryBuilder {
                     } else if (table.equals("favourites")) {
                         temp = resultsAsFavourite(rs);
                     }
+                } else {
+                    temp = resultAsHashmap(rs);
                 }
                 data.add(temp);
             }

@@ -147,10 +147,10 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void displayRoutes() {
-        List<Object> favouritesList = SqliteQueryBuilder.create()
-                                                        .select("*")
-                                                        .from("favourites")
-                                                        .buildGetter();
+        List<?> favouritesList = SqliteQueryBuilder.create()
+                                                    .select("*")
+                                                    .from("favourites")
+                                                    .buildGetter();
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList
                 .stream().map(favourite -> {
                     Favourite favouriteCasted = (Favourite) favourite;
@@ -163,11 +163,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void loadRoute() throws SQLException {
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
         if (favouriteId != 0 && favouriteId != -1) {
-            List<Object> favouriteList = SqliteQueryBuilder.create()
-                                                            .select("*")
-                                                            .from("favourites")
-                                                            .where("id = " + favouriteId)
-                                                            .buildGetter();
+            List<?> favouriteList = SqliteQueryBuilder.create()
+                                                        .select("*")
+                                                        .from("favourites")
+                                                        .where("id = " + favouriteId)
+                                                        .buildGetter();
 
             Favourite favourite = (Favourite) favouriteList.get(0);
 
