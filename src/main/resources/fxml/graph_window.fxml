@@ -17,7 +17,7 @@
     </Region>
    <AnchorPane prefHeight="751.0" prefWidth="1336.0" StackPane.alignment="CENTER">
       <children>
-         <PieChart fx:id="pieChartTest" layoutX="61.0" layoutY="156.0" />
+         <PieChart fx:id="pieChartMade" layoutX="61.0" layoutY="156.0" />
            <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" layoutX="50.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="35.0" prefWidth="94.0" styleClass="menuButtonColor" stylesheets="@style.css" text="Back" textFill="WHITE" />
           <AnchorPane layoutX="800.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="250.0" prefHeight="300.0" prefWidth="350.0" styleClass="sideBarColor" stylesheets="@style.css">
               <VBox alignment="TOP_CENTER" layoutX="13.0" layoutY="34.0" prefHeight="181.0" prefWidth="323.0" spacing="10">
