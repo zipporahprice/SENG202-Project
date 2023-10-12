@@ -472,8 +472,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         startLocation.setText("");
         endLocation.setText("");
         modeChoice = null;
-        selectedButton.getStyleClass().remove("clickedButtonColor");
-        selectedButton.getStyleClass().add("hamburgerStyle");
+        if(selectedButton !=null) {
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("hamburgerStyle");
+        }
+
         removeRoute.setDisable(true);
 
     }
@@ -518,6 +521,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         modeChoice = (String) chosenButton.getUserData();
 
         if (Objects.equals(chosenButton, selectedButton)) {
+            modeChoice = null;
             selectedButton = null;
             chosenButton.getStyleClass().remove("clickedButtonColor");
             chosenButton.getStyleClass().add("hamburgerStyle");
@@ -527,10 +531,13 @@ public class RoutingMenuController implements Initializable, MenuController {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
+            modeChoice = (String) chosenButton.getUserData();
+
         } else {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
+            modeChoice = (String) chosenButton.getUserData();
 
         }
     }
