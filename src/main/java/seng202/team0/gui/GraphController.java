@@ -29,6 +29,7 @@ import seng202.team0.App;
 import seng202.team0.business.FilterManager;
 import seng202.team0.models.Favourite;
 import seng202.team0.repository.DatabaseManager;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * This class manages actions and views related to graphical representations of data.
@@ -67,21 +68,26 @@ public class GraphController implements Initializable {
     private ObservableList<PieChart.Data> newPieChart() {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        String sqlQuery = "SELECT * FROM crashes"; //TODO figure out what query to do
+        List dbList = (ObservableList<PieChart.Data>) SqliteQueryBuilder.create().select("region, COUNT(*)").from("crashes").groupBy("region").build();
 
-        // Connect to database and gets the corresponding Favourite
-        try (Connection conn = databaseManager.connect();
-             PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    result.add(new PieChart.Data(rs.getString(2), rs.getDouble(1)));
-                    //TODO change columnIndexes, I have no idea what the table looks like.
-                }
-            }
-        } catch (AssertionError | SQLException sqlException) {
-            log.error(sqlException);
-            return null;
+        for (Object item : result) {
+            System.out.println(item);
         }
+//        String sqlQuery = "SELECT region FROM crashes"; //TODO figure out what query to do
+//
+//        // Connect to database and gets the corresponding Favourite
+//        try (Connection conn = databaseManager.connect();
+//             PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
+//            try (ResultSet rs = ps.executeQuery()) {
+//                while (rs.next()) {
+//                    result.add(new PieChart.Data(rs.getString(1), rs.getDouble(2)));
+//                    //TODO change columnIndexes, I have no idea what the table looks like.
+//                }
+//            }
+//        } catch (AssertionError | SQLException sqlException) {
+//            log.error(sqlException);
+//            return null;
+//        }
 
 //        for (Object filter : filterList) {
 //            double percentage = 0.0;

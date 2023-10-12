@@ -69,6 +69,17 @@ public class SqliteQueryBuilder {
         return this;
     }
 
+    public SqliteQueryBuilder groupBy(String columns) {
+        query.append("GROUP BY ").append(columns).append(" ");
+        String[] columnsWithoutCommas = columns.split(",");
+
+        for (String column : columnsWithoutCommas) {
+            selectedColumns.add(column.trim());
+        }
+
+        return this;
+    }
+
     /**
      * Takes a table name to query data from.
      * Note: Updates selected columns list from the table's metadata if all columns selected.
