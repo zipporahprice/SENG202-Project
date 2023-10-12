@@ -68,12 +68,13 @@ function initMap() {
             var averageSeverity = calculateAverageSeverity(cluster);
             var clusterColor = getColorBasedOnSeverity(averageSeverity);
 
+
             return L.divIcon({
-                // html: '<div class="custom-cluster-icon">' + cluster.getChildCount() + '</div>',
-                html: '<div style="background-color: ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
-                className: 'marker_styler',  // You might need to adjust the CSS styling
+                html: '<div class="markers-style ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
+                className: 'marker-style',
                 iconSize: L.point(32, 32)
             });
+
         }
     });
 
