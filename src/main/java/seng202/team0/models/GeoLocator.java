@@ -59,8 +59,7 @@ public class GeoLocator {
             JSONArray results = (JSONArray) parser.parse(response.body());
 
             if (results.isEmpty()) {
-                return new Pair<>(null, "The address '" + address + "' "
-                        + "is invalid or couldn't be found.");
+                return new Pair<>(null, "The address " + address + " is invalid or couldn't be found.");
             }
 
             JSONObject bestResult = (JSONObject) results.get(0);
@@ -121,7 +120,8 @@ public class GeoLocator {
 
             if (result.isEmpty()) {
                 showErrorAlert("Invalid " + location + " Address",
-                        "The " + location.toLowerCase() + " provided is invalid or couldn't be found.");
+                        "The " + location.toLowerCase()
+                                + " provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 

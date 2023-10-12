@@ -113,6 +113,7 @@ application {
 checkstyle {
     toolVersion '10.12.4'
     configFile file("config/checkstyle/google_checks.xml")
+    ignoreFailures = false
 }
 
 checkstyleMain {

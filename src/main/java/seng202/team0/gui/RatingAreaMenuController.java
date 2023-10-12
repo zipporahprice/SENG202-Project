@@ -1,5 +1,8 @@
 package seng202.team0.gui;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -8,10 +11,9 @@ import seng202.team0.business.RatingAreaManager;
 import seng202.team0.models.Location;
 import seng202.team0.repository.SqliteQueryBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
+/**
+ * controller for rating area menu.
+ */
 public class RatingAreaMenuController implements MenuController {
     @FXML
     public Label ratingAreaText;
@@ -28,6 +30,9 @@ public class RatingAreaMenuController implements MenuController {
 
     }
 
+    /**
+     * rates the area based on severity and crashes.
+     */
     public void rateArea() {
         String select = "severity";
         String from = "crashes";
@@ -35,7 +40,8 @@ public class RatingAreaMenuController implements MenuController {
         FilterManager filterManager = FilterManager.getInstance();
         String filterWhere = filterManager.toString();
         String[] filterList = filterWhere.split(" AND ");
-        String filterWhereWithoutViewport = String.join(" AND ", Arrays.copyOf(filterList, filterList.length - 1));
+        String filterWhereWithoutViewport = String.join(" AND ",
+                Arrays.copyOf(filterList, filterList.length - 1));
 
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         Location boundingBoxMin = ratingAreaManager.getBoundingBoxMin();
