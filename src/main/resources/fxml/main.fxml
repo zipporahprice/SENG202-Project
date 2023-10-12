@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.effect.BoxBlur?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 
-<?import javafx.scene.control.skin.ToolBarSkin.ToolBarOverflowMenu?>
-<?import javafx.scene.control.Tooltip?>
-<StackPane fx:id="mainWindow" minHeight="400" minWidth="600" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" minHeight="400" minWidth="600" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>
             <Insets />
          </StackPane.margin></WebView>
-      <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: linear-gradient(to right,rgba(46,54,255,1) 0%, rgba(99,121,241,1) 0%, rgba(126,155,234,1) 9%, rgba(138,170,231,1) 13%, rgba(146,180,229,1) 17%, rgba(158,196,226,1) 23%, rgba(170,211,223,1) 31%);;" StackPane.alignment="CENTER_LEFT">
-         <effect>
-            <BoxBlur height="0.0" width="255.0" />
-         </effect>
-      </Region>
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
@@ -52,7 +38,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Plan a Route" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Plan a Route" />
                </tooltip>
             </Button>
             <Button fx:id="filterDataButton" layoutX="9.0" layoutY="159.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="filtering">
@@ -69,7 +55,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Filter Data" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Filter Data" />
                </tooltip>
             </Button>
             <Button fx:id="importExportButton" layoutX="9.0" layoutY="239.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="import">
@@ -86,7 +72,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Import/Export Data" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Import/Export Data" />
                </tooltip>
             </Button>
             <Button fx:id="settingsButton" layoutX="9.0" layoutY="319.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="settings">
@@ -103,7 +89,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Change the Data View" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Change the Data View" />
                </tooltip>
             </Button>
             <Button fx:id="userHelpButton" layoutX="9.0" layoutY="399.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="help">
@@ -120,7 +106,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To View the Help Page" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To View the Help Page" />
                </tooltip>
             </Button>
             <Button fx:id="graphsButton" layoutX="9.0" layoutY="479.0" mnemonicParsing="false" onAction="#loadGraphs" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css">
@@ -137,7 +123,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Interact and Create Graphs" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Interact and Create Graphs" />
                </tooltip>
             </Button>
             <Button fx:id="rateAreaButton" layoutX="9.0" layoutY="560.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="rateArea">
@@ -152,7 +138,7 @@
                   <Insets bottom="0.0" left="25.0" right="0.0" top="0.0" />
                </padding>
                <tooltip>
-                  <Tooltip text = "Click To Rate an Area" styleClass="custom-tool-tip"></Tooltip>
+                  <Tooltip styleClass="custom-tool-tip" text="Click To Rate an Area" />
                </tooltip>
             </Button>
          </children>
@@ -173,7 +159,7 @@
             <Insets bottom="10.0" left="10.0" />
          </StackPane.margin>
          <tooltip>
-            <Tooltip text = "Click To Quit the App" styleClass="custom-tool-tip"></Tooltip>
+            <Tooltip styleClass="custom-tool-tip" text="Click To Quit the App" />
          </tooltip>
       </Button>
 
@@ -192,7 +178,7 @@
             </ImageView>
          </graphic>
          <tooltip>
-            <Tooltip text = "Refresh the Window" styleClass="custom-tool-tip"></Tooltip>
+            <Tooltip styleClass="custom-tool-tip" text="Refresh the Window" />
          </tooltip>
       </Button>
 
