@@ -33,7 +33,8 @@ let jsConnector = {
     initMap: initMap,
     updateDataShown: updateDataShown,
     drawingModeOn: drawingModeOn,
-    drawingModeOff: drawingModeOff
+    drawingModeOff: drawingModeOff,
+    changeDrawingColourToRating: changeDrawingColourToRating
 };
 
 /**
@@ -368,22 +369,18 @@ function getMarkerIcon(severity) {
     });
 }
 
-function resetLayers() {
-    newHeatmap()
-    markerLayer.clearLayers();
-}
-
 function getColorBasedOnSeverity(averageSeverity) {
-    if (averageSeverity >= 1 && averageSeverity < 2) {
-        return 'green'; // Low severity, green color
-    } else if (averageSeverity >= 2 && averageSeverity < 3) {
-        return 'yellow'; // Moderate severity, yellow color
-    } else if (averageSeverity >= 3 && averageSeverity < 4) {
-        return 'orange'; // High severity, orange color
-    } else if (averageSeverity == null) {
+    // averageSeverity is out of 10
+
+    if (averageSeverity == null) {
         return 'black';
+    } else if (averageSeverity < 0.8) {
+        return 'green'; // Low severity, green color
+    } else if (averageSeverity < 4.3) {
+        return 'yellow'; // Moderate severity, yellow color
+    } else if (averageSeverity < 7.1) {
+        return 'orange'; // High severity, orange color
     } else {
-        console.log(averageSeverity);
         return 'red'; // Very high severity, red color
     }
 }
@@ -400,7 +397,14 @@ function calculateAverageSeverity(cluster) {
     for (var i = 0; i < childMarkers.length; i++) {
         totalSeverity += childMarkers[i].options.severity;
     }
-    return totalSeverity/childMarkers.length;
+
+    // Score out of 10
+    return ((totalSeverity/childMarkers.length - 1.0) / 7.0) * 10.0;
+}
+
+function resetLayers() {
+    newHeatmap()
+    markerLayer.clearLayers();
 }
 
 function addPoint(lat, lng, severity, year, weather) {
@@ -472,4 +476,13 @@ function handleNewDrawing(event) {
     //     let latLngString = centerLat + " " + centerLng + " " + radius;
     //     javaScriptBridge.printThings(latLngString);
     // }
+}
+
+function changeDrawingColourToRating(rating) {
+    const colour = getColorBasedOnSeverity(rating);
+    drawnItems.eachLayer(function(layer) {
+        layer.setStyle({
+            "color": colour
+        })
+    })
 }

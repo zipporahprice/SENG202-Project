@@ -3,6 +3,8 @@ package seng202.team0.gui;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -48,14 +50,16 @@ public class RatingAreaMenuController implements MenuController {
             FilterManager filterManager = FilterManager.getInstance();
             String filterWhere = filterManager.toString();
             String[] filterList = filterWhere.split(" AND ");
+
+            // 4 ANDS to take away to get rid of the viewport
             String filterWhereWithoutViewport = String.join(" AND ",
-                    Arrays.copyOf(filterList, filterList.length - 1));
+                    Arrays.copyOf(filterList, filterList.length - 4));
 
             String where = "object_id IN (SELECT id FROM rtree_index WHERE minX >= "
                     + boundingBoxMin.getLongitude() + " AND maxX <= "
                     + boundingBoxMax.getLongitude() + " AND minY >= "
                     + boundingBoxMin.getLatitude() + " AND maxY <= "
-                    + boundingBoxMax.getLatitude() + "))";
+                    + boundingBoxMax.getLatitude() + ")";
 
             List severityList = SqliteQueryBuilder
                     .create()
@@ -66,16 +70,22 @@ public class RatingAreaMenuController implements MenuController {
 
             HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);
 
-            double averageSeverity = (double) resultHashMap.get("AVG(severity)");
-            int total = (int) resultHashMap.get("COUNT()");
-            if (total > 0) {
-                // Actual average severity will range from 1 to 8
-                // Score rating massaged to be out of 10 and in a range from 0 to 10.
-                averageSeverity = ((averageSeverity - 1.0) / 7.0) * 10;
-            }
+            if (resultHashMap.get("AVG(severity)") != null) {
+                double averageSeverity = (double) resultHashMap.get("AVG(severity)");
+                int total = (int) resultHashMap.get("COUNT()");
+                if (total > 0) {
+                    // Actual average severity will range from 1 to 8
+                    // Score rating massaged to be out of 10 and in a range from 0 to 10.
+                    averageSeverity = ((averageSeverity - 1.0) / 7.0) * 10;
+                }
 
-            ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity) + " / 10");
-            numCrashesAreaLabel.setText("Number of crashes in area: " + total);
+                MainController.javaScriptConnector.call("changeDrawingColourToRating", averageSeverity);
+                ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity) + " / 10");
+                numCrashesAreaLabel.setText("Number of crashes in area: " + total);
+            } else {
+                ratingAreaText.setText("Danger: 0.00/10");
+                numCrashesAreaLabel.setText("Number of crashes in area: 0");
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
