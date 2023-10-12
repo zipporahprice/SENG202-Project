@@ -171,8 +171,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
-            if (!menuPopulated.equals("empty")
-                    && !menuPopulated.equals("import") && !menuPopulated.equals("help")) {
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
+                    && !menuPopulated.equals("help")) {
                 controller = loader.getController();
             }
 
@@ -185,10 +185,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
      * Toggles the menu display dependent on the button clicked.
      */
     public void toggleMenuDisplay(ActionEvent event) {
-        final Button menuButton = (Button) event.getSource();
-        final String menuChoice = (String) menuButton.getUserData();
+        Button menuButton = (Button) event.getSource();
 
         toggleMenuButton(menuButton);
+
+        String menuChoice = (String) menuButton.getUserData();
 
         if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
                 && !menuPopulated.equals(("help"))) {
@@ -232,9 +233,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
 
     /**
-     * Toggles the style of a menu button.
+     * changes the colour of the chosen button when clicked.
      *
-     * @param chosenButton The button to toggle.
+     * @param chosenButton the button that was selected.
      */
     public void toggleMenuButton(Button chosenButton) {
         if (Objects.equals(chosenButton, selectedButton)) { // deselects

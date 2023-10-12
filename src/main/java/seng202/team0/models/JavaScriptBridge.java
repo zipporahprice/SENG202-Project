@@ -9,6 +9,8 @@ import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
 
 
+
+
 /**
  * Provides a bridge between JavaScript and Java for handling crash data.
  * This class retrieves crash data, converts it to a JSON format, and exposes it

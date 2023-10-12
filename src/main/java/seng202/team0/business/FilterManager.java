@@ -397,7 +397,9 @@ public class FilterManager {
 
         if (getLatestYear() != null) {
             where.add(startOfClauses.get("crash_year")
-                    + getEarliestYear() + " AND " + getLatestYear());
+                    + getEarliestYear()
+                    + " AND "
+                    + getLatestYear());
         }
 
         if (getWeathersSelected().size() > 0) {

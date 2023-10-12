@@ -34,14 +34,7 @@ public class RatingAreaMenuController implements MenuController {
     }
 
     /**
-     * Calculates and displays the rating of a specific area based on crash data and filterS.
-     * This method performs the following steps:
-     * 1. Retrieves filter conditions.
-     * 2. Gets the bounding box for the area.
-     * 3. If a bounding box exists, retrieves crash data within that area.
-     * 4. Calculates the average severity of crashes.
-     * 5. Displays the area rating and the number of crashes.
-     * 6. Shows an error message if no bounding area is defined.
+     * rates the area based on severity and crashes.
      */
     public void rateArea() {
         String select = "severity";
