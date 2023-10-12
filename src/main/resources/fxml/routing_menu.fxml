@@ -12,18 +12,28 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
+<?import javafx.scene.control.Tooltip?>
+<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController" >
 
     <children>
         <TextField fx:id="startLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStart" prefHeight="50.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+            <tooltip>
+                <Tooltip text = "Enter a Start Address" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="100.0" />
             </StackPane.margin></TextField>
         <TextField fx:id="endLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+            <tooltip>
+                <Tooltip text = "Enter a Destination Address" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="159.0" />
             </StackPane.margin></TextField>
         <TextField fx:id="stopLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add Stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+            <tooltip>
+                <Tooltip text = "Enter a Stop" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="218.0" />
             </StackPane.margin></TextField>
@@ -31,6 +41,9 @@
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
+            <tooltip>
+                <Tooltip text = "Add the Stop" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="390.0" />
             </StackPane.margin>
@@ -39,6 +52,9 @@
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
+            <tooltip>
+                <Tooltip text = "Remove a Stop" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="480.0" top="390.0" />
             </StackPane.margin>
@@ -47,6 +63,9 @@
             <StackPane.margin>
                 <Insets left="335.0" top="440.0" />
             </StackPane.margin>
+            <tooltip>
+                <Tooltip text = "Save a Route" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <prefWidth>280.0</prefWidth>
             <prefHeight>43.0</prefHeight>
             <minHeight>43.0</minHeight>
@@ -57,6 +76,9 @@
             <textFill>#FFFFFF</textFill>
         </Button>
         <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select Saved Route" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+            <tooltip>
+                <Tooltip text = "Select a Saved Route" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="490.0" />
             </StackPane.margin>
@@ -84,7 +106,9 @@
             </StackPane.margin>
         </AnchorPane>
       <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-
+          <tooltip>
+              <Tooltip text = "Journey by Car" styleClass="custom-tool-tip"></Tooltip>
+          </tooltip>
           <graphic>
               <ImageView fitHeight="43.0" fitWidth="49.0" preserveRatio="true">
                   <image>
@@ -97,7 +121,10 @@
           </StackPane.margin>
       </Button>
       <Button id="bikeButton" fx:id="bikeButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <graphic>
+          <tooltip>
+              <Tooltip text = "Journey by Bicycle" styleClass="custom-tool-tip"></Tooltip>
+          </tooltip>
+          <graphic>
             <ImageView fitHeight="52.0" fitWidth="70.0" preserveRatio="true">
                <image>
                   <Image url="@images/bike.png" />
@@ -109,7 +136,10 @@
          </StackPane.margin>
       </Button>
       <Button id="walkingButton" fx:id="walkingButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <graphic>
+          <tooltip>
+              <Tooltip text = "Journey by Walking" styleClass="custom-tool-tip"></Tooltip>
+          </tooltip>
+          <graphic>
             <ImageView fitHeight="56.0" fitWidth="64.0" preserveRatio="true">
                <image>
                   <Image url="@images/man-walking.png" />
@@ -121,6 +151,9 @@
          </StackPane.margin>
       </Button>
         <Button fx:id="generateRoute" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+            <tooltip>
+                <Tooltip text = "Click to Generate the Route" styleClass="custom-tool-tip"></Tooltip>
+            </tooltip>
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
@@ -131,8 +164,11 @@
                 <Insets left="10.0" />
             </padding>
         </Button>
-      <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Remove Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
-         <font>
+      <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Clear Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+          <tooltip>
+              <Tooltip text = "Click to Remove the Route" styleClass="custom-tool-tip"></Tooltip>
+          </tooltip>
+          <font>
             <Font name="System Bold" size="15.0" />
          </font>
          <padding>

@@ -55,7 +55,7 @@ function initMap() {
 
     // Adding zoom control to bottom right
     L.control.zoom({
-        position: 'bottomright'
+        position: 'topright'
     }).addTo(map);
 
     // Setup potential layers for views
@@ -76,7 +76,7 @@ function initMap() {
             marker: false,
             circlemarker: false
         },
-        position: 'topright'
+        position: 'topright',
     });
 
     // Initialise layers and setup callbacks
