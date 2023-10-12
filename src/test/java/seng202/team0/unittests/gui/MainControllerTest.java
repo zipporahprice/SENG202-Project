@@ -1,8 +1,10 @@
 package seng202.team0.unittests.gui;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.CrashManager;
+import seng202.team0.repository.DatabaseManager;
 import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.util.ArrayList;
@@ -10,6 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainControllerTest {
+
+    private DatabaseManager databaseManager;
+
+    @BeforeEach
+    void resetDatabase() {
+        databaseManager = DatabaseManager.getInstance();
+        databaseManager.resetDb();
+    }
 
     // TODO make integration test for filtering
     @Test
@@ -40,7 +50,7 @@ public class MainControllerTest {
     @Test
     void testingWeatherSelected() {
         //like ticking all the checkboxes in weather
-        List<String> weatherSelected = new ArrayList<String>();
+        List<String> weatherSelected = new ArrayList<>();
         weatherSelected.add("Fine");
         weatherSelected.add("Light Rain");
         weatherSelected.add("Heavy Rain");
@@ -48,17 +58,16 @@ public class MainControllerTest {
         weatherSelected.add("Snow");
         weatherSelected.add("Null");
 
-        List crashes = SqliteQueryBuilder
+        List<?> crashes = SqliteQueryBuilder
                 .create()
                 .select("object_id")
                 .from("crashes")
                 .where("weather IN (" + weatherSelected.stream().map(s -> "'" + s + "'")
                         .collect(Collectors.joining(", ")) + ")")
-                .build();
+                .buildGetter();
 
-        List expectedCrashes  = null;
         CrashManager manager = new CrashManager();
-        expectedCrashes = manager.getCrashLocations();
+        List expectedCrashes = manager.getCrashLocations();
 
         Assertions.assertNotNull(expectedCrashes);
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());

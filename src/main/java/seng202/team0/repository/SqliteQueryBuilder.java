@@ -293,28 +293,28 @@ public class SqliteQueryBuilder {
 
     private Crash resultsAsCrash(ResultSet rs) {
         try {
-            return new Crash(
-                    rs.getInt("object_id"),
-                    rs.getInt("speed_limit"),
-                    rs.getInt("crash_year"),
-                    rs.getString("crash_location1"),
-                    rs.getString("crash_location2"),
-                    CrashSeverity.intToString(rs.getInt("severity")),
-                    rs.getString("region"),
-                    rs.getString("weather"),
-                    rs.getFloat("longitude"),
-                    rs.getFloat("latitude"),
-                    rs.getBoolean("bicycle_involved"),
-                    rs.getBoolean("bus_involved"),
-                    rs.getBoolean("car_involved"),
-                    rs.getBoolean("holiday"),
-                    rs.getBoolean("moped_involved"),
-                    rs.getBoolean("motorcycle_involved"),
-                    rs.getBoolean("parked_vehicle_involved"),
-                    rs.getBoolean("pedestrian_involved"),
-                    rs.getBoolean("school_bus_involved"),
-                    rs.getBoolean("train_involved"),
-                    rs.getBoolean("truck_involved"));
+            return new Crash.Builder(rs.getInt("object_id"))
+                    .speedLimit(rs.getInt("speed_limit"))
+                    .year(rs.getInt("crash_year"))
+                    .location1(rs.getString("crash_location1"))
+                    .location2(rs.getString("crash_location2"))
+                    .severity(CrashSeverity.intToString(rs.getInt("severity")))
+                    .region(rs.getString("region"))
+                    .weather(rs.getString("weather"))
+                    .longitude(rs.getFloat("longitude"))
+                    .latitude(rs.getFloat("latitude"))
+                    .bicycleInvolved(rs.getBoolean("bicycle_involved"))
+                    .busInvolved(rs.getBoolean("bus_involved"))
+                    .carInvolved(rs.getBoolean("car_involved"))
+                    .holiday(rs.getBoolean("holiday"))
+                    .mopedInvolved(rs.getBoolean("moped_involved"))
+                    .motorcycleInvolved(rs.getBoolean("motorcycle_involved"))
+                    .parkedVehicleInvolved(rs.getBoolean("parked_vehicle_involved"))
+                    .pedestrianInvolved(rs.getBoolean("pedestrian_involved"))
+                    .schoolBusInvolved(rs.getBoolean("school_bus_involved"))
+                    .trainInvolved(rs.getBoolean("train_involved"))
+                    .truckInvolved(rs.getBoolean("truck_involved"))
+                    .build();
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return null;

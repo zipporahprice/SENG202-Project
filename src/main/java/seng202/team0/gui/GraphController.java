@@ -70,18 +70,19 @@ public class GraphController implements Initializable {
     private ObservableList<PieChart.Data> newPieChart(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
+        List<?> dbList = SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
                 .groupBy(columnOfInterest)
-                .build();
+                .buildGetter();
 
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
-        for (HashMap<String, Object> hash : dbList) {
-            String column = (String) hash.get(columnOfInterest);
-            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+        for (Object hash : dbList) {
+            HashMap<String, Object> hashMap = (HashMap) hash;
+            String column = (String) hashMap.get(columnOfInterest);
+            double count = ((Number) hashMap.get("COUNT(*)")).doubleValue();
 
             sliceNames.add(column);
             sliceCounts.add(count);
