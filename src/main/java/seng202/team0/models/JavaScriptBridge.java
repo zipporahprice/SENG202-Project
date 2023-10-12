@@ -1,13 +1,13 @@
 package seng202.team0.models;
 
-import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
+import seng202.team0.business.RatingAreaManager;
 import seng202.team0.gui.MainController;
 import seng202.team0.gui.SettingsMenuController;
+
 
 
 
@@ -44,66 +44,24 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String crashes() {
-        List crashList = crashData.getCrashLocations().stream().map(crash -> {
-            if (crash instanceof Crash) {
-                Crash crash1 = (Crash) crash;
-                double latitude = crash1.getLatitude();
-                double longitude = crash1.getLongitude();
-                int severity = crash1.getSeverity().getValue();
-                String year = Integer.toString(crash1.getCrashYear());
-                String weather = crash1.getWeather().toString();
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            } else {
-                HashMap crash1 = (HashMap) crash;
-                double latitude = (double) crash1.get("latitude");
-                double longitude = (double) crash1.get("longitude");
-                int severity = (int) crash1.get("severity");
-                String year = Integer.toString((Integer) crash1.get("crash_year"));
-                String weather = (String) crash1.get("weather");
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            }
-        }).toList();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("resetLayers();");
 
-        Gson gson = new Gson();
+        crashData.getCrashLocations().stream().forEach(crash -> {
+            HashMap crash1 = (HashMap) crash;
+            double latitude = (double) crash1.get("latitude");
+            double longitude = (double) crash1.get("longitude");
+            int severity = (int) crash1.get("severity");
+            String year = Integer.toString((Integer) crash1.get("crash_year"));
+            String weather = (String) crash1.get("weather");
 
-        String json = gson.toJson(crashList);
+            stringBuilder.append(String.format("addPoint(%f,%f,%d,%s,'%s');",
+                    latitude, longitude, severity, year, weather));
+        });
 
-        return json;
+        stringBuilder.append("setHeatmapData();");
 
-    }
-
-    /**
-     * Represents crash information containing latitude and longitude.
-     */
-    protected static class CrashInfo {
-        /**
-         * The latitude of the crash location.
-         */
-        public double lat;
-        /**
-         * The longitude of the crash location.
-         */
-        public double lng;
-        public int severity;
-
-        public String crashYear; // Add year
-        public String weather;
-
-        /**
-         * Constructs a CrashInfo object with latitude and longitude.
-         *
-         * @param lat The latitude of the crash location.
-         * @param lng The longitude of the crash location.
-         */
-        public CrashInfo(double lat, double lng, int severity, String year, String weather) {
-            this.lat = lat;
-            this.lng = lng;
-            this.severity = severity;
-            this.crashYear = year;
-            this.weather = weather;
-
-        }
-
+        return stringBuilder.toString();
     }
 
     /**
@@ -133,6 +91,21 @@ public class JavaScriptBridge {
     }
 
     /**
+     * Sets the viewport variables in the FilterManager singleton class.
+     *
+     * @param minLatitude minimum latitude of the map view
+     * @param minLongitude minimum longitude of the map view
+     * @param maxLatitude maximum latitude of the map view
+     * @param maxLongitude maximum longitude of the map view
+     */
+    public void setRatingAreaManagerBoundingBox(double minLatitude, double minLongitude,
+                                         double maxLatitude, double maxLongitude) {
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        ratingAreaManager.setBoundingBoxMin(minLatitude, minLongitude);
+        ratingAreaManager.setBoundingBoxMax(maxLatitude, maxLongitude);
+    }
+
+    /**
      * Calls mapLoaded function in the MainController class.
      */
     public void mapLoaded() {
@@ -146,6 +119,18 @@ public class JavaScriptBridge {
      */
     public static interface JavaScriptListener {
         void mapLoaded();
+    }
+
+    public void printTime(double time) {
+        System.out.println(time);
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public void enableRefreshButton() {
+        mainController.enableRefresh();
     }
 }
 

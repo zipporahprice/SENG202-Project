@@ -38,7 +38,7 @@ public class FilterManager {
     private final HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
             put("severity", "severity IN (");
             put("transport_mode", "(");
-            put("crash_year", "crash_year >= ");
+            put("crash_year", "crash_year BETWEEN ");
             put("weather", "weather IN (");
             put("region", "region IN (");
             put("holiday", "holiday IN (");
@@ -69,7 +69,7 @@ public class FilterManager {
 
         earliestYear = 2000;
 
-        latestYear = 2020;
+        latestYear = 2023;
 
         modesSelected = new ArrayList<>(Arrays.asList(
                 "bicycle_involved",
@@ -396,7 +396,10 @@ public class FilterManager {
         }
 
         if (getLatestYear() != null) {
-            where.add("crash_year BETWEEN " + getEarliestYear() + " AND " + getLatestYear());
+            where.add(startOfClauses.get("crash_year")
+                    + getEarliestYear()
+                    + " AND "
+                    + getLatestYear());
         }
 
         if (getWeathersSelected().size() > 0) {
@@ -429,7 +432,6 @@ public class FilterManager {
                     + viewPortMax.getLatitude() + closeParenthesis);
         }
 
-        // TODO thoughts, add an IMPOSSIBLE value so that when it is empty, it is fine
         if (modesSelected.isEmpty() || severitiesSelected.isEmpty() || weathersSelected.isEmpty()
                 || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
             return "1 = 0";

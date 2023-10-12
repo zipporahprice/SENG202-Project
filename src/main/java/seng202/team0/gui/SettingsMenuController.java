@@ -39,6 +39,7 @@ public class SettingsMenuController implements Initializable, MenuController {
                     if (newValue != null) {
                         currentView = (String) newValue;
                     }
+                    //MainController.javaScriptConnector.call("updateView");
                 });
     }
 

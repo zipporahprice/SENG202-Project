@@ -22,11 +22,20 @@
 .clickedButtonColor{
     -fx-background-color: linear-gradient(to right, rgba(143,138,255,1) 0%, rgba(116,182,250,1) 48%, rgba(0,212,255,1) 100%);
     -fx-background-radius: 32px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-alignment: center;
 }
 
 .menuButtonColor{
     -fx-background-color: #2c2c2c;
     -fx-background-radius: 40px;
+}
+.filterButtonColor{
+    -fx-background-color: #3c3c3c;
+    -fx-background-radius: 40px;
+    -fx-font-weight: bold;
 }
 .feathered-border-pane {
     -fx-background-color: transparent;
@@ -56,6 +65,14 @@
     -fx-font-weight: bold;
     -fx-font-size: 15;
     -fx-alignment: center-left;
+}
+
+.combo-box > .list-cell {
+    -fx-text-fill: white;
+}
+
+.choice-box > .label {
+    -fx-text-fill: white;
 }
 
 .address-button-add-style {

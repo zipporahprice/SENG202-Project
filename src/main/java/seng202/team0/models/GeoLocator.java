@@ -34,7 +34,7 @@ public class GeoLocator {
      * @param address user input to find latitude and longitude for
      */
 
-    public Location getLocation(String address) {
+    public Location getLocation(String address, String location) {
         String logMessage = String.format("Requesting geolocation from Nominatim for address:"
                 + " %s, New Zealand", address);
         log.error(logMessage);
@@ -54,8 +54,9 @@ public class GeoLocator {
             JSONArray results = (JSONArray) parser.parse(response.body());
 
             if (results.isEmpty()) {
-                showErrorAlert("Invalid Address",
-                        "The address provided is invalid or couldn't be found.");
+                showErrorAlert("Invalid " + location + " Address",
+                        "The " + location.toLowerCase()
+                                + " address provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 
@@ -88,7 +89,7 @@ public class GeoLocator {
      * @param lng The longitude coordinate.
      * @return Address corresponding to provided latitude and longitude, else "No Address Found".
      */
-    public String getAddress(Double lat, Double lng) {
+    public String getAddress(Double lat, Double lng, String location) {
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
@@ -104,8 +105,9 @@ public class GeoLocator {
             JSONObject result = (JSONObject) parser.parse(response.body());
 
             if (result.isEmpty()) {
-                showErrorAlert("Invalid Address",
-                        "The address provided is invalid or couldn't be found.");
+                showErrorAlert("Invalid " + location + " Address",
+                        "The " + location.toLowerCase()
+                                + " provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 

@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
-import seng202.team0.business.DataManager;
 import seng202.team0.repository.DatabaseManager;
 
 /**
@@ -32,7 +31,7 @@ public class ImportMenuController implements Initializable {
     public void openFileChooserDialog() {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(importDataButton.getScene().getWindow());
-        DataManager.getInstance().importFile(file);
+        DatabaseManager.getInstance().importFile(file);
     }
 
     public void resetDatabase() {
