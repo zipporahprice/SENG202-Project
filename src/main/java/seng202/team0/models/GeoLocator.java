@@ -55,7 +55,8 @@ public class GeoLocator {
 
             if (results.isEmpty()) {
                 showErrorAlert("Invalid " + location + " Address",
-                        "The " + location.toLowerCase() + " address provided is invalid or couldn't be found.");
+                        "The " + location.toLowerCase()
+                                + " address provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 
@@ -105,7 +106,8 @@ public class GeoLocator {
 
             if (result.isEmpty()) {
                 showErrorAlert("Invalid " + location + " Address",
-                        "The " + location.toLowerCase() + " provided is invalid or couldn't be found.");
+                        "The " + location.toLowerCase()
+                                + " provided is invalid or couldn't be found.");
                 return null; // or return a default location, depending on your use-case
             }
 

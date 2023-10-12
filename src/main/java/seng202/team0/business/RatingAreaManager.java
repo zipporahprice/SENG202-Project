@@ -2,6 +2,10 @@ package seng202.team0.business;
 
 import seng202.team0.models.Location;
 
+/**
+ * class for managing bounding boxes for area rating.
+ *
+ */
 public class RatingAreaManager {
 
     private static RatingAreaManager ratingAreaManager;

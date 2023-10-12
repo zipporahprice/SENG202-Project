@@ -208,8 +208,8 @@ public class FilteringMenuController implements Initializable, MenuController {
         List<CheckBox> checkBoxes = new ArrayList<>();
 
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof CheckBox checkBox) {
                         checkBoxes.add(checkBox);
                     }
@@ -229,8 +229,8 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     private void setCheckBoxesToState(AnchorPane parent, Boolean state) {
         for (Object child : parent.getChildren()) {
-            if (child instanceof VBox vBox) {
-                for (Object childCheckBox : vBox.getChildren()) {
+            if (child instanceof VBox vertBox) {
+                for (Object childCheckBox : vertBox.getChildren()) {
                     if (childCheckBox instanceof  CheckBox checkBox) {
                         checkBox.setSelected(state);
                         addToFilters(checkBox, parent);
