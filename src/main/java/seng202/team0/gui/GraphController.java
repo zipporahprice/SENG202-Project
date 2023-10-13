@@ -32,7 +32,7 @@ import seng202.team0.repository.SqliteQueryBuilder;
  * This class manages actions and views related to graphical representations of data.
  * It includes methods for initializing the window and handling navigation back to the main window.
  */
-public class GraphController implements Initializable {
+public class GraphController implements Initializable, MenuController {
 
     private static final Logger log = LogManager.getLogger(App.class);
     @FXML
@@ -72,6 +72,23 @@ public class GraphController implements Initializable {
 
         setPieGraph(pieChartMade, pieChartSqlTestData);
 
+
+    }
+
+
+    /**
+     * Update the data manager associated with the menu.
+     */
+    @Override
+    public void updateManager() {
+
+    }
+
+    /**
+     * Load initial data and settings into the menu manager.
+     */
+    @Override
+    public void loadManager() {
 
     }
 

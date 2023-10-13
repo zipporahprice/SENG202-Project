@@ -8,6 +8,12 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
 }
 
+.pieBackgroundColor{
+    -fx-background-color: #fefefe;
+    -fx-background-radius: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
+}
+
 .hamburgerStyle{
     -fx-background-color: #1e1e1e;
     -fx-background-radius: 30px;
@@ -127,4 +133,26 @@
 .custom-tool-tip {
     -fx-font-size: 15;
 }
+
+.chart-pie-label-line {
+    -fx-stroke: #fefefe;
+}
+
+.chart-pie-label {
+    -fx-fill: #fefefe;
+    -fx-font-size: 1em;
+}
+
+.chart-title {
+    -fx-text-fill: #fefefe;
+    -fx-font-size: 1.6em;
+}
+
+.chart-pie {
+    /*-fx-border-color: derive(-fx-pie-color, 0%);*/
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    /*-fx-border-width: 0px;*/
+}
+
 

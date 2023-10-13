@@ -109,7 +109,7 @@
                   <Tooltip styleClass="custom-tool-tip" text="Click To View the Help Page" />
                </tooltip>
             </Button>
-            <Button fx:id="graphsButton" layoutX="9.0" layoutY="479.0" mnemonicParsing="false" onAction="#loadGraphs" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="graphsButton" layoutX="9.0" layoutY="479.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="graphing">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10">
                      <ImageView fitHeight="38.0" preserveRatio="true">

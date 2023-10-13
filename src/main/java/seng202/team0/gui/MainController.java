@@ -146,22 +146,22 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         timeline.play();
     }
 
-    /**
-     * Loads the graph display.
-     */
-    public void loadGraphs() {
-        try {
-            FXMLLoader loadGraphs = new FXMLLoader(getClass()
-                    .getResource("/fxml/graph_window.fxml"));
-            Parent graphsViewParent = loadGraphs.load();
-
-            mainWindow.getChildren().clear();
-            mainWindow.getChildren().add(graphsViewParent);
-            AnchorPane.setRightAnchor(graphsViewParent, 0d);
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
+//    /**
+//     * Loads the graph display.
+//     */
+//    public void loadGraphs() {
+//        try {
+//            FXMLLoader loadGraphs = new FXMLLoader(getClass()
+//                    .getResource("/fxml/graph_window.fxml"));
+//            Parent graphsViewParent = loadGraphs.load();
+//
+//            mainWindow.getChildren().clear();
+//            mainWindow.getChildren().add(graphsViewParent);
+//            AnchorPane.setRightAnchor(graphsViewParent, 0d);
+//        } catch (IOException e) {
+//            log.error(e);
+//        }
+//    }
 
     /**
      * Loads menu display in FXML file into menuDisplayPane.
@@ -228,6 +228,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("help", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
+        } else if (Objects.equals("graphing", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/graph_window.fxml");
         }
     }
 
