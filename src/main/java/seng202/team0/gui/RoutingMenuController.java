@@ -29,10 +29,14 @@ import seng202.team0.business.RouteManager;
 import seng202.team0.models.Crash;
 import seng202.team0.models.Favourite;
 import seng202.team0.models.GeoLocator;
-import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.SqliteQueryBuilder;
+import seng202.team0.models.JavaScriptBridge;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.*;
 import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
 
 
@@ -357,24 +361,13 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
-    /**
-     * Calculates the overall severity value for a list of route coordinates.
-     * This method computes the average severity of crashes for each segment
-     * of the route and then multiplies this by the segment's distance using
-     * the Haversine formula. The final result is a product of the total average
-     * severity and total distance of the route. This value can be used to
-     * determine the overall risk or danger associated with a given route.
-     *
-     * @param coordinates A list of Location objects representing the coordinates
-     *                    of a route.
-     * @return The overall severity value computed for the route.
-     */
+
     public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
-        for (int i = 0; i < coordinates.size() - 1; i += 1) {
+        for (int i = 0; i < coordinates.size()-1; i+=1) {
             Location segmentStart = coordinates.get(i);
-            Location segmentEnd = coordinates.get(i + 1);
+            Location segmentEnd = coordinates.get(i+1);
             double distance = haversineDistance(segmentStart, segmentEnd);
             double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
             totalDistance += distance;
@@ -385,7 +378,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Calculates the Haversine distance between two geographic.
+     * Calculates the Haversine distance between two geographic
      * coordinates using the Haversine formula.
      * The Haversine formula is used to compute
      * the distance between two points on the Earth's surface

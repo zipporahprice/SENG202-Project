@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
@@ -138,7 +140,7 @@ public class JavaScriptBridge {
                 double lng = (double) coordJson.get("lng");
 
                 // Add a new Coordinate object to the list
-                coordinates.add(new Location(lat, lng));
+                coordinates.add(new Location(lat, lng)); // Ensure you have a Coordinate class with a constructor that accepts lat and lng
             }
             index = routeId;
             processRoute(routeId, coordinates);
