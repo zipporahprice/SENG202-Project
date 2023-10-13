@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -67,6 +68,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private Timeline progressBarTimeline;
     private Button selectedButton = null;
     //private String menuChoice;
+    @FXML
+    private ProgressIndicator loadingSpinner;
+
 
     private RoutingMenuController routingMenuController;
 
@@ -129,6 +133,20 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
                 animateProgressBarToFull(progressBar);
             }
         });
+    }
+
+    /**
+     * Makes the loading spinner visible while data is loading.
+     */
+    public void showLoadingSpinner() {
+        loadingSpinner.setVisible(true);
+    }
+
+    /**
+     * Hides the loading spinner after data has finished loading.
+     */
+    public void hideLoadingSpinner() {
+        loadingSpinner.setVisible(false);
     }
 
     /**
@@ -285,8 +303,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
     public void refreshData() {
+        showLoadingSpinner();
         MainController.javaScriptConnector.call("updateDataShown");
         disableRefresh();
+        hideLoadingSpinner();
     }
 
     public void quitApp() {
