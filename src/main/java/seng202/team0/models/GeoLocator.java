@@ -5,6 +5,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +46,11 @@ public class GeoLocator {
         String logMessage = String.format("Requesting geolocation from Nominatim for address:"
                 + " %s, New Zealand", address);
         log.error(logMessage);
-        address = address.replace(' ', '+');
+        address = address.replaceAll("[ ,/]", "+");
+        address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
+        address = address.replaceAll(" +", "+");
+        String[] addressParts = address.split("\\+");
+        address = addressParts[0] + "+" + addressParts[1] + "+" + addressParts[2];
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
@@ -83,6 +90,40 @@ public class GeoLocator {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public ObservableList<String> getAddressOptions(String address) {
+        String logMessage = String.format("Requesting options from Nominatim for address:"
+                + " %s, New Zealand", address);
+        log.error(logMessage);
+        address = address.replaceAll("[ ,/]", "+");
+        address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
+        address = address.replaceAll(" +", "+");
+        try {
+            // Creating the http request
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder(
+                    URI.create("https://nominatim.openstreetmap.org/search?q="
+                            + address + ",+New+Zealand&format=json")
+            ).build();
+            // Getting the response
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            // Parsing the json response
+            JSONParser parser = new JSONParser();
+            JSONArray results = (JSONArray) parser.parse(response.body());
+            ObservableList<String> output = FXCollections.observableArrayList();
+            for (Object result : results) {
+                JSONObject jsonObject = (JSONObject) result;
+                String output1 = (String) jsonObject.get("display_name");
+                output.add(output1);
+            }
+            return output;
+        } catch (IOException | ParseException | InterruptedException e) {
+            log.error("Exception while fetching address options: ", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 

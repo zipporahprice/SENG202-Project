@@ -5,44 +5,22 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.Tooltip?>
-<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController" >
+<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.RoutingMenuController">
 
     <children>
-        <TextField fx:id="startLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStart" prefHeight="50.0" prefWidth="300.0" promptText="Start Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-            <tooltip>
-                <Tooltip text = "Enter a Start Address" styleClass="custom-tool-tip"></Tooltip>
-            </tooltip>
-            <StackPane.margin>
-                <Insets left="335.0" top="100.0" />
-            </StackPane.margin></TextField>
-        <TextField fx:id="endLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getEnd" prefHeight="75.0" prefWidth="300.0" promptText="End Location" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-            <tooltip>
-                <Tooltip text = "Enter a Destination Address" styleClass="custom-tool-tip"></Tooltip>
-            </tooltip>
-            <StackPane.margin>
-                <Insets left="335.0" top="159.0" />
-            </StackPane.margin></TextField>
-        <TextField fx:id="stopLocation" maxHeight="50.0" maxWidth="300.0" onAction="#getStop" prefHeight="75" prefWidth="300" promptText="Add Stop" styleClass="address-box-style" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-            <tooltip>
-                <Tooltip text = "Enter a Stop" styleClass="custom-tool-tip"></Tooltip>
-            </tooltip>
-            <StackPane.margin>
-                <Insets left="335.0" top="218.0" />
-            </StackPane.margin></TextField>
         <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="135.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <font>
                 <Font name="System Bold" size="15.0" />
             </font>
             <tooltip>
-                <Tooltip text = "Add the Stop" styleClass="custom-tool-tip"></Tooltip>
+                <Tooltip styleClass="custom-tool-tip" text="Add the Stop" />
             </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="390.0" />
@@ -53,7 +31,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
             <tooltip>
-                <Tooltip text = "Remove a Stop" styleClass="custom-tool-tip"></Tooltip>
+                <Tooltip styleClass="custom-tool-tip" text="Remove a Stop" />
             </tooltip>
             <StackPane.margin>
                 <Insets left="480.0" top="390.0" />
@@ -64,7 +42,7 @@
                 <Insets left="335.0" top="440.0" />
             </StackPane.margin>
             <tooltip>
-                <Tooltip text = "Save a Route" styleClass="custom-tool-tip"></Tooltip>
+                <Tooltip styleClass="custom-tool-tip" text="Save a Route" />
             </tooltip>
             <prefWidth>280.0</prefWidth>
             <prefHeight>43.0</prefHeight>
@@ -77,7 +55,7 @@
         </Button>
         <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select Saved Route" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
             <tooltip>
-                <Tooltip text = "Select a Saved Route" styleClass="custom-tool-tip"></Tooltip>
+                <Tooltip styleClass="custom-tool-tip" text="Select a Saved Route" />
             </tooltip>
             <StackPane.margin>
                 <Insets left="335.0" top="490.0" />
@@ -107,7 +85,7 @@
         </AnchorPane>
       <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
           <tooltip>
-              <Tooltip text = "Journey by Car" styleClass="custom-tool-tip"></Tooltip>
+              <Tooltip styleClass="custom-tool-tip" text="Journey by Car" />
           </tooltip>
           <graphic>
               <ImageView fitHeight="43.0" fitWidth="49.0" preserveRatio="true">
@@ -122,7 +100,7 @@
       </Button>
       <Button id="bikeButton" fx:id="bikeButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
           <tooltip>
-              <Tooltip text = "Journey by Bicycle" styleClass="custom-tool-tip"></Tooltip>
+              <Tooltip styleClass="custom-tool-tip" text="Journey by Bicycle" />
           </tooltip>
           <graphic>
             <ImageView fitHeight="52.0" fitWidth="70.0" preserveRatio="true">
@@ -137,7 +115,7 @@
       </Button>
       <Button id="walkingButton" fx:id="walkingButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
           <tooltip>
-              <Tooltip text = "Journey by Walking" styleClass="custom-tool-tip"></Tooltip>
+              <Tooltip styleClass="custom-tool-tip" text="Journey by Walking" />
           </tooltip>
           <graphic>
             <ImageView fitHeight="56.0" fitWidth="64.0" preserveRatio="true">
@@ -152,7 +130,7 @@
       </Button>
         <Button fx:id="generateRoute" mnemonicParsing="false" onAction="#generateRouteAction" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Generate Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
             <tooltip>
-                <Tooltip text = "Click to Generate the Route" styleClass="custom-tool-tip"></Tooltip>
+                <Tooltip styleClass="custom-tool-tip" text="Click to Generate the Route" />
             </tooltip>
             <font>
                 <Font name="System Bold" size="15.0" />
@@ -166,7 +144,7 @@
         </Button>
       <Button fx:id="removeRoute" mnemonicParsing="false" onAction="#removeRoute" prefHeight="43" prefWidth="280" styleClass="address-button-style" stylesheets="@style.css" text="Clear Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
           <tooltip>
-              <Tooltip text = "Click to Remove the Route" styleClass="custom-tool-tip"></Tooltip>
+              <Tooltip styleClass="custom-tool-tip" text="Click to Remove the Route" />
           </tooltip>
           <font>
             <Font name="System Bold" size="15.0" />
@@ -178,5 +156,20 @@
             <Insets left="335.0" top="332.0" />
          </StackPane.margin>
       </Button>
+      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefWidth="150.0" promptText="Start Location" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="340.0" top="110.0" />
+         </StackPane.margin>
+      </ComboBox>
+      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefWidth="150.0" promptText="End Location" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="340.0" top="170.0" />
+         </StackPane.margin>
+      </ComboBox>
+      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefWidth="150.0" promptText="Stop Location" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="340.0" top="230.0" />
+         </StackPane.margin>
+      </ComboBox>
     </children>
 </StackPane>

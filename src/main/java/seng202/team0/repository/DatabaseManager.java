@@ -45,7 +45,7 @@ public class DatabaseManager {
      *
      * @param url Location of the db file or null
      */
-    public DatabaseManager(String url) {
+    private DatabaseManager(String url) {
         // Uses url or helper function to get the relative database path
         if (url == null || url.isEmpty()) {
             this.url = this.getDatabasePath();
@@ -80,18 +80,16 @@ public class DatabaseManager {
     /**
      * Initialises database and checks if populated.
      */
-    public void initialiseDatabase() {
+    public void initialiseDatabase(String fileName) {
         CrashManager manager = new CrashManager();
         List crashes = manager.getCrashLocations();
         if (crashes.size() == 0) {
             try {
-                CrashCsvImporter importer = new CrashCsvImporter();
-                // TODO replace with full file
                 InputStream stream = Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("files/crash_data_10k.csv");
+                        .getResourceAsStream(fileName);
                 File tempFile = File.createTempFile("tempCSV", ".csv");
                 Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                manager.addAllCrashesFromFile(importer, tempFile);
+                importFile(tempFile);
             } catch (IOException e) {
                 log.error(e);
             }
@@ -209,5 +207,4 @@ public class DatabaseManager {
         CrashCsvImporter importer = new CrashCsvImporter();
         manager.addAllCrashesFromFile(importer, file);
     }
-
 }
