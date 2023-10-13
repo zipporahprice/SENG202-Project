@@ -112,6 +112,9 @@ public class GraphController implements Initializable {
         return result;
     }
 
+    /**
+     * method to set chart options for dropdown, can only select 1 graph.
+     */
     public void setChartOptions() {
         System.out.println("set chart options");
         chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
@@ -150,8 +153,12 @@ public class GraphController implements Initializable {
                 });
     }
 
+    /**
+     * Dropdown choosing the data for pie graph.
+     */
     public void setPieChartDataOptions() {
-        chartDataChoiceBox.getItems().addAll("Region", "Severity", "Vehicle type", "Weather", "Year");
+        chartDataChoiceBox.getItems().addAll(
+                "Region", "Severity", "Vehicle type", "Weather", "Year");
         chartDataChoiceBox.setValue(currentChartData);
         chartDataChoiceBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
