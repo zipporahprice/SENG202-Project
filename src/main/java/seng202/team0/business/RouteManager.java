@@ -37,26 +37,56 @@ public class RouteManager {
         return route;
     }
 
+    /**
+     * Getter method for startLocation.
+     *
+     * @return String object of start location.
+     */
     public String getStartLocation() {
         return startLocation;
     }
 
+    /**
+     * Setter method for startLocation.
+     *
+     * @param location String object of start location
+     */
     public void setStartLocation(String location) {
         startLocation = location;
     }
 
+    /**
+     * Getter method for endLocation.
+     *
+     * @return String object of end location.
+     */
     public String getEndLocation() {
         return endLocation;
     }
 
+    /**
+     * Setter method for endLocation.
+     *
+     * @param location String object of end location
+     */
     public void setEndLocation(String location) {
         endLocation = location;
     }
 
+    /**
+     * Getter method for stopLocation.
+     *
+     * @return String object of stop location.
+     */
     public String getStopLocation() {
         return stopLocation;
     }
 
+    /**
+     * Setter method for stopLocation.
+     *
+     * @param location String object of stop location
+     */
     public void setStopLocation(String location) {
         stopLocation = location;
     }
