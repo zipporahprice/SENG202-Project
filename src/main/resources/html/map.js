@@ -4,7 +4,7 @@ let markers = [];
 var routes = [];
 var crashes = [];
 
-const heatmapCfg = {
+const cfg = {
     // radius should be small ONLY if scaleRadius is true (or small radius is intended)
     // if scaleRadius is false it will be the constant radius used in pixels
     "radius": 0.1,
@@ -34,7 +34,8 @@ let jsConnector = {
     updateDataShown: updateDataShown,
     drawingModeOn: drawingModeOn,
     drawingModeOff: drawingModeOff,
-    changeDrawingColourToRating: changeDrawingColourToRating
+    changeDrawingColourToRating: changeDrawingColourToRating,
+    updateView: updateView
 };
 
 /**
@@ -113,7 +114,7 @@ function updateEnabled() {
 function newHeatmap() {
     const heatmapShowing = map.hasLayer(heatmapLayer);
 
-    heatmapLayer = new HeatmapOverlay(heatmapCfg);
+    heatmapLayer = new HeatmapOverlay(cfg);
 
     if (heatmapShowing) {
         setHeatmapData();
@@ -123,7 +124,7 @@ function newHeatmap() {
 
 function updateDataShown() {
     setFilteringViewport();
-    eval(javaScriptBridge.crashes());
+    eval(javaScriptBridge.setCrashes());
     updateView();
 }
 
@@ -148,7 +149,7 @@ function adjustHeatmapRadiusBasedOnZoom() {
         newRadius = 0.1;  // For city-level detail
     }
 
-    heatmapLayer.heatmapCfg.radius=newRadius;
+    heatmapLayer.cfg.radius=newRadius;
 
 }
 
@@ -453,7 +454,6 @@ function calculateAverageSeverity(cluster) {
 }
 
 function resetLayers() {
-    newHeatmap()
     markerLayer.clearLayers();
 }
 
