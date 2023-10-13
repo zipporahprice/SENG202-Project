@@ -15,12 +15,33 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane fx:id="mainWindow" minHeight="400" minWidth="600"  xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TextArea?>
+<StackPane fx:id="mainWindow" minHeight="400" minWidth="600" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
+
          <StackPane.margin>
+
             <Insets />
-         </StackPane.margin></WebView>
+         </StackPane.margin>
+      </WebView>
+      <TabPane fx:id="tabPane" maxWidth="400" maxHeight="200" prefHeight="200" prefWidth="400" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="100.0">
+         <tabs>
+            <Tab fx:id="directionsTab" text="Directions">
+               <content>
+                  <Label text="Content for Tab 2"/>
+               </content>
+            </Tab>
+            <Tab text="Review">
+               <content>
+                  <Label text="Content for Tab 2"/>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>

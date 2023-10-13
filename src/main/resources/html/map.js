@@ -296,10 +296,19 @@ function displayRoute(routesIn, transportMode) {
         newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
+            var instructions = route.instructions;
+
 
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
             var routeId = getRouteIdentifier(route);
+
+            var instructionsString = instructions.map(instruction =>
+                `${instruction.text} - ${instruction.distance}m`
+            ).join('\n');
+
+            console.log(instructionsString); // Logs the instructions string to the browser's console
+
 
             // Check if this routeId has been selected before
             if (!routeIndexMap.has(routeId)) {
@@ -315,7 +324,8 @@ function displayRoute(routesIn, transportMode) {
             // Prepare and send the coordinates
             var coordinatesJson = JSON.stringify({
                 routeId: indexToSend, // Use the index retrieved from the map
-                coordinates: coordinates
+                coordinates: coordinates,
+                instructions: instructionsString
             });
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });

@@ -13,10 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -44,9 +41,17 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     public StackPane loadingScreen;
     public Label loadingPercentageLabel;
     @FXML
+    public static Tab directionsTab;
+    @FXML
     private WebView webView;
     @FXML
     private StackPane mainWindow;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private TextArea directionsTextArea;
+    @FXML
+    private TextArea reviewTextArea;
 
     @FXML
     private ProgressBar progressBar;
@@ -130,6 +135,15 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
                 animateProgressBarToFull(progressBar);
             }
         });
+    }
+
+
+    public void updateDirections(String directions){
+        directionsTextArea.setText(directions);
+    }
+
+    public void updateDangerInfo(String dangerInfo){
+        reviewTextArea.setText(dangerInfo);
     }
 
     /**

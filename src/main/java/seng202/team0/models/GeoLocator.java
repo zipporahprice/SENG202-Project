@@ -43,9 +43,6 @@ public class GeoLocator {
      */
 
     public Pair<Location, String> getLocation(String address) {
-        String logMessage = String.format("Requesting geolocation from Nominatim for address:"
-                + " %s, New Zealand", address);
-        log.error(logMessage);
         address = address.replaceAll("[ ,/]", "+");
         address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
         address = address.replaceAll(" +", "+");
@@ -92,9 +89,6 @@ public class GeoLocator {
     }
 
     public ObservableList<String> getAddressOptions(String address) {
-        String logMessage = String.format("Requesting options from Nominatim for address:"
-                + " %s, New Zealand", address);
-        log.error(logMessage);
         address = address.replaceAll("[ ,/]", "+");
         address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
         address = address.replaceAll(" +", "+");
