@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.models.Crash;
@@ -60,6 +63,7 @@ public class SqliteQueryBuilder {
     /**
      * Takes a table name and a mapping from variable name to variable and appends
      * a 'WITH' statement to the current query.
+     *
      * @param tableName name of the Common Table Expression
      * @param valuesMap Map object mapping from variable name and to variable value.
      * @return SQLiteQueryBuilder instance to chain methods

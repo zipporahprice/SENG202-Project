@@ -138,11 +138,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
 
-    public void updateDirections(String directions){
+    public void updateDirections(String directions) {
         directionsTextArea.setText(directions);
     }
 
-    public void updateDangerInfo(String dangerInfo){
+    public void updateDangerInfo(String dangerInfo) {
         reviewTextArea.setText(dangerInfo);
     }
 
@@ -313,6 +313,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         refreshButton.setDisable(false);
     }
 
+    /**
+     * This method refreshes the data
+     */
     public void refreshData() {
         showLoadingSpinner();
         MainController.javaScriptConnector.call("updateDataShown");

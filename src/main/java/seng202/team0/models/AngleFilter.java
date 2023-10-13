@@ -19,11 +19,11 @@ public class AngleFilter {
      * as not enough points are present to perform the filter.
      *
      * @param coordinates     The list of locations to filter.
-     * @param angleThreshold  The angle threshold, in degrees. Locations will be included
+     * @param angle  The angle threshold, in degrees. Locations will be included
      *                        if the angle they make with adjacent locations exceeds this threshold.
      * @return A list of filtered locations based on angle constraints.
      */
-    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angleThreshold) {
+    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angle) {
         if (coordinates.size() < 3) {
             return coordinates; // Not enough points to filter
         }
@@ -39,9 +39,9 @@ public class AngleFilter {
             while (j < coordinates.size()) {
                 Location next = coordinates.get(j);
 
-                double angle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
+                double testAngle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
 
-                if (Math.abs(angle) > angleThreshold) {
+                if (Math.abs(testAngle) > angle) {
                     filteredCoordinates.add(potentialNextLocation);
                     lastSelectedLocation = potentialNextLocation;
                     i = j;

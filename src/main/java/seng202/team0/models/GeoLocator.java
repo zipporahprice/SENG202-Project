@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -41,7 +40,6 @@ public class GeoLocator {
      *
      * @param address user input to find latitude and longitude for
      */
-
     public Pair<Location, String> getLocation(String address) {
         address = address.replaceAll("[ ,/]", "+");
         address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
@@ -88,6 +86,12 @@ public class GeoLocator {
         alert.showAndWait();
     }
 
+    /**
+     * Takes user input and searches for the closest address based off of the
+     * text supplied.
+     *
+     * @param address user input to find latitude and longitude for
+     */
     public ObservableList<String> getAddressOptions(String address) {
         address = address.replaceAll("[ ,/]", "+");
         address = address.replaceAll("\\++", " "); // Replace one or more + with a single space

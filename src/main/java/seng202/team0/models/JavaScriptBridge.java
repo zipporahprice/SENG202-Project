@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
@@ -134,16 +132,16 @@ public class JavaScriptBridge {
             List<Location> coordinates = new ArrayList<>();
 
             // Iterate over the items in the JSONArray
-            for (Object aJsonArray : jsonArray) {
+            for (Object ajsonArray : jsonArray) {
                 // Cast each item in the array to a JSONObject
-                JSONObject coordJson = (JSONObject) aJsonArray;
+                JSONObject coordJson = (JSONObject) ajsonArray;
 
                 // Extract latitude and longitude from the JSONObject
                 double lat = (double) coordJson.get("lat");
                 double lng = (double) coordJson.get("lng");
 
                 // Add a new Coordinate object to the list
-                coordinates.add(new Location(lat, lng)); // Ensure you have a Coordinate class with a constructor that accepts lat and lng
+                coordinates.add(new Location(lat, lng));
             }
             index = routeId;
             processRoute(routeId, coordinates);
@@ -200,14 +198,14 @@ public class JavaScriptBridge {
      * Sets the bounding circle variables in the RatingAreaManager singleton class.
      * Clears the bounding box variables.
      *
-     * @param latitude latitude of the bounding circle
+     * @param lat latitude of the bounding circle
      * @param longitude longitude of the bounding circle
      * @param radius radius of the bounding circle
      */
-    public void setRatingAreaManagerBoundingCircle(double latitude, double longitude, double radius) {
+    public void setRatingAreaManagerBoundingCircle(double lat, double longitude, double radius) {
         // Setting the Bounding Circle
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
-        ratingAreaManager.setBoundingCircleCentre(latitude, longitude);
+        ratingAreaManager.setBoundingCircleCentre(lat, longitude);
         ratingAreaManager.setBoundingCircleRadius(radius);
 
         // Clearing the Bounding Box
