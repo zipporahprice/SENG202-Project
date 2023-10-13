@@ -16,10 +16,11 @@ public class FavouriteTest {
     private final double endLat = -43.488116649999995;
     private final double endLong = 172.54213544359874;
     private final String filters = "Some Filters";
+    private final String transportMode = "car";
 
     @BeforeEach
     void setUp() {
-        favourite = new Favourite(startAddress, endAddress, startLat, startLong, endLat, endLong, filters);
+        favourite = new Favourite(startAddress, endAddress, startLat, startLong, endLat, endLong, filters, transportMode);
     }
 
 

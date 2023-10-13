@@ -93,7 +93,7 @@ public class SqliteQueryBuilder {
 
         if (table.equals("favourites")) {
             columns = " (start_address, end_address, start_lat, start_lng, "
-                    + "end_lat, end_lng, filters) values (?,?,?,?,?,?,?)";
+                    + "end_lat, end_lng, filters, transport_mode) values (?,?,?,?,?,?,?,?)";
         } else if (table.equals("crashes")) {
             columns = " (speed_limit, crash_year, "
                     + "crash_location1, crash_location2, severity, region, weather, "
@@ -269,6 +269,7 @@ public class SqliteQueryBuilder {
             ps.setDouble(5, toAdd.getEndLat());
             ps.setDouble(6, toAdd.getEndLong());
             ps.setString(7, toAdd.getFilters());
+            ps.setString(8, toAdd.getTransportMode());
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
@@ -362,7 +363,8 @@ public class SqliteQueryBuilder {
                     rs.getFloat("start_lng"),
                     rs.getFloat("end_lat"),
                     rs.getFloat("end_lng"),
-                    rs.getString("filters"));
+                    rs.getString("filters"),
+                    rs.getString("transport_mode"));
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return null;
