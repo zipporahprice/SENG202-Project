@@ -56,9 +56,9 @@ import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
 public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
-    private TextField startLocation;
+    private ComboBox<String> startLocation;
     @FXML
-    private TextField endLocation;
+    private ComboBox<String> endLocation;
     @FXML
     private TextField stopLocation;
     @FXML
@@ -86,6 +86,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
+
+    private String startAddress;
+    private String endAddress;
 
     private PopOver popOver;
 
@@ -202,19 +205,27 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     @FXML
     private Location getStart() {
-        String address = startLocation.getText().trim();
+        String address = startAddress;
         if (address.isEmpty()) {
             return null;
         }
         Pair<Location, String> startResult = geolocator.getLocation(address);
-        Location startMarker = startResult.getKey();
-        String errorMessageStart = startResult.getValue();
-        if (errorMessageStart != null) {
-            showPopOver(errorMessageStart, startLocation, 5);
-            return null; // You might want to return null here if there was an error.
+        return startResult.getKey();
+    }
+
+    @FXML
+    private void setStart() {
+        String selectedItem = startLocation.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            startAddress = selectedItem;
         }
-        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return startMarker;
+    }
+
+    @FXML
+    private void loadStartOptions() {
+        String address = startLocation.getEditor().getText().trim();
+        ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
+        startLocation.setItems(addressOptions);
     }
 
     /**
@@ -224,19 +235,27 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     @FXML
     private Location getEnd() {
-        String address = endLocation.getText().trim();
+        String address = endAddress;
         if (address.isEmpty()) {
             return null;
         }
         Pair<Location, String> endResult = geolocator.getLocation(address);
-        Location newMarker = endResult.getKey();
-        String errorMessage = endResult.getValue();
-        if (errorMessage != null) {
-            showPopOver(errorMessage, endLocation, 5);
-            return null; // You might want to return null here if there was an error.
+        return endResult.getKey();
+    }
+
+    @FXML
+    private void setEnd() {
+        String selectedItem = endLocation.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            endAddress = selectedItem;
         }
-        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
+    }
+
+    @FXML
+    private void loadEndOptions() {
+        String address = endLocation.getEditor().getText().trim();
+        ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
+        endLocation.setItems(addressOptions);
     }
 
     /**
@@ -305,8 +324,8 @@ public class RoutingMenuController implements Initializable, MenuController {
             stops.clear();
             generateRouteAction(favourite);
 
-            startLocation.setText(favourite.getStartAddress());
-            endLocation.setText(favourite.getEndAddress());
+            startLocation.getEditor().setText(favourite.getStartAddress());
+            endLocation.getEditor().setText(favourite.getEndAddress());
         }
     }
 
@@ -568,8 +587,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
         MainController.javaScriptConnector.call("removeRoute");
-        startLocation.setText("");
-        endLocation.setText("");
         modeChoice = null;
         if (selectedButton != null) {
             selectedButton.getStyleClass().remove("clickedButtonColor");
@@ -654,8 +671,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String stopLoc = route.getStopLocation();
 
         // update textFields according to data
-        startLocation.setText(startLoc);
-        endLocation.setText(endLoc);
+        startLocation.getEditor().setText(startLoc);
+        endLocation.getEditor().setText(endLoc);
         stopLocation.setText(stopLoc);
     }
 
@@ -665,8 +682,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void updateManager() {
         RouteManager route = RouteManager.getInstance();
-        route.setStartLocation(startLocation.getText());
-        route.setEndLocation(endLocation.getText());
+        route.setStartLocation(startLocation.getEditor().getText());
+        route.setEndLocation(endLocation.getEditor().getText());
         route.setStopLocation(stopLocation.getText());
     }
 
