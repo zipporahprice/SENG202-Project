@@ -291,16 +291,23 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         fadeTransition.play();
     }
 
+    /**
+     * Enables the refresh button.
+     */
     public void enableRefresh() {
         refreshButton.setDisable(false);
     }
 
+    /**
+     * Disables the refresh button.
+     */
     public void disableRefresh() {
         refreshButton.setDisable(false);
     }
 
     /**
-     * Refreshes the display of the data on the map.
+     * Refreshes the data with a loading spinner and calls
+     * to Javascript to update the data shown on Leaflet map.
      */
     public void refreshData() {
         showLoadingSpinner();
@@ -309,6 +316,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         hideLoadingSpinner();
     }
 
+    /**
+     * Quits app with closing the window.
+     */
     public void quitApp() {
         Platform.exit();
     }

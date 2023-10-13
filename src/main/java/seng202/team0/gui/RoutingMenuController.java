@@ -1,7 +1,5 @@
 package seng202.team0.gui;
 
-import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -393,10 +391,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Retrieves the overlapping points from a list of coordinates.
+     * Gets the overlapping points from the list of
+     * Location coordinates for rating the route.
      *
-     * @param coordinates List of Location objects representing coordinates.
-     * @return rating value.
+     * @param coordinates List of Location object coordinates
+     * @return double of route rating
      */
     public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
@@ -441,8 +440,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Takes in two locations of a start and end location and queries the database.
-     * for an average severity of crashes within a 1km radius along the line between.
+     * Takes in two locations of a start and end location and queries the database
+     * for an average severity of crashes within a 1km radius along the line between
      * the two locations.
      *
      * @param startLocation location the route segment starts at
@@ -450,26 +449,27 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @return double of average severity
      */
     public static double crossProductQuery(Location startLocation, Location endLocation) {
-        double start_long_rad = Math.toRadians(startLocation.getLongitude());
-        double start_lat_rad = Math.toRadians(startLocation.getLatitude());
-        double end_long_rad = Math.toRadians(endLocation.getLongitude());
-        double end_lat_rad = Math.toRadians(endLocation.getLatitude());
+        double startLatRad = Math.toRadians(startLocation.getLatitude());
+        double startLongRad = Math.toRadians(startLocation.getLongitude());
+        double endLatRad = Math.toRadians(endLocation.getLatitude());
+        double endLongRad = Math.toRadians(endLocation.getLongitude());
 
-        double start_x = Math.cos(start_lat_rad) * Math.cos(start_long_rad);
-        double start_y = Math.cos(start_lat_rad) * Math.sin(start_long_rad);
-        double start_z = Math.sin(start_lat_rad);
 
-        double end_x = Math.cos(end_lat_rad) * Math.cos(end_long_rad);
-        double end_y = Math.cos(end_lat_rad) * Math.sin(end_long_rad);
-        double end_z = Math.sin(end_lat_rad);
+        double startX = Math.cos(startLatRad) * Math.cos(startLongRad);
+        double startY = Math.cos(startLatRad) * Math.sin(startLongRad);
+        double startZ = Math.sin(startLatRad);
+
+        double endX = Math.cos(endLatRad) * Math.cos(endLongRad);
+        double endY = Math.cos(endLatRad) * Math.sin(endLongRad);
+        double endZ = Math.sin(endLatRad);
 
         Map<String, Number> constantsTable = new LinkedHashMap<>();
-        constantsTable.put("start_x", start_x);
-        constantsTable.put("start_y", start_y);
-        constantsTable.put("start_z", start_z);
-        constantsTable.put("end_x", end_x);
-        constantsTable.put("end_y", end_y);
-        constantsTable.put("end_z", end_z);
+        constantsTable.put("start_x", startX);
+        constantsTable.put("start_y", startY);
+        constantsTable.put("start_z", startZ);
+        constantsTable.put("end_x", endX);
+        constantsTable.put("end_y", endY);
+        constantsTable.put("end_z", endZ);
 
         double minLon = Math.min(startLocation.getLongitude(), endLocation.getLongitude());
         double maxLon = Math.max(startLocation.getLongitude(), endLocation.getLongitude());
@@ -477,31 +477,36 @@ public class RoutingMenuController implements Initializable, MenuController {
         double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude());
 
         // One kilometre in degrees
-        double oneKilometreInDegrees = 0.008;
+        double kilometreInDegrees = 0.008;
         double distance = 100;
 
         String tableName = "locations";
-        String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
-                + tableName + ".start_y) * (" + tableName + ".end_z - " + tableName + ".start_z) - (SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_y - " + tableName + ".start_y), 2) + POWER((SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_x - " + tableName + ".start_x) - (COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
-                + tableName + ".start_x) * (" + tableName + ".end_z - " + tableName + ".start_z), 2) + POWER((COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
-                + tableName + ".start_x) * (" + tableName + ".end_y - " + tableName + ".start_y) - (COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
-                + tableName + ".start_y) * (" + tableName + ".end_x - " + tableName + ".start_x), 2))";
-        String lineMagnitude = "SQRT(POWER(" + tableName + ".end_x - " + tableName + ".start_x, 2) + POWER("
-                + tableName + ".end_y - " + tableName + ".start_y, 2) + POWER("
-                + tableName + ".end_z - " + tableName + ".start_z, 2))";
-        String aSinTheta = "(ASIN(" + crossProductMagnitude + "/" + lineMagnitude + ")";
-        String worldDistance = aSinTheta + " * 6371.0) <= " + distance;
+        String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude))*SIN(RADIANS(longitude))-"
+                + tableName + ".start_y) * (" + tableName + ".end_z - "
+                + tableName + ".start_z) - (SIN(RADIANS(latitude)) - "
+                + tableName + ".start_z) * (" + tableName + ".end_y - "
+                + tableName + ".start_y), 2) + POWER((SIN(RADIANS(latitude)) - "
+                + tableName + ".start_z) * (" + tableName + ".end_x - "
+                + tableName + ".start_x) - (COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
+                + tableName + ".start_x) * (" + tableName + ".end_z - "
+                + tableName + ".start_z),2)+POWER((COS(RADIANS(latitude))*COS(RADIANS(longitude))-"
+                + tableName + ".start_x) * (" + tableName + ".end_y - "
+                + tableName + ".start_y) - (COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
+                + tableName + ".start_y) * (" + tableName + ".end_x - "
+                + tableName + ".start_x), 2))";
+        String lineMagnitude = "SQRT(POWER(" + tableName + ".end_x - " + tableName
+                + ".start_x, 2) + POWER(" + tableName + ".end_y - " + tableName
+                + ".start_y, 2) + POWER(" + tableName + ".end_z - " + tableName
+                + ".start_z, 2))";
+        String asinTheta = "(ASIN(" + crossProductMagnitude + "/" + lineMagnitude + ")";
+        String worldDistance = asinTheta + " * 6371.0) <= " + distance;
 
         FilterManager filterManager = FilterManager.getInstance();
         Location previousMin = filterManager.getViewPortMin();
         Location previousMax = filterManager.getViewPortMax();
 
-        filterManager.setViewPortMin(minLat - oneKilometreInDegrees,
-                minLon - oneKilometreInDegrees);
-        filterManager.setViewPortMax(maxLat + oneKilometreInDegrees,
-                maxLon + oneKilometreInDegrees);
+        filterManager.setViewPortMin(minLat - kilometreInDegrees, minLon - kilometreInDegrees);
+        filterManager.setViewPortMax(maxLat + kilometreInDegrees, maxLon + kilometreInDegrees);
 
         String filterWhere = filterManager.toString();
 
@@ -538,10 +543,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     /**
      * Generates a route, calculates its danger rating, and updates the UI.
      *
-     * @throws SQLException If a database error occurs during the process.
      */
     @FXML
-    private void generateRouteAction() throws SQLException {
+    private void generateRouteAction() {
         Location start = getStart();
         Location end = getEnd();
         if (start != null && end != null) {
@@ -560,7 +564,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      *
      * @param favourite Favourite object with locations of route and filters.
      */
-    private void generateRouteAction(Favourite favourite) throws SQLException {
+    private void generateRouteAction(Favourite favourite) {
         Location start = new Location(favourite.getStartLat(), favourite.getStartLong());
         Location end = new Location(favourite.getEndLat(), favourite.getEndLong());
 

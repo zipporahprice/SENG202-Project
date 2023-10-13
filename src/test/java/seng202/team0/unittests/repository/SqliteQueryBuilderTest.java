@@ -87,7 +87,7 @@ public class SqliteQueryBuilderTest {
         DatabaseManager.getInstance().resetDb();
 
         Favourite favourite = new Favourite("40 Little Oaks Drive", "University of Canterbury",
-                143.657, 34.534,141.657, 33.534, "");
+                143.657, 34.534,141.657, 33.534, "", "bike");
         List<Favourite> favourites = new ArrayList<>();
         favourites.add(favourite);
 

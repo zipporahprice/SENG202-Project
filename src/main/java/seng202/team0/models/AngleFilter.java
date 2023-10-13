@@ -23,7 +23,8 @@ public class AngleFilter {
      *                        if the angle they make with adjacent locations exceeds this threshold.
      * @return A list of filtered locations based on angle constraints.
      */
-    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angleThreshold) {
+    public static List<Location> filterLocationsByAngle(List<Location> coordinates,
+                                                        double angleThreshold) {
         if (coordinates.size() < 3) {
             return coordinates; // Not enough points to filter
         }
@@ -95,10 +96,10 @@ public class AngleFilter {
      *
      * @return The computed angle based on the bearing between the two points.
      */
-    private static double computeAngle(double lon, double lat, double firstLatitude, double secondLatitude) {
+    private static double computeAngle(double lon, double lat, double firstLat, double secondLat) {
         double numerator = Math.sin(lon) * Math.cos(lat);
-        double denominatorPartA = Math.cos(firstLatitude) * Math.sin(secondLatitude);
-        double denominatorPartB = Math.sin(firstLatitude) * Math.cos(secondLatitude) * Math.cos(lon);
+        double denominatorPartA = Math.cos(firstLat) * Math.sin(secondLat);
+        double denominatorPartB = Math.sin(firstLat) * Math.cos(secondLat) * Math.cos(lon);
         return Math.atan2(numerator, denominatorPartA - denominatorPartB);
     }
 }

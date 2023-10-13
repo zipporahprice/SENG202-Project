@@ -54,6 +54,9 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String setCrashes() {
+        // TODO get rid of timing performance
+        final double start = System.currentTimeMillis();
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("resetLayers();Promise.resolve().then(function () {");
 
@@ -70,6 +73,10 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {setHeatmapData();});");
+
+        // TODO get rid of timing performance
+        double end = System.currentTimeMillis();
+        System.out.println(end - start);
 
         return stringBuilder.toString();
     }
@@ -129,16 +136,18 @@ public class JavaScriptBridge {
             List<Location> coordinates = new ArrayList<>();
 
             // Iterate over the items in the JSONArray
-            for (Object aJsonArray : jsonArray) {
+            for (Object array : jsonArray) {
                 // Cast each item in the array to a JSONObject
-                JSONObject coordJson = (JSONObject) aJsonArray;
+                JSONObject coordJson = (JSONObject) array;
 
                 // Extract latitude and longitude from the JSONObject
                 double lat = (double) coordJson.get("lat");
                 double lng = (double) coordJson.get("lng");
 
                 // Add a new Coordinate object to the list
-                coordinates.add(new Location(lat, lng)); // Ensure you have a Coordinate class with a constructor that accepts lat and lng
+                // Ensure you have a Coordinate class with a
+                // constructor that accepts lat and lng
+                coordinates.add(new Location(lat, lng));
             }
             index = routeId;
             processRoute(routeId, coordinates);
@@ -166,7 +175,7 @@ public class JavaScriptBridge {
 
     }
 
-    public static Map<Long, List<Location>> getRouteMap() throws SQLException {
+    public static Map<Long, List<Location>> getRouteMap() {
         return routeMap;
     }
 
@@ -195,14 +204,15 @@ public class JavaScriptBridge {
      * Sets the bounding circle variables in the RatingAreaManager singleton class.
      * Clears the bounding box variables.
      *
-     * @param lat latitude of the bounding circle
-     * @param lon longitude of the bounding circle
+     * @param latitude latitude of the bounding circle
+     * @param longitude longitude of the bounding circle
      * @param radius radius of the bounding circle
      */
-    public void setRatingAreaManagerBoundingCircle(double lat, double lon, double radius) {
+    public void setRatingAreaManagerBoundingCircle(double latitude, double longitude,
+                                                   double radius) {
         // Setting the Bounding Circle
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
-        ratingAreaManager.setBoundingCircleCentre(lat, lon);
+        ratingAreaManager.setBoundingCircleCentre(latitude, longitude);
         ratingAreaManager.setBoundingCircleRadius(radius);
 
         // Clearing the Bounding Box

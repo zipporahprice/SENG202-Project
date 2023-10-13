@@ -95,7 +95,6 @@ public class GeoLocator {
      *
      * @param address The address query string to be searched for in Nominatim API.
      * @return An ObservableList of possible full address strings based on input address query.
-     * @throws RuntimeException if an exception occurs during the HTTP request or JSON parsing.
      */
     public ObservableList<String> getAddressOptions(String address) {
         String logMessage = String.format("Requesting options from Nominatim for address:"

@@ -1,6 +1,5 @@
 package seng202.team0.gui;
 
-import com.sun.tools.javac.Main;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -39,30 +38,29 @@ public class RatingAreaMenuController implements MenuController {
      */
     public void rateArea() {
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
-        Location boundingBoxMin = ratingAreaManager.getBoundingBoxMin();
-        Location boundingBoxMax = ratingAreaManager.getBoundingBoxMax();
-        Location boundingCircleCentre = ratingAreaManager.getBoundingCircleCentre();
-        double boundingCircleRadius = ratingAreaManager.getBoundingCircleRadius();
+        Location boxMin = ratingAreaManager.getBoundingBoxMin();
+        Location boxMax = ratingAreaManager.getBoundingBoxMax();
+        Location circleCentre = ratingAreaManager.getBoundingCircleCentre();
+        double circleRadius = ratingAreaManager.getBoundingCircleRadius();
 
         String where = null;
-        if (boundingBoxMax != null || boundingBoxMin != null) {
-            where = "minX >= " + boundingBoxMin.getLongitude()
-                    + " AND maxX <= " + boundingBoxMax.getLongitude()
-                    + " AND minY >= " + boundingBoxMin.getLatitude()
-                    + " AND maxY <= " + boundingBoxMax.getLatitude() + ")";
+        if (boxMin != null || boxMax != null) {
+            where = "minX >= " + boxMin.getLongitude()
+                    + " AND maxX <= " + boxMax.getLongitude()
+                    + " AND minY >= " + boxMin.getLatitude()
+                    + " AND maxY <= " + boxMax.getLatitude() + ")";
 
-        } else if (boundingCircleCentre != null) {
-            where = "minX >= " + (boundingCircleCentre.getLongitude() - boundingCircleRadius)
-                    + " AND maxX <= " + (boundingCircleCentre.getLongitude() + boundingCircleRadius)
-                    + " AND minY >= " + (boundingCircleCentre.getLatitude() - boundingCircleRadius)
-                    + " AND maxY <= " + (boundingCircleCentre.getLatitude() + boundingCircleRadius)
-                    + ")";
+        } else if (circleCentre != null) {
+            where = "minX >= " + (circleCentre.getLongitude() - circleRadius)
+                    + " AND maxX <= " + (circleCentre.getLongitude() + circleRadius)
+                    + " AND minY >= " + (circleCentre.getLatitude() - circleRadius)
+                    + " AND maxY <= " + (circleCentre.getLatitude() + circleRadius) + ")";
 
-            //          R-Tree module does not have this function
-            //            where = "MbrWithinCircle(minX, minY, maxX, maxY, "
-            //                    + boundingCircleCentre.getLongitude() + ", "
-            //                    + boundingCircleCentre.getLatitude() + ", "
-            //                    + boundingCircleRadius + "))";
+            // R-Tree module does not have this function
+            //where = "MbrWithinCircle(minX, minY, maxX, maxY, "
+            //        + boundingCircleCentre.getLongitude() + ", "
+            //        + boundingCircleCentre.getLatitude() + ", "
+            //        + boundingCircleRadius + "))";
         }
 
         if (where != null) {
@@ -77,13 +75,13 @@ public class RatingAreaMenuController implements MenuController {
             String filterWhereWithoutViewport = String.join(" AND ",
                     Arrays.copyOf(filterList, filterList.length - 4));
 
-            String rTreeFind = "object_id IN (SELECT id FROM rtree_index WHERE " + where;
+            String rtreeFind = "object_id IN (SELECT id FROM rtree_index WHERE " + where;
 
             List severityList = SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
-                    .where(filterWhereWithoutViewport + " AND " + rTreeFind)
+                    .where(filterWhereWithoutViewport + " AND " + rtreeFind)
                     .buildGetter();
 
             HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);
@@ -91,16 +89,16 @@ public class RatingAreaMenuController implements MenuController {
             if (resultHashMap.get("AVG(severity)") != null) {
                 double averageSeverity = (double) resultHashMap.get("AVG(severity)");
                 int total = (int) resultHashMap.get("COUNT()");
+                double score = 0.0;
                 if (total > 0) {
                     // Actual average severity will range from 1 to 8
                     // Score rating massaged to be out of 10 and in a range from 0 to 10.
-                    averageSeverity = ((averageSeverity - 1.0) / 7.0) * 10;
+                    score = ((averageSeverity - 1.0) / 7.0) * 10;
                 }
 
-                MainController.javaScriptConnector.call("changeDrawingColourToRating",
-                        averageSeverity);
-                ratingAreaText.setText("Danger: " + String.format("%.2f",
-                        averageSeverity) + " / 10");
+                MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
+                ratingAreaText.setText("Danger: "
+                        + String.format("%.2f", averageSeverity) + " / 10");
                 numCrashesAreaLabel.setText("Number of crashes in area: " + total);
             } else {
                 ratingAreaText.setText("Danger: 0.00/10");

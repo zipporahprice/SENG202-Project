@@ -113,7 +113,7 @@ public class Favourite {
     /**
      * Gets the transport mode associated with the favourite.
      *
-     * @return The transport mode.
+     * @return transport mode of the Favourite route.
      */
     public String getTransportMode() {
         return transportMode;
