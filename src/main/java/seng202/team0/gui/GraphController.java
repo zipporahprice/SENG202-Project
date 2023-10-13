@@ -138,6 +138,7 @@ public class GraphController implements Initializable, MenuController {
         List<HashMap<Object, Object>> dbList;
 
 
+
         if (columnOfInterest.equals("bicycle_involved")) {
             columnOfInterest = "SUM(bicycle_involved) AS bicycleCount, "
                     + "SUM(bus_involved) AS busCount, "
@@ -194,6 +195,18 @@ public class GraphController implements Initializable, MenuController {
                         break;
                     default:
                         log.error("Invalid severity type");
+                        break;
+                }
+            } else if (columnOfInterest.equals("holiday")) {
+                switch ((int) column) {
+                    case 0:
+                        column = "Not a holiday";
+                        break;
+                    case 1:
+                        column = "Was a holiday";
+                        break;
+                    default:
+                        log.error("Invalid holiday type");
                         break;
                 }
             }
@@ -265,7 +278,7 @@ public class GraphController implements Initializable, MenuController {
      */
     public void setPieChartDataOptions() {
         chartDataChoiceBox.getItems().addAll(
-                "Region", "Severity", "Vehicle Type", "Weather", "Year");
+                "Region", "Holiday", "Severity", "Vehicle Type", "Weather", "Year");
         chartDataChoiceBox.setValue(currentChartData);
         System.out.println(columnOfInterest + " COL OF INTEREST");
         chartDataChoiceBox.getSelectionModel()
@@ -277,6 +290,9 @@ public class GraphController implements Initializable, MenuController {
                     switch (currentChartData) {
                         case "Region":
                             columnOfInterest = "region";
+                            break;
+                        case "Holiday":
+                            columnOfInterest = "holiday";
                             break;
                         case "Severity":
                             columnOfInterest = "severity";
