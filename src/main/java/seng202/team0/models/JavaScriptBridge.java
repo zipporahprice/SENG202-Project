@@ -175,17 +175,8 @@ public class JavaScriptBridge {
 
 
     private void processRoute(long routeId, List<Location> coordinates) {
-        // Here, handle the coordinates associated with the given routeId
-        // This can involve storing the coordinates, analyzing them, etc.
-
         // Example: You might store the coordinates in a Map where the key is the routeId
         routeMap.put(routeId, coordinates);
-
-
-        // Now, you can retrieve and handle the coordinates of each route separately
-        // For example, for analysis, drawing, or other processing
-
-        // Printing routeId
 
     }
 

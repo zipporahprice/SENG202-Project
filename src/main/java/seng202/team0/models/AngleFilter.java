@@ -10,7 +10,7 @@ public class AngleFilter {
         }
 
         List<Location> filteredCoordinates = new ArrayList<>();
-        filteredCoordinates.add(coordinates.get(0)); // Always include the first point
+        filteredCoordinates.add(coordinates.get(0));
 
         Location lastSelectedLocation = coordinates.get(0);
         for (int i = 1; i < coordinates.size() - 1; i++) {
@@ -20,17 +20,16 @@ public class AngleFilter {
             while (j < coordinates.size()) {
                 Location next = coordinates.get(j);
 
-                // Calculate angle between lastSelectedLocation, potentialNextLocation, and next
                 double angle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
 
                 if (Math.abs(angle) > angleThreshold) {
-                    filteredCoordinates.add(potentialNextLocation); // Add the point if the angle exceeds the threshold
-                    lastSelectedLocation = potentialNextLocation; // Update last selected location
-                    i = j; // Skip to the next valid index
-                    break; // Exit the while loop to proceed with the next pair of points
+                    filteredCoordinates.add(potentialNextLocation);
+                    lastSelectedLocation = potentialNextLocation;
+                    i = j;
+                    break;
                 }
 
-                potentialNextLocation = next; // Update potential next location to be used for angle calculation
+                potentialNextLocation = next;
                 j++;
             }
         }
