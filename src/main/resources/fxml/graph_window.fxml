@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -14,11 +15,15 @@
          <AnchorPane fx:id="pieChartPane" layoutX="339.0" layoutY="131.0" prefHeight="451.0" prefWidth="539.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
                <PieChart fx:id="pieChartMade" layoutX="36.0" layoutY="26.0" prefHeight="400.0" prefWidth="467.0" />
+               <Label fx:id="holidayInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="250.0" style="-fx-text-fill: white;" text="*Holiday only includes Christmas/New Year, Easter, Queen's Birthday and Labour Weekend holiday period. " wrapText="true">
+                  <font>
+                     <Font size="10.0" />
+                  </font></Label>
             </children>
          </AnchorPane>
-          <AnchorPane layoutX="930.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="180.0" minWidth="250.0" prefHeight="180.0" prefWidth="262.0" styleClass="sideBarColor" stylesheets="@style.css">
+          <AnchorPane layoutX="897.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="180.0" prefHeight="83.0" prefWidth="180.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
-                  <Label layoutX="39.0" layoutY="14.0" prefHeight="74.0" prefWidth="183.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." wrapText="true" />
+                  <Label layoutX="29.0" layoutY="5.0" prefHeight="74.0" prefWidth="121.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." wrapText="true" />
             </children>
           </AnchorPane>
          <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
@@ -38,7 +43,7 @@
          </AnchorPane>
          <AnchorPane fx:id="graphsDataPane" layoutX="629.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
-               <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css">
+               <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css" visible="false">
                   <styleClass>
                      <String fx:value="filterButtonColor" />
                      <String fx:value="choice-box" />
@@ -49,6 +54,7 @@
                      <Font name="System Bold" size="15.0" />
                   </font>
                </Label>
+               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" styleClass="filterButtonColor" stylesheets="@style.css" />
             </children>
          </AnchorPane>
       </children>

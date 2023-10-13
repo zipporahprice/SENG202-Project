@@ -17,6 +17,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -49,10 +51,14 @@ public class GraphController implements Initializable, MenuController {
     private String currentChart = "Pie Graph";
     @FXML
     private ChoiceBox chartDataChoiceBox;
+    @FXML
+    private ComboBox chartDataComboBox;
     private static String currentChartData = "Region";
     @FXML
     private AnchorPane graphsDataPane;
 
+    @FXML
+    private Label holidayInfoLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -118,8 +124,11 @@ public class GraphController implements Initializable, MenuController {
             System.out.println("PIE GRAPH NOT VISIBLE");
         }
 
+        holidayInfoLabel.setVisible(false);
         if (currentChartData.equals("Weather")) {
             pieGraph.setLegendVisible(true);
+        } else if (currentChartData.equals("Holiday")) {
+            holidayInfoLabel.setVisible(true);
         }
 
 
@@ -277,11 +286,15 @@ public class GraphController implements Initializable, MenuController {
      * Dropdown choosing the data for pie graph.
      */
     public void setPieChartDataOptions() {
-        chartDataChoiceBox.getItems().addAll(
+        chartDataComboBox.getItems().addAll(
                 "Region", "Holiday", "Severity", "Vehicle Type", "Weather", "Year");
-        chartDataChoiceBox.setValue(currentChartData);
+        chartDataComboBox.setValue(currentChartData);
+
+//        chartDataChoiceBox.getItems().addAll(
+//                "Region", "Holiday", "Severity", "Vehicle Type", "Weather", "Year");
+//        chartDataChoiceBox.setValue(currentChartData);
         System.out.println(columnOfInterest + " COL OF INTEREST");
-        chartDataChoiceBox.getSelectionModel()
+        chartDataComboBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         currentChartData = (String) newValue;
