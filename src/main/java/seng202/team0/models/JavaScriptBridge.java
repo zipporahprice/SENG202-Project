@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RatingAreaManager;
@@ -201,7 +199,7 @@ public class JavaScriptBridge {
      * @param longitude longitude of the bounding circle
      * @param radius radius of the bounding circle
      */
-    public void setRatingAreaManagerBoundingCircle(double latitude, double longitude, double radius) {
+    public void setRatingAreaManagerBoundingCircle(double latitude,double longitude,double radius) {
         // Setting the Bounding Circle
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         ratingAreaManager.setBoundingCircleCentre(latitude, longitude);

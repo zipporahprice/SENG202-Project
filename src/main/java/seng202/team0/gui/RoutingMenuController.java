@@ -444,6 +444,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      * Takes in two locations of a start and end location and queries the database
      * for an average severity of crashes within a 1km radius along the line between
      * the two locations
+     *
      * @param startLocation location the route segment starts at
      * @param endLocation location the route segment ends at
      * @return double of average severity
@@ -576,6 +577,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     /**
      * Updates the ratingText label's text to the rating provided.
+     *
      * @param rating string of numeric rating.
      */
     public void updateRatingLabel(String rating) {
@@ -585,15 +587,16 @@ public class RoutingMenuController implements Initializable, MenuController {
     /**
      * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
      * on the GUI's ratingText label through getting the overlapping points of each segment.
+     *
      * @throws SQLException
+     *
      */
     public static void ratingUpdate() throws SQLException {
         List<Location> coordinates = JavaScriptBridge.getRouteMap()
-                .get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
-        if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
-            double rating = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
-            RoutingMenuController.controller.updateRatingLabel
-                    (Double.toString(Math.round(rating))); // Update the UI
+                .get(JavaScriptBridge.getIndex());
+        if (coordinates != null && !coordinates.isEmpty()) {
+            double rating = getOverlappingPoints(coordinates);
+            RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating)));
         } else {
             System.out.println("No coordinates available for routeId: 0");
         }

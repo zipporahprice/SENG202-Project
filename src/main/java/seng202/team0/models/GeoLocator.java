@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -91,6 +90,13 @@ public class GeoLocator {
         alert.showAndWait();
     }
 
+    /**
+     * Fetches and parses possible address options from the Nominatim API using a query string.
+     *
+     * @param address The address query string to be searched for in Nominatim API.
+     * @return An ObservableList of possible full address strings based on input address query.
+     * @throws RuntimeException if an exception occurs during the HTTP request or JSON parsing.
+     */
     public ObservableList<String> getAddressOptions(String address) {
         String logMessage = String.format("Requesting options from Nominatim for address:"
                 + " %s, New Zealand", address);
@@ -174,11 +180,4 @@ public class GeoLocator {
         return "No Address Found";
     }
 
-    /*Need to check out the API usage policies before getting into this*/
-    //    public Collection<String> getAddressSuggestions(String userInput) {
-    //        // Call the Nominatim API similarly to getLocation but fetch
-    //        multiple results and return them
-    //        // For now, let's assume it returns a dummy list for simplicity
-    //        return Arrays.asList("123 Main St", "456 Elm St");
-    //    }
 }
