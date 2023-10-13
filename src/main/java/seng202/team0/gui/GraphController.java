@@ -135,19 +135,48 @@ public class GraphController implements Initializable, MenuController {
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
+        List<HashMap<Object, Object>> dbList;
 
-        List<HashMap<Object, Object>> dbList = SqliteQueryBuilder.create()
-                .select(columnOfInterest + ", COUNT(*)")
-                .from("crashes")
-                .groupBy(columnOfInterest)
-                .build();
+
+        if (columnOfInterest.equals("bicycle_involved")) {
+            columnOfInterest = "SUM(bicycle_involved) AS bicycleCount, "
+                    + "SUM(bus_involved) AS busCount, "
+                    + "SUM(car_involved) AS carCount, "
+                    + "SUM(moped_involved) AS mopedCount, "
+                    + "SUM(motorcycle_involved) AS motorcycleCount, "
+                    + "SUM(parked_vehicle_involved) AS pVehicleCount, "
+                    + "SUM(pedestrian_involved) AS pedestrianCount, "
+                    + "SUM(school_bus_involved) AS schoolBusCount, "
+                    + "SUM(train_involved) AS trainCount, "
+                    + "SUM(truck_involved) AS truckCount";
+
+
+            dbList = SqliteQueryBuilder.create()
+                    .select(columnOfInterest)
+                    .from("crashes")
+                    .build();
+        } else {
+            dbList = SqliteQueryBuilder.create()
+                    .select(columnOfInterest + ", COUNT(*)")
+                    .from("crashes")
+                    .groupBy(columnOfInterest)
+                    .build();
+        }
 
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
+        System.out.println(dbList);
+        for (HashMap<Object, Object> hash1 : dbList) {
+            Object column1 = hash1.get(columnOfInterest);
+            double count1 = ((Number) hash1.get("COUNT(*)")).doubleValue();
+            System.out.println(column1 + " " + count1);
+        }
+
         for (HashMap<Object, Object> hash : dbList) {
             Object column = hash.get(columnOfInterest);
             double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+            System.out.println(column + " " + count);
 
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {
@@ -247,23 +276,19 @@ public class GraphController implements Initializable, MenuController {
                     // Adjusted for the new option.
                     switch (currentChartData) {
                         case "Region":
-                            // Code to show the regions pie chart.
                             columnOfInterest = "region";
                             break;
                         case "Severity":
-                            // Code to show severity pie chart.
                             columnOfInterest = "severity";
                             break;
-                        case "Vehicle type":
+                        case "Vehicle Type":
                             //code to show vehicle type pie chart.
+                            columnOfInterest = "bicycle_involved";
                             break;
                         case "Weather":
-                            //code to show weather pie chart
                             columnOfInterest = "weather";
-
                             break;
                         case "Year":
-                            //code to show the year data pie chart
                             columnOfInterest = "crash_year";
                             break;
                         default:
