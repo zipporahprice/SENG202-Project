@@ -51,7 +51,8 @@ public class SqliteQueryBuilderTest {
     @Test
     void testSelect() {
         builder.select("id, ltd, lng");
-        Assertions.assertEquals("SELECT id, ltd, lng ", builder.getQuery());
+        String expectedQuery = "SELECT id, ltd, lng ";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
     }
 
     /**
@@ -60,7 +61,8 @@ public class SqliteQueryBuilderTest {
     @Test
     void testFrom() {
         builder.from("crashes");
-        Assertions.assertEquals("FROM crashes ", builder.getQuery());
+        String expectedQuery = "FROM crashes ";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
     }
 
     /**
@@ -69,7 +71,8 @@ public class SqliteQueryBuilderTest {
     @Test
     void testWhere() {
         builder.where("age > 30, speed > 30");
-        Assertions.assertEquals("WHERE age > 30, speed > 30 ", builder.getQuery());
+        String expectedQuery = "WHERE age > 30, speed > 30 ";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
     }
 
     /**
