@@ -15,17 +15,15 @@ public class AngleFilter {
     /**
      * Filters the provided list of locations, ensuring the angle between consecutive
      * points is above the given threshold.
-     * <p>
      * If the list contains less than three locations, the original list is returned
      * as not enough points are present to perform the filter.
-     * </p>
      *
      * @param coordinates     The list of locations to filter.
      * @param angleThreshold  The angle threshold, in degrees. Locations will be included
      *                        if the angle they make with adjacent locations exceeds this threshold.
      * @return A list of filtered locations based on angle constraints.
      */
-    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angleThreshold) {
+    public static List<Location> filterLocationsByAngle(List<Location>coordinates, double angleThreshold) {
         if (coordinates.size() < 3) {
             return coordinates; // Not enough points to filter
         }
@@ -55,18 +53,22 @@ public class AngleFilter {
             }
         }
 
-        filteredCoordinates.add(coordinates.get(coordinates.size() - 1)); // Always include the last point
+        filteredCoordinates.add(coordinates.get(coordinates.size() - 1));
         return filteredCoordinates;
     }
 
     /**
-     * Calculates the angle difference between two consecutive points with respect to a reference point.
+     * Calculates the angle difference between two consecutive
+     * points with respect to a reference point.
      * The angle is calculated based on the bearing between the points. The bearing is the
      * angle formed between the north direction and the line connecting the two points.
+     *
      * @param prev The reference location point.
      * @param curr The first location point.
      * @param next The second location point.
-     * @return The difference in degrees between the bearings of the two segments formed by the provided points.
+     *
+     * @return The difference in degrees between the bearings of
+     * the two segments formed by the provided points.
      */
     private static double calculateAngle(Location prev, Location curr, Location next) {
         // Convert latitude and longitude to radians for calculation
