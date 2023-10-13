@@ -1,21 +1,24 @@
 package seng202.team0.models;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import seng202.team0.business.CrashManager;
-import seng202.team0.business.FilterManager;
-import seng202.team0.business.RatingAreaManager;
-import seng202.team0.gui.MainController;
-import seng202.team0.gui.RoutingMenuController;
-import seng202.team0.gui.SettingsMenuController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import seng202.team0.business.CrashManager;
+import seng202.team0.business.FilterManager;
+import seng202.team0.business.RatingAreaManager;
+import seng202.team0.gui.MainController;
+import seng202.team0.gui.RoutingMenuController;
+import seng202.team0.gui.SettingsMenuController;
+
 
 
 /**
@@ -103,6 +106,17 @@ public class JavaScriptBridge {
         System.out.println(string1);
     }
 
+    /**
+     * Processes and sends the coordinates received in a JSON format.
+     * This method parses the provided JSON string to extract routeId and
+     * a list of coordinates, and subsequently performs necessary operations
+     * such as updating ratings or processing routes.
+     *
+     * @param coordinatesJson A JSON formatted string containing a routeId and
+     *                        an array of coordinate objects with latitude and longitude values.
+     *
+     * @throws RuntimeException if there's an SQL exception during processing.
+     */
     public void sendCoordinates(String coordinatesJson) {
         JSONParser parser = new JSONParser();
         try {

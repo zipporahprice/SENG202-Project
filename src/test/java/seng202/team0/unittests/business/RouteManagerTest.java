@@ -1,8 +1,16 @@
 package seng202.team0.unittests.business;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team0.business.RouteManager;
+import seng202.team0.models.Route;
+import seng202.team0.repository.DatabaseManager;
+import seng202.team0.repository.SqliteQueryBuilder;
+
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 public class RouteManagerTest {
 
@@ -33,6 +41,17 @@ public class RouteManagerTest {
         routeManager.setStopLocation("321 Queen Street");
         routeManager = RouteManager.getInstance();
         Assertions.assertEquals("321 Queen Street", routeManager.getStopLocation());
+    }
+
+    @Test
+    void testGetFavourites() {
+        DatabaseManager.getInstance().resetDb();
+        RouteManager routeManager = RouteManager.getInstance();
+        List<?> favourites = routeManager.getFavourites();
+        List<?> expectedFavourites = SqliteQueryBuilder.create()
+                .select("id").from("favourites").buildGetter();
+
+        Assertions.assertEquals(expectedFavourites.size(), favourites.size());
     }
 
 }
