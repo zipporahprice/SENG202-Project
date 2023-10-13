@@ -114,6 +114,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         transportButtons.add(carButton);
         transportButtons.add(bikeButton);
         transportButtons.add(walkingButton);
+        selectedButton = carButton;
 
         removeRoute.setDisable(true);
 
@@ -643,13 +644,16 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     /**
      * Enacts the selection of a given button when a click event occurs.
+     * If the button is not already selected, it selects it.
+     * Otherwise, it does nothing.
      *
      * @param event An ActionEvent called when the button is pressed.
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
-        modeChoice = (String) chosenButton.getUserData();
-        selectButton(chosenButton);
+        if (!Objects.equals(chosenButton, selectedButton)) {
+            selectButton(chosenButton);
+        }
     }
 
     /**
