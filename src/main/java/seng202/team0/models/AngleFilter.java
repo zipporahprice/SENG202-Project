@@ -97,8 +97,8 @@ public class AngleFilter {
      */
     private static double computeAngle(double lon, double lat, double firstLatitude, double secondLatitude) {
         double numerator = Math.sin(lon) * Math.cos(lat);
-        double denominatorPartA = Math.cos(firstLatitude)*Math.sin(secondLatitude);
-        double denominatorPartB = Math.sin(firstLatitude)*Math.cos(secondLatitude)*Math.cos(lon);
+        double denominatorPartA = Math.cos(firstLatitude) * Math.sin(secondLatitude);
+        double denominatorPartB = Math.sin(firstLatitude) * Math.cos(secondLatitude) * Math.cos(lon);
         return Math.atan2(numerator, denominatorPartA - denominatorPartB);
     }
 }
