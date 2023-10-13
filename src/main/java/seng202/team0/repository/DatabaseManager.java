@@ -81,19 +81,26 @@ public class DatabaseManager {
      * Initialises database and checks if populated.
      */
     public void initialiseDatabase(String fileName) {
+        double start = System.currentTimeMillis();
         CrashManager manager = new CrashManager();
-        List crashes = manager.getCrashLocations();
+        List<?> crashes = manager.getCrashLocations();
         if (crashes.size() == 0) {
             try {
                 InputStream stream = Thread.currentThread().getContextClassLoader()
                         .getResourceAsStream(fileName);
                 File tempFile = File.createTempFile("tempCSV", ".csv");
+                assert stream != null;
                 Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 importFile(tempFile);
+
+                executeSqlScript(getClass().getResourceAsStream("/sql/populate_rtree.sql"));
             } catch (IOException e) {
                 log.error(e);
             }
         }
+
+        double end = System.currentTimeMillis();
+        System.out.println(end - start);
     }
 
     /**
@@ -170,7 +177,8 @@ public class DatabaseManager {
      *                sql statements for execution (separated by --SPLIT)
      */
     private void executeSqlScript(InputStream sqlFile) {
-        try {
+        try (Connection conn = this.connect();
+             Statement statementConnection = conn.createStatement()) {
             // Setting up reader with input stream
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sqlFile));
 
@@ -187,8 +195,6 @@ public class DatabaseManager {
             String[] statements = strings.toString().split("--SPLIT");
 
             // Execute statements on tables
-            Connection conn = this.connect();
-            Statement statementConnection = conn.createStatement();
             for (String statement : statements) {
                 statementConnection.execute(statement);
             }
