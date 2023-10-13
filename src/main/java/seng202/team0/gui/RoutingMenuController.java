@@ -92,6 +92,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private String stopAddress;
 
     private PopOver popOver;
+    private List<Button> transportButtons = new ArrayList<>();
 
 
     /**
@@ -105,10 +106,13 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
-        modeChoice = "car"; //temporary solution to auto choose car.
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
+        transportButtons.add(carButton);
+        transportButtons.add(bikeButton);
+        transportButtons.add(walkingButton);
+
         removeRoute.setDisable(true);
 
 
@@ -300,7 +304,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude(), "End");
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(),
-                end.getLongitude(), filters);
+                end.getLongitude(), filters, modeChoice);
 
         List<Favourite> favourites = new ArrayList<>();
         favourites.add(favourite);
@@ -353,6 +357,11 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             startLocation.getEditor().setText(favourite.getStartAddress());
             endLocation.getEditor().setText(favourite.getEndAddress());
+            for (Button button : transportButtons) {
+                if (button.getUserData().equals(favourite.getTransportMode())) {
+                    selectButton(button);
+                }
+            }
         }
     }
 
@@ -631,36 +640,32 @@ public class RoutingMenuController implements Initializable, MenuController {
 
 
     /**
-     * Toggles between the transport mode buttons.
-     * When one button is selected, the previously selected button (if any) is deselected.
+     * Enacts the selection of a given button when a click event occurs.
      *
-     * @param event An ActionEvent called when the button is pressed
+     * @param event An ActionEvent called when the button is pressed.
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
-
         modeChoice = (String) chosenButton.getUserData();
+        selectButton(chosenButton);
+    }
 
-        if (Objects.equals(chosenButton, selectedButton)) {
-            modeChoice = null;
-            selectedButton = null;
-            chosenButton.getStyleClass().remove("clickedButtonColor");
-            chosenButton.getStyleClass().add("hamburgerStyle");
-        } else if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) {
+    /**
+     * Takes a button to be selected.
+     * If a different button is already selected, deselects this button and selects the new one.
+     * Otherwise, just selects the new one.
+     *
+     * @param chosenButton Button to be selected.
+     */
+    public void selectButton(Button chosenButton) {
+        if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) {
             selectedButton.getStyleClass().remove("clickedButtonColor");
             selectedButton.getStyleClass().add("hamburgerStyle");
-            selectedButton = chosenButton;
-            chosenButton.getStyleClass().remove("hamburgerStyle");
-            chosenButton.getStyleClass().add("clickedButtonColor");
-            modeChoice = (String) chosenButton.getUserData();
-
-        } else {
-            selectedButton = chosenButton;
-            chosenButton.getStyleClass().remove("hamburgerStyle");
-            chosenButton.getStyleClass().add("clickedButtonColor");
-            modeChoice = (String) chosenButton.getUserData();
-
         }
+        selectedButton = chosenButton;
+        chosenButton.getStyleClass().remove("hamburgerStyle");
+        chosenButton.getStyleClass().add("clickedButtonColor");
+        modeChoice = (String) chosenButton.getUserData();
     }
 
     /**
@@ -674,11 +679,17 @@ public class RoutingMenuController implements Initializable, MenuController {
         String startLoc = route.getStartLocation();
         String endLoc = route.getEndLocation();
         String stopLoc = route.getStopLocation();
+        String mode = route.getTransportMode();
 
         // update textFields according to data
         startLocation.getEditor().setText(startLoc);
         endLocation.getEditor().setText(endLoc);
         stopLocation.getEditor().setText(stopLoc);
+        for (Button button : transportButtons) {
+            if (button.getUserData().equals(mode)) {
+                selectButton(button);
+            }
+        }
     }
 
     /**
@@ -690,6 +701,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setStartLocation(startLocation.getEditor().getText());
         route.setEndLocation(endLocation.getEditor().getText());
         route.setStopLocation(stopLocation.getEditor().getText());
+        route.setTransportMode(modeChoice);
     }
 
 

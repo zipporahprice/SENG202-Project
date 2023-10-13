@@ -14,6 +14,7 @@ public class RouteManager {
     private String startLocation;
     private String endLocation;
     private String stopLocation;
+    private String transportMode;
 
     /**
      * Initializer of the RouteManager class that sets default null values for
@@ -23,6 +24,7 @@ public class RouteManager {
         startLocation = null;
         endLocation = null;
         stopLocation = null;
+        transportMode = "car";
     }
 
     /**
@@ -115,6 +117,14 @@ public class RouteManager {
         startLocation = null;
         endLocation = null;
         stopLocation = null;
+    }
+
+    public void setTransportMode(String mode) {
+        transportMode = mode;
+    }
+
+    public String getTransportMode() {
+        return transportMode;
     }
 
 }
