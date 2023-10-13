@@ -299,6 +299,9 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         refreshButton.setDisable(false);
     }
 
+    /**
+     * Refreshes the display of the data on the map.
+     */
     public void refreshData() {
         showLoadingSpinner();
         MainController.javaScriptConnector.call("updateDataShown");

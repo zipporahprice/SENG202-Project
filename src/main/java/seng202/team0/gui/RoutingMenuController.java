@@ -1,5 +1,6 @@
 package seng202.team0.gui;
 
+import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -24,23 +26,15 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import org.controlsfx.control.PopOver;
-import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
 import seng202.team0.models.Crash;
 import seng202.team0.models.Favourite;
 import seng202.team0.models.GeoLocator;
+import seng202.team0.models.JavaScriptBridge;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.SqliteQueryBuilder;
-import seng202.team0.models.JavaScriptBridge;
-
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.*;
-import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
-
-
 
 /**
  * The `RoutingMenuController` class manages user

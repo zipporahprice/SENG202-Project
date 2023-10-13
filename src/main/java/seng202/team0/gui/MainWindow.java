@@ -30,7 +30,8 @@ public class MainWindow extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         double estimatedTitleBarHeight = 30;
 
-        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight() - estimatedTitleBarHeight);
+        Scene scene = new Scene(root, screenBounds.getWidth(),
+                screenBounds.getHeight() - estimatedTitleBarHeight);
 
         primaryStage.setScene(scene);
         MainController baseController = baseLoader.getController();

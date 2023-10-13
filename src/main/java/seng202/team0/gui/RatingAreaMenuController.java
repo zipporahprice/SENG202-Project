@@ -1,10 +1,9 @@
 package seng202.team0.gui;
 
+import com.sun.tools.javac.Main;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -58,11 +57,11 @@ public class RatingAreaMenuController implements MenuController {
                     + " AND minY >= " + (boundingCircleCentre.getLatitude() - boundingCircleRadius)
                     + " AND maxY <= " + (boundingCircleCentre.getLatitude() + boundingCircleRadius) + ")";
 
-//          R-Tree module does not have this function
-//            where = "MbrWithinCircle(minX, minY, maxX, maxY, "
-//                    + boundingCircleCentre.getLongitude() + ", "
-//                    + boundingCircleCentre.getLatitude() + ", "
-//                    + boundingCircleRadius + "))";
+            //          R-Tree module does not have this function
+            //            where = "MbrWithinCircle(minX, minY, maxX, maxY, "
+            //                    + boundingCircleCentre.getLongitude() + ", "
+            //                    + boundingCircleCentre.getLatitude() + ", "
+            //                    + boundingCircleRadius + "))";
         }
 
         if (where != null) {
@@ -97,8 +96,10 @@ public class RatingAreaMenuController implements MenuController {
                     averageSeverity = ((averageSeverity - 1.0) / 7.0) * 10;
                 }
 
-                MainController.javaScriptConnector.call("changeDrawingColourToRating", averageSeverity);
-                ratingAreaText.setText("Danger: " + String.format("%.2f", averageSeverity) + " / 10");
+                MainController.javaScriptConnector.call("changeDrawingColourToRating",
+                        averageSeverity);
+                ratingAreaText.setText("Danger: " + String.format("%.2f",
+                        averageSeverity) + " / 10");
                 numCrashesAreaLabel.setText("Number of crashes in area: " + total);
             } else {
                 ratingAreaText.setText("Danger: 0.00/10");
