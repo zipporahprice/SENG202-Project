@@ -55,7 +55,8 @@ public class RatingAreaMenuController implements MenuController {
             where = "minX >= " + (boundingCircleCentre.getLongitude() - boundingCircleRadius)
                     + " AND maxX <= " + (boundingCircleCentre.getLongitude() + boundingCircleRadius)
                     + " AND minY >= " + (boundingCircleCentre.getLatitude() - boundingCircleRadius)
-                    + " AND maxY <= " + (boundingCircleCentre.getLatitude() + boundingCircleRadius) + ")";
+                    + " AND maxY <= " + (boundingCircleCentre.getLatitude() + boundingCircleRadius)
+                    + ")";
 
             //          R-Tree module does not have this function
             //            where = "MbrWithinCircle(minX, minY, maxX, maxY, "

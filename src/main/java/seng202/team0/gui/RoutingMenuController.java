@@ -1,6 +1,7 @@
 package seng202.team0.gui;
 
 import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -391,13 +392,18 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
-
+    /**
+     * Retrieves the overlapping points from a list of coordinates.
+     *
+     * @param coordinates List of Location objects representing coordinates.
+     * @return rating value.
+     */
     public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
-        for (int i = 0; i < coordinates.size()-1; i+=1) {
+        for (int i = 0; i < coordinates.size() - 1; i += 1) {
             Location segmentStart = coordinates.get(i);
-            Location segmentEnd = coordinates.get(i+1);
+            Location segmentEnd = coordinates.get(i + 1);
             double distance = haversineDistance(segmentStart, segmentEnd);
             double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
             totalDistance += distance;
@@ -491,8 +497,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location previousMin = filterManager.getViewPortMin();
         Location previousMax = filterManager.getViewPortMax();
 
-        filterManager.setViewPortMin(minLat - oneKilometreInDegrees, minLon - oneKilometreInDegrees);
-        filterManager.setViewPortMax(maxLat + oneKilometreInDegrees, maxLon + oneKilometreInDegrees);
+        filterManager.setViewPortMin(minLat - oneKilometreInDegrees,
+                minLon - oneKilometreInDegrees);
+        filterManager.setViewPortMax(maxLat + oneKilometreInDegrees,
+                maxLon + oneKilometreInDegrees);
 
         String filterWhere = filterManager.toString();
 
@@ -547,31 +555,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Updates the ratingText label's text to the rating provided.
-     * @param rating string of numeric rating.
-     */
-    public void updateRatingLabel(String rating) {
-        ratingText.setText("Rating: "+ rating);
-    }
-
-    /**
-     * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
-     * on the GUI's ratingText label through getting the overlapping points of each segment.
-     * @throws SQLException
-     */
-    public static void ratingUpdate() throws SQLException {
-        List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
-        if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
-            double rating = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
-            RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating))); // Update the UI
-        } else {
-            System.out.println("No coordinates available for routeId: 0");
-        }
-    }
-
-
-    /**
      * Overloaded function for handling route generation with favourites.
+     *
      * @param favourite Favourite object with locations of route and filters.
      */
     private void generateRouteAction(Favourite favourite) throws SQLException {
@@ -586,6 +571,31 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
+        }
+    }
+
+    /**
+     * Updates the ratingText label's text to the rating provided.
+     * @param rating string of numeric rating.
+     */
+    public void updateRatingLabel(String rating) {
+        ratingText.setText("Rating: " + rating);
+    }
+
+    /**
+     * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
+     * on the GUI's ratingText label through getting the overlapping points of each segment.
+     * @throws SQLException
+     */
+    public static void ratingUpdate() throws SQLException {
+        List<Location> coordinates = JavaScriptBridge.getRouteMap()
+                .get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+        if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
+            double rating = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
+            RoutingMenuController.controller.updateRatingLabel
+                    (Double.toString(Math.round(rating))); // Update the UI
+        } else {
+            System.out.println("No coordinates available for routeId: 0");
         }
     }
 
@@ -703,7 +713,5 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setStopLocation(stopLocation.getEditor().getText());
         route.setTransportMode(modeChoice);
     }
-
-
 
 }
