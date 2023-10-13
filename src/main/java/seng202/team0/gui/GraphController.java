@@ -106,10 +106,11 @@ public class GraphController implements Initializable, MenuController {
 
 
 //        pieGraph.setData(pieData);
-        pieGraph.setTitle("Crashes in Aotearoa by " + columnOfInterest);
+        pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
         pieGraph.setLegendVisible(false);
         pieGraph.setLabelsVisible(true);
         pieGraph.setLabelLineLength(30);
+        pieGraph.setStartAngle(90);
         if (pieGraph.isVisible() == false) {
             System.out.println("PIE GRAPH NOT VISIBLE");
         }
@@ -128,7 +129,7 @@ public class GraphController implements Initializable, MenuController {
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
+        List<HashMap<Object, Object>> dbList = SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
                 .groupBy(columnOfInterest)
@@ -137,11 +138,11 @@ public class GraphController implements Initializable, MenuController {
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
-        for (HashMap<String, Object> hash : dbList) {
-            String column = (String) hash.get(columnOfInterest);
+        for (HashMap<Object, Object> hash : dbList) {
+            Object column = hash.get(columnOfInterest);
             double count = ((Number) hash.get("COUNT(*)")).doubleValue();
 
-            sliceNames.add(column);
+            sliceNames.add(column.toString());
             sliceCounts.add(count);
 
             System.out.println(columnOfInterest + ": " + column + "  Count: " + count);
@@ -149,7 +150,13 @@ public class GraphController implements Initializable, MenuController {
         }
 
         for (int i = 0; i < sliceNames.size(); i++) {
-            result.add(new PieChart.Data(sliceNames.get(i), sliceCounts.get(i)));
+            String sliceName = sliceNames.get(i);
+            if (sliceName.equals("Manawatū-Whanganui")) {
+                sliceName = "Manawatu-Whanganui";
+            } else if (sliceName.equals("Null")) {
+                sliceName = "Unknown";
+            }
+            result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
         }
 
         return result;
@@ -235,7 +242,7 @@ public class GraphController implements Initializable, MenuController {
                             break;
                         case "Year":
                             //code to show the year data pie chart
-//                            columnOfInterest = "crash-year";
+                            columnOfInterest = "crash_year";
                             break;
                         default:
                             // Other cases.
