@@ -16,6 +16,8 @@ public class RatingAreaManager {
     private static RatingAreaManager ratingAreaManager;
     private Location boundingBoxMin;
     private Location boundingBoxMax;
+    private Location boundingCircleCentre;
+    private double boundingCircleRadius;
 
     private RatingAreaManager() {
 
@@ -78,6 +80,50 @@ public class RatingAreaManager {
             boundingBoxMax = new Location(maxLatitude, maxLongitude);
         }
     }
+
+    /**
+     * Retrieves the location for the centre of the bounding circle for rating an area.
+     *
+     * @return A location of (maxLatitude, maxLongitude).
+     */
+    public Location getBoundingCircleCentre() {
+        return this.boundingCircleCentre;
+    }
+
+    /**
+     * Sets the bounding circle centre location for rating an area.
+     *
+     * @param latitude latitude of bounding circle
+     * @param longitude longitude of bounding circle
+     */
+    public void setBoundingCircleCentre(Double latitude, Double longitude) {
+        if (latitude == null || longitude == null) {
+            boundingCircleCentre = null;
+        } else {
+            boundingCircleCentre = new Location(latitude, longitude);
+        }
+    }
+
+    /**
+     * Retrieves the location for the radius of the bounding circle for rating an area.
+     *
+     * @return A radius of the bounding circle.
+     */
+    public double getBoundingCircleRadius() {
+        return this.boundingCircleRadius;
+    }
+
+    /**
+     * Sets the bounding circle centre location for rating an area.
+     *
+     * @param radius radius of the bounding circle.
+     */
+    public void setBoundingCircleRadius(double radius) {
+        boundingCircleRadius = radius;
+    }
+
+
+
 
     /**
      * Clears the stored bounding boxes.

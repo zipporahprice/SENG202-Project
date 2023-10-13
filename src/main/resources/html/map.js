@@ -465,13 +465,12 @@ function handleNewDrawing(event) {
         javaScriptBridge.setRatingAreaManagerBoundingBox(southwestLat, southwestLng, northeastLat, northeastLng);
     } else if (layer instanceof L.Circle) {
         const center = layer.getLatLng();
-        const radius = layer.getRadius();
+        const radius = (layer.getRadius() / 6371000.0) * (180.0 / Math.PI);
 
         const centerLat = center.lat;
         const centerLng = center.lng;
 
-        let latLngString = centerLat + " " + centerLng + " " + radius;
-        javaScriptBridge.printThings(latLngString);
+        javaScriptBridge.setRatingAreaManagerBoundingCircle(centerLat, centerLng, radius);
     }
 }
 

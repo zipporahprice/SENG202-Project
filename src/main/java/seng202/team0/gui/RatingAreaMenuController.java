@@ -42,8 +42,30 @@ public class RatingAreaMenuController implements MenuController {
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         Location boundingBoxMin = ratingAreaManager.getBoundingBoxMin();
         Location boundingBoxMax = ratingAreaManager.getBoundingBoxMax();
+        Location boundingCircleCentre = ratingAreaManager.getBoundingCircleCentre();
+        double boundingCircleRadius = ratingAreaManager.getBoundingCircleRadius();
 
-        if (boundingBoxMax != null && boundingBoxMin != null) {
+        String where = null;
+        if (boundingBoxMax != null || boundingBoxMin != null) {
+            where = "minX >= " + boundingBoxMin.getLongitude()
+                    + " AND maxX <= " + boundingBoxMax.getLongitude()
+                    + " AND minY >= " + boundingBoxMin.getLatitude()
+                    + " AND maxY <= " + boundingBoxMax.getLatitude() + ")";
+
+        } else if (boundingCircleCentre != null) {
+            where = "minX >= " + (boundingCircleCentre.getLongitude() - boundingCircleRadius)
+                    + " AND maxX <= " + (boundingCircleCentre.getLongitude() + boundingCircleRadius)
+                    + " AND minY >= " + (boundingCircleCentre.getLatitude() - boundingCircleRadius)
+                    + " AND maxY <= " + (boundingCircleCentre.getLatitude() + boundingCircleRadius) + ")";
+
+//          R-Tree module does not have this function
+//            where = "MbrWithinCircle(minX, minY, maxX, maxY, "
+//                    + boundingCircleCentre.getLongitude() + ", "
+//                    + boundingCircleCentre.getLatitude() + ", "
+//                    + boundingCircleRadius + "))";
+        }
+
+        if (where != null) {
             String select = "AVG(severity), COUNT()";
             String from = "crashes";
 
@@ -55,17 +77,13 @@ public class RatingAreaMenuController implements MenuController {
             String filterWhereWithoutViewport = String.join(" AND ",
                     Arrays.copyOf(filterList, filterList.length - 4));
 
-            String where = "object_id IN (SELECT id FROM rtree_index WHERE minX >= "
-                    + boundingBoxMin.getLongitude() + " AND maxX <= "
-                    + boundingBoxMax.getLongitude() + " AND minY >= "
-                    + boundingBoxMin.getLatitude() + " AND maxY <= "
-                    + boundingBoxMax.getLatitude() + ")";
+            String rTreeFind = "object_id IN (SELECT id FROM rtree_index WHERE " + where;
 
             List severityList = SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
-                    .where(filterWhereWithoutViewport + " AND " + where)
+                    .where(filterWhereWithoutViewport + " AND " + rTreeFind)
                     .buildGetter();
 
             HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);

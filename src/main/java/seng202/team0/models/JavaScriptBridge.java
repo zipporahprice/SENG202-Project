@@ -91,19 +91,45 @@ public class JavaScriptBridge {
     }
 
     /**
-     * Sets the viewport variables in the FilterManager singleton class.
+     * Sets the bounding box variables in the RatingAreaManager singleton class.
+     * Clears the bounding circle variables.
      *
-     * @param minLatitude minimum latitude of the map view
-     * @param minLongitude minimum longitude of the map view
-     * @param maxLatitude maximum latitude of the map view
-     * @param maxLongitude maximum longitude of the map view
+     * @param minLatitude minimum latitude of the bounding box
+     * @param minLongitude minimum longitude of the bounding box
+     * @param maxLatitude maximum latitude of the bounding box
+     * @param maxLongitude maximum longitude of the bounding box
      */
     public void setRatingAreaManagerBoundingBox(double minLatitude, double minLongitude,
                                          double maxLatitude, double maxLongitude) {
+        // Setting the Bounding Box
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
         ratingAreaManager.setBoundingBoxMin(minLatitude, minLongitude);
         ratingAreaManager.setBoundingBoxMax(maxLatitude, maxLongitude);
+
+        // Clearing the Bounding Circle
+        ratingAreaManager.setBoundingCircleCentre(null, null);
+        ratingAreaManager.setBoundingCircleRadius(0);
     }
+
+    /**
+     * Sets the bounding circle variables in the RatingAreaManager singleton class.
+     * Clears the bounding box variables.
+     *
+     * @param latitude latitude of the bounding circle
+     * @param longitude longitude of the bounding circle
+     * @param radius radius of the bounding circle
+     */
+    public void setRatingAreaManagerBoundingCircle(double latitude, double longitude, double radius) {
+        // Setting the Bounding Circle
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        ratingAreaManager.setBoundingCircleCentre(latitude, longitude);
+        ratingAreaManager.setBoundingCircleRadius(radius);
+
+        // Clearing the Bounding Box
+        ratingAreaManager.setBoundingBoxMin(null, null);
+        ratingAreaManager.setBoundingBoxMax(null, null);
+    }
+
 
     /**
      * Calls mapLoaded function in the MainController class.
