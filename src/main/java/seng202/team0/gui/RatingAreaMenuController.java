@@ -51,17 +51,19 @@ public class RatingAreaMenuController implements MenuController {
                     + " AND maxY <= " + boxMax.getLatitude() + ")";
 
         } else if (circleCentre != null) {
+            // Bounding box to lessen the load
             where = "minX >= " + (circleCentre.getLongitude() - circleRadius)
                     + " AND maxX <= " + (circleCentre.getLongitude() + circleRadius)
                     + " AND minY >= " + (circleCentre.getLatitude() - circleRadius)
                     + " AND maxY <= " + (circleCentre.getLatitude() + circleRadius) + ")";
 
-            // R-Tree module does not have this function
-            //where = "MbrWithinCircle(minX, minY, maxX, maxY, "
-            //        + boundingCircleCentre.getLongitude() + ", "
-            //        + boundingCircleCentre.getLatitude() + ", "
-            //        + boundingCircleRadius + "))";
+            // Pythagoras theorem calculation compared to circle radius
+            where += " AND (SQRT(POW(" + circleCentre.getLongitude()
+                    + " - longitude, 2) + POW(" + circleCentre.getLatitude()
+                    + " - latitude, 2)) <= " + circleRadius + ")";
         }
+
+        double start = System.currentTimeMillis();
 
         if (where != null) {
             String select = "AVG(severity), COUNT()";
@@ -98,7 +100,7 @@ public class RatingAreaMenuController implements MenuController {
 
                 MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
                 ratingAreaText.setText("Danger: "
-                        + String.format("%.2f", averageSeverity) + " / 10");
+                        + String.format("%.2f", score) + " / 10");
                 numCrashesAreaLabel.setText("Number of crashes in area: " + total);
             } else {
                 ratingAreaText.setText("Danger: 0.00/10");
@@ -113,6 +115,10 @@ public class RatingAreaMenuController implements MenuController {
 
             alert.showAndWait();
         }
+        double end = System.currentTimeMillis();
+
+        System.out.println(end - start);
+
 
     }
 }

@@ -18,7 +18,7 @@ public class App {
      */
     public static void main(String[] args) {
         // Initialises database and checks if populated
-        DatabaseManager.getInstance().initialiseDatabase("files/crash_data.csv");
+        DatabaseManager.getInstance().initialiseDatabase("files/crash_data_10k.csv");
 
         MainWindow.main(args);
     }
