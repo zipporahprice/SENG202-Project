@@ -1,6 +1,5 @@
 # SafeTrip - SENG 202 Project Team 10
-SafeTrip is a New Zealand based safety routing app with public data from the Waka Kotahi. This project is developed
-by a group of second-year software engineering students. The following details how to run the application.
+SafeTrip, designed by second-year software engineering students from the University of Canterbury, is a unique, New Zealand-based safety routing app, providing visual displays of crash data and enabling users to plan routes based on comprehensive safety ratings using public data from Waka Kotahi. Targeting New Zealand road users with a keen focus on safety, SafeTrip distinguishes itself by combining features of potential competitors, offering unique functionality to prioritize your safety on the roads. Below are details on how to set up and run the application.
 
 ## Authors
 - Angelica Silva
@@ -16,7 +15,7 @@ by a group of second-year software engineering students. The following details h
 
 
 ## What's Included
-This project comes with some basic examples of the following (including dependencies in the build.gradle file):
+This project includes some of the following:
 - JavaFX
 - Logging (with Log4J)
 - Junit 5
@@ -28,8 +27,6 @@ We have also included a basic setup of the Gradle project and Tasks required for
 - Build plugins:
     - JavaFX Gradle plugin for working with (and packaging) JavaFX applications easily
 
-You are expected to understand the content provided and build your application on top of it. If there is anything you
-would like more information about please reach out to the tutors.
 
 ## Importing Project (Using IntelliJ)
 IntelliJ has built-in support for Gradle. To import your project:
@@ -40,13 +37,8 @@ IntelliJ has built-in support for Gradle. To import your project:
 
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
-## Running the project
-You can run the project through your IDE from the main class (App.java) or use the `./gradlew run` command from your terminal
-
 ## Build Project 
 1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. The file is located at `build/libs/seng202_teamX-1.0-SNAPSHOT.jar
 
 ## Run App
-- If you haven't already, Build the project.
-- Open a command line interface inside the project directory and run `cd target` to change into the target directory.
-- Run the command `java -jar SafeTrip-1.0_10k` to open the application.
+- Double click the safetrip.jar file to open the app!
