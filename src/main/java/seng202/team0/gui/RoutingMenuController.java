@@ -88,7 +88,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private String modeChoice;
 
     private PopOver popOver;
-    private ArrayList<Button> transportButtons;
+    private List<Button> transportButtons = new ArrayList<>();
 
 
     /**
@@ -622,10 +622,10 @@ public class RoutingMenuController implements Initializable, MenuController {
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
         modeChoice = (String) chosenButton.getUserData();
-        selectButton(modeChoice, chosenButton);
+        selectButton(chosenButton);
     }
 
-    public void selectButton(String modeChoice, Button chosenButton) {
+    public void selectButton(Button chosenButton) {
         if (Objects.equals(chosenButton, selectedButton)) {
             modeChoice = null;
             selectedButton = null;
@@ -666,7 +666,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         stopLocation.setText(stopLoc);
         for (Button button : transportButtons) {
             if (button.getUserData().equals(mode)) {
-                selectButton(mode, button);
+                selectButton(button);
             }
         }
     }
