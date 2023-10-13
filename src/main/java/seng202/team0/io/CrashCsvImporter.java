@@ -71,7 +71,7 @@ public class CrashCsvImporter {
      * @param crashVariables a list of strings representing variables
      * @return Point object initialised with given crashVariables
      */
-    public Crash crashFromString(String[] crashVariables) {
+    private Crash crashFromString(String[] crashVariables) {
 
         try {
             int objectId = changeEmptyToZero(crashVariables[0]);

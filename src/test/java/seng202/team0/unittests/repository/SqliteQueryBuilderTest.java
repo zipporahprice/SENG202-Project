@@ -1,5 +1,6 @@
 package seng202.team0.unittests.repository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Test class for SQLiteQueryBuilder class
@@ -113,6 +116,14 @@ public class SqliteQueryBuilderTest {
     void testGetQuery() {
         String query = SqliteQueryBuilder.create().getQuery();
         Assertions.assertEquals(query, "");
+    }
+
+    /**
+     * Clear database after each test.
+     */
+    @AfterEach
+    void clearDatabase() {
+        DatabaseManager.getInstance().resetDb();
     }
 
 }
