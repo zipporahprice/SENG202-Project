@@ -54,6 +54,28 @@ function initMap() {
     };
     map = new L.map('map', mapOptions);
 
+    L.CustomItineraryBuilder = L.Routing.ItineraryBuilder.extend({
+        createContainer: function(className) {
+            // Create a container div.
+            var container = L.DomUtil.create('div', className);
+
+            // Create the default table using the base class method.
+            var table = L.DomUtil.create('table', 'leaflet-routing-container-table', container);
+
+            // Create the review tab div.
+            var reviewTab = L.DomUtil.create('div', 'custom-review-tab', container);
+
+            L.DomUtil.create('br', 'break-styling', container);
+
+            reviewTab.innerHTML = `
+            <h3>Review:</h3>
+            <p>Your review content goes here...</p>
+        `;
+
+            return container;
+        }
+    });
+
     // Adding zoom control to bottom right
     L.control.zoom({
         position: 'topright'
@@ -264,6 +286,8 @@ function addMarker(title, lat, lng) {
     markers.push(m)
 }
 
+
+
 /**
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
@@ -275,22 +299,21 @@ function displayRoute(routesIn, transportMode) {
     var currentRouteIndex = 0; // Starting index at 0
     var routeIndexMap = new Map();
     var mode = getMode(transportMode);
+
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
         //var routeColor = getColorForSafetyScore(safetyScore);
 
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
 
+
+
         var newRoute = L.Routing.control({
             waypoints: waypoints,
             routeWhileDragging: true,
             showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            // lineOptions: {
-            //     styles: [
-            //         {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
-            //     ]
-            // }
+            itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
         }).addTo(map);
 
         newRoute.on('routeselected', (e) => {
@@ -299,15 +322,10 @@ function displayRoute(routesIn, transportMode) {
             var instructions = route.instructions;
 
 
+
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
             var routeId = getRouteIdentifier(route);
-
-            var instructionsString = instructions.map(instruction =>
-                `${instruction.text} - ${instruction.distance}m`
-            ).join('\n');
-
-            console.log(instructionsString); // Logs the instructions string to the browser's console
 
 
             // Check if this routeId has been selected before
@@ -325,7 +343,6 @@ function displayRoute(routesIn, transportMode) {
             var coordinatesJson = JSON.stringify({
                 routeId: indexToSend, // Use the index retrieved from the map
                 coordinates: coordinates,
-                instructions: instructionsString
             });
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });

@@ -124,8 +124,6 @@ public class JavaScriptBridge {
             // Extract routeId and coordinates
             long routeId = (long) routeObj.get("routeId");
             JSONArray jsonArray = (JSONArray) routeObj.get("coordinates");
-            String instructions = (String) routeObj.get("instructions");
-            System.out.println(instructions); // Logs the instructions string to your Java console
 
 
             // Create a List to hold Coordinate objects

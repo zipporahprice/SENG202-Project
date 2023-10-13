@@ -40,18 +40,11 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private static final Logger log = LogManager.getLogger(MainController.class);
     public StackPane loadingScreen;
     public Label loadingPercentageLabel;
-    @FXML
-    public static Tab directionsTab;
+
     @FXML
     private WebView webView;
     @FXML
     private StackPane mainWindow;
-    @FXML
-    private TabPane tabPane;
-    @FXML
-    private TextArea directionsTextArea;
-    @FXML
-    private TextArea reviewTextArea;
 
     @FXML
     private ProgressBar progressBar;
@@ -135,15 +128,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
                 animateProgressBarToFull(progressBar);
             }
         });
-    }
-
-
-    public void updateDirections(String directions) {
-        directionsTextArea.setText(directions);
-    }
-
-    public void updateDangerInfo(String dangerInfo) {
-        reviewTextArea.setText(dangerInfo);
     }
 
     /**

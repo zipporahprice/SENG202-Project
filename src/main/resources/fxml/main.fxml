@@ -27,20 +27,6 @@
             <Insets />
          </StackPane.margin>
       </WebView>
-      <TabPane fx:id="tabPane" maxWidth="400" maxHeight="200" prefHeight="200" prefWidth="400" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="100.0">
-         <tabs>
-            <Tab fx:id="directionsTab" text="Directions">
-               <content>
-                  <Label text="Content for Tab 2"/>
-               </content>
-            </Tab>
-            <Tab text="Review">
-               <content>
-                  <Label text="Content for Tab 2"/>
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
 
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
