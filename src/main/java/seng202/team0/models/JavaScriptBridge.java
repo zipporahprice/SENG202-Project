@@ -4,11 +4,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import com.google.gson.Gson;
 import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
-import seng202.team0.gui.SettingsMenuController;
+import seng202.team0.business.RatingAreaManager;
+import seng202.team0.gui.MainController;
 import seng202.team0.gui.RoutingMenuController;
+import seng202.team0.gui.SettingsMenuController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,15 +22,29 @@ import java.util.concurrent.ConcurrentHashMap;
  * Provides a bridge between JavaScript and Java for handling crash data.
  * This class retrieves crash data, converts it to a JSON format, and exposes it
  * to JavaScript for integration with web applications.
- * @author toddv
+ *
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
-
     private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
     private static long index;
 
+    private JavaScriptListener listener;
+
+    private MainController mainController;
+
+
+    public void setListener(JavaScriptListener listener) {
+        this.listener = listener;
+    }
 
     /**
      * Retrieves a list of crash data and converts it to a JSON format.
@@ -38,66 +53,24 @@ public class JavaScriptBridge {
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
     public String crashes() {
-        // TODO currently hard coding difference in having filters or not, have a think about how to not do this
-        List crashList = crashData.getCrashLocations().stream().map(crash -> {
-            if (crash instanceof Crash) {
-                Crash crash1 = (Crash) crash;
-                double latitude = crash1.getLatitude();
-                double longitude = crash1.getLongitude();
-                int severity = crash1.getSeverity().getValue();
-                String year = Integer.toString(crash1.getCrashYear());
-                String weather = crash1.getWeather().toString();
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            } else {
-                HashMap crash1 = (HashMap) crash;
-                double latitude = (double) crash1.get("latitude");
-                double longitude = (double) crash1.get("longitude");
-                int severity = (int) crash1.get("severity");
-                String year = (String) crash1.get("year");
-                String weather = (String) crash1.get("weather");
-                return new CrashInfo(latitude, longitude, severity, year, weather);
-            }
-        }).toList();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("resetLayers();");
 
-        Gson gson = new Gson();
+        crashData.getCrashLocations().stream().forEach(crash -> {
+            HashMap crash1 = (HashMap) crash;
+            double latitude = (double) crash1.get("latitude");
+            double longitude = (double) crash1.get("longitude");
+            int severity = (int) crash1.get("severity");
+            String year = Integer.toString((Integer) crash1.get("crash_year"));
+            String weather = (String) crash1.get("weather");
 
-        String json = gson.toJson(crashList);
+            stringBuilder.append(String.format("addPoint(%f,%f,%d,%s,'%s');",
+                    latitude, longitude, severity, year, weather));
+        });
 
-        return json;
+        stringBuilder.append("setHeatmapData();");
 
-    }
-    /**
-     * Represents crash information containing latitude and longitude.
-     */
-    protected static class CrashInfo {
-        /**
-         * The latitude of the crash location.
-         */
-        public double lat;
-        /**
-         * The longitude of the crash location.
-         */
-        public double lng;
-        public int severity;
-
-        public String crash_year; // Add year
-        public String weather;
-
-        /**
-         * Constructs a CrashInfo object with latitude and longitude.
-         *
-         * @param lat The latitude of the crash location.
-         * @param lng The longitude of the crash location.
-         */
-        public CrashInfo(double lat, double lng, int severity, String year, String weather) {
-            this.lat = lat;
-            this.lng = lng;
-            this.severity = severity;
-            this.crash_year = year;
-            this.weather = weather;
-
-        }
-
+        return stringBuilder.toString();
     }
 
     /**
@@ -109,8 +82,11 @@ public class JavaScriptBridge {
         return SettingsMenuController.currentView;
     }
 
+
+
     /**
      * Sets the viewport variables in the FilterManager singleton class.
+     *
      * @param minLatitude minimum latitude of the map view
      * @param minLongitude minimum longitude of the map view
      * @param maxLatitude maximum latitude of the map view
@@ -119,10 +95,8 @@ public class JavaScriptBridge {
     public void setFilterManagerViewport(double minLatitude, double minLongitude,
                                          double maxLatitude, double maxLongitude) {
         FilterManager filterManager = FilterManager.getInstance();
-        Location minimum = new Location(minLatitude, minLongitude);
-        Location maximum = new Location(maxLatitude, maxLongitude);
-        filterManager.setViewPortMin(minimum);
-        filterManager.setViewPortMax(maximum);
+        filterManager.setViewPortMin(minLatitude, minLongitude);
+        filterManager.setViewPortMax(maxLatitude, maxLongitude);
     }
 
     public void printOutput(Object string1) {
@@ -184,7 +158,73 @@ public class JavaScriptBridge {
         return routeMap;
     }
 
+    /**
+     * Sets the bounding box variables in the RatingAreaManager singleton class.
+     * Clears the bounding circle variables.
+     *
+     * @param minLatitude minimum latitude of the bounding box
+     * @param minLongitude minimum longitude of the bounding box
+     * @param maxLatitude maximum latitude of the bounding box
+     * @param maxLongitude maximum longitude of the bounding box
+     */
+    public void setRatingAreaManagerBoundingBox(double minLatitude, double minLongitude,
+                                                double maxLatitude, double maxLongitude) {
+        // Setting the Bounding Box
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        ratingAreaManager.setBoundingBoxMin(minLatitude, minLongitude);
+        ratingAreaManager.setBoundingBoxMax(maxLatitude, maxLongitude);
+
+        // Clearing the Bounding Circle
+        ratingAreaManager.setBoundingCircleCentre(null, null);
+        ratingAreaManager.setBoundingCircleRadius(0);
+    }
+
+    /**
+     * Sets the bounding circle variables in the RatingAreaManager singleton class.
+     * Clears the bounding box variables.
+     *
+     * @param latitude latitude of the bounding circle
+     * @param longitude longitude of the bounding circle
+     * @param radius radius of the bounding circle
+     */
+    public void setRatingAreaManagerBoundingCircle(double latitude, double longitude, double radius) {
+        // Setting the Bounding Circle
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        ratingAreaManager.setBoundingCircleCentre(latitude, longitude);
+        ratingAreaManager.setBoundingCircleRadius(radius);
+
+        // Clearing the Bounding Box
+        ratingAreaManager.setBoundingBoxMin(null, null);
+        ratingAreaManager.setBoundingBoxMax(null, null);
+    }
 
 
+    /**
+     * Calls mapLoaded function in the MainController class.
+     */
+    public void mapLoaded() {
+        if (listener != null) {
+            listener.mapLoaded();
+        }
+    }
 
+    /**
+     * Creates an interface for the listener to call relevant methods.
+     */
+    public static interface JavaScriptListener {
+        void mapLoaded();
+    }
+
+    public void printTime(double time) {
+        System.out.println(time);
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public void enableRefreshButton() {
+        mainController.enableRefresh();
+    }
 }
+

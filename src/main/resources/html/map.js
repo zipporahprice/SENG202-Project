@@ -1,8 +1,27 @@
-let map, baseLayer, heatmapLayer, markerLayer;
+let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl;
 var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 let markers = [];
 var routes = [];
+var crashes = [];
 
+const heatmapCfg = {
+    // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+    // if scaleRadius is false it will be the constant radius used in pixels
+    "radius": 0.1,
+    "maxOpacity": .4,
+    // scales the radius based on map zoom
+    "scaleRadius": true,
+    // if set to false the heatmap uses the global maximum for colorization
+    // if activated: uses the data maximum within the current map boundaries
+    //   (there will always be a red spot with useLocalExtremas true)
+    "useLocalExtrema": false,
+    // which field name in your data represents the latitude - default "lat"
+    latField: 'lat',
+    // which field name in your data represents the longitude - default "lng"
+    lngField: 'lng',
+    // which field name in your data represents the data value - default "value"
+    valueField: 'count'
+};
 
 /**
  * This object can be returned to our java code, where we can call the functions we define inside it
@@ -12,7 +31,10 @@ let jsConnector = {
     displayRoute: displayRoute,
     removeRoute: removeRoute,
     initMap: initMap,
-    setData: setData
+    updateDataShown: updateDataShown,
+    drawingModeOn: drawingModeOn,
+    drawingModeOff: drawingModeOff,
+    changeDrawingColourToRating: changeDrawingColourToRating
 };
 
 /**
@@ -23,48 +45,111 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
-    // Setup layers
-    var cfg = {
-        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-        // if scaleRadius is false it will be the constant radius used in pixels
-        "radius": 0.1,
-        "maxOpacity": .4,
-        // scales the radius based on map zoom
-        "scaleRadius": true,
-        // if set to false the heatmap uses the global maximum for colorization
-        // if activated: uses the data maximum within the current map boundaries
-        //   (there will always be a red spot with useLocalExtremas true)
-        "useLocalExtrema": false,
-        // which field name in your data represents the latitude - default "lat"
-        latField: 'lat',
-        // which field name in your data represents the longitude - default "lng"
-        lngField: 'lng',
-        // which field name in your data represents the data value - default "value"
-        valueField: 'count'
-    };
-    heatmapLayer = new HeatmapOverlay(cfg);
-    markerLayer = L.markerClusterGroup();
-
     // Setup map
     let mapOptions = {
-        center: [-41.0, 172.0],
-        zoom: 5.5,
-        layers:[baseLayer, heatmapLayer]
+        center: [-43.5, 172.5],
+        zoom: 11,
+        layers:[baseLayer],
+        zoomControl: false
     };
     map = new L.map('map', mapOptions);
 
+    // Adding zoom control to bottom right
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
+
+    // Setup potential layers for views
+    newHeatmap();
+
+    setHeatmapData();
+
+    markerLayer = L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            var averageSeverity = calculateAverageSeverity(cluster);
+            var clusterColor = getColorBasedOnSeverity(averageSeverity);
+
+
+            return L.divIcon({
+                html: '<div class="markers-style ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
+                className: 'marker-style',
+                iconSize: L.point(32, 32)
+            });
+
+        }
+    });
+
+    drawnItems = new L.FeatureGroup();
+    drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems,
+            remove: false,
+            edit: false
+        },
+        draw: {
+            circle: true,
+            rectangle: true,
+            polygon: false,
+            polyline: false,
+            marker: false,
+            circlemarker: false
+        },
+        position: 'topright',
+    });
+
     // Initialise layers and setup callbacks
-    setFilteringViewport();
-    setData();
-    updateView();
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
+    updateDataShown();
+    map.on('zoomend', updateEnabled);
+    map.on('moveend', updateEnabled);
+    window.addEventListener('resize', newHeatmap);
+
+    mapIsReady();
+}
+
+function updateEnabled() {
+    javaScriptBridge.enableRefreshButton();
+}
+
+function newHeatmap() {
+    const heatmapShowing = map.hasLayer(heatmapLayer);
+
+    heatmapLayer = new HeatmapOverlay(heatmapCfg);
+
+    if (heatmapShowing) {
+        setHeatmapData();
+        map.addLayer(heatmapLayer);
+    }
 }
 
 function updateDataShown() {
     setFilteringViewport();
-    setData();
+    eval(javaScriptBridge.crashes());
     updateView();
+}
+
+function mapIsReady() {
+    javaScriptBridge.mapLoaded();
+}
+
+function adjustHeatmapRadiusBasedOnZoom() {
+    let zoomLevel = map.getZoom();
+
+    let newRadius;
+    if (zoomLevel >= 17) {
+        newRadius = 0.0002;  // For street-level detail
+    } else if (zoomLevel >= 15 && zoomLevel < 17) {
+        newRadius = 0.001; // For street-level detail
+    } else if (zoomLevel >= 13) {
+        newRadius = 0.005;  // For neighborhood-level detail
+    }
+    else if (zoomLevel >= 10) {
+        newRadius = 0.01;  // For neighborhood-level detail
+    }  else {
+        newRadius = 0.1;  // For city-level detail
+    }
+
+    heatmapLayer.heatmapCfg.radius=newRadius;
+
 }
 
 function setFilteringViewport() {
@@ -96,6 +181,16 @@ function automaticViewChange() {
     }
 }
 
+function showCrashesWithEventCallbacks() {
+    map.on('zoomend', updateDataShown);
+    map.on('moveend', updateDataShown);
+}
+
+function hideCrashesWithEventCallbacks() {
+    map.off('zoomend', updateDataShown);
+    map.off('moveend', updateDataShown);
+}
+
 /**
  * Updates the view according to the user selection
  * Three views available:
@@ -109,21 +204,51 @@ function updateView() {
     if (currentView === "Automatic") {
         automaticViewChange();
         map.on('zoomend', automaticViewChange);
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
     } else if (currentView === "Heatmap") {
         map.off('zoomend', automaticViewChange);
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
+
         if (map.hasLayer(markerLayer)) {
             map.removeLayer(markerLayer);
         }
-        map.addLayer(heatmapLayer);
-        heatmapLayer.setData(testData);
-    } else {
+        if (!map.hasLayer(heatmapLayer)) {
+            map.addLayer(heatmapLayer);
+        }
+    } else if (currentView === "Crash Locations") {
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
+
         if (map.hasLayer(heatmapLayer)) {
             map.removeLayer(heatmapLayer);
         }
-        map.addLayer(markerLayer);
+        if (!map.hasLayer(markerLayer)) {
+            map.addLayer(markerLayer);
+        }
+    } else if (currentView === "Heatmap & Crash Locations") {
+        map.off('zoomend', automaticViewChange);
+        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
+
+        if (!map.hasLayer(heatmapLayer)) {
+            map.addLayer(heatmapLayer);
+        }
+        if (!map.hasLayer(markerLayer)) {
+            map.addLayer(markerLayer);
+        }
+    } else {
+        // Default with "None" showing
+        map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
+        map.off('zoomend', automaticViewChange);
+
+        if (map.hasLayer(heatmapLayer)) {
+            map.removeLayer(heatmapLayer);
+        }
+        if (map.hasLayer(markerLayer)) {
+            map.removeLayer(markerLayer);
+        }
     }
 }
+
 
 
 /**
@@ -143,22 +268,29 @@ function addMarker(title, lat, lng) {
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
  */
-function displayRoute(routesIn) {
+function displayRoute(routesIn, transportMode, safetyScore) {
     removeRoute();
 
     var routesArray = JSON.parse(routesIn);
-
     var currentRouteIndex = 0; // Starting index at 0
-    var routeIndexMap = new Map(); // Map to hold routeId as key and currentRouteIndex as value
-
-    routesArray.forEach((waypointsIn, index) => {
+    var routeIndexMap = new Map();
+    var mode = getMode(transportMode);
+    routesArray.forEach(waypointsIn => {
         var waypoints = [];
+        var routeColor = getColorForSafetyScore(safetyScore);
+
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
 
         var newRoute = L.Routing.control({
             waypoints: waypoints,
             routeWhileDragging: true,
-            showAlternatives: true
+            showAlternatives: true,
+            router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
+            lineOptions: {
+                styles: [
+                    {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
+                ]
+            }
         }).addTo(map);
 
         newRoute.on('routeselected', (e) => {
@@ -192,6 +324,43 @@ function displayRoute(routesIn) {
     });
 }
 
+/**
+ * Removes the current route being displayed (will not do anything if there is no route currently displayed)
+ */
+function removeRoute() {
+    routes.forEach((r) => {
+        r.remove();
+    });
+    routes = [];
+}
+
+function getColorForSafetyScore(score) {
+    if (score >= 4.0) return 'red';   // least safe
+    if (score >= 3.0) return 'orange';  // moderately safe
+    if (score >= 2.0) return 'yellow'; // safest
+    if (score >= 0.0) return 'green';
+    return 'red'; // default if safety score is null
+}
+
+function getMode(transportMode) {
+    var mode;
+    switch (transportMode) {
+        case "car":
+            mode = 'mapbox/driving';
+            break;
+        case "bike":
+            mode = 'mapbox/cycling';
+            break;
+        case "walking":
+            mode = 'mapbox/walking';
+            break;
+        default:
+            mode = 'mapbox/driving';
+            break;
+    }
+    return mode;
+}
+
 function getRouteIdentifier(route) {
     // Assuming route.coordinates is an array of coordinate objects
     // And each coordinate can be represented as a string
@@ -206,32 +375,23 @@ function getRouteIdentifier(route) {
 function coordToString(coord) {
     // Convert coordinate object to a string
     // Replace this with the actual structure of your coordinate objects
-    return `${coord.lat},${coord.lng}`; // Assuming a coord object has lat and lng properties
+    return `${coord.lat},${coord.lng}`; // Assuming a
 }
-
-
-
-
-
-/**
- * Removes the current route being displayed (will not do anything if there is no route currently displayed)
- */
-function removeRoute() {
-    routes.forEach((r) => {
-        r.remove();
-    });
-    routes = [];
-}
-
 function getSeverityStringFromValue(severity) {
     switch (severity) {
-        case 1: return "Non-Injury";
-        case 2: return "Minor Crash";
-        case 4: return "Major Crash";
-        case 8: return "Death";
-        default: return "Invalid";
+        case 1:
+            return "Non-Injury";
+        case 2:
+            return "Minor Crash";
+        case 4:
+            return "Major Crash";
+        case 8:
+            return "Death";
+        default:
+            return "Invalid";
     }
 }
+
 
 function getMarkerIcon(severity) {
     var iconUrl;
@@ -259,30 +419,116 @@ function getMarkerIcon(severity) {
     });
 }
 
-function setData() {
-    var crashesJSON = javaScriptBridge.crashes();
-    var crashes = JSON.parse(crashesJSON);
-    var testData = {
-        max: 10,
-        data: crashes
-    };
-    markerLayer.clearLayers();
+function getColorBasedOnSeverity(averageSeverity) {
+    // averageSeverity is out of 10
 
-    for (var i = 0; i < crashes.length; i++) {
-        var a = crashes[i];
-        var severity = getSeverityStringFromValue(a.severity);
-        var markerIcon = getMarkerIcon(a.severity);
-        var marker = L.marker(new L.LatLng(a.lat, a.lng), { title: severity, icon: markerIcon });
-        marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
-            "<p><strong>Latitude:</strong> " + a.lat + "</p>" +
-            "<p><strong>Longitude:</strong> " + a.lng + "</p>" +
-            "<p><strong>Severity:</strong> " + severity + "</p>" +
-            "<p><strong>Year:</strong> " + a.year + "</p>" + // Add year
-            "<p><strong>Weather:</strong> " + a.weather + "</p>" + // Add weather
-            "</div>"
-        );
-        markerLayer.addLayer(marker);
+    if (averageSeverity == null) {
+        return 'black';
+    } else if (averageSeverity < 0.8) {
+        return 'green'; // Low severity, green color
+    } else if (averageSeverity < 4.3) {
+        return 'yellow'; // Moderate severity, yellow color
+    } else if (averageSeverity < 7.1) {
+        return 'orange'; // High severity, orange color
+    } else {
+        return 'red'; // Very high severity, red color
+    }
+}
+
+
+function calculateAverageSeverity(cluster) {
+    var childMarkers = cluster.getAllChildMarkers();
+    if (childMarkers == 0) {
+        return 0;
+    }
+    var totalSeverity = 0;
+
+    // Calculate the total severity within the cluster
+    for (var i = 0; i < childMarkers.length; i++) {
+        totalSeverity += childMarkers[i].options.severity;
     }
 
+    // Score out of 10
+    return ((totalSeverity / childMarkers.length - 1.0) / 7.0) * 10.0;
+}
+
+function resetLayers() {
+    newHeatmap()
+    markerLayer.clearLayers();
+}
+
+function addPoint(lat, lng, severity, year, weather) {
+    const severityString = getSeverityStringFromValue(severity);
+    const markerIcon = getMarkerIcon(severity);
+    var marker = L.marker(new L.LatLng(lat, lng), {title: severityString, icon: markerIcon, severity: severity});
+    marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
+        "<p><strong>Latitude:</strong> " + lat + "</p>" +
+        "<p><strong>Longitude:</strong> " + lng + "</p>" +
+        "<p><strong>Severity:</strong> " + severityString + "</p>" +
+        "<p><strong>Year:</strong> " + year + "</p>" + // Add year
+        "<p><strong>Weather:</strong> " + weather + "</p>" + // Add weather
+        "</div>"
+    );
+    markerLayer.addLayer(marker);
+    crashes.push({"lat": lat, "lng": lng});
+}
+
+function setHeatmapData() {
+    const testData = {
+        max: 200,
+        data: crashes
+    }
     heatmapLayer.setData(testData);
+}
+
+function drawingModeOn() {
+    map.addLayer(drawnItems);
+    map.addControl(drawControl);
+    map.on('draw:created', handleNewDrawing);
+}
+
+function drawingModeOff() {
+    map.removeLayer(drawnItems);
+    drawnItems.clearLayers();
+    map.removeControl(drawControl);
+    map.off('draw-created');
+}
+
+function handleNewDrawing(event) {
+    // Remove previous drawings
+    drawnItems.clearLayers();
+
+    // Add new drawing
+    const layer = event.layer;
+    drawnItems.addLayer(layer);
+
+    if (layer instanceof L.Rectangle) {
+        const latLngs = layer.getBounds(); // Get the coordinates within the shape
+        const southwest = latLngs.getSouthWest();
+        const northeast = latLngs.getNorthEast();
+
+        const southwestLat = southwest.lat;
+        const southwestLng = southwest.lng;
+        const northeastLat = northeast.lat;
+        const northeastLng = northeast.lng;
+
+        javaScriptBridge.setRatingAreaManagerBoundingBox(southwestLat, southwestLng, northeastLat, northeastLng);
+    } else if (layer instanceof L.Circle) {
+        const center = layer.getLatLng();
+        const radius = (layer.getRadius() / 6371000.0) * (180.0 / Math.PI);
+
+        const centerLat = center.lat;
+        const centerLng = center.lng;
+
+        javaScriptBridge.setRatingAreaManagerBoundingCircle(centerLat, centerLng, radius);
+    }
+}
+
+function changeDrawingColourToRating(rating) {
+    const colour = getColorBasedOnSeverity(rating);
+    drawnItems.eachLayer(function (layer) {
+        layer.setStyle({
+            "color": colour
+        })
+    })
 }
