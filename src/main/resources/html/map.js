@@ -45,12 +45,22 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
+    const nzBounds = [
+        [-47, 166], // Southwest coordinates of nz
+        [-34, 179]  // Northeast coordinates of nz
+    ];
+
+    const minZoomLevel = 5;
+    const maxZoomLevel = 18;
     // Setup map
     let mapOptions = {
         center: [-43.5, 172.5],
         zoom: 11,
         layers:[baseLayer],
-        zoomControl: false
+        zoomControl: false,
+        maxBounds: nzBounds,
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel
     };
     map = new L.map('map', mapOptions);
 
