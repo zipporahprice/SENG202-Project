@@ -23,7 +23,7 @@ public class AngleFilter {
      *                        if the angle they make with adjacent locations exceeds this threshold.
      * @return A list of filtered locations based on angle constraints.
      */
-    public static List<Location> filterLocationsByAngle(List<Location>coordinates, double angleThreshold) {
+    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angleThreshold) {
         if (coordinates.size() < 3) {
             return coordinates; // Not enough points to filter
         }
@@ -67,8 +67,7 @@ public class AngleFilter {
      * @param curr The first location point.
      * @param next The second location point.
      *
-     * @return The difference in degrees between the bearings of
-     * the two segments formed by the provided points.
+     * @return The difference in degrees between the bearings of the two segments.
      */
     private static double calculateAngle(Location prev, Location curr, Location next) {
         // Convert latitude and longitude to radians for calculation
@@ -78,8 +77,15 @@ public class AngleFilter {
         double lon2 = Math.toRadians(next.getLongitude() - curr.getLongitude());
 
         // Compute the bearing (angle) between the two points
-        double angle1 = Math.atan2(Math.sin(lon1) * Math.cos(lat1), Math.cos(prev.getLatitude()) * Math.sin(curr.getLatitude()) - Math.sin(prev.getLatitude()) * Math.cos(curr.getLatitude()) * Math.cos(lon1));
-        double angle2 = Math.atan2(Math.sin(lon2) * Math.cos(lat2), Math.cos(curr.getLatitude()) * Math.sin(next.getLatitude()) - Math.sin(curr.getLatitude()) * Math.cos(next.getLatitude()) * Math.cos(lon2));
+        double numerator1 = Math.sin(lon1) * Math.cos(lat1);
+        double denominatorPartA1 = Math.cos(prev.getLatitude()) * Math.sin(curr.getLatitude());
+        double denominatorPartB1 = Math.sin(prev.getLatitude()) * Math.cos(curr.getLatitude()) * Math.cos(lon1);
+        double angle1 = Math.atan2(numerator1, denominatorPartA1 - denominatorPartB1);
+
+        double numerator2 = Math.sin(lon2) * Math.cos(lat2);
+        double denominatorPartA2 = Math.cos(curr.getLatitude()) * Math.sin(next.getLatitude());
+        double denominatorPartB2 = Math.sin(curr.getLatitude()) * Math.cos(next.getLatitude()) * Math.cos(lon2);
+        double angle2 = Math.atan2(numerator2, denominatorPartA2 - denominatorPartB2);
 
         // Return the difference of the two angles
         return Math.toDegrees(angle2 - angle1);
