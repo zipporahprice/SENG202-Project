@@ -1,8 +1,5 @@
 package seng202.team0.business;
 
-import javafx.scene.chart.PieChart;
-import seng202.team0.gui.GraphController;
-
 /**
  * Responsible for storing graph settings from FXML to be consistent.
  *
@@ -10,14 +7,16 @@ import seng202.team0.gui.GraphController;
 public class GraphManager {
     private static GraphManager graphingManager;
 
-    private String currentColumn;
+    private String currentColumnData;
+    private String currentColOfInterest;
 
     /**
      * Initializer of the GraphManager class that populates the graph settings
      * with the default state as pie graph of regions.
      */
     private GraphManager() {
-        currentColumn = "regions";
+        currentColumnData = "Regions";
+        currentColOfInterest = "regions";
     }
 
     /**
@@ -33,5 +32,20 @@ public class GraphManager {
         return graphingManager;
     }
 
+    public String getCurrentColumnData() {
+        return currentColumnData;
+    }
+
+    public void setCurrentColumnData(String newColumn) {
+        currentColumnData = newColumn;
+    }
+
+    public String getCurrentColOfInterest() {
+        return currentColOfInterest;
+    }
+
+    public void setCurrentColOfInterest(String newColumn) {
+        currentColOfInterest = newColumn;
+    }
 
 }

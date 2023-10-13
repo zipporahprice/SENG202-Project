@@ -2,7 +2,6 @@ package seng202.team0.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team0.App;
 import seng202.team0.business.FilterManager;
-import seng202.team0.repository.DatabaseManager;
+import seng202.team0.business.GraphManager;
 import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
@@ -43,19 +42,13 @@ public class GraphController implements Initializable, MenuController {
 
     private Stage stage;
 
-    private FilterManager filters = FilterManager.getInstance();
-    private List<String> modesSelected = filters.getModesSelected();
-
-    private Connection connection;
-    private DatabaseManager databaseManager;
-    private String columnOfInterest;
+    private static String columnOfInterest = "region";
     @FXML
     private ChoiceBox chartChoiceBox;
     private String currentChart = "Pie Graph";
-
     @FXML
     private ChoiceBox chartDataChoiceBox;
-    private String currentChartData = "Region";
+    private static String currentChartData = "Region";
     @FXML
     private AnchorPane graphsDataPane;
 
@@ -66,7 +59,6 @@ public class GraphController implements Initializable, MenuController {
         setChartOptions();
         setPieChartDataOptions();
 
-        columnOfInterest = "region"; //to start off
         //TODO need to account for severity, transport type, year, holiday??
         pieChartSqlTestData = newPieChartData(columnOfInterest);
 
@@ -81,6 +73,9 @@ public class GraphController implements Initializable, MenuController {
      */
     @Override
     public void updateManager() {
+        GraphManager graphingManager = GraphManager.getInstance();
+        graphingManager.setCurrentColumnData(currentChartData);
+        graphingManager.setCurrentColOfInterest(columnOfInterest);
 
     }
 
@@ -89,21 +84,35 @@ public class GraphController implements Initializable, MenuController {
      */
     @Override
     public void loadManager() {
+        GraphManager graphingManager = GraphManager.getInstance();
+
+        String currentColumnData = graphingManager.getCurrentColumnData();
+        currentChartData = currentColumnData;
+
+        String currentColOfInterest = graphingManager.getCurrentColOfInterest();
+        columnOfInterest = currentColOfInterest;
 
     }
 
     private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
-        pieGraph.setData(pieData);
+        if (pieGraph.getData().size() != 0) {
+            pieGraph.getData().clear();
+            System.out.println("clearing data from pie graph. new: " + columnOfInterest);
+        }
+
+        for (PieChart.Data data : pieData) {
+            pieGraph.getData().add(data);
+        }
+
+
+//        pieGraph.setData(pieData);
         pieGraph.setTitle("Crashes in Aotearoa by " + columnOfInterest);
         pieGraph.setLegendVisible(false);
         pieGraph.setLabelsVisible(true);
-        pieGraph.setLabelLineLength(16);
-        pieGraph.setVisible(true);
+        pieGraph.setLabelLineLength(30);
         if (pieGraph.isVisible() == false) {
             System.out.println("PIE GRAPH NOT VISIBLE");
         }
-
-        pieChartPane.setVisible(true);
 
 
         pieGraph.getData().forEach(data -> {
@@ -112,7 +121,9 @@ public class GraphController implements Initializable, MenuController {
             Tooltip toolTipPercentRegion = new Tooltip(percentage + ", " + slice);
             Tooltip.install(data.getNode(), toolTipPercentRegion);
         });
+
     }
+
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
@@ -192,7 +203,7 @@ public class GraphController implements Initializable, MenuController {
         chartDataChoiceBox.getItems().addAll(
                 "Region", "Severity", "Vehicle type", "Weather", "Year");
         chartDataChoiceBox.setValue(currentChartData);
-        columnOfInterest = ((String) chartDataChoiceBox.getValue()).toLowerCase();
+//        columnOfInterest = ((String) chartDataChoiceBox.getValue()).toLowerCase();
         System.out.println(columnOfInterest + " COL OF INTEREST");
         chartDataChoiceBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -210,7 +221,7 @@ public class GraphController implements Initializable, MenuController {
                             break;
                         case "Severity":
                             // Code to show severity pie chart.
-                            //TODO refactor newPieChartData into here.
+//                            columnOfInterest = "severity";
                             break;
                         case "Vehicle type":
                             //code to show vehicle type pie chart.
@@ -224,6 +235,7 @@ public class GraphController implements Initializable, MenuController {
                             break;
                         case "Year":
                             //code to show the year data pie chart
+//                            columnOfInterest = "crash-year";
                             break;
                         default:
                             // Other cases.
@@ -232,10 +244,12 @@ public class GraphController implements Initializable, MenuController {
                     }
                     log.info("Selected columnOfInterest: " + columnOfInterest);
 
-                    ObservableList<PieChart.Data> pieData = newPieChartData(columnOfInterest);
-                    log.info("Data size: " + pieData.size());
-
-                    setPieGraph(pieChartMade, pieData);
+                    ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
+                    log.info("Data size: " + newPieData.size());
+                    pieChartMade.getData().removeAll();
+                    pieChartMade.setVisible(false);
+                    setPieGraph(pieChartMade, newPieData);
+                    pieChartMade.setVisible(true);
                 });
     }
 
@@ -249,38 +263,6 @@ public class GraphController implements Initializable, MenuController {
         this.stage = stage;
     }
 
-    /**
-     * Handles the action of navigating back to the main window view from the current view.
-     *
-     * @param event The ActionEvent that triggered this method.
-     */
-    public void handleBackButton(ActionEvent event) {
-        try {
-            // Load the main window FXML file
-            FXMLLoader mainLoader = new FXMLLoader(getClass()
-                    .getResource("/fxml/main.fxml"));
-            Parent mainView = mainLoader.load();
-
-            // Get the controller of main.fxml
-            MainController mainController = mainLoader.getController();
-
-            // Initialize the main window
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            mainController.init(window);
-
-            // Create a new scene and put the main window into it
-            Scene mainViewScene = new Scene(mainView);
-
-            // Set the scene to the stage
-            window.setScene(mainViewScene);
-
-            // Finally, show the stage
-            window.show();
-
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
 
 
 }
