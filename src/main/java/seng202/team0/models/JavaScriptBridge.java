@@ -55,9 +55,9 @@ public class JavaScriptBridge {
      * @return A JSON representation of crash data containing latitude and longitude information.
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
-    public String crashes() {
+    public String setCrashes() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("resetLayers();");
+        stringBuilder.append("resetLayers();Promise.resolve().then(function () {");
 
         crashData.getCrashLocations().stream().forEach(crash -> {
             HashMap crash1 = (HashMap) crash;
@@ -71,7 +71,7 @@ public class JavaScriptBridge {
                     latitude, longitude, severity, year, weather));
         });
 
-        stringBuilder.append("setHeatmapData();");
+        stringBuilder.append("}).then(function () {setHeatmapData();});");
 
         return stringBuilder.toString();
     }
