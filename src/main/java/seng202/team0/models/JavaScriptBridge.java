@@ -195,14 +195,14 @@ public class JavaScriptBridge {
      * Sets the bounding circle variables in the RatingAreaManager singleton class.
      * Clears the bounding box variables.
      *
-     * @param latitude latitude of the bounding circle
-     * @param longitude longitude of the bounding circle
+     * @param lat latitude of the bounding circle
+     * @param lon longitude of the bounding circle
      * @param radius radius of the bounding circle
      */
-    public void setRatingAreaManagerBoundingCircle(double latitude,double longitude,double radius) {
+    public void setRatingAreaManagerBoundingCircle(double lat, double lon, double radius) {
         // Setting the Bounding Circle
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
-        ratingAreaManager.setBoundingCircleCentre(latitude, longitude);
+        ratingAreaManager.setBoundingCircleCentre(lat, lon);
         ratingAreaManager.setBoundingCircleRadius(radius);
 
         // Clearing the Bounding Box
