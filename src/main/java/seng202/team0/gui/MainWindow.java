@@ -3,8 +3,10 @@ package seng202.team0.gui;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 
@@ -25,17 +27,19 @@ public class MainWindow extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root = baseLoader.load();
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double estimatedTitleBarHeight = 30;
 
+        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight() - estimatedTitleBarHeight);
+
+        primaryStage.setScene(scene);
         MainController baseController = baseLoader.getController();
         baseController.init(primaryStage);
 
         primaryStage.setTitle("SafeTrip");
-        Scene scene = new Scene(root, 1000, 800);
-        primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
+
 
     /**
      * Launches the FXML application, this must be called from

@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 
-<StackPane fx:id="mainWindow" minHeight="400" minWidth="600" prefHeight="774.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" minHeight="400" minWidth="600"  xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
    <children>
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>

@@ -105,6 +105,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
+        modeChoice = "car"; //temporary solution to auto choose car.
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
