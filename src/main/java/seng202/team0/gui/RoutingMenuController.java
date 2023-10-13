@@ -88,6 +88,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private String modeChoice;
 
     private PopOver popOver;
+    private ArrayList<Button> transportButtons;
 
 
     /**
@@ -104,6 +105,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
+        transportButtons.add(carButton);
+        transportButtons.add(bikeButton);
+        transportButtons.add(walkingButton);
+
         removeRoute.setDisable(true);
 
 
@@ -616,9 +621,11 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
-
         modeChoice = (String) chosenButton.getUserData();
+        selectButton(modeChoice, chosenButton);
+    }
 
+    public void selectButton(String modeChoice, Button chosenButton) {
         if (Objects.equals(chosenButton, selectedButton)) {
             modeChoice = null;
             selectedButton = null;
@@ -637,7 +644,6 @@ public class RoutingMenuController implements Initializable, MenuController {
             chosenButton.getStyleClass().remove("hamburgerStyle");
             chosenButton.getStyleClass().add("clickedButtonColor");
             modeChoice = (String) chosenButton.getUserData();
-
         }
     }
 
@@ -652,11 +658,17 @@ public class RoutingMenuController implements Initializable, MenuController {
         String startLoc = route.getStartLocation();
         String endLoc = route.getEndLocation();
         String stopLoc = route.getStopLocation();
+        String mode = route.getTransportMode();
 
         // update textFields according to data
         startLocation.setText(startLoc);
         endLocation.setText(endLoc);
         stopLocation.setText(stopLoc);
+        for (Button button : transportButtons) {
+            if (button.getUserData().equals(mode)) {
+                selectButton(mode, button);
+            }
+        }
     }
 
     /**
@@ -668,6 +680,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setStartLocation(startLocation.getText());
         route.setEndLocation(endLocation.getText());
         route.setStopLocation(stopLocation.getText());
+        route.setTransportMode(modeChoice);
     }
 
 
