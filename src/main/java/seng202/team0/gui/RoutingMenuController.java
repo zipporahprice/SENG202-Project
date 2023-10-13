@@ -588,7 +588,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
      * on the GUI's ratingText label through getting the overlapping points of each segment.
      *
-     * @throws SQLException
+     * @throws SQLException if there is an error
      *
      */
     public static void ratingUpdate() throws SQLException {
