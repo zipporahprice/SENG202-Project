@@ -105,8 +105,6 @@ public class GraphController implements Initializable, MenuController {
             pieGraph.getData().add(data);
         }
 
-
-//        pieGraph.setData(pieData);
         pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
 
         pieGraph.setLegendVisible(false);
@@ -238,9 +236,8 @@ public class GraphController implements Initializable, MenuController {
      */
     public void setPieChartDataOptions() {
         chartDataChoiceBox.getItems().addAll(
-                "Region", "Severity", "Vehicle type", "Weather", "Year");
+                "Region", "Severity", "Vehicle Type", "Weather", "Year");
         chartDataChoiceBox.setValue(currentChartData);
-//        columnOfInterest = ((String) chartDataChoiceBox.getValue()).toLowerCase();
         System.out.println(columnOfInterest + " COL OF INTEREST");
         chartDataChoiceBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -252,9 +249,6 @@ public class GraphController implements Initializable, MenuController {
                         case "Region":
                             // Code to show the regions pie chart.
                             columnOfInterest = "region";
-//                            setPieGraph(pieChartMade, newPieChartData(columnOfInterest));
-
-
                             break;
                         case "Severity":
                             // Code to show severity pie chart.
@@ -266,8 +260,6 @@ public class GraphController implements Initializable, MenuController {
                         case "Weather":
                             //code to show weather pie chart
                             columnOfInterest = "weather";
-//                            setPieGraph(pieChartMade, newPieChartData(columnOfInterest));
-//                            pieChartMade.setVisible(true);
 
                             break;
                         case "Year":
