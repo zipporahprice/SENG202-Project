@@ -36,7 +36,10 @@ public class GraphController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(App.class);
     @FXML
-    public PieChart pieChartMade;
+    private PieChart pieChartMade;
+    @FXML
+    private AnchorPane pieChartPane;
+    ObservableList<PieChart.Data> pieChartSqlTestData;
 
     private Stage stage;
 
@@ -63,26 +66,38 @@ public class GraphController implements Initializable {
         setChartOptions();
         setPieChartDataOptions();
 
-        columnOfInterest = "weather";
+        columnOfInterest = "region"; //to start off
         //TODO need to account for severity, transport type, year, holiday??
-        ObservableList<PieChart.Data> pieChartSqlTestData = newPieChart(columnOfInterest);
+        pieChartSqlTestData = newPieChartData(columnOfInterest);
 
-        pieChartMade.setData(pieChartSqlTestData);
-        pieChartMade.setTitle("Crashes in Aotearoa by " + columnOfInterest);
-        pieChartMade.setLegendVisible(false);
-        pieChartMade.setLabelsVisible(true);
-        pieChartMade.setLabelLineLength(16);
+        setPieGraph(pieChartMade, pieChartSqlTestData);
 
-        pieChartMade.getData().forEach(data -> {
+
+    }
+
+    private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
+        pieGraph.setData(pieData);
+        pieGraph.setTitle("Crashes in Aotearoa by " + columnOfInterest);
+        pieGraph.setLegendVisible(false);
+        pieGraph.setLabelsVisible(true);
+        pieGraph.setLabelLineLength(16);
+        pieGraph.setVisible(true);
+        if (pieGraph.isVisible() == false) {
+            System.out.println("PIE GRAPH NOT VISIBLE");
+        }
+
+        pieChartPane.setVisible(true);
+
+
+        pieGraph.getData().forEach(data -> {
             String percentage = String.format("%.2f%%", (data.getPieValue() / 100));
             String slice = data.getName();
             Tooltip toolTipPercentRegion = new Tooltip(percentage + ", " + slice);
             Tooltip.install(data.getNode(), toolTipPercentRegion);
         });
-
     }
 
-    private ObservableList<PieChart.Data> newPieChart(String columnOfInterest) {
+    private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
         List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
@@ -101,7 +116,7 @@ public class GraphController implements Initializable {
             sliceNames.add(column);
             sliceCounts.add(count);
 
-            System.out.println("Region: " + column + "  Count: " + count);
+            System.out.println(columnOfInterest + ": " + column + "  Count: " + count);
             //TODO remove print statement
         }
 
@@ -135,7 +150,7 @@ public class GraphController implements Initializable {
                     switch (currentChart) {
                         case "Pie Graph":
                             // Code to show the Pie Graph.
-                            //TODO refactor newPieChart into here.
+                            //TODO refactor newPieChartData into here.
                             graphsDataPane.setVisible(true);
                             //todo set line graph pane visibility false
                             break;
@@ -160,6 +175,8 @@ public class GraphController implements Initializable {
         chartDataChoiceBox.getItems().addAll(
                 "Region", "Severity", "Vehicle type", "Weather", "Year");
         chartDataChoiceBox.setValue(currentChartData);
+        columnOfInterest = ((String) chartDataChoiceBox.getValue()).toLowerCase();
+        System.out.println(columnOfInterest + " COL OF INTEREST");
         chartDataChoiceBox.getSelectionModel()
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
@@ -169,25 +186,39 @@ public class GraphController implements Initializable {
                     switch (currentChartData) {
                         case "Region":
                             // Code to show the regions pie chart.
+                            columnOfInterest = "region";
+//                            setPieGraph(pieChartMade, newPieChartData(columnOfInterest));
+
+
                             break;
                         case "Severity":
                             // Code to show severity pie chart.
-                            //TODO refactor newPieChart into here.
+                            //TODO refactor newPieChartData into here.
                             break;
                         case "Vehicle type":
                             //code to show vehicle type pie chart.
                             break;
                         case "Weather":
                             //code to show weather pie chart
+                            columnOfInterest = "weather";
+//                            setPieGraph(pieChartMade, newPieChartData(columnOfInterest));
+//                            pieChartMade.setVisible(true);
+
                             break;
                         case "Year":
                             //code to show the year data pie chart
                             break;
                         default:
                             // Other cases.
-                            log.error("uh oh wrong choiceBox option");
+                            log.error("Invalid choiceBox option: " + currentChartData);
                             break;
                     }
+                    log.info("Selected columnOfInterest: " + columnOfInterest);
+
+                    ObservableList<PieChart.Data> pieData = newPieChartData(columnOfInterest);
+                    log.info("Data size: " + pieData.size());
+
+                    setPieGraph(pieChartMade, pieData);
                 });
     }
 
