@@ -60,7 +60,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private ComboBox<String> endLocation;
     @FXML
-    private TextField stopLocation;
+    private ComboBox<String> stopLocation;
     @FXML
     private Label numCrashesLabel;
     @FXML
@@ -89,6 +89,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     private String startAddress;
     private String endAddress;
+    private String stopAddress;
 
     private PopOver popOver;
 
@@ -258,6 +259,31 @@ public class RoutingMenuController implements Initializable, MenuController {
         endLocation.setItems(addressOptions);
     }
 
+    @FXML
+    private Location getStop() {
+        String address = stopAddress;
+        if (address.isEmpty()) {
+            return null;
+        }
+        Pair<Location, String> stopResult = geolocator.getLocation(address);
+        return stopResult.getKey();
+    }
+
+    @FXML
+    private void setStop() {
+        String selectedItem = stopLocation.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            stopAddress = selectedItem;
+        }
+    }
+
+    @FXML
+    private void loadStopOptions() {
+        String address = stopLocation.getEditor().getText().trim();
+        ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
+        stopLocation.setItems(addressOptions);
+    }
+
     /**
      * Saves a route or favorite location to a database.
      *
@@ -330,28 +356,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
 
-    /**
-     * Retrieves a stop location based on user input from a TextField.
-     *
-     * @return The stop Location object, or null if the input is empty or invalid.
-     */
-
-    @FXML
-    private Location getStop() {
-        String address = stopLocation.getText().trim();
-        if (address.isEmpty()) {
-            return null;
-        }
-        Pair<Location, String> endResult = geolocator.getLocation(address);
-        Location newMarker = endResult.getKey();
-        String errorMessage = endResult.getValue();
-        if (errorMessage != null) {
-            showPopOver(errorMessage, stopLocation, 5);
-            return null; // You might want to return null here if there was an error.
-        }
-        // e.g., javaScriptConnector.call("addMarker", address, newMarker.lat, newMarker.lng);
-        return newMarker;
-    }
 
     /**
      * Adds a stop location to the collection and generates a route action.
@@ -673,7 +677,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         // update textFields according to data
         startLocation.getEditor().setText(startLoc);
         endLocation.getEditor().setText(endLoc);
-        stopLocation.setText(stopLoc);
+        stopLocation.getEditor().setText(stopLoc);
     }
 
     /**
@@ -684,7 +688,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         RouteManager route = RouteManager.getInstance();
         route.setStartLocation(startLocation.getEditor().getText());
         route.setEndLocation(endLocation.getEditor().getText());
-        route.setStopLocation(stopLocation.getText());
+        route.setStopLocation(stopLocation.getEditor().getText());
     }
 
 
