@@ -40,14 +40,14 @@ public class AngleFilter {
 
     private static double calculateAngle(Location prev, Location curr, Location next) {
         // Convert latitude and longitude to radians for calculation
-        double lat1 = Math.toRadians(curr.latitude - prev.latitude);
-        double lon1 = Math.toRadians(curr.longitude - prev.longitude);
-        double lat2 = Math.toRadians(next.latitude - curr.latitude);
-        double lon2 = Math.toRadians(next.longitude - curr.longitude);
+        double lat1 = Math.toRadians(curr.getLatitude() - prev.getLatitude());
+        double lon1 = Math.toRadians(curr.getLongitude() - prev.getLongitude());
+        double lat2 = Math.toRadians(next.getLatitude() - curr.getLatitude());
+        double lon2 = Math.toRadians(next.getLongitude() - curr.getLongitude());
 
         // Compute the bearing (angle) between the two points
-        double angle1 = Math.atan2(Math.sin(lon1) * Math.cos(lat1), Math.cos(prev.latitude) * Math.sin(curr.latitude) - Math.sin(prev.latitude) * Math.cos(curr.latitude) * Math.cos(lon1));
-        double angle2 = Math.atan2(Math.sin(lon2) * Math.cos(lat2), Math.cos(curr.latitude) * Math.sin(next.latitude) - Math.sin(curr.latitude) * Math.cos(next.latitude) * Math.cos(lon2));
+        double angle1 = Math.atan2(Math.sin(lon1) * Math.cos(lat1), Math.cos(prev.getLatitude()) * Math.sin(curr.getLatitude()) - Math.sin(prev.getLatitude()) * Math.cos(curr.getLatitude()) * Math.cos(lon1));
+        double angle2 = Math.atan2(Math.sin(lon2) * Math.cos(lat2), Math.cos(curr.getLatitude()) * Math.sin(next.getLatitude()) - Math.sin(curr.getLatitude()) * Math.cos(next.getLatitude()) * Math.cos(lon2));
 
         // Return the difference of the two angles
         return Math.toDegrees(angle2 - angle1);

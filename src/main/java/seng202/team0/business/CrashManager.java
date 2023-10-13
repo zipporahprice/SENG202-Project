@@ -1,19 +1,12 @@
 package seng202.team0.business;
 
+import java.io.File;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team0.io.CrashCSVImporter;
+import seng202.team0.io.CrashCsvImporter;
 import seng202.team0.models.Crash;
-import seng202.team0.repository.CrashDAO;
-import seng202.team0.repository.FavouriteDAO;
-import seng202.team0.repository.SQLiteQueryBuilder;
-
-import java.io.File;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
  * Manages operations related to Crash data, including importing Crash data from CSV files,
@@ -31,17 +24,17 @@ import java.util.stream.Collectors;
 
 public class CrashManager {
     private static final Logger log = LogManager.getLogger(CrashManager.class);
-    private final CrashDAO crashDAO;
-    public CrashManager() { crashDAO = new CrashDAO(); }
 
     /**
-     * Saves a file of sales to the repository layer using the specified crash csv importer functionality
+     * Saves a file of sales to the repository layer.
+     * Does this by using the specified crash csv importer functionality.
+     *
      * @param importer Crash csv importer object to use
      * @param file File to be imported
      */
-    public void addAllCrashesFromFile(CrashCSVImporter importer, File file) {
-        List<Crash> sales = importer.crashListFromFile(file);
-        crashDAO.addMultiple(sales);
+    public void addAllCrashesFromFile(CrashCsvImporter importer, File file) {
+        List<Crash> crashes = importer.crashListFromFile(file);
+        SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
     }
 
     /**
@@ -51,13 +44,14 @@ public class CrashManager {
      * @return The Crash object associated with the specified ID, or null if no such Crash is found.
      */
     public Crash getCrash(int id) {
-        return crashDAO.getOne(id);
+        return (Crash) SqliteQueryBuilder.create().select("*").from("crashes")
+                .where("object_id = " + id).buildGetter().get(0);
     }
 
     /**
      * Retrieves crash locations from the database based on selected filters.
      *
-     * @return A list of crash locations represented as database records containing longitude, latitude, and severity.
+     * @return A list of crash locations containing longitude, latitude, and severity.
      */
     public List getCrashLocations() {
         // TODO Currently hard coding according to CrashInfo model
@@ -68,18 +62,18 @@ public class CrashManager {
         String where = FilterManager.getInstance().toString();
 
         if (where.length() == 0) {
-            return SQLiteQueryBuilder
+            return SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
-                    .build();
+                    .buildGetter();
         } else {
-            return SQLiteQueryBuilder
+            return SqliteQueryBuilder
                     .create()
                     .select(select)
                     .from(from)
                     .where(where)
-                    .build();
+                    .buildGetter();
         }
     }
 }

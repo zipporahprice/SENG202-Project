@@ -1,43 +1,74 @@
 package seng202.team0.gui;
 
+import java.io.IOException;
+import java.util.Objects;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.Message;
+import seng202.team0.business.RatingAreaManager;
+import seng202.team0.models.JavaScriptBridge;
 
-import javafx.event.ActionEvent;
-import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Controller for the main.fxml window
+ *
  * @author Team10
  */
-
-
-public class MainController {
+public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     private static final Logger log = LogManager.getLogger(MainController.class);
+    public StackPane loadingScreen;
+    public Label loadingPercentageLabel;
     @FXML
     private WebView webView;
     @FXML
     private StackPane mainWindow;
+
+    @FXML
+    private ProgressBar progressBar;
     private Stage stage;
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
     private MapController mapController;
+
+    @FXML
+    private Button refreshButton;
+
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
+    private MenuController controller;
+
+    private JavaScriptBridge javaScriptBridge;
+
+    private Timeline progressBarTimeline;
+    private Button selectedButton = null;
+    //private String menuChoice;
+
+    private RoutingMenuController routingMenuController;
 
 
     /**
@@ -58,53 +89,94 @@ public class MainController {
         stage.setMaximized(true);
         stage.sizeToScene();
 
+        loadingScreen.setVisible(true);
         webEngine = webView.getEngine();
-        webEngine.getLoadWorker().stateProperty().addListener(
-                (ov, oldState, newState) -> {
-                    // if javascript loads successfully
-                    if (newState == Worker.State.SUCCEEDED) {
-                        javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
-                    }
-                });
-
         mapController = new MapController();
         mapController.setWebView(webView);
         mapController.init(stage);
-
-        loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
+        javaScriptBridge = mapController.getJavaScriptBridge();
+        javaScriptBridge.setListener(this);
+        javaScriptBridge.setMainController(this);
+        loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
+        initProgressBarTimeline();
     }
 
 
     /**
-     * Loads and displays the help window within the main application window.
-     * This method uses JavaFX's FXMLLoader to load the content of the help window from an FXML file.
-     * It clears the existing content in the main window and adds the help window's content.
-     * The help window is anchored to the right side of the main window.
+     * Initializes and manages the progress bar and its animation timeline.
+     * This is for the loading screen
      */
-    @FXML
-    public void loadHelp() {
+    private void initProgressBarTimeline() {
+        progressBarTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(1),
+                        new KeyValue(progressBar.progressProperty(), 1.0)
+                )
+        );
+        progressBarTimeline.setCycleCount(1);
+
+        progressBar.progressProperty().addListener((obs, oldVal, newVal) -> {
+            int progressPercentage = (int) (newVal.doubleValue() * 100);
+            loadingPercentageLabel.setText(progressPercentage + "%");
+        });
+
+        progressBarTimeline.play();
+
+        webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
+                progressBarTimeline.stop();
+                animateProgressBarToFull(progressBar);
+            }
+        });
+    }
+
+    /**
+     * Animates a JavaFX ProgressBar to reach full (100%) progress.
+     *
+     * @param progressBar The ProgressBar to be animated.
+     */
+    private void animateProgressBarToFull(ProgressBar progressBar) {
+        final Duration duration = Duration.millis(500);
+        final Timeline timeline = new Timeline();
+        KeyValue keyValue = new KeyValue(progressBar.progressProperty(), 1.0);
+
+        KeyFrame keyFrame = new KeyFrame(duration, keyValue);
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+    }
+
+    /**
+     * Loads the graph display.
+     */
+    public void loadGraphs() {
         try {
-            FXMLLoader helpLoader = new FXMLLoader(getClass().getResource("/fxml/help_window.fxml"));
-            Parent helpViewParent = helpLoader.load();
+            FXMLLoader loadGraphs = new FXMLLoader(getClass()
+                    .getResource("/fxml/graph_window.fxml"));
+            Parent graphsViewParent = loadGraphs.load();
 
-            // TODO maybe take out of function and put into something you can call for all loaders
             mainWindow.getChildren().clear();
-
-            mainWindow.getChildren().add(helpViewParent);
-            AnchorPane.setRightAnchor(helpViewParent,0d);
+            mainWindow.getChildren().add(graphsViewParent);
+            AnchorPane.setRightAnchor(graphsViewParent, 0d);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
     /**
-     * Loads menu display in FXML file into menuDisplayPane
+     * Loads menu display in FXML file into menuDisplayPane.
      */
-    private void loadMenuDisplayFromFXML(String filePath) {
+    private void loadMenuDisplayFromFxml(String filePath) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
         try {
             StackPane menuDisplay = loader.load();
             menuDisplayPane.getChildren().setAll(menuDisplay);
+            if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
+                    && !menuPopulated.equals("help")) {
+                controller = loader.getController();
+            }
+
         } catch (IOException ioException) {
             log.error(ioException);
         }
@@ -115,21 +187,118 @@ public class MainController {
      */
     public void toggleMenuDisplay(ActionEvent event) {
         Button menuButton = (Button) event.getSource();
+
+        toggleMenuButton(menuButton);
+
         String menuChoice = (String) menuButton.getUserData();
 
-        if (Objects.equals(menuPopulated, menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/empty_menu.fxml");
-            menuPopulated = "empty";
-        } else if (Objects.equals("routing", menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/routing_menu.fxml");
-            menuPopulated = menuChoice;
-        } else if (Objects.equals("filtering", menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/filtering_menu.fxml");
-            menuPopulated = menuChoice;
-        } else if (Objects.equals("settings", menuChoice)) {
-            loadMenuDisplayFromFXML("/fxml/settings_menu.fxml");
-            menuPopulated = menuChoice;
+        if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
+                && !menuPopulated.equals(("help"))) {
+            controller.updateManager();
         }
 
+        if (menuPopulated.equals("rateArea")) {
+            MainController.javaScriptConnector.call("drawingModeOff");
+            RatingAreaManager.getInstance().clearBoundingBoxes();
+        }
+
+        if (Objects.equals(menuPopulated, menuChoice)) {
+            menuPopulated = "empty";
+            loadMenuDisplayFromFxml("/fxml/empty_menu.fxml");
+
+        } else if (Objects.equals("routing", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/routing_menu.fxml");
+
+        } else if (Objects.equals("filtering", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/filtering_menu.fxml");
+
+        } else if (Objects.equals("settings", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/settings_menu.fxml");
+
+        } else if (Objects.equals("import", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/import_window.fxml");
+
+        } else if (Objects.equals("rateArea", menuChoice)) {
+            menuPopulated = menuChoice;
+            MainController.javaScriptConnector.call("drawingModeOn");
+            loadMenuDisplayFromFxml("/fxml/rating_area_menu.fxml");
+
+        } else if (Objects.equals("help", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
+        }
+    }
+
+
+    /**
+     * changes the colour of the chosen button when clicked.
+     *
+     * @param chosenButton the button that was selected.
+     */
+    public void toggleMenuButton(Button chosenButton) {
+        if (Objects.equals(chosenButton, selectedButton)) { // deselects
+            selectedButton = null;
+            chosenButton.getStyleClass().remove("clickedButtonColor");
+            chosenButton.getStyleClass().add("menuButtonColor");
+        } else if (!Objects.equals(chosenButton, selectedButton)
+                && selectedButton != null) { // deselects and selects new
+            selectedButton.getStyleClass().remove("clickedButtonColor");
+            selectedButton.getStyleClass().add("menuButtonColor");
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+        } else { // just selects new
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("menuButtonColor");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+
+        }
+    }
+
+    /**
+     * Fades out a loading screen using a FadeTransition animation.
+     */
+    private void fadeOutLoadingScreen() {
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setNode(loadingScreen);
+        fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.millis(1500));
+        fadeTransition.setOnFinished(event -> {
+            loadingScreen.setVisible(false);
+        });
+        // Start the fade out
+        fadeTransition.play();
+    }
+
+    public void enableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void disableRefresh() {
+        refreshButton.setDisable(false);
+    }
+
+    public void refreshData() {
+        MainController.javaScriptConnector.call("updateDataShown");
+        disableRefresh();
+    }
+
+    public void quitApp() {
+        Platform.exit();
+    }
+
+    /**
+     * This method is called when the map has finished loading.
+     * It initiates the fading out of the loading screen.
+     */
+    @Override
+    public void mapLoaded() {
+        fadeOutLoadingScreen();
     }
 }

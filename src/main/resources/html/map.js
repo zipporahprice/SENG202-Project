@@ -268,7 +268,7 @@ function addMarker(title, lat, lng) {
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
  */
-function displayRoute(routesIn, transportMode, safetyScore) {
+function displayRoute(routesIn, transportMode) {
     removeRoute();
 
     var routesArray = JSON.parse(routesIn);
@@ -277,7 +277,7 @@ function displayRoute(routesIn, transportMode, safetyScore) {
     var mode = getMode(transportMode);
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
-        var routeColor = getColorForSafetyScore(safetyScore);
+        //var routeColor = getColorForSafetyScore(safetyScore);
 
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
 
@@ -286,11 +286,11 @@ function displayRoute(routesIn, transportMode, safetyScore) {
             routeWhileDragging: true,
             showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            lineOptions: {
-                styles: [
-                    {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
-                ]
-            }
+            // lineOptions: {
+            //     styles: [
+            //         {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
+            //     ]
+            // }
         }).addTo(map);
 
         newRoute.on('routeselected', (e) => {

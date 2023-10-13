@@ -1,36 +1,36 @@
 package seng202.team0.io;
 
+
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import seng202.team0.App;
-import seng202.team0.models.CrashSeverity;
-import seng202.team0.models.Crash;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import seng202.team0.App;
+import seng202.team0.models.Crash;
 /**
  * Class handling the importing of crash data from CSV files.
+ *
  * @author Neil Alombro
  * @author Zipporah Price
  * @author Angelica Silva
  */
 
-public class CrashCSVImporter {
+public class CrashCsvImporter {
 
-    private static final Logger log = LogManager.getLogger(App.class);
+    private static final Logger log = LogManager.getLogger(CrashCsvImporter.class);
 
     /**
-     * List of all the crashes as Point objects from the given file object
-     * @param file
+     * List of all the crashes as Point objects from the given file object.
+     *
+     * @param file a file containing the crash data
      * @return points list of all crashes from the given file
-     * @throws IOException
+     * @throws IOException throws exception in case
      */
     public List<Crash> crashListFromFile(File file) {
         List<Crash> pointList = new ArrayList<Crash>();
@@ -65,20 +65,19 @@ public class CrashCSVImporter {
     }
 
     /**
-     * Takes a list of strings representing variables
-     * from the crash data CSV file and returns a Point object
-     * @param crashVariables
+     * Takes a list of strings representing variables.
+     * From the crash data CSV file and returns a Point object.
+     *
+     * @param crashVariables a list of strings representing variables
      * @return Point object initialised with given crashVariables
      */
     public Crash crashFromString(String[] crashVariables) {
-        // TODO think about numbers not existing, ie empty string instead of check 0
 
         try {
             int objectId = changeEmptyToZero(crashVariables[0]);
             boolean bicycleInvolved = changeEmptyToZero(crashVariables[2]) > 0;
             boolean busInvolved = changeEmptyToZero(crashVariables[4]) > 0;
 
-            // TODO look at different type of car variables
             boolean carInvolved = changeEmptyToZero(crashVariables[5]) > 0;
             int crashYear = changeEmptyToZero(crashVariables[14]);
             String crashLocation1 = crashVariables[9];
@@ -98,14 +97,32 @@ public class CrashCSVImporter {
             boolean trainInvolved = changeEmptyToZero(crashVariables[57]) > 0;
             boolean truckInvolved = changeEmptyToZero(crashVariables[59]) > 0;
 
-            // TODO think about weatherA vs weatherB
             String weather = crashVariables[65];
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);
 
-            return new Crash(objectId, speedLimit, crashYear, crashLocation1, crashLocation2, severity, region, weather,
-                    longitude, latitude, bicycleInvolved, busInvolved, carInvolved, holiday, mopedInvolved,
-                    motorcycleInvolved, parkedVehicleInvolved, pedestrianInvolved, schoolBusInvolved, trainInvolved, truckInvolved);
+            return new Crash.Builder(objectId)
+                    .speedLimit(speedLimit)
+                    .year(crashYear)
+                    .location1(crashLocation1)
+                    .location2(crashLocation2)
+                    .severity(severity)
+                    .region(region)
+                    .weather(weather)
+                    .longitude(longitude)
+                    .latitude(latitude)
+                    .bicycleInvolved(bicycleInvolved)
+                    .busInvolved(busInvolved)
+                    .carInvolved(carInvolved)
+                    .holiday(holiday)
+                    .mopedInvolved(mopedInvolved)
+                    .motorcycleInvolved(motorcycleInvolved)
+                    .parkedVehicleInvolved(parkedVehicleInvolved)
+                    .pedestrianInvolved(pedestrianInvolved)
+                    .schoolBusInvolved(schoolBusInvolved)
+                    .trainInvolved(trainInvolved)
+                    .truckInvolved(truckInvolved)
+                    .build();
         } catch (NumberFormatException e) {
             log.error(e);
         }

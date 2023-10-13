@@ -5,6 +5,7 @@ package seng202.team0.models;
  * It provides a mapping between string representations of region names and enum constants.
  *
  * @author Zipporah Price
+ *
  */
 public enum Region {
 
@@ -13,7 +14,6 @@ public enum Region {
     CANTERBURY("Canterbury"),
     GISBORNE("Gisborne"),
     HAWKESBAY("Hawke's Bay"),
-    // TODO removing from a list with the macron on the last u on the first word is not working, just left it off
     MANAWATUWHANGANUI("Manawatū-Whanganui"),
     MARLBOROUGH("Marlborough"),
     NELSON("Nelson"),
@@ -29,7 +29,7 @@ public enum Region {
 
     private final String name;
 
-    Region (String name) {
+    Region(String name) {
         this.name = name;
     }
 
@@ -40,7 +40,7 @@ public enum Region {
      * @return The Region enum constant representing the given region string, or null if not found.
      */
     public static Region stringToRegion(String stringRegion) {
-        switch(stringRegion) {
+        switch (stringRegion) {
             case "Auckland Region": return Region.AUCKLAND;
             case "Bay of Plenty Region": return Region.BAYOFPLENTY;
             case "Canterbury Region": return Region.CANTERBURY;

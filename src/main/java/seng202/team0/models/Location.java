@@ -3,20 +3,45 @@ package seng202.team0.models;
 /**
  * Represents a geographic location with latitude and longitude coordinates.
  *
- * @author Team 10
+ * @author Angelica Silva
+ * @author Christopher Wareing
+ * @author Neil Alombro
+ * @author Todd Vermeir
+ * @author William Thompson
+ * @author Zipporah Price
+ *
  */
 public class Location {
-    public double latitude;
+    private double latitude;
 
-    public double longitude;
+    private double longitude;
 
     /**
-     * Creates a position by using the longitude and latitude of that position
-     * @param latitude
-     * @param longitude
+     * Creates a position by using the longitude and latitude of that position.
+     *
+     * @param latitude latitude of the given location
+     * @param longitude longitude of the given location
      */
-    public Location(double latitude, double longitude){
+    public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    /**
+     * Returns the latitude value of the location.
+     *
+     * @return latitude of location
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Returns the longitude value of the location.
+     *
+     * @return longitude of location
+     */
+    public double getLongitude() {
+        return longitude;
     }
 }

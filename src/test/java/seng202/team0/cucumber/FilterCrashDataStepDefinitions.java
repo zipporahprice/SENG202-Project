@@ -5,7 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import seng202.team0.business.FilterManager;
-import seng202.team0.repository.SQLiteQueryBuilder;
+import seng202.team0.repository.SqliteQueryBuilder;
 
 import java.util.List;
 
@@ -30,10 +30,10 @@ public class FilterCrashDataStepDefinitions {
 
     @Then("the user will see less crashes than the size of the {string} table")
     public void checkFilteringWorked(String table) {
-         List filtered = SQLiteQueryBuilder.create().select("*")
-                .from(table).where(where + " = 1").build();
-         List allPoints = SQLiteQueryBuilder.create().select("*")
-                 .from(table).build();
+         List filtered = SqliteQueryBuilder.create().select("*")
+                .from(table).where(where + " = 1").buildGetter();
+         List allPoints = SqliteQueryBuilder.create().select("*")
+                 .from(table).buildGetter();
 
          // TODO maybe look at if filtered actually has points??
          Assertions.assertTrue(filtered.size() < allPoints.size());

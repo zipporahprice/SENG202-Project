@@ -32,6 +32,7 @@ import seng202.team0.models.GeoLocator;
 import seng202.team0.models.Location;
 import seng202.team0.models.Route;
 import seng202.team0.repository.SqliteQueryBuilder;
+import seng202.team0.models.JavaScriptBridge;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -52,7 +53,7 @@ import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
  *
  * @author Team 10
  */
-public class RoutingMenuController implements Initializable {
+public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private TextField startLocation;
@@ -156,17 +157,16 @@ public class RoutingMenuController implements Initializable {
     /**
      * Displays a route or routes based on safety score, mode choice, and an array of routes.
      *
-     * @param safetyScore The safety score associated with the route.
      * @param routes      An array of Route objects to display.
      */
-    private void displayRoute(int safetyScore, Route... routes) {
+    private void displayRoute(Route... routes) {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         if (modeChoice == null) {
             showNotificationOnButtonPress(generateRoute, "Please select a transport option");
         } else {
             MainController.javaScriptConnector.call("displayRoute", Route
-                    .routesToJsonArray(routesList), modeChoice, safetyScore);
+                    .routesToJsonArray(routesList), modeChoice);
         }
     }
 
@@ -361,19 +361,7 @@ public class RoutingMenuController implements Initializable {
         }
     }
 
-    /**
-     * Retrieves crash points that overlap with a given route within a specified danger radius.
-     * This method retrieves crash information from a database,
-     * calculates distances between the route
-     * segments and crash points using the Haversine formula,
-     * and identifies crash points that fall
-     * within the specified danger radius of the route segments.
-     *
-     * @param route        The route for which overlapping crash points are to be identified.
-     * @param dangerRadius The radius in which crashes are considered overlapping with the route.
-     * @return A list of CrashInfo objects representing crash points that overlap with the route.
-     * @throws SQLException If an SQL-related error occurs during database query execution.
-     */
+
     public static double getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
@@ -401,7 +389,7 @@ public class RoutingMenuController implements Initializable {
      * @return The Haversine distance between the two locations in meters.
      */
 
-    public double haversineDistance(Location loc1, Crash loc2) {
+    public static double haversineDistance(Location loc1, Location loc2) {
         double r = 6371000; // Earth radius in meters
         double deltaLat = Math.toRadians(loc2.getLatitude() - loc1.getLatitude());
         double deltaLon = Math.toRadians(loc2.getLongitude() - loc1.getLongitude());
@@ -425,10 +413,10 @@ public class RoutingMenuController implements Initializable {
      * @return double of average severity
      */
     public static double crossProductQuery(Location startLocation, Location endLocation) {
-        double start_long_rad = Math.toRadians(startLocation.longitude);
-        double start_lat_rad = Math.toRadians(startLocation.latitude);
-        double end_long_rad = Math.toRadians(endLocation.longitude);
-        double end_lat_rad = Math.toRadians(endLocation.latitude);
+        double start_long_rad = Math.toRadians(startLocation.getLongitude());
+        double start_lat_rad = Math.toRadians(startLocation.getLatitude());
+        double end_long_rad = Math.toRadians(endLocation.getLongitude());
+        double end_lat_rad = Math.toRadians(endLocation.getLatitude());
 
         double start_x = Math.cos(start_lat_rad) * Math.cos(start_long_rad);
         double start_y = Math.cos(start_lat_rad) * Math.sin(start_long_rad);
@@ -446,10 +434,10 @@ public class RoutingMenuController implements Initializable {
         constantsTable.put("end_y", end_y);
         constantsTable.put("end_z", end_z);
 
-        double minLon = Math.min(startLocation.longitude, endLocation.longitude);
-        double maxLon = Math.max(startLocation.longitude, endLocation.longitude);
-        double minLat = Math.min(startLocation.latitude, endLocation.latitude);
-        double maxLat = Math.max(startLocation.latitude, endLocation.latitude);
+        double minLon = Math.min(startLocation.getLongitude(), endLocation.getLongitude());
+        double maxLon = Math.max(startLocation.getLongitude(), endLocation.getLongitude());
+        double minLat = Math.min(startLocation.getLatitude(), endLocation.getLatitude());
+        double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude());
 
         // One kilometre in degrees
         double oneKilometreInDegrees = 0.008;
@@ -473,24 +461,24 @@ public class RoutingMenuController implements Initializable {
         Location previousMin = filterManager.getViewPortMin();
         Location previousMax = filterManager.getViewPortMax();
 
-        filterManager.setViewPortMin(new Location(minLat - oneKilometreInDegrees, minLon - oneKilometreInDegrees));
-        filterManager.setViewPortMax(new Location(maxLat + oneKilometreInDegrees, maxLon + oneKilometreInDegrees));
+        filterManager.setViewPortMin(minLat - oneKilometreInDegrees, minLon - oneKilometreInDegrees);
+        filterManager.setViewPortMax(maxLat + oneKilometreInDegrees, maxLon + oneKilometreInDegrees);
 
         String filterWhere = filterManager.toString();
 
-        filterManager.setViewPortMin(previousMin);
-        filterManager.setViewPortMax(previousMax);
+        filterManager.setViewPortMin(previousMin.getLatitude(), previousMin.getLongitude());
+        filterManager.setViewPortMax(previousMax.getLatitude(), previousMax.getLongitude());
 
         String select = "severity";
         String from = "crashes, locations";
         String where = filterWhere + " AND " + worldDistance;
 
-        List severityList = SQLiteQueryBuilder.create()
+        List severityList = SqliteQueryBuilder.create()
                 .with(tableName, constantsTable)
                 .select(select)
                 .from(from)
                 .where(where)
-                .build();
+                .buildGetter();
         int totalSeverity = 0;
         double total = 0;
 
@@ -524,12 +512,7 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<Crash> crashInfos = getOverlappingPoints(route, 1000);
-            int total = ratingGenerator(crashInfos);
-            ratingText.setText("Danger: " + total + "/5");
-            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
-            displayRoute(total, route);
-            removeRoute.setDisable(false);
+            displayRoute(route);
         }
     }
 
@@ -572,11 +555,7 @@ public class RoutingMenuController implements Initializable {
             routeLocations.add(end);
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
-            List<Crash> crashInfos = getOverlappingPoints(route, 1000);
-            int total = ratingGenerator(crashInfos);
-            displayRoute(total, route);
-            ratingText.setText("Danger: " + total + "/5");
-            numCrashesLabel.setText("Number of crashes on route: " + crashInfos.size());
+            displayRoute(route);
         }
     }
 
