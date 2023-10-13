@@ -60,8 +60,10 @@ public class SqliteQueryBuilder {
     /**
      * Takes a table name and a mapping from variable name to variable and appends
      * a 'WITH' statement to the current query.
+     *
      * @param tableName name of the Common Table Expression
      * @param valuesMap Map object mapping from variable name and to variable value.
+     *
      * @return SQLiteQueryBuilder instance to chain methods
      */
     public SqliteQueryBuilder with(String tableName, Map<String, Number> valuesMap) {
