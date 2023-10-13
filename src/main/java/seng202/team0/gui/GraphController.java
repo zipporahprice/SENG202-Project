@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import seng202.team0.App;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.GraphManager;
+import seng202.team0.models.CrashSeverity;
 import seng202.team0.repository.SqliteQueryBuilder;
 
 /**
@@ -107,12 +108,20 @@ public class GraphController implements Initializable, MenuController {
 
 //        pieGraph.setData(pieData);
         pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
+
         pieGraph.setLegendVisible(false);
+
         pieGraph.setLabelsVisible(true);
-        pieGraph.setLabelLineLength(30);
-        pieGraph.setStartAngle(90);
+        pieGraph.setLabelLineLength(15);
+
+        pieGraph.setMinSize(300, 300);
+        pieGraph.setStartAngle(87);
         if (pieGraph.isVisible() == false) {
             System.out.println("PIE GRAPH NOT VISIBLE");
+        }
+
+        if (currentChartData.equals("Weather")) {
+            pieGraph.setLegendVisible(true);
         }
 
 
@@ -142,6 +151,26 @@ public class GraphController implements Initializable, MenuController {
             Object column = hash.get(columnOfInterest);
             double count = ((Number) hash.get("COUNT(*)")).doubleValue();
 
+            if (columnOfInterest.equals("severity")) {
+                switch ((int) column) {
+                    case 1:
+                        column = "Non-injury";
+                        break;
+                    case 2:
+                        column = "Minor";
+                        break;
+                    case 4:
+                        column = "Serious";
+                        break;
+                    case 8:
+                        column = "Fatal";
+                        break;
+                    default:
+                        log.error("Invalid severity type");
+                        break;
+                }
+            }
+
             sliceNames.add(column.toString());
             sliceCounts.add(count);
 
@@ -156,6 +185,7 @@ public class GraphController implements Initializable, MenuController {
             } else if (sliceName.equals("Null")) {
                 sliceName = "Unknown";
             }
+
             result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
         }
 
@@ -228,7 +258,7 @@ public class GraphController implements Initializable, MenuController {
                             break;
                         case "Severity":
                             // Code to show severity pie chart.
-//                            columnOfInterest = "severity";
+                            columnOfInterest = "severity";
                             break;
                         case "Vehicle type":
                             //code to show vehicle type pie chart.

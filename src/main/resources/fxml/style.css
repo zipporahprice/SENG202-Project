@@ -147,6 +147,17 @@
     -fx-text-fill: #fefefe;
     -fx-font-size: 1.6em;
 }
+.default-color0.chart-pie { -fx-pie-color: #22CDFFFF; }
+.default-color1.chart-pie { -fx-pie-color: #85ecc5; }
+.default-color2.chart-pie { -fx-pie-color: #f3ff8a; }
+.default-color3.chart-pie { -fx-pie-color: #f59b62; }
+.default-color4.chart-pie { -fx-pie-color: #f163b8; }
+.default-color5.chart-pie { -fx-pie-color: #ef505c; }
+.default-color6.chart-pie { -fx-pie-color: #3473e7; }
+.default-color7.chart-pie { -fx-pie-color: #a363f1; }
+
+
+
 
 .chart-pie {
     /*-fx-border-color: derive(-fx-pie-color, 0%);*/
