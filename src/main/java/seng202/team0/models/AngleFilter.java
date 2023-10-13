@@ -76,18 +76,29 @@ public class AngleFilter {
         double lat2 = Math.toRadians(next.getLatitude() - curr.getLatitude());
         double lon2 = Math.toRadians(next.getLongitude() - curr.getLongitude());
 
-        // Compute the bearing (angle) between the two points
-        double numerator1 = Math.sin(lon1) * Math.cos(lat1);
-        double denominatorPartA1 = Math.cos(prev.getLatitude()) * Math.sin(curr.getLatitude());
-        double denominatorPartB1 = Math.sin(prev.getLatitude()) * Math.cos(curr.getLatitude()) * Math.cos(lon1);
-        double angle1 = Math.atan2(numerator1, denominatorPartA1 - denominatorPartB1);
-
-        double numerator2 = Math.sin(lon2) * Math.cos(lat2);
-        double denominatorPartA2 = Math.cos(curr.getLatitude()) * Math.sin(next.getLatitude());
-        double denominatorPartB2 = Math.sin(curr.getLatitude()) * Math.cos(next.getLatitude()) * Math.cos(lon2);
-        double angle2 = Math.atan2(numerator2, denominatorPartA2 - denominatorPartB2);
+        double angle1 = computeAngle(lon1, lat1, prev.getLatitude(), curr.getLatitude());
+        double angle2 = computeAngle(lon2, lat2, curr.getLatitude(), next.getLatitude());
 
         // Return the difference of the two angles
         return Math.toDegrees(angle2 - angle1);
+    }
+
+    /**
+     * Computes the angle based on the bearing between two points.
+     * The bearing is the angle formed between the north direction
+     * and the line connecting the two points.
+     *
+     * @param lon The difference in longitude (in radians) between the two points.
+     * @param lat The difference in latitude (in radians) between the two points.
+     * @param firstLatitude The latitude (in degrees) of the first point.
+     * @param secondLatitude The latitude (in degrees) of the second point.
+     *
+     * @return The computed angle based on the bearing between the two points.
+     */
+    private static double computeAngle(double lon, double lat, double firstLatitude, double secondLatitude) {
+        double numerator = Math.sin(lon) * Math.cos(lat);
+        double denominatorPartA = Math.cos(firstLatitude) * Math.sin(secondLatitude);
+        double denominatorPartB = Math.sin(firstLatitude) * Math.cos(secondLatitude) * Math.cos(lon);
+        return Math.atan2(numerator, denominatorPartA - denominatorPartB);
     }
 }
