@@ -88,24 +88,23 @@ public class RatingAreaMenuController implements MenuController {
 
             HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);
 
+            double score = 0.0;
+            int total = 0;
             if (resultHashMap.get("AVG(severity)") != null) {
                 double averageSeverity = (double) resultHashMap.get("AVG(severity)");
-                int total = (int) resultHashMap.get("COUNT()");
-                double score = 0.0;
+                total = (int) resultHashMap.get("COUNT()");
+
                 if (total > 0) {
                     // Actual average severity will range from 1 to 8
                     // Score rating massaged to be out of 10 and in a range from 0 to 10.
                     score = ((averageSeverity - 1.0) / 7.0) * 10;
                 }
-
-                MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
-                ratingAreaText.setText("Danger: "
-                        + String.format("%.2f", score) + " / 10");
-                numCrashesAreaLabel.setText("Number of crashes in area: " + total);
-            } else {
-                ratingAreaText.setText("Danger: 0.00/10");
-                numCrashesAreaLabel.setText("Number of crashes in area: 0");
             }
+
+            MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
+            ratingAreaText.setText("Danger: "
+                    + String.format("%.2f", score) + " / 10");
+            numCrashesAreaLabel.setText("Number of crashes in area: " + total);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
