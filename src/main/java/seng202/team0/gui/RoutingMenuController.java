@@ -441,9 +441,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
     /**
-     * Takes in two locations of a start and end location and queries the database
-     * for an average severity of crashes within a 1km radius along the line between
-     * the two locations
+     * Takes in two locations of a start and end location and queries the database.
+     * for an average severity of crashes within a 1km radius along the line between.
+     * the two locations.
      *
      * @param startLocation location the route segment starts at
      * @param endLocation location the route segment ends at
