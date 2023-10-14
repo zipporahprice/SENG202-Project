@@ -15,15 +15,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TextArea?>
-<StackPane fx:id="mainWindow" minHeight="400" minWidth="600" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.MainController">
+<StackPane fx:id="mainWindow" minHeight="400" minWidth="600"  xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.MainController">
    <children>
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
-
          <StackPane.margin>
-
             <Insets />
          </StackPane.margin>
       </WebView>
