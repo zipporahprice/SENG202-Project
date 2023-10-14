@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import com.sun.tools.javac.Main;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -386,19 +388,112 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
 
-    public static double getOverlappingPoints(List<Location> coordinates) {
+    public static Result getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
         double totalDistance = 0;
+        double maxSegmentSeverity = Double.MIN_VALUE;
+        Location startOfMostDangerousSegment = null;
+        Location endOfMostDangerousSegment = null;
+
+        FilterManager filterManager = FilterManager.getInstance();
+        int startYear = filterManager.getEarliestYear();
+        int endYear = filterManager.getLatestYear();
+
+        Map<String, Integer> weatherSeverityTotal = new HashMap<>();
+        Map<String, Integer> weatherTotals = new HashMap<>();
+        int totalNumPoints = 0;
+
+        Set<Integer> objectIdSet = new HashSet<>();
+
         for (int i = 0; i < coordinates.size()-1; i+=1) {
             Location segmentStart = coordinates.get(i);
             Location segmentEnd = coordinates.get(i+1);
             double distance = haversineDistance(segmentStart, segmentEnd);
-            double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
+
+            List crashList = crossProductQuery(segmentStart, segmentEnd);
+
+            int totalSeverity = 0;
+            double total = 0;
+
+            for (Object severityMap : crashList) {
+                HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
+                int objectId = (int) map.get("object_id");
+                if (!objectIdSet.contains(objectId)) {
+                    objectIdSet.add(objectId);
+                    int currentSeverity = (int) map.get("severity");
+                    totalSeverity += currentSeverity;
+                    String weather = (String) map.get("weather");
+                    if (weatherSeverityTotal.containsKey(map.get("weather"))) {
+                        weatherSeverityTotal.put(weather, weatherSeverityTotal.get(weather) + currentSeverity);
+                        weatherTotals.put(weather, weatherTotals.get(weather) + 1);
+                    } else {
+                        weatherSeverityTotal.put(weather, currentSeverity);
+                        weatherTotals.put(weather, 1);
+                    }
+
+                    total += 1;
+                }
+            }
+            totalNumPoints += total;
+
+
+
+            double segmentSeverity = 0;
+
+            if (total > 0) {
+                segmentSeverity = totalSeverity / total;
+            }
+
+            if (segmentSeverity > maxSegmentSeverity) {
+                maxSegmentSeverity = segmentSeverity;
+                startOfMostDangerousSegment = segmentStart;
+                endOfMostDangerousSegment = segmentEnd;
+            }
+
             totalDistance += distance;
-            totalValue += averageSeverity / totalDistance;
+            totalValue += segmentSeverity / totalDistance;
         }
-        //TODO store average severities in a list to look at coloring route segments.
-        return totalValue * totalDistance;
+
+        double maxWeatherSeverity = Double.MIN_VALUE;
+        String maxWeather = "";
+
+        for (String weather : weatherSeverityTotal.keySet()) {
+            double currentWeatherSeverity = (double) weatherSeverityTotal.get(weather) / weatherTotals.get(weather);
+            if (currentWeatherSeverity > maxWeatherSeverity) {
+                maxWeatherSeverity = currentWeatherSeverity;
+                maxWeather = weather;
+            }
+        }
+
+        double dangerRatingOutOf10 = (totalValue); // Adjust the formula as necessary
+        //if (dangerRatingOutOf10 > 10) dangerRatingOutOf10 = 10; // Cap at 10
+
+        return new Result(dangerRatingOutOf10, startOfMostDangerousSegment, endOfMostDangerousSegment, maxSegmentSeverity, maxWeather, startYear, endYear, totalNumPoints);
+    }
+
+    // A helper class to hold the results
+    public static class Result {
+        public double dangerRating;
+        public Location startOfMostDangerousSegment;
+        public Location endOfMostDangerousSegment;
+
+        public double maxSegmentSeverity;
+        public String maxWeather;
+        public int startYear;
+        public int endYear;
+
+        public int totalNumPoints;
+
+        public Result(double dangerRating, Location startOfMostDangerousSegment, Location endOfMostDangerousSegment, double maxSegmentSeverity, String maxWeather, int startYear, int endYear, int totalNumPoints) {
+            this.dangerRating = dangerRating;
+            this.startOfMostDangerousSegment = startOfMostDangerousSegment;
+            this.endOfMostDangerousSegment = endOfMostDangerousSegment;
+            this.maxSegmentSeverity = maxSegmentSeverity;
+            this.maxWeather = maxWeather;
+            this.startYear = startYear;
+            this.endYear = endYear;
+            this.totalNumPoints = totalNumPoints;
+        }
     }
 
     /**
@@ -436,7 +531,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @param endLocation location the route segment ends at
      * @return double of average severity
      */
-    public static double crossProductQuery(Location startLocation, Location endLocation) {
+    public static List crossProductQuery(Location startLocation, Location endLocation) {
         double start_long_rad = Math.toRadians(startLocation.getLongitude());
         double start_lat_rad = Math.toRadians(startLocation.getLatitude());
         double end_long_rad = Math.toRadians(endLocation.getLongitude());
@@ -493,7 +588,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         filterManager.setViewPortMin(previousMin.getLatitude(), previousMin.getLongitude());
         filterManager.setViewPortMax(previousMax.getLatitude(), previousMax.getLongitude());
 
-        String select = "severity";
+        String select = "object_id, severity, weather";
         String from = "crashes, locations";
         String where = filterWhere + " AND " + worldDistance;
 
@@ -503,21 +598,8 @@ public class RoutingMenuController implements Initializable, MenuController {
                 .from(from)
                 .where(where)
                 .buildGetter();
-        int totalSeverity = 0;
-        double total = 0;
 
-        for (Object severityMap : severityList) {
-            HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
-            totalSeverity += (int) map.get("severity");
-            total += 1;
-        }
-
-        if (total > 0) {
-            return totalSeverity / total;
-        } else {
-            return 0;
-        }
-
+        return severityList;
     }
 
     /**
@@ -556,8 +638,10 @@ public class RoutingMenuController implements Initializable, MenuController {
     public static void ratingUpdate() throws SQLException {
         List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
         if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
-            double rating = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
-            RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating))); // Update the UI
+            Result review = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
+            String reviewString = String.format("This route has a %.2f/10 danger rating, there have been %d crashes since %d up till %d. The majority of crashes occur during %s conditions, the most dangerous segment is from BLANK to BLANK With a danger rating of %.2f.", review.dangerRating, review.totalNumPoints, review.startYear, review.endYear, review.maxWeather, review.maxSegmentSeverity);
+            MainController.javaScriptConnector.call("updateReviewContent", reviewString);
+
         } else {
             System.out.println("No coordinates available for routeId: 0");
         }

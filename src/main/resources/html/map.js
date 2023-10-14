@@ -34,7 +34,8 @@ let jsConnector = {
     updateDataShown: updateDataShown,
     drawingModeOn: drawingModeOn,
     drawingModeOff: drawingModeOff,
-    changeDrawingColourToRating: changeDrawingColourToRating
+    changeDrawingColourToRating: changeDrawingColourToRating,
+    updateReviewContent: updateReviewContent
 };
 
 /**
@@ -69,7 +70,7 @@ function initMap() {
 
             reviewTab.innerHTML = `
             <h3>Review:</h3>
-            <p>Your review content goes here...</p>
+            <p id="reviewContent">Hello</p>
         `;
 
             return container;
@@ -286,6 +287,13 @@ function addMarker(title, lat, lng) {
     markers.push(m)
 }
 
+function updateReviewContent(dataFromJava) {
+    var reviewContentElement = document.getElementById('reviewContent');
+    if (reviewContentElement) {
+        reviewContentElement.textContent = dataFromJava;
+    }
+
+}
 
 
 /**
@@ -319,14 +327,10 @@ function displayRoute(routesIn, transportMode) {
         newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
-            var instructions = route.instructions;
-
-
 
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
             var routeId = getRouteIdentifier(route);
-
 
             // Check if this routeId has been selected before
             if (!routeIndexMap.has(routeId)) {
@@ -344,6 +348,8 @@ function displayRoute(routesIn, transportMode) {
                 routeId: indexToSend, // Use the index retrieved from the map
                 coordinates: coordinates,
             });
+            // var reviewData = javaScriptBridge.getReviewDataForRoute(routeId);
+            // updateReviewContent(reviewData);
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });
 
