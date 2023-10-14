@@ -30,6 +30,8 @@ public class ImportMenuController implements Initializable {
     /**
      * Opens the window to choose a file.
      *
+     * Has correct error handling
+     *
      */
     public void openFileChooserDialog() {
         FileChooser fileChooser = new FileChooser();
