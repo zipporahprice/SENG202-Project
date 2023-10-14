@@ -17,16 +17,15 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.App;
+import seng202.team10.business.FilterManager;
 import seng202.team10.business.GraphManager;
 import seng202.team10.repository.SqliteQueryBuilder;
-
-
-
 
 /**
  * This class manages actions and views related to graphical representations of data.
  * It includes methods for showing the pie graph and changing the data shown.
  */
+
 public class GraphController implements Initializable, MenuController {
 
     private static final Logger log = LogManager.getLogger(App.class);
