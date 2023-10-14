@@ -26,12 +26,12 @@
                </Label>
             </children>
          </AnchorPane>
-          <AnchorPane layoutX="897.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="180.0" prefHeight="83.0" prefWidth="180.0" styleClass="sideBarColor" stylesheets="@style.css">
+          <AnchorPane layoutX="622.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="180.0" prefHeight="83.0" prefWidth="180.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
                   <Label layoutX="29.0" layoutY="5.0" prefHeight="74.0" prefWidth="121.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." wrapText="true" />
             </children>
           </AnchorPane>
-         <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
             <children>
                <ChoiceBox fx:id="chartChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css">
                   <styleClass>
@@ -46,7 +46,7 @@
                </Label>
             </children>
          </AnchorPane>
-         <AnchorPane fx:id="graphsDataPane" layoutX="629.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <AnchorPane fx:id="graphsDataPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
                <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css" visible="false">
                   <styleClass>
@@ -59,7 +59,7 @@
                      <Font name="System Bold" size="15.0" />
                   </font>
                </Label>
-               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" styleClass="filterButtonColor" stylesheets="@style.css" />
+               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" promptText="Choose data" styleClass="filterButtonColor" stylesheets="@style.css" />
             </children>
          </AnchorPane>
       </children>
