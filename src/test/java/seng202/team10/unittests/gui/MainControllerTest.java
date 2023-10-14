@@ -1,5 +1,9 @@
 package seng202.team10.unittests.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,21 +11,27 @@ import seng202.team10.business.CrashManager;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+/**
+ * Testing MainController class.
+ */
 
 public class MainControllerTest {
 
     private DatabaseManager databaseManager;
 
+    /**
+     * Setup with resetting database at each test.
+     */
     @BeforeEach
-    void resetDatabase() {
+    @AfterEach
+    void setUp() {
         databaseManager = DatabaseManager.getInstance();
         databaseManager.resetDb();
     }
 
-    // TODO make integration test for filtering
+    /**
+     * Test for severitiesSelected method.
+     */
     @Test
     void testingSeveritiesSelected() {
         // Imitating checking all the boxes
@@ -35,7 +45,8 @@ public class MainControllerTest {
                 .create()
                 .select("object_id")
                 .from("crashes")
-                .where("severity IN (" + severitiesSelected.stream().map(Object::toString).collect(Collectors.joining(", ")) + ")")
+                .where("severity IN (" + severitiesSelected.stream()
+                        .map(Object::toString).collect(Collectors.joining(", ")) + ")")
                 .buildGetter();
 
         List expectedCrashes = null;
@@ -47,9 +58,12 @@ public class MainControllerTest {
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
     }
 
+    /**
+     * Test for weatherSelected method.
+     */
     @Test
     void testingWeatherSelected() {
-        //like ticking all the checkboxes in weather
+        // Like ticking all the checkboxes in weather
         List<String> weatherSelected = new ArrayList<>();
         weatherSelected.add("Fine");
         weatherSelected.add("Light Rain");
@@ -71,6 +85,14 @@ public class MainControllerTest {
 
         Assertions.assertNotNull(expectedCrashes);
         Assertions.assertEquals(crashes.size(), expectedCrashes.size());
+    }
+
+    /**
+     * Tear down with resetting the database.
+     */
+    @AfterEach
+    void tearDown() {
+        databaseManager.resetDb();
     }
 
 }

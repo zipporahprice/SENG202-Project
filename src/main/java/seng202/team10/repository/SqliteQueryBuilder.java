@@ -74,6 +74,7 @@ public class SqliteQueryBuilder {
         StringJoiner variableNames = new StringJoiner(", ");
         StringJoiner variableValues = new StringJoiner(", ");
 
+        // Maps the valuesMap with key and value pairs to their respective StringJoiner
         for (Map.Entry<String, Number> entry : valuesMap.entrySet()) {
             variableNames.add(entry.getKey());
             variableValues.add(String.valueOf(entry.getValue()));
@@ -97,6 +98,7 @@ public class SqliteQueryBuilder {
     public SqliteQueryBuilder insert(String table) {
         String columns = "";
 
+        // Checks if the table is either of the existing favourites or crashes table
         if (table.equals("favourites")) {
             columns = " (start_address, end_address, start_lat, start_lng, "
                     + "end_lat, end_lng, filters, transport_mode) values (?,?,?,?,?,?,?,?)";
@@ -144,6 +146,7 @@ public class SqliteQueryBuilder {
         query.append("GROUP BY ").append(columns).append(" ");
         String[] columnsWithoutCommas = columns.split(",");
 
+        // Adding columns to selectedColumns
         for (String column : columnsWithoutCommas) {
             selectedColumns.add(column.trim());
         }
@@ -204,6 +207,7 @@ public class SqliteQueryBuilder {
              PreparedStatement ps = conn.prepareStatement(query.toString());) {
             conn.setAutoCommit(false);
 
+            // If there are objects to add, add them to the database
             if (!objectsToAdd.isEmpty()) {
                 Object firstElement = objectsToAdd.get(0);
                 if (firstElement instanceof Crash) {
@@ -291,6 +295,7 @@ public class SqliteQueryBuilder {
         try (Connection conn = databaseManager.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query.toString())) {
+            // Loop through the results until no result is left
             while (rs.next()) {
                 Object temp = null;
                 if (allColumnsFromTable) {

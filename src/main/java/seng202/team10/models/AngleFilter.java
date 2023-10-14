@@ -24,8 +24,8 @@ public class AngleFilter {
      * @return A list of filtered locations based on angle constraints.
      */
     public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angle) {
-        if (coordinates.size() < 3) {
-            return coordinates; // Not enough points to filter
+        if (coordinates.size() < 3) { // Not enough points to filter
+            return coordinates;
         }
 
         List<Location> filteredCoordinates = new ArrayList<>();
@@ -39,8 +39,11 @@ public class AngleFilter {
             while (j < coordinates.size()) {
                 Location next = coordinates.get(j);
 
-                double testAngle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
+                double testAngle = calculateAngle(lastSelectedLocation,
+                                                  potentialNextLocation,
+                                                  next);
 
+                // If the angle is greater than the constant add that angle
                 if (Math.abs(testAngle) > angle) {
                     filteredCoordinates.add(potentialNextLocation);
                     lastSelectedLocation = potentialNextLocation;
@@ -90,8 +93,8 @@ public class AngleFilter {
      *
      * @param lon The difference in longitude (in radians) between the two points.
      * @param lat The difference in latitude (in radians) between the two points.
-     * @param firstLatitude The latitude (in degrees) of the first point.
-     * @param secondLatitude The latitude (in degrees) of the second point.
+     * @param firstLat The latitude (in degrees) of the first point.
+     * @param secondLat The latitude (in degrees) of the second point.
      *
      * @return The computed angle based on the bearing between the two points.
      */

@@ -46,6 +46,9 @@ public class GeoLocator {
         address = address.replaceAll(" +", "+");
         String[] addressParts = address.split("\\+");
         StringBuilder finalAddress = new StringBuilder(addressParts[0]);
+
+        //the address being called is already the full length hence
+        // ignores the new+zealand+aotearoa with -3
         for (int i = 1; i < addressParts.length - 3; i++) {
             finalAddress.append("+").append(addressParts[i]);
         }
@@ -68,7 +71,7 @@ public class GeoLocator {
                         + " is invalid or couldn't be found.");
             }
 
-            JSONObject bestResult = (JSONObject) results.get(0);
+            JSONObject bestResult = (JSONObject) results.get(0); //gets first result
             double lat = Double.parseDouble((String) bestResult.get("lat"));
             double lng = Double.parseDouble((String) bestResult.get("lon"));
             return new Pair<>(new Location(lat, lng), null);
@@ -101,7 +104,11 @@ public class GeoLocator {
         address = address.replaceAll(" +", "+");
         String[] addressParts = address.split("\\+");
         StringBuilder finalAddress = new StringBuilder(addressParts[0]);
-        if (addressParts[addressParts.length-1].equals("Aotearoa")) {
+
+        //checks if the address is the full length
+        if (addressParts[addressParts.length - 1].equals("Aotearoa")) {
+            //the address being called is already the full length hence
+            // ignores the new+zealand+aotaeroa with -3
             for (int i = 1; i < addressParts.length - 3; i++) {
                 finalAddress.append("+").append(addressParts[i]);
             }
@@ -123,6 +130,7 @@ public class GeoLocator {
             JSONParser parser = new JSONParser();
             JSONArray results = (JSONArray) parser.parse(response.body());
             ObservableList<String> output = FXCollections.observableArrayList();
+            //adds the strings to the list that is used for the comboBox
             for (Object result : results) {
                 JSONObject jsonObject = (JSONObject) result;
                 String output1 = (String) jsonObject.get("display_name");

@@ -132,7 +132,7 @@ public class JavaScriptBridge {
             List<String> roads = new ArrayList<>();
 
 
-            // Extract routeId and coordinates
+            // Extract routeId, coordinates, instructionsRoads and instructionDistance
             long routeId = (long) routeObj.get("routeId");
             JSONArray jsonArray = (JSONArray) routeObj.get("coordinates");
             JSONArray jsonArray1 = (JSONArray) routeObj.get("instructionRoads");
@@ -152,31 +152,35 @@ public class JavaScriptBridge {
                 // Add a new Coordinate object to the list
                 coordinates.add(new Location(lat, lng));
             }
-            List<Double> distances = new ArrayList<>();
 
+
+            List<Double> distances = new ArrayList<>();
+            //since jsonArray1 and jsonArray2 are always the same size
+            // both operations are in the same loop
             for (int i = 0; i < jsonArray2.size(); i++) {
                 double output;
                 Object distance = jsonArray2.get(i);
                 if (distance instanceof Long distanceLong) {
+                    //if distance is a Long convert it to a double
                     output = distanceLong.doubleValue();
-                } else if (distance instanceof Double distanceDouble) {
+                } else if (distance instanceof Double distanceDouble) { //already a double
                     output = distanceDouble;
                 } else {
-                    throw new IllegalArgumentException("Valoue is not a long");
+                    throw new IllegalArgumentException("Value is not a long");
                 }
                 String road = (String) jsonArray1.get(i);
+                //add both items to the appropriate arrays
                 roads.add(road);
                 distances.add(output);
             }
 
-            index = routeId;
+            index = routeId; //store the routeId globally
+            //store all of the arrays in a map with the routeIds
             processRoads(routeId, roads);
             processRoute(routeId, coordinates);
             processDistances(routeId, distances);
+            //call the ratingupdate method in routingmenucontroller
             RoutingMenuController.ratingUpdate();
-
-            // Now you have a List of Coordinates in Java
-            // Do something with the coordinates...
 
         } catch (Throwable e) {
             // Handle JSON parsing exceptions

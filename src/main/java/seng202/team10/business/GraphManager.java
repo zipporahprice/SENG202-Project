@@ -1,12 +1,11 @@
 package seng202.team10.business;
 
 /**
- * Responsible for storing graph settings from FXML to be consistent.
+ * Responsible for storing graph settings to be persistent.
  *
  */
 public class GraphManager {
     private static GraphManager graphingManager;
-
     private String currentColumnData;
     private String currentColOfInterest;
 

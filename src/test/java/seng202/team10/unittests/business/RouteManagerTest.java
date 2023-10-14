@@ -1,14 +1,15 @@
 package seng202.team10.unittests.business;
 
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team10.business.RouteManager;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
+/**
+ * Testing RouteManager class.
+ */
 
 public class RouteManagerTest {
 

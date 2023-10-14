@@ -41,7 +41,7 @@ public class SettingsMenuController implements Initializable, MenuController {
                     if (newValue != null) {
                         currentView = (String) newValue;
                         MainController.javaScriptConnector.call("updateView");
-                    }
+                    } //updates the view based on the option selected
                 });
     }
 
@@ -61,4 +61,5 @@ public class SettingsMenuController implements Initializable, MenuController {
     }
 
     //    public String getCurrentView() { return (String) viewChoiceBox.getValue(); }
+    //todo look at this
 }

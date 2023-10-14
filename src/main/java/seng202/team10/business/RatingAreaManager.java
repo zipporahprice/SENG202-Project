@@ -122,9 +122,6 @@ public class RatingAreaManager {
         boundingCircleRadius = radius;
     }
 
-
-
-
     /**
      * Clears the stored bounding boxes.
      */
