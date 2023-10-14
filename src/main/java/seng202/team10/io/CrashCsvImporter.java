@@ -32,27 +32,30 @@ public class CrashCsvImporter {
      * @throws IOException throws exception in case
      */
     public List<Crash> crashListFromFile(File file) {
-        List<Crash> pointList = new ArrayList<Crash>();
-        try (FileReader reader = new FileReader(file)) {
-            try (CSVReader csvReader = new CSVReader(reader)) {
-                csvReader.skip(1);
-                String[] line;
-                while ((line = csvReader.readNext()) != null) {
-                    if (!Objects.equals(line[0], "")) {
-                        Crash currentPoint = crashFromString(line);
-                        if (currentPoint != null) {
-                            pointList.add(currentPoint);
-                        }
+        // List to accumulate crashes.
+        List<Crash> pointList = new ArrayList<>();
+
+        try (FileReader reader = new FileReader(file);
+             CSVReader csvReader = new CSVReader(reader)) {
+            // Skips the header row
+            csvReader.skip(1);
+
+            // Look through until the csv is finished.
+            String[] line;
+            while ((line = csvReader.readNext()) != null) {
+                if (!Objects.equals(line[0], "")) {
+                    Crash currentPoint = crashFromString(line);
+                    if (currentPoint != null) {
+                        pointList.add(currentPoint);
                     }
                 }
-                return pointList;
-            } catch (CsvValidationException e) {
-                log.error(e);
             }
-        } catch (IOException e) {
+
+            return pointList;
+        } catch (IOException | CsvValidationException e) {
             log.error(e);
+            return null;
         }
-        return null;
     }
 
     private int changeEmptyToZero(String string) {
@@ -71,31 +74,25 @@ public class CrashCsvImporter {
      * @return Point object initialised with given crashVariables
      */
     private Crash crashFromString(String[] crashVariables) {
-
         try {
             int objectId = changeEmptyToZero(crashVariables[0]);
             boolean bicycleInvolved = changeEmptyToZero(crashVariables[2]) > 0;
             boolean busInvolved = changeEmptyToZero(crashVariables[4]) > 0;
-
             boolean carInvolved = changeEmptyToZero(crashVariables[5]) > 0;
             int crashYear = changeEmptyToZero(crashVariables[14]);
             String crashLocation1 = crashVariables[9];
             String crashLocation2 = crashVariables[10];
-
             String severity = crashVariables[12];
-
             boolean holiday = !Objects.equals(crashVariables[22], "");
             boolean mopedInvolved = changeEmptyToZero(crashVariables[28]) > 0;
             boolean motorcycleInvolved = changeEmptyToZero(crashVariables[29]) > 0;
             boolean parkedVehicleInvolved = changeEmptyToZero(crashVariables[35]) > 0;
             boolean pedestrianInvolved = changeEmptyToZero(crashVariables[36]) > 0;
-
             String region = crashVariables[39];
             boolean schoolBusInvolved = changeEmptyToZero(crashVariables[44]) > 0;
             int speedLimit = changeEmptyToZero(crashVariables[47]);
             boolean trainInvolved = changeEmptyToZero(crashVariables[57]) > 0;
             boolean truckInvolved = changeEmptyToZero(crashVariables[59]) > 0;
-
             String weather = crashVariables[65];
             float longitude = Float.parseFloat(crashVariables[68]);
             float latitude = Float.parseFloat(crashVariables[67]);

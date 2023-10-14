@@ -1,6 +1,5 @@
 package seng202.team10.business;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,15 +34,16 @@ public class FilterManager {
     private final String comma = ", ";
     private final String closeParenthesis = ")";
     private final String equalOne = " = 1";
-    private final HashMap<String, String> startOfClauses = new HashMap<String, String>() {{
-            put("severity", "severity IN (");
-            put("transport_mode", "(");
-            put("crash_year", "crash_year BETWEEN ");
-            put("weather", "weather IN (");
-            put("region", "region IN (");
-            put("holiday", "holiday IN (");
-            put("viewport", "object_id IN (");
-        }};
+    private final HashMap<String, String> startOfClauses = new HashMap<>() {{
+        put("severity", "severity IN (");
+        put("transport_mode", "(");
+        put("crash_year", "crash_year BETWEEN ");
+        put("weather", "weather IN (");
+        put("region", "region IN (");
+        put("holiday", "holiday IN (");
+        put("viewport", "object_id IN (");
+    }};
+    private final String falseQuery = "1 = 0";
 
     // Singleton instance of FilterManager
     private static FilterManager filters;
@@ -64,7 +64,7 @@ public class FilterManager {
      */
     private FilterManager() {
         severitiesSelected = new ArrayList<>(
-                Arrays.stream(CrashSeverity.values()).map(severity -> severity.getValue()).toList()
+                Arrays.stream(CrashSeverity.values()).map(CrashSeverity::getValue).toList()
         );
 
         earliestYear = 2000;
@@ -280,7 +280,6 @@ public class FilterManager {
     }
 
     public void updateEarliestYear(int newEarliestYear) {
-
         earliestYear = newEarliestYear;
     }
 
@@ -327,12 +326,14 @@ public class FilterManager {
         weathersSelected.clear();
         regionsSelected.clear();
         earliestYear = 2000;
+        latestYear = 2023;
         holidaysSelected.clear();
 
-        if (!Objects.equals(query, "1 = 0")) {
+        // If not the falseQuery, then iterate through and add
+        // all the filters according to the given string.
+        if (!Objects.equals(query, falseQuery)) {
             String[] queryList = query.split(and);
 
-            // TODO hacking the database with always false to return no rows.
             for (String filter : queryList) {
                 if (filter.startsWith(startOfClauses.get("severity"))) {
                     String severitiesString = filter.substring(startOfClauses
@@ -381,6 +382,7 @@ public class FilterManager {
     public String toString() {
         List<String> where = new ArrayList<>();
 
+        // If any severity selected, add to where clause
         if (getSeveritiesSelected().size() > 0) {
             where.add(startOfClauses.get("severity")
                     + getSeveritiesSelected().stream().map(Object::toString)
@@ -388,6 +390,7 @@ public class FilterManager {
                     + closeParenthesis);
         }
 
+        // If any transport mode selected, add to where clause
         if (filters.getModesSelected().size() > 0) {
             String modesCondition = filters.getModesSelected().stream()
                     .map(mode -> mode + equalOne).collect(Collectors.joining(or));
@@ -395,13 +398,15 @@ public class FilterManager {
 
         }
 
-        if (getLatestYear() != null) {
+        // If earliest and latest years are populated, add to where clause
+        if (getEarliestYear() != null && getLatestYear() != null) {
             where.add(startOfClauses.get("crash_year")
                     + getEarliestYear()
                     + " AND "
                     + getLatestYear());
         }
 
+        // If any weather selected, add to where clause
         if (getWeathersSelected().size() > 0) {
             where.add(startOfClauses.get("weather")
                     +
@@ -410,6 +415,7 @@ public class FilterManager {
                     + closeParenthesis);
         }
 
+        // If any region selected, add to where clause
         if (regionsSelected.size() > 0) {
             where.add(startOfClauses.get("region")
                     + getRegionsSelected().stream().map(region -> quote + region + quote)
@@ -417,6 +423,7 @@ public class FilterManager {
                     + closeParenthesis);
         }
 
+        // If a holiday choice (yes or no) is selected, add to where clause
         if (holidaysSelected.size() > 0) {
             where.add(startOfClauses.get("holiday")
                     + getHolidaysSelected().stream().map(Object::toString)
@@ -424,6 +431,7 @@ public class FilterManager {
                     + closeParenthesis);
         }
 
+        // If viewport bounds exist, add to where clause
         if (viewPortMin != null && viewPortMax != null) {
             where.add(startOfClauses.get("viewport") + "SELECT id FROM rtree_index WHERE minX >= "
                     + viewPortMin.getLongitude() + " AND maxX <= "
@@ -432,9 +440,11 @@ public class FilterManager {
                     + viewPortMax.getLatitude() + closeParenthesis);
         }
 
+        // If any of the IN statements have empty sets,
+        // then have the falseQuery make sure the result is empty.
         if (modesSelected.isEmpty() || severitiesSelected.isEmpty() || weathersSelected.isEmpty()
                 || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
-            return "1 = 0";
+            return falseQuery;
         } else {
             return String.join(and, where);
         }

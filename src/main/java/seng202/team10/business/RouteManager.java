@@ -102,6 +102,7 @@ public class RouteManager {
         String columns = "*";
         String table = "favourites";
 
+        // Gets all the favourites from the database.
         List<?> favourites = SqliteQueryBuilder.create()
                                             .select(columns)
                                             .from(table)
