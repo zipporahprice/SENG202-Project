@@ -4,7 +4,7 @@ let markers = [];
 var routes = [];
 var crashes = [];
 
-const heatmapCfg = {
+const cfg = {
     // radius should be small ONLY if scaleRadius is true (or small radius is intended)
     // if scaleRadius is false it will be the constant radius used in pixels
     "radius": 0.1,
@@ -33,7 +33,11 @@ let jsConnector = {
     initMap: initMap,
     updateDataShown: updateDataShown,
     drawingModeOn: drawingModeOn,
-    drawingModeOff: drawingModeOff
+    drawingModeOff: drawingModeOff,
+    changeDrawingColourToRating: changeDrawingColourToRating,
+    updateView: updateView,
+    updateReviewContent: updateReviewContent
+
 };
 
 /**
@@ -44,14 +48,46 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
+    const nzBounds = [
+        [-47, 166], // Southwest coordinates of nz
+        [-34, 179]  // Northeast coordinates of nz
+    ];
+
+    const minZoomLevel = 5;
+    const maxZoomLevel = 18;
     // Setup map
     let mapOptions = {
         center: [-43.5, 172.5],
         zoom: 11,
         layers:[baseLayer],
-        zoomControl: false
+        zoomControl: false,
+        maxBounds: nzBounds,
+        minZoom: minZoomLevel,
+        maxZoom: maxZoomLevel
     };
     map = new L.map('map', mapOptions);
+
+    L.CustomItineraryBuilder = L.Routing.ItineraryBuilder.extend({
+        createContainer: function(className) {
+            // Create a container div.
+            var container = L.DomUtil.create('div', className);
+
+            // Create the default table using the base class method.
+            var table = L.DomUtil.create('table', 'leaflet-routing-container-table', container);
+
+            // Create the review tab div.
+            var reviewTab = L.DomUtil.create('div', 'custom-review-tab', container);
+
+            L.DomUtil.create('br', 'break-styling', container);
+
+            reviewTab.innerHTML = `
+            <h3>Review:</h3>
+            <p class="reviewContent">Hello</p>
+        `;
+
+            return container;
+        }
+    });
 
     // Adding zoom control to bottom right
     L.control.zoom({
@@ -86,7 +122,7 @@ function initMap() {
             edit: false
         },
         draw: {
-            circle: false,
+            circle: true,
             rectangle: true,
             polygon: false,
             polyline: false,
@@ -112,7 +148,7 @@ function updateEnabled() {
 function newHeatmap() {
     const heatmapShowing = map.hasLayer(heatmapLayer);
 
-    heatmapLayer = new HeatmapOverlay(heatmapCfg);
+    heatmapLayer = new HeatmapOverlay(cfg);
 
     if (heatmapShowing) {
         setHeatmapData();
@@ -122,7 +158,7 @@ function newHeatmap() {
 
 function updateDataShown() {
     setFilteringViewport();
-    eval(javaScriptBridge.crashes());
+    eval(javaScriptBridge.setCrashes());
     updateView();
 }
 
@@ -147,7 +183,7 @@ function adjustHeatmapRadiusBasedOnZoom() {
         newRadius = 0.1;  // For city-level detail
     }
 
-    heatmapLayer.heatmapCfg.radius=newRadius;
+    heatmapLayer.cfg.radius=newRadius;
 
 }
 
@@ -263,36 +299,94 @@ function addMarker(title, lat, lng) {
     markers.push(m)
 }
 
+function updateReviewContent(dataFromJava) {
+    const reviewContentElements = document.querySelectorAll('.reviewContent');
+    reviewContentElements.forEach(paragraph => {
+        paragraph.textContent = dataFromJava;
+    })
+}
+
+
+
 /**
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
  */
-function displayRoute(routesIn, transportMode, safetyScore) {
+function displayRoute(routesIn, transportMode) {
     removeRoute();
 
     var routesArray = JSON.parse(routesIn);
-    console.log(routesArray);
-
+    var currentRouteIndex = 0; // Starting index at 0
+    var routeIndexMap = new Map();
     var mode = getMode(transportMode);
+
 
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
-        var routeColor = getColorForSafetyScore(safetyScore);
+        //var routeColor = getColorForSafetyScore(safetyScore);
 
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
-        console.log(waypoints);
+
         var newRoute = L.Routing.control({
+            addWaypoints: false,
             waypoints: waypoints,
             routeWhileDragging: true,
+            showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            lineOptions: {
-                styles: [
-                    {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
-                ]
-            }
+            itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
         }).addTo(map);
+
+
+        newRoute.on('routeselected', (e) => {
+            var route = e.route;
+            var coordinates = route.coordinates;
+            var instructions = route.instructions;
+            var instructionRoads = [];
+            var instructionDistance = [];
+            for (var i = 0; i < instructions.length; i++) {
+                var instruction = instructions[i];
+                instructionRoads.push(instruction.road);
+                instructionDistance.push(instruction.distance)
+            }
+
+
+            // Generating or retrieving a unique identifier for the route.
+            // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
+            var routeId = getRouteIdentifier(route);
+
+            // Check if this routeId has been selected before
+            if (!routeIndexMap.has(routeId)) {
+                // If not, add it to the map with the current index as its value
+                routeIndexMap.set(routeId, currentRouteIndex);
+                // Increment the current index for the next new route
+                currentRouteIndex += 1;
+            }
+
+            // Retrieve the index associated with the routeId from the map
+            var indexToSend = routeIndexMap.get(routeId);
+
+            // Prepare and send the coordinates
+            var coordinatesJson = JSON.stringify({
+                routeId: indexToSend, // Use the index retrieved from the map
+                coordinates: coordinates,
+                instructionRoads: instructionRoads,
+                instructionDistance: instructionDistance
+            });
+            javaScriptBridge.sendCoordinates(coordinatesJson);
+        });
+
         routes.push(newRoute);
     });
+}
+
+/**
+ * Removes the current route being displayed (will not do anything if there is no route currently displayed)
+ */
+function removeRoute() {
+    routes.forEach((r) => {
+        r.remove();
+    });
+    routes = [];
 }
 
 function getColorForSafetyScore(score) {
@@ -322,25 +416,37 @@ function getMode(transportMode) {
     return mode;
 }
 
-/**
- * Removes the current route being displayed (will not do anything if there is no route currently displayed)
- */
-function removeRoute() {
-    routes.forEach((r) => {
-        r.remove();
-    });
-    routes = [];
+function getRouteIdentifier(route) {
+    // Assuming route.coordinates is an array of coordinate objects
+    // And each coordinate can be represented as a string
+    // You should replace this logic with the actual properties of your route objects
+    if (!route || !route.coordinates) return null;
+
+    // Convert each coordinate to a string and concatenate them
+    // Ensure this provides a unique and consistent identifier for each route
+    return route.coordinates.map(coord => coordToString(coord)).join(',');
 }
 
+function coordToString(coord) {
+    // Convert coordinate object to a string
+    // Replace this with the actual structure of your coordinate objects
+    return `${coord.lat},${coord.lng}`; // Assuming a
+}
 function getSeverityStringFromValue(severity) {
     switch (severity) {
-        case 1: return "Non-Injury";
-        case 2: return "Minor Crash";
-        case 4: return "Major Crash";
-        case 8: return "Death";
-        default: return "Invalid";
+        case 1:
+            return "Non-Injury";
+        case 2:
+            return "Minor Crash";
+        case 4:
+            return "Major Crash";
+        case 8:
+            return "Death";
+        default:
+            return "Invalid";
     }
 }
+
 
 function getMarkerIcon(severity) {
     var iconUrl;
@@ -368,22 +474,18 @@ function getMarkerIcon(severity) {
     });
 }
 
-function resetLayers() {
-    newHeatmap()
-    markerLayer.clearLayers();
-}
-
 function getColorBasedOnSeverity(averageSeverity) {
-    if (averageSeverity >= 1 && averageSeverity < 2) {
-        return 'green'; // Low severity, green color
-    } else if (averageSeverity >= 2 && averageSeverity < 3) {
-        return 'yellow'; // Moderate severity, yellow color
-    } else if (averageSeverity >= 3 && averageSeverity < 4) {
-        return 'orange'; // High severity, orange color
-    } else if (averageSeverity == null) {
+    // averageSeverity is out of 10
+
+    if (averageSeverity == null) {
         return 'black';
+    } else if (averageSeverity < 0.8) {
+        return 'green'; // Low severity, green color
+    } else if (averageSeverity < 4.3) {
+        return 'yellow'; // Moderate severity, yellow color
+    } else if (averageSeverity < 7.1) {
+        return 'orange'; // High severity, orange color
     } else {
-        console.log(averageSeverity);
         return 'red'; // Very high severity, red color
     }
 }
@@ -400,13 +502,19 @@ function calculateAverageSeverity(cluster) {
     for (var i = 0; i < childMarkers.length; i++) {
         totalSeverity += childMarkers[i].options.severity;
     }
-    return totalSeverity/childMarkers.length;
+
+    // Score out of 10
+    return ((totalSeverity / childMarkers.length - 1.0) / 7.0) * 10.0;
+}
+
+function resetLayers() {
+    markerLayer.clearLayers();
 }
 
 function addPoint(lat, lng, severity, year, weather) {
     const severityString = getSeverityStringFromValue(severity);
     const markerIcon = getMarkerIcon(severity);
-    var marker = L.marker(new L.LatLng(lat, lng), { title: severityString, icon: markerIcon, severity : severity });
+    var marker = L.marker(new L.LatLng(lat, lng), {title: severityString, icon: markerIcon, severity: severity});
     marker.bindPopup("<div style='font-size: 16px;' class='popup-content'>" +
         "<p><strong>Latitude:</strong> " + lat + "</p>" +
         "<p><strong>Longitude:</strong> " + lng + "</p>" +
@@ -459,17 +567,22 @@ function handleNewDrawing(event) {
         const northeastLng = northeast.lng;
 
         javaScriptBridge.setRatingAreaManagerBoundingBox(southwestLat, southwestLng, northeastLat, northeastLng);
-    }
+    } else if (layer instanceof L.Circle) {
+        const center = layer.getLatLng();
+        const radius = (layer.getRadius() / 6371000.0) * (180.0 / Math.PI);
 
-    // TODO for implementing a circle
-    // else if (layer instanceof L.Circle) {
-    //     const center = layer.getLatLng();
-    //     const radius = layer.getRadius();
-    //
-    //     const centerLat = center.lat;
-    //     const centerLng = center.lng;
-    //
-    //     let latLngString = centerLat + " " + centerLng + " " + radius;
-    //     javaScriptBridge.printThings(latLngString);
-    // }
+        const centerLat = center.lat;
+        const centerLng = center.lng;
+
+        javaScriptBridge.setRatingAreaManagerBoundingCircle(centerLat, centerLng, radius);
+    }
+}
+
+function changeDrawingColourToRating(rating) {
+    const colour = getColorBasedOnSeverity(rating);
+    drawnItems.eachLayer(function (layer) {
+        layer.setStyle({
+            "color": colour
+        })
+    })
 }
