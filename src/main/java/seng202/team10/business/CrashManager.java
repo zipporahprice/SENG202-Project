@@ -33,7 +33,8 @@ public class CrashManager {
      * @param importer Crash csv importer object to use
      * @param file File to be imported
      */
-    public void addAllCrashesFromFile(CrashCsvImporter importer, File file) throws DataImportException {
+    public void addAllCrashesFromFile(CrashCsvImporter importer, File file)
+            throws DataImportException {
         List<Crash> crashes = importer.crashListFromFile(file);
         SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
     }
