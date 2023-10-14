@@ -18,8 +18,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.business.CrashManager;
-import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.exceptions.DataImportException;
+import seng202.team10.io.CrashCsvImporter;
 
 /**
  * Class instantiating and initialising SQLite database.
