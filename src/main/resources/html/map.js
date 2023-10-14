@@ -1,4 +1,4 @@
-let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl;
+let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl, layerGroup;
 var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 let markers = [];
 var routes = [];
@@ -72,6 +72,9 @@ function initMap() {
     };
     map = new L.map('map', mapOptions);
 
+    // LayerGroup to store the heatmap and crash locations
+    layerGroup = L.layerGroup().addTo(map);
+
     L.CustomItineraryBuilder = L.Routing.ItineraryBuilder.extend({
         createContainer: function(className) {
             // Create a container div.
@@ -102,10 +105,7 @@ function initMap() {
     }).addTo(map);
 
     // Setup potential layers for views
-    newHeatmap();
-
-    setHeatmapData();
-
+    heatmapLayer = new HeatmapOverlay(cfg);
     markerLayer = L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
             var averageSeverity = calculateAverageSeverity(cluster);
@@ -153,13 +153,13 @@ function updateEnabled() {
 }
 
 function newHeatmap() {
-    const heatmapShowing = map.hasLayer(heatmapLayer);
+    const heatmapShowing = layerGroup.hasLayer(heatmapLayer);
 
     heatmapLayer = new HeatmapOverlay(cfg);
+    heatmapLayer.setData(testData);
 
     if (heatmapShowing) {
-        setHeatmapData();
-        map.addLayer(heatmapLayer);
+        layerGroup.addLayer(heatmapLayer);
     }
 }
 
@@ -190,7 +190,7 @@ function adjustHeatmapRadiusBasedOnZoom() {
         newRadius = 0.1;  // For city-level detail
     }
 
-    heatmapLayer.cfg.radius=newRadius;
+    heatmapLayer.cfg.radius = newRadius;
 
 }
 
@@ -206,19 +206,19 @@ function setFilteringViewport() {
 function automaticViewChange() {
     var zoomLevel = map.getZoom();
     if (zoomLevel >= 12) {
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     }
     else {
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
     }
 }
@@ -251,42 +251,42 @@ function updateView() {
         map.off('zoomend', automaticViewChange);
         map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
     } else if (currentView === "Crash Locations") {
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
 
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     } else if (currentView === "Heatmap & Crash Locations") {
         map.off('zoomend', automaticViewChange);
         map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     } else {
         // Default with "None" showing
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
 
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
     }
 }
@@ -516,16 +516,13 @@ function calculateAverageSeverity(cluster) {
 
 function resetLayers() {
     // Set booleans for later use to see if layers should be added back
-    markersShowing = map.hasLayer(markerLayer);
-    heatmapShowing = map.hasLayer(heatmapLayer);
+    markersShowing = layerGroup.hasLayer(markerLayer);
+    heatmapShowing = layerGroup.hasLayer(heatmapLayer);
 
-    // Removing layers if they are showing
-    if (markersShowing) {
-        map.removeLayer(markerLayer);
-    }
-    if (heatmapShowing) {
-        map.removeLayer(heatmapLayer);
-    }
+    // Clears all layers so nothing is showing to slow loading down
+    layerGroup.eachLayer(function (layer) {
+        layerGroup.removeLayer(layer);
+    });
 
     // Emptying heatmap testData data list and markerLayer's markers
     testData.data = [];
@@ -550,17 +547,17 @@ function addPoint(lat, lng, severity, year, weather) {
 
 var start, end;
 
-function setHeatmapData() {
+function showLayers() {
     start = performance.now();
     heatmapLayer.setData(testData);
 
     // Adding layers back based on resetLayers function
     // state with what layers were showing
     if (markersShowing) {
-        map.addLayer(markerLayer);
+        layerGroup.addLayer(markerLayer);
     }
     if (heatmapShowing) {
-        map.addLayer(heatmapLayer);
+        layerGroup.addLayer(heatmapLayer);
     }
 
     end = performance.now();

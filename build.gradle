@@ -7,9 +7,9 @@ plugins {
 }
 
 archivesBaseName = 'seng202_teamX'
-group = 'seng202.team0'
+group = 'seng202.team10'
 version = '1.0-SNAPSHOT'
-mainClassName = 'seng202.team0.App'
+mainClassName = 'seng202.team10.App'
 
 def javaVersion = '17'
 def javafxVersion = '21-ea+17'
@@ -146,7 +146,7 @@ tasks.register("cucumber", Test)  {
     useJUnitPlatform()
 
     filter {
-        includeTestsMatching "seng202.team0.cucumber.*"
+        includeTestsMatching "seng202.team10.cucumber.*"
     }
 
     testLogging {
