@@ -717,7 +717,8 @@ public class RoutingMenuController implements Initializable, MenuController {
 
                     reviewString = String.format(
                             format,
-                            review.dangerRating, review.totalNumPoints, review.startYear, review.endYear,
+                            review.dangerRating, review.totalNumPoints,
+                            review.startYear, review.endYear,
                             review.maxWeather, review.finalRoad, review.maxSegmentSeverity
                     );
                 }

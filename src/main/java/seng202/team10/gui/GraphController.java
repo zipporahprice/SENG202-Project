@@ -1,11 +1,13 @@
 package seng202.team10.gui;
 
 import java.net.URL;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
@@ -20,6 +22,7 @@ import seng202.team10.App;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.GraphManager;
 import seng202.team10.repository.SqliteQueryBuilder;
+
 
 /**
  * This class manages actions and views related to graphical representations of data.
