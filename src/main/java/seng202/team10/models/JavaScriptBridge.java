@@ -36,6 +36,8 @@ public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
     private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
+    private static Map<Long, List<Double>> distancesMap = new ConcurrentHashMap<>();
+    private static Map<Long, List<String>> roadsMap = new ConcurrentHashMap<>();
     private static long index;
 
     private JavaScriptListener listener;
@@ -72,7 +74,7 @@ public class JavaScriptBridge {
                     latitude, longitude, severity, year, weather));
         });
 
-        stringBuilder.append("}).then(function () {setHeatmapData();});");
+        stringBuilder.append("}).then(function () {showLayers();});");
 
         // TODO get rid of timing performance
         double end = System.currentTimeMillis();
@@ -127,40 +129,62 @@ public class JavaScriptBridge {
         try {
             // Parse the JSON string to a JSONObject
             JSONObject routeObj = (JSONObject) parser.parse(coordinatesJson);
+            List<String> roads = new ArrayList<>();
 
-            // Extract routeId and coordinates
+
+            // Extract routeId, coordinates, instructionsRoads and instructionDistance
             long routeId = (long) routeObj.get("routeId");
             JSONArray jsonArray = (JSONArray) routeObj.get("coordinates");
+            JSONArray jsonArray1 = (JSONArray) routeObj.get("instructionRoads");
+            JSONArray jsonArray2 = (JSONArray) routeObj.get("instructionDistance");
+
+
+
 
             // Create a List to hold Coordinate objects
             List<Location> coordinates = new ArrayList<>();
-
-            // Iterate over the items in the JSONArray
-            for (Object array : jsonArray) {
+            for (Object ajsonArray : jsonArray) {
                 // Cast each item in the array to a JSONObject
-                JSONObject coordJson = (JSONObject) array;
-
+                JSONObject coordJson = (JSONObject) ajsonArray;
                 // Extract latitude and longitude from the JSONObject
                 double lat = (double) coordJson.get("lat");
                 double lng = (double) coordJson.get("lng");
-
                 // Add a new Coordinate object to the list
-                // Ensure you have a Coordinate class with a
-                // constructor that accepts lat and lng
                 coordinates.add(new Location(lat, lng));
             }
-            index = routeId;
+
+
+            List<Double> distances = new ArrayList<>();
+            //since jsonArray1 and jsonArray2 are always the same size
+            // both operations are in the same loop
+            for (int i = 0; i < jsonArray2.size(); i++) {
+                double output;
+                Object distance = jsonArray2.get(i);
+                if (distance instanceof Long distanceLong) {
+                    //if distance is a Long convert it to a double
+                    output = distanceLong.doubleValue();
+                } else if (distance instanceof Double distanceDouble) { //already a double
+                    output = distanceDouble;
+                } else {
+                    throw new IllegalArgumentException("Value is not a long");
+                }
+                String road = (String) jsonArray1.get(i);
+                //add both items to the appropriate arrays
+                roads.add(road);
+                distances.add(output);
+            }
+
+            index = routeId; //store the routeId globally
+            //store all of the arrays in a map with the routeIds
+            processRoads(routeId, roads);
             processRoute(routeId, coordinates);
+            processDistances(routeId, distances);
+            //call the ratingupdate method in routingmenucontroller
             RoutingMenuController.ratingUpdate();
 
-            // Now you have a List of Coordinates in Java
-            // Do something with the coordinates...
-
-        } catch (ParseException e) {
+        } catch (Throwable e) {
             // Handle JSON parsing exceptions
-            e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
     }
 
@@ -170,13 +194,30 @@ public class JavaScriptBridge {
 
 
     private void processRoute(long routeId, List<Location> coordinates) {
-        // Example: You might store the coordinates in a Map where the key is the routeId
         routeMap.put(routeId, coordinates);
 
     }
 
-    public static Map<Long, List<Location>> getRouteMap() {
+    private void processDistances(long routeId, List<Double> coordinates) {
+        distancesMap.put(routeId, coordinates);
+    }
+
+    private void processRoads(long routeId, List<String> coordinates) {
+        roadsMap.put(routeId, coordinates);
+    }
+
+    public static Map<Long, List<Location>> getRouteMap() throws SQLException {
         return routeMap;
+    }
+
+
+
+    public static Map<Long, List<Double>> getDistancesMap() {
+        return distancesMap;
+    }
+
+    public static Map<Long, List<String>> getRoadsMap() {
+        return roadsMap;
     }
 
     /**
@@ -237,7 +278,7 @@ public class JavaScriptBridge {
         void mapLoaded();
     }
 
-    public void printTime(double time) {
+    public void printTime(String time) {
         System.out.println(time);
     }
 

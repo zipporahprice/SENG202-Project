@@ -56,9 +56,6 @@ public class CrashManager {
      * @return A list of crash locations containing longitude, latitude, and severity.
      */
     public List<?> getCrashLocations() {
-        // TODO Currently hard coding according to CrashInfo model
-        // TODO Look at generalising this
-
         String select = "longitude, latitude, severity, crash_year, weather";
         String from = "crashes";
         String where = FilterManager.getInstance().toString();

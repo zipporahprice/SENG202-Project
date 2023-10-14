@@ -32,10 +32,9 @@ import seng202.team10.models.JavaScriptBridge;
 /**
  * Controller for the main.fxml window
  *
- * @author Team10
+ * @author Team 10
  */
 public class MainController implements JavaScriptBridge.JavaScriptListener {
-
     private static final Logger log = LogManager.getLogger(MainController.class);
     public StackPane loadingScreen;
     public Label loadingPercentageLabel;
@@ -43,31 +42,23 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private WebView webView;
     @FXML
     private StackPane mainWindow;
-
     @FXML
     private ProgressBar progressBar;
     private Stage stage;
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
     private MapController mapController;
-
     @FXML
     private Button refreshButton;
-
     @FXML
     private AnchorPane menuDisplayPane;
     private String menuPopulated = "empty";
     private MenuController controller;
-
     private JavaScriptBridge javaScriptBridge;
-
     private Timeline progressBarTimeline;
     private Button selectedButton = null;
-    //private String menuChoice;
     @FXML
     private ProgressIndicator loadingSpinner;
-
-
     private RoutingMenuController routingMenuController;
 
 
@@ -85,7 +76,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     void init(Stage stage) {
         this.stage = stage;
         stage.sizeToScene();
-
         loadingScreen.setVisible(true);
         webEngine = webView.getEngine();
         mapController = new MapController();
@@ -101,7 +91,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
 
     /**
      * Initializes and manages the progress bar and its animation timeline.
-     * This is for the loading screen
+     * This is for the loading screen.
      */
     private void initProgressBarTimeline() {
         progressBarTimeline = new Timeline(
@@ -115,7 +105,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         progressBar.progressProperty().addListener((obs, oldVal, newVal) -> {
             int progressPercentage = (int) (newVal.doubleValue() * 100);
             loadingPercentageLabel.setText(progressPercentage + "%");
-        });
+        }); //changing the percentage label as it loads.
 
         progressBarTimeline.play();
 
@@ -125,7 +115,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
                 progressBarTimeline.stop();
                 animateProgressBarToFull(progressBar);
             }
-        });
+        }); //finishes the progress bar animation when the map is loaded.
     }
 
     /**
@@ -159,23 +149,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
     /**
-     * Loads the graph display.
-     */
-    public void loadGraphs() {
-        try {
-            FXMLLoader loadGraphs = new FXMLLoader(getClass()
-                    .getResource("/fxml/graph_window.fxml"));
-            Parent graphsViewParent = loadGraphs.load();
-
-            mainWindow.getChildren().clear();
-            mainWindow.getChildren().add(graphsViewParent);
-            AnchorPane.setRightAnchor(graphsViewParent, 0d);
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
-
-    /**
      * Loads menu display in FXML file into menuDisplayPane.
      */
     private void loadMenuDisplayFromFxml(String filePath) {
@@ -186,7 +159,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
             if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
                     && !menuPopulated.equals("help")) {
                 controller = loader.getController();
-            }
+            } //because nothing to update in these 3 menus.
 
         } catch (IOException ioException) {
             log.error(ioException);
@@ -206,7 +179,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         if (!menuPopulated.equals("empty") && !menuPopulated.equals("import")
                 && !menuPopulated.equals(("help"))) {
             controller.updateManager();
-        }
+        } //because they don't have information to update
 
         if (menuPopulated.equals("rateArea")) {
             MainController.javaScriptConnector.call("drawingModeOff");
@@ -241,12 +214,16 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         } else if (Objects.equals("help", menuChoice)) {
             menuPopulated = menuChoice;
             loadMenuDisplayFromFxml("/fxml/help_menu.fxml");
+
+        } else if (Objects.equals("graphing", menuChoice)) {
+            menuPopulated = menuChoice;
+            loadMenuDisplayFromFxml("/fxml/graph_window.fxml");
         }
     }
 
 
     /**
-     * changes the colour of the chosen button when clicked.
+     * Changes the colour of the chosen button when clicked.
      *
      * @param chosenButton the button that was selected.
      */
@@ -262,7 +239,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("menuButtonColor");
             chosenButton.getStyleClass().add("clickedButtonColor");
-        } else { // just selects new
+        } else { // selects new
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("menuButtonColor");
             chosenButton.getStyleClass().add("clickedButtonColor");

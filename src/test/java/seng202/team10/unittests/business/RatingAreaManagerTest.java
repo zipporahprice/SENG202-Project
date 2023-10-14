@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import seng202.team10.business.RatingAreaManager;
 import seng202.team10.models.Location;
 
+/**
+ * Testing RatingAreaManager test.
+ */
+
 public class RatingAreaManagerTest {
     private RatingAreaManager manager;
 

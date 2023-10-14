@@ -1,8 +1,8 @@
-let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl;
+let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl, layerGroup;
 var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 let markers = [];
 var routes = [];
-var crashes = [];
+let markersShowing, heatmapShowing;
 
 const cfg = {
     // radius should be small ONLY if scaleRadius is true (or small radius is intended)
@@ -23,6 +23,11 @@ const cfg = {
     valueField: 'count'
 };
 
+var testData = {
+    max: 200,
+    data: []
+}
+
 /**
  * This object can be returned to our java code, where we can call the functions we define inside it
  */
@@ -35,7 +40,9 @@ let jsConnector = {
     drawingModeOn: drawingModeOn,
     drawingModeOff: drawingModeOff,
     changeDrawingColourToRating: changeDrawingColourToRating,
-    updateView: updateView
+    updateView: updateView,
+    updateReviewContent: updateReviewContent
+
 };
 
 /**
@@ -65,16 +72,38 @@ function initMap() {
     };
     map = new L.map('map', mapOptions);
 
+    // LayerGroup to store the heatmap and crash locations
+    layerGroup = L.layerGroup().addTo(map);
+
+    L.CustomItineraryBuilder = L.Routing.ItineraryBuilder.extend({
+        createContainer: function(className) {
+            // Create a container div.
+            var container = L.DomUtil.create('div', className);
+
+            // Create the default table using the base class method.
+            var table = L.DomUtil.create('table', 'leaflet-routing-container-table', container);
+
+            // Create the review tab div.
+            var reviewTab = L.DomUtil.create('div', 'custom-review-tab', container);
+
+            L.DomUtil.create('br', 'break-styling', container);
+
+            reviewTab.innerHTML = `
+            <h3>Review:</h3>
+            <p class="reviewContent">Hello</p>
+        `;
+
+            return container;
+        }
+    });
+
     // Adding zoom control to bottom right
     L.control.zoom({
         position: 'topright'
     }).addTo(map);
 
     // Setup potential layers for views
-    newHeatmap();
-
-    setHeatmapData();
-
+    heatmapLayer = new HeatmapOverlay(cfg);
     markerLayer = L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
             var averageSeverity = calculateAverageSeverity(cluster);
@@ -122,13 +151,13 @@ function updateEnabled() {
 }
 
 function newHeatmap() {
-    const heatmapShowing = map.hasLayer(heatmapLayer);
+    const heatmapShowing = layerGroup.hasLayer(heatmapLayer);
 
     heatmapLayer = new HeatmapOverlay(cfg);
+    heatmapLayer.setData(testData);
 
     if (heatmapShowing) {
-        setHeatmapData();
-        map.addLayer(heatmapLayer);
+        layerGroup.addLayer(heatmapLayer);
     }
 }
 
@@ -159,7 +188,7 @@ function adjustHeatmapRadiusBasedOnZoom() {
         newRadius = 0.1;  // For city-level detail
     }
 
-    heatmapLayer.cfg.radius=newRadius;
+    heatmapLayer.cfg.radius = newRadius;
 
 }
 
@@ -175,19 +204,19 @@ function setFilteringViewport() {
 function automaticViewChange() {
     var zoomLevel = map.getZoom();
     if (zoomLevel >= 12) {
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     }
     else {
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
     }
 }
@@ -220,42 +249,42 @@ function updateView() {
         map.off('zoomend', automaticViewChange);
         map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
     } else if (currentView === "Crash Locations") {
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
 
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     } else if (currentView === "Heatmap & Crash Locations") {
         map.off('zoomend', automaticViewChange);
         map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
-        if (!map.hasLayer(heatmapLayer)) {
-            map.addLayer(heatmapLayer);
+        if (!layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.addLayer(heatmapLayer);
         }
-        if (!map.hasLayer(markerLayer)) {
-            map.addLayer(markerLayer);
+        if (!layerGroup.hasLayer(markerLayer)) {
+            layerGroup.addLayer(markerLayer);
         }
     } else {
         // Default with "None" showing
         map.off('zoomend', adjustHeatmapRadiusBasedOnZoom);
         map.off('zoomend', automaticViewChange);
 
-        if (map.hasLayer(heatmapLayer)) {
-            map.removeLayer(heatmapLayer);
+        if (layerGroup.hasLayer(heatmapLayer)) {
+            layerGroup.removeLayer(heatmapLayer);
         }
-        if (map.hasLayer(markerLayer)) {
-            map.removeLayer(markerLayer);
+        if (layerGroup.hasLayer(markerLayer)) {
+            layerGroup.removeLayer(markerLayer);
         }
     }
 }
@@ -275,6 +304,15 @@ function addMarker(title, lat, lng) {
     markers.push(m)
 }
 
+function updateReviewContent(dataFromJava) {
+    const reviewContentElements = document.querySelectorAll('.reviewContent');
+    reviewContentElements.forEach(paragraph => {
+        paragraph.textContent = dataFromJava;
+    })
+}
+
+
+
 /**
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
@@ -286,6 +324,8 @@ function displayRoute(routesIn, transportMode) {
     var currentRouteIndex = 0; // Starting index at 0
     var routeIndexMap = new Map();
     var mode = getMode(transportMode);
+
+
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
         //var routeColor = getColorForSafetyScore(safetyScore);
@@ -293,20 +333,27 @@ function displayRoute(routesIn, transportMode) {
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
 
         var newRoute = L.Routing.control({
+            addWaypoints: false,
             waypoints: waypoints,
             routeWhileDragging: true,
             showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            // lineOptions: {
-            //     styles: [
-            //         {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
-            //     ]
-            // }
+            itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
         }).addTo(map);
+
 
         newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
+            var instructions = route.instructions;
+            var instructionRoads = [];
+            var instructionDistance = [];
+            for (var i = 0; i < instructions.length; i++) {
+                var instruction = instructions[i];
+                instructionRoads.push(instruction.road);
+                instructionDistance.push(instruction.distance)
+            }
+
 
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
@@ -326,7 +373,9 @@ function displayRoute(routesIn, transportMode) {
             // Prepare and send the coordinates
             var coordinatesJson = JSON.stringify({
                 routeId: indexToSend, // Use the index retrieved from the map
-                coordinates: coordinates
+                coordinates: coordinates,
+                instructionRoads: instructionRoads,
+                instructionDistance: instructionDistance
             });
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });
@@ -464,6 +513,17 @@ function calculateAverageSeverity(cluster) {
 }
 
 function resetLayers() {
+    // Set booleans for later use to see if layers should be added back
+    markersShowing = layerGroup.hasLayer(markerLayer);
+    heatmapShowing = layerGroup.hasLayer(heatmapLayer);
+
+    // Clears all layers so nothing is showing to slow loading down
+    layerGroup.eachLayer(function (layer) {
+        layerGroup.removeLayer(layer);
+    });
+
+    // Emptying heatmap testData data list and markerLayer's markers
+    testData.data = [];
     markerLayer.clearLayers();
 }
 
@@ -480,15 +540,26 @@ function addPoint(lat, lng, severity, year, weather) {
         "</div>"
     );
     markerLayer.addLayer(marker);
-    crashes.push({"lat": lat, "lng": lng});
+    testData.data.push({"lat": lat, "lng": lng});
 }
 
-function setHeatmapData() {
-    const testData = {
-        max: 200,
-        data: crashes
-    }
+var start, end;
+
+function showLayers() {
+    start = performance.now();
     heatmapLayer.setData(testData);
+
+    // Adding layers back based on resetLayers function
+    // state with what layers were showing
+    if (markersShowing) {
+        layerGroup.addLayer(markerLayer);
+    }
+    if (heatmapShowing) {
+        layerGroup.addLayer(heatmapLayer);
+    }
+
+    end = performance.now();
+    javaScriptBridge.printTime(end - start);
 }
 
 function drawingModeOn() {

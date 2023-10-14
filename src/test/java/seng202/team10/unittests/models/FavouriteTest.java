@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team10.models.Favourite;
 
+/**
+ * Testing Favourite class.
+ */
+
 public class FavouriteTest {
     private Favourite favourite;
 
@@ -20,7 +24,8 @@ public class FavouriteTest {
 
     @BeforeEach
     void setUp() {
-        favourite = new Favourite(startAddress, endAddress, startLat, startLong, endLat, endLong, filters, transportMode);
+        favourite = new Favourite(startAddress, endAddress, startLat,
+                startLong, endLat, endLong, filters, transportMode);
     }
 
 

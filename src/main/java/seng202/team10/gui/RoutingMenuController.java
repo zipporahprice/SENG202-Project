@@ -3,13 +3,15 @@ package seng202.team10.gui;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,9 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RouteManager;
+import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.GeoLocator;
@@ -49,6 +54,8 @@ import seng202.team10.repository.SqliteQueryBuilder;
  * @author Team 10
  */
 public class RoutingMenuController implements Initializable, MenuController {
+
+    private static final Logger log = LogManager.getLogger(RoutingMenuController.class);
 
     @FXML
     private ComboBox<String> startLocation;
@@ -228,6 +235,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = startLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         startLocation.setItems(addressOptions);
+        startLocation.getEditor().setText(address);
     }
 
     /**
@@ -258,6 +266,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = endLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         endLocation.setItems(addressOptions);
+        endLocation.getEditor().setText(address);
+
     }
 
     @FXML
@@ -283,6 +293,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = stopLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         stopLocation.setItems(addressOptions);
+        stopLocation.getEditor().setText(address);
+
     }
 
     /**
@@ -390,26 +402,165 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
+
     /**
-     * Gets the overlapping points from the list of
-     * Location coordinates for rating the route.
+     * Calculates and returns a type Result that contains information on points along a route.
+     * The function checks segments of the path between the given coordinates, calculating severity,
+     * weather conditions, and other relevant metrics to provide a result.
      *
-     * @param coordinates List of Location object coordinates
-     * @return double of route rating
+     * @param coordinates List of locations representing the path of the route.
+     * @param roads List of road names corresponding to the segments between provided coordinates.
+     * @param distances List of distances that a route must continue before the next instruction.
+     *
+     * @return Result object
      */
-    public static double getOverlappingPoints(List<Location> coordinates) {
+    public static Result getOverlappingPoints(List<Location> coordinates,
+                                              List<String> roads, List<Double> distances) {
         double totalValue = 0;
+        double maxSegmentSeverity = Double.MIN_VALUE;
+        Location startOfDangerousSegment = null;
+        Location endOfDangerousSegment = null;
+        String finalRoad = roads.get(0);
+
+
+        Map<String, Integer> weatherSeverityTotal = new HashMap<>();
+        Map<String, Integer> weatherTotals = new HashMap<>();
+        double totalDistances = 0;
         double totalDistance = 0;
+        int totalNumPoints = 0;
+
+        Set<Integer> objectIdSet = new HashSet<>();
+
+        int j = 0;
         for (int i = 0; i < coordinates.size() - 1; i += 1) {
             Location segmentStart = coordinates.get(i);
             Location segmentEnd = coordinates.get(i + 1);
             double distance = haversineDistance(segmentStart, segmentEnd);
-            double averageSeverity = crossProductQuery(segmentStart, segmentEnd);
             totalDistance += distance;
-            totalValue += averageSeverity / totalDistance;
+            if (totalDistance > totalDistances && j < distances.size()) {
+                totalDistances += distances.get(j);
+                j++;
+            }
+            List<?> crashList = crossProductQuery(segmentStart, segmentEnd);
+
+            int totalSeverity = 0;
+            double total = 0;
+
+            for (Object severityMap : crashList) {
+                HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
+                int objectId = (int) map.get("object_id");
+                if (!objectIdSet.contains(objectId)) {
+                    objectIdSet.add(objectId);
+                    int currentSeverity = (int) map.get("severity");
+                    totalSeverity += currentSeverity;
+                    String weather = (String) map.get("weather");
+                    if (weatherSeverityTotal.containsKey(map.get("weather"))) {
+                        weatherSeverityTotal.put(weather, weatherSeverityTotal.get(weather)
+                                + currentSeverity);
+                        weatherTotals.put(weather, weatherTotals.get(weather) + 1);
+                    } else {
+                        weatherSeverityTotal.put(weather, currentSeverity);
+                        weatherTotals.put(weather, 1);
+                    }
+
+                    total += 1;
+                }
+            }
+            totalNumPoints += total;
+
+
+
+            double segmentSeverity = 0;
+
+            if (total > 0) {
+                segmentSeverity = totalSeverity;
+            }
+
+            if (segmentSeverity > maxSegmentSeverity) {
+                maxSegmentSeverity = segmentSeverity;
+                if (!Objects.equals(roads.get(j), "")) {
+                    finalRoad = roads.get(j);
+                }
+                startOfDangerousSegment = segmentStart;
+                endOfDangerousSegment = segmentEnd;
+            }
+
+            totalValue += segmentSeverity;
         }
-        //TODO store average severities in a list to look at coloring route segments.
-        return totalValue * totalDistance;
+        if (finalRoad.equals("")) {
+            int counter = 0;
+            while (counter < roads.size() && roads.get(counter).equals("")) {
+                counter++;
+            }
+            finalRoad = roads.get(counter);
+        }
+
+        double maxWeatherSeverity = Double.MIN_VALUE;
+        String maxWeather = "";
+
+        for (String weather : weatherSeverityTotal.keySet()) {
+            double currentWeatherSeverity = (double) weatherSeverityTotal.get(weather)
+                    / weatherTotals.get(weather);
+            if (currentWeatherSeverity > maxWeatherSeverity) {
+                maxWeatherSeverity = currentWeatherSeverity;
+                maxWeather = weather;
+            }
+        }
+
+        double dangerRatingOutOf10 = (((totalValue / totalNumPoints) - 1.0) / 7.0) * 10.0;
+        FilterManager filterManager = FilterManager.getInstance();
+        int startYear = filterManager.getEarliestYear();
+        int endYear = filterManager.getLatestYear();
+
+        return new Result(dangerRatingOutOf10, startOfDangerousSegment, endOfDangerousSegment,
+                maxSegmentSeverity, maxWeather, startYear, endYear, objectIdSet.size(), finalRoad);
+    }
+
+
+    /**
+     * Represents the result of an analysis for overlapping points and their severity
+     * on a given path defined by a list of locations.
+     *
+     */
+    public static class Result {
+        public double dangerRating;
+        public Location startOfMostDangerousSegment;
+        public Location endOfMostDangerousSegment;
+
+        public double maxSegmentSeverity;
+        public String maxWeather;
+        public int startYear;
+        public int endYear;
+
+        public int totalNumPoints;
+        public String finalRoad;
+
+        /**
+         * Constructs a new Result object with the provided metrics.
+         *
+         * @param dangerRating Overall danger rating of the path.
+         * @param startSegment Start location of the most dangerous segment.
+         * @param endSegment End location of the most dangerous segment.
+         * @param maxSegmentSeverity The highest severity encountered along the path.
+         * @param maxWeather The most severe weather condition encountered.
+         * @param startYear The beginning year of the data range considered.
+         * @param endYear The end year of the data range considered.
+         * @param totalNumPoints Total number of unique overlapping points encountered.
+         * @param finalRoad Name of the road where the most severe overlapping point was found.
+         */
+        public Result(double dangerRating, Location startSegment, Location endSegment,
+                      double maxSegmentSeverity, String maxWeather, int startYear, int endYear,
+                      int totalNumPoints, String finalRoad) {
+            this.dangerRating = dangerRating;
+            this.startOfMostDangerousSegment = startSegment;
+            this.endOfMostDangerousSegment = endSegment;
+            this.maxSegmentSeverity = maxSegmentSeverity;
+            this.maxWeather = maxWeather;
+            this.startYear = startYear;
+            this.endYear = endYear;
+            this.totalNumPoints = totalNumPoints;
+            this.finalRoad = finalRoad;
+        }
     }
 
     /**
@@ -448,96 +599,41 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @param endLocation location the route segment ends at
      * @return double of average severity
      */
-    public static double crossProductQuery(Location startLocation, Location endLocation) {
-        double startLatRad = Math.toRadians(startLocation.getLatitude());
-        double startLongRad = Math.toRadians(startLocation.getLongitude());
-        double endLatRad = Math.toRadians(endLocation.getLatitude());
-        double endLongRad = Math.toRadians(endLocation.getLongitude());
+    public static List crossProductQuery(Location startLocation, Location endLocation) {
+        // 100 metres away
+        double oneKilometreInDegrees = 0.008;
+        double dist = oneKilometreInDegrees * 0.1;
 
-
-        double startX = Math.cos(startLatRad) * Math.cos(startLongRad);
-        double startY = Math.cos(startLatRad) * Math.sin(startLongRad);
-        double startZ = Math.sin(startLatRad);
-
-        double endX = Math.cos(endLatRad) * Math.cos(endLongRad);
-        double endY = Math.cos(endLatRad) * Math.sin(endLongRad);
-        double endZ = Math.sin(endLatRad);
-
-        Map<String, Number> constantsTable = new LinkedHashMap<>();
-        constantsTable.put("start_x", startX);
-        constantsTable.put("start_y", startY);
-        constantsTable.put("start_z", startZ);
-        constantsTable.put("end_x", endX);
-        constantsTable.put("end_y", endY);
-        constantsTable.put("end_z", endZ);
-
-        double minLon = Math.min(startLocation.getLongitude(), endLocation.getLongitude());
-        double maxLon = Math.max(startLocation.getLongitude(), endLocation.getLongitude());
-        double minLat = Math.min(startLocation.getLatitude(), endLocation.getLatitude());
-        double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude());
-
-        // One kilometre in degrees
-        double kilometreInDegrees = 0.008;
-        double distance = 100;
-
-        String tableName = "locations";
-        String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude))*SIN(RADIANS(longitude))-"
-                + tableName + ".start_y) * (" + tableName + ".end_z - "
-                + tableName + ".start_z) - (SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_y - "
-                + tableName + ".start_y), 2) + POWER((SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_x - "
-                + tableName + ".start_x) - (COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
-                + tableName + ".start_x) * (" + tableName + ".end_z - "
-                + tableName + ".start_z),2)+POWER((COS(RADIANS(latitude))*COS(RADIANS(longitude))-"
-                + tableName + ".start_x) * (" + tableName + ".end_y - "
-                + tableName + ".start_y) - (COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
-                + tableName + ".start_y) * (" + tableName + ".end_x - "
-                + tableName + ".start_x), 2))";
-        String lineMagnitude = "SQRT(POWER(" + tableName + ".end_x - " + tableName
-                + ".start_x, 2) + POWER(" + tableName + ".end_y - " + tableName
-                + ".start_y, 2) + POWER(" + tableName + ".end_z - " + tableName
-                + ".start_z, 2))";
-        String asinTheta = "(ASIN(" + crossProductMagnitude + "/" + lineMagnitude + ")";
-        String worldDistance = asinTheta + " * 6371.0) <= " + distance;
+        double minLat = Math.min(startLocation.getLatitude(), endLocation.getLatitude()) - dist;
+        double minLong = Math.min(startLocation.getLongitude(), endLocation.getLongitude()) - dist;
+        double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude()) + dist;
+        double maxLong = Math.max(startLocation.getLongitude(), endLocation.getLongitude()) + dist;
 
         FilterManager filterManager = FilterManager.getInstance();
-        Location previousMin = filterManager.getViewPortMin();
-        Location previousMax = filterManager.getViewPortMax();
-
-        filterManager.setViewPortMin(minLat - kilometreInDegrees, minLon - kilometreInDegrees);
-        filterManager.setViewPortMax(maxLat + kilometreInDegrees, maxLon + kilometreInDegrees);
-
         String filterWhere = filterManager.toString();
+        String[] filterList = filterWhere.split(" AND ");
 
-        filterManager.setViewPortMin(previousMin.getLatitude(), previousMin.getLongitude());
-        filterManager.setViewPortMax(previousMax.getLatitude(), previousMax.getLongitude());
+        // 4 ANDS to take away to get rid of the viewport
+        String filterWhereWithoutViewport = String.join(" AND ",
+                Arrays.copyOf(filterList, filterList.length - 4));
 
-        String select = "severity";
-        String from = "crashes, locations";
-        String where = filterWhere + " AND " + worldDistance;
+        String select = "object_id, severity, weather";
+        String from = "crashes";
+        String where = filterWhereWithoutViewport + " AND "
+                + "object_id IN (SELECT id FROM rtree_index WHERE minX >= " + minLong
+                + " AND maxX <= " + maxLong
+                + " AND minY >= " + minLat
+                + " AND maxY <= " + maxLat + ")";
 
-        List severityList = SqliteQueryBuilder.create()
-                .with(tableName, constantsTable)
+
+        List<?> severityList = SqliteQueryBuilder
+                .create()
                 .select(select)
                 .from(from)
                 .where(where)
                 .buildGetter();
-        int totalSeverity = 0;
-        double total = 0;
 
-        for (Object severityMap : severityList) {
-            HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
-            totalSeverity += (int) map.get("severity");
-            total += 1;
-        }
-
-        if (total > 0) {
-            return totalSeverity / total;
-        } else {
-            return 0;
-        }
-
+        return severityList;
     }
 
     /**
@@ -591,20 +687,32 @@ public class RoutingMenuController implements Initializable, MenuController {
     /**
      * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
      * on the GUI's ratingText label through getting the overlapping points of each segment.
-     *
-     * @throws SQLException if there is an error
-     *
      */
-    public static void ratingUpdate() throws SQLException {
-        List<Location> coordinates = JavaScriptBridge.getRouteMap()
-                .get(JavaScriptBridge.getIndex());
-        if (coordinates != null && !coordinates.isEmpty()) {
-            double rating = getOverlappingPoints(coordinates);
-            RoutingMenuController.controller.updateRatingLabel(Double.toString(Math.round(rating)));
-        } else {
-            System.out.println("No coordinates available for routeId: 0");
+    public static void ratingUpdate() {
+        try {
+            List<Location> coordinates =
+                    JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex());
+            List<String> roads = JavaScriptBridge.getRoadsMap().get(JavaScriptBridge.getIndex());
+            List<Double> distances =
+                    JavaScriptBridge.getDistancesMap().get(JavaScriptBridge.getIndex());
+            if (coordinates != null && !coordinates.isEmpty()) {
+                Result review = getOverlappingPoints(coordinates, roads, distances);
+                String reviewString = String.format("This route has a %.2f/10 danger rating, "
+                        + "there have been %d crashes since %d up till %d. The worst crashes occur "
+                        + "during %s conditions, the most dangerous segment is on %s with a "
+                        + "danger rating of %.2f.", review.dangerRating, review.totalNumPoints,
+                        review.startYear, review.endYear, review.maxWeather, review.finalRoad,
+                        review.maxSegmentSeverity);
+                MainController.javaScriptConnector.call("updateReviewContent", reviewString);
+
+            } else {
+                System.out.println("No coordinates available for routeId: 0");
+            }
+        } catch (SQLException e) {
+            log.error(e);
         }
     }
+
 
     /**
      * Calls the JS function, removeRoute.
@@ -720,5 +828,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setStopLocation(stopLocation.getEditor().getText());
         route.setTransportMode(modeChoice);
     }
+
+
 
 }

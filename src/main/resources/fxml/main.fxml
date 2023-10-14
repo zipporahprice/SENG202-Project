@@ -20,7 +20,9 @@
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>
             <Insets />
-         </StackPane.margin></WebView>
+         </StackPane.margin>
+      </WebView>
+
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>
@@ -117,7 +119,7 @@
                   <Tooltip styleClass="custom-tool-tip" text="Click To View the Help Page" />
                </tooltip>
             </Button>
-            <Button fx:id="graphsButton" layoutX="9.0" layoutY="479.0" mnemonicParsing="false" onAction="#loadGraphs" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css">
+            <Button fx:id="graphsButton" layoutX="9.0" layoutY="479.0" mnemonicParsing="false" onAction="#toggleMenuDisplay" prefHeight="67.0" prefWidth="300.0" styleClass="menuButtonColor" stylesheets="@style.css" userData="graphing">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10">
                      <ImageView fitHeight="38.0" preserveRatio="true">

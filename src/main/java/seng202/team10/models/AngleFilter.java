@@ -19,14 +19,13 @@ public class AngleFilter {
      * as not enough points are present to perform the filter.
      *
      * @param coordinates     The list of locations to filter.
-     * @param angleThreshold  The angle threshold, in degrees. Locations will be included
+     * @param angle  The angle threshold, in degrees. Locations will be included
      *                        if the angle they make with adjacent locations exceeds this threshold.
      * @return A list of filtered locations based on angle constraints.
      */
-    public static List<Location> filterLocationsByAngle(List<Location> coordinates,
-                                                        double angleThreshold) {
-        if (coordinates.size() < 3) {
-            return coordinates; // Not enough points to filter
+    public static List<Location> filterLocationsByAngle(List<Location> coordinates, double angle) {
+        if (coordinates.size() < 3) { // Not enough points to filter
+            return coordinates;
         }
 
         List<Location> filteredCoordinates = new ArrayList<>();
@@ -40,9 +39,12 @@ public class AngleFilter {
             while (j < coordinates.size()) {
                 Location next = coordinates.get(j);
 
-                double angle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
+                double testAngle = calculateAngle(lastSelectedLocation,
+                                                  potentialNextLocation,
+                                                  next);
 
-                if (Math.abs(angle) > angleThreshold) {
+                // If the angle is greater than the constant add that angle
+                if (Math.abs(testAngle) > angle) {
                     filteredCoordinates.add(potentialNextLocation);
                     lastSelectedLocation = potentialNextLocation;
                     i = j;
@@ -91,8 +93,8 @@ public class AngleFilter {
      *
      * @param lon The difference in longitude (in radians) between the two points.
      * @param lat The difference in latitude (in radians) between the two points.
-     * @param firstLatitude The latitude (in degrees) of the first point.
-     * @param secondLatitude The latitude (in degrees) of the second point.
+     * @param firstLat The latitude (in degrees) of the first point.
+     * @param secondLat The latitude (in degrees) of the second point.
      *
      * @return The computed angle based on the bearing between the two points.
      */
