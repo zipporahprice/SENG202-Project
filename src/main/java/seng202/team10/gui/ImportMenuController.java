@@ -35,6 +35,20 @@ public class ImportMenuController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(importDataButton.getScene().getWindow());
 
+        if (file == null) {
+            // User canceled the file chooser, exit the method.
+            return;
+        }
+
+        if (!file.getName().endsWith(".csv")) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Import Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid file format. Please import a CSV file.");
+            alert.showAndWait();
+            return;
+        }
+
         try {
             DatabaseManager.getInstance().importFile(file);
         } catch (DataImportException e) {
@@ -43,8 +57,16 @@ public class ImportMenuController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
+        } catch (Exception e) {
+            // Catching other unexpected exceptions and notifying the user.
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Import Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An unexpected error occurred while importing the file.");
+            alert.showAndWait();
         }
     }
+
 
     public void resetDatabase() {
         DatabaseManager manager = DatabaseManager.getInstance();
