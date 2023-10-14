@@ -155,11 +155,13 @@ public class JavaScriptBridge {
 
 
             List<Double> distances = new ArrayList<>();
-            //since jsonArray1 and jsonArray2 are always the same size both operations are in the same loop
+            //since jsonArray1 and jsonArray2 are always the same size
+            // both operations are in the same loop
             for (int i = 0; i < jsonArray2.size(); i++) {
                 double output;
                 Object distance = jsonArray2.get(i);
-                if (distance instanceof Long distanceLong) { //if distance is a Long convert it to a double
+                if (distance instanceof Long distanceLong) {
+                    //if distance is a Long convert it to a double
                     output = distanceLong.doubleValue();
                 } else if (distance instanceof Double distanceDouble) { //already a double
                     output = distanceDouble;

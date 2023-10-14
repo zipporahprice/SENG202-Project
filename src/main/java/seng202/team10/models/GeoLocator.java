@@ -47,7 +47,8 @@ public class GeoLocator {
         String[] addressParts = address.split("\\+");
         StringBuilder finalAddress = new StringBuilder(addressParts[0]);
 
-        //the address being called is already the full length hence ignores the new+zealand+aotaeroa with -3
+        //the address being called is already the full length hence
+        // ignores the new+zealand+aotearoa with -3
         for (int i = 1; i < addressParts.length - 3; i++) {
             finalAddress.append("+").append(addressParts[i]);
         }
@@ -105,8 +106,9 @@ public class GeoLocator {
         StringBuilder finalAddress = new StringBuilder(addressParts[0]);
 
         //checks if the address is the full length
-        if (addressParts[addressParts.length-1].equals("Aotearoa")) {
-            //the address being called is already the full length hence ignores the new+zealand+aotaeroa with -3
+        if (addressParts[addressParts.length - 1].equals("Aotearoa")) {
+            //the address being called is already the full length hence
+            // ignores the new+zealand+aotaeroa with -3
             for (int i = 1; i < addressParts.length - 3; i++) {
                 finalAddress.append("+").append(addressParts[i]);
             }

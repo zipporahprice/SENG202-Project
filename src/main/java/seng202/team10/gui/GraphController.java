@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -18,8 +17,8 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.App;
-import seng202.team10.repository.SqliteQueryBuilder;
 import seng202.team10.business.GraphManager;
+import seng202.team10.repository.SqliteQueryBuilder;
 
 
 
@@ -38,8 +37,6 @@ public class GraphController implements Initializable, MenuController {
     @FXML
     private PieChart pieChartMade;
     @FXML
-    private ChoiceBox chartChoiceBox;
-    @FXML
     private ComboBox chartDataComboBox;
     @FXML
     private AnchorPane graphsDataPane;
@@ -50,7 +47,7 @@ public class GraphController implements Initializable, MenuController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        setChartOptions();  todo look at deleting
+        //setChartOptions();  todo look at deleting
         setPieChartDataOptions();
         pieChartSqlTestData = newPieChartData(columnOfInterest);
         setPieGraph(pieChartMade, pieChartSqlTestData);
@@ -173,18 +170,19 @@ public class GraphController implements Initializable, MenuController {
     private ObservableList<PieChart.Data> newPieChartVehicleData() {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        //avoid complex SQL query by creating PieChart.Data elements by vehicle type to add to result
-        PieChart.Data bikeData =  createVehiclePieData("Bicycle", "bicycle_involved");
-        PieChart.Data busData =  createVehiclePieData("Bus", "bus_involved");
-        PieChart.Data carData =  createVehiclePieData("Car", "car_involved");
-        PieChart.Data mopedData =  createVehiclePieData("Moped", "moped_involved");
-        PieChart.Data motorcycleData =  createVehiclePieData("Motorcycle", "motorcycle_involved");
-        PieChart.Data parkedData =  createVehiclePieData("Parked Vehicle",
+        //avoid complex SQL query by creating PieChart.Data elements
+        // by vehicle type to add to result
+        PieChart.Data bikeData = createVehiclePieData("Bicycle", "bicycle_involved");
+        PieChart.Data busData = createVehiclePieData("Bus", "bus_involved");
+        PieChart.Data carData = createVehiclePieData("Car", "car_involved");
+        PieChart.Data mopedData = createVehiclePieData("Moped", "moped_involved");
+        PieChart.Data motorcycleData = createVehiclePieData("Motorcycle", "motorcycle_involved");
+        PieChart.Data parkedData = createVehiclePieData("Parked Vehicle",
                 "parked_vehicle_involved");
-        PieChart.Data pedestrianData =  createVehiclePieData("Pedestrian", "pedestrian_involved");
-        PieChart.Data schoolBusData =  createVehiclePieData("School Bus", "school_bus_involved");
-        PieChart.Data trainData =  createVehiclePieData("Train", "train_involved");
-        PieChart.Data truckData =  createVehiclePieData("Truck", "truck_involved");
+        PieChart.Data pedestrianData = createVehiclePieData("Pedestrian", "pedestrian_involved");
+        PieChart.Data schoolBusData = createVehiclePieData("School Bus", "school_bus_involved");
+        PieChart.Data trainData = createVehiclePieData("Train", "train_involved");
+        PieChart.Data truckData = createVehiclePieData("Truck", "truck_involved");
 
         result.add(bikeData);
         result.add(busData);
@@ -265,46 +263,47 @@ public class GraphController implements Initializable, MenuController {
         return result;
     }
 
-    //todo look at deleting
-//    /**
-//     * Method to set chart options for dropdown, can only select 1 graph.
-//     */
-//    public void setChartOptions() {
-//        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
-//        chartChoiceBox.setValue(currentChart);
-//        if (currentChart.equals("Pie Graph")) {
-//            graphsDataPane.setVisible(true);
-//            //todo set line graph pane visibility false
-//        } else {
-//            graphsDataPane.setVisible(false);
-//            //TODO set line graph data options
-//        }
-//        chartChoiceBox.getSelectionModel()
-//                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//                    if (newValue != null) {
-//                        currentChart = (String) newValue;
-//                    }
-//                    // Adjusted for the new option.
-//                    switch (currentChart) {
-//                        case "Pie Graph":
-//                            // Code to show the Pie Graph.
-//                            //TODO refactor newPieChartData into here.
-//                            graphsDataPane.setVisible(true);
-//                            //todo set line graph pane visibility false
-//                            break;
-//                        case "Line Graph":
-//                            // Code to show Line Graph.
-//                            graphsDataPane.setVisible(false);
-//                            //todo set line graph pane visibility true
-//
-//                            break;
-//                        default:
-//                            // Other cases.
-//                            log.error("uh oh wrong choiceBox option");
-//                            break;
-//                    }
-//                });
-//    }
+
+    //    /** //todo look at deleting
+    //     * Method to set chart options for dropdown, can only select 1 graph.
+    //     */
+    //    public void setChartOptions() {
+    //        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
+    //        chartChoiceBox.setValue(currentChart);
+    //        if (currentChart.equals("Pie Graph")) {
+    //            graphsDataPane.setVisible(true);
+    //            //todo set line graph pane visibility false
+    //        } else {
+    //            graphsDataPane.setVisible(false);
+    //            //TODO set line graph data options
+    //        }
+    //        chartChoiceBox.getSelectionModel()
+    //                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    //                    if (newValue != null) {
+    //                        currentChart = (String) newValue;
+    //                    }
+    //                    // Adjusted for the new option.
+    //                    switch (currentChart) {
+    //                        case "Pie Graph":
+    //                            // Code to show the Pie Graph.
+    //                            //TODO refactor newPieChartData into here.
+    //                            graphsDataPane.setVisible(true);
+    //                            //todo set line graph pane visibility false
+    //                            break;
+    //                        case "Line Graph":
+    //                            // Code to show Line Graph.
+    //                            graphsDataPane.setVisible(false);
+    //                            //todo set line graph pane visibility true
+    //
+    //                            break;
+    //                        default:
+    //                            // Other cases.
+    //                            log.error("uh oh wrong choiceBox option");
+    //                            break;
+    //                    }
+    //                });
+    //  }
+
 
     /**
      * Dropdown choosing the data for pie graph.
