@@ -57,6 +57,8 @@ public class GraphController implements Initializable, MenuController {
 
     @FXML
     private Label holidayInfoLabel;
+    @FXML
+    private Label vehiclesInfoLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -123,10 +125,13 @@ public class GraphController implements Initializable, MenuController {
         }
 
         holidayInfoLabel.setVisible(false);
+        vehiclesInfoLabel.setVisible(false);
         if (currentChartData.equals("Weather")) {
             pieGraph.setLegendVisible(true);
         } else if (currentChartData.equals("Holiday")) {
             holidayInfoLabel.setVisible(true);
+        } else if (currentChartData.equals("Vehicle Type")) {
+            vehiclesInfoLabel.setVisible(true);
         }
 
         int totalValue = pieGraph.getData().stream().mapToInt(data -> (int) data.getPieValue()).sum();
@@ -197,7 +202,8 @@ public class GraphController implements Initializable, MenuController {
 
 
 
-        if (columnOfInterest.equals("bicycle_involved")) {
+        if (columnOfInterest.equals("truck_involved")) {
+            //because truck is the last data item to be set and what columnOfInterest will be at the end.
             PieChart.Data bikeData =  newPieChartDataVehicleType("Bicycle", "bicycle_involved");
             PieChart.Data busData =  newPieChartDataVehicleType("Bus", "bus_involved");
             PieChart.Data carData =  newPieChartDataVehicleType("Car", "car_involved");
@@ -456,8 +462,8 @@ public class GraphController implements Initializable, MenuController {
                             columnOfInterest = "severity";
                             break;
                         case "Vehicle Type":
-                            //code to show vehicle type pie chart.
-                            columnOfInterest = "bicycle_involved";
+                            //truck to trigger if statement in newPieChartData.
+                            columnOfInterest = "truck_involved";
                             break;
                         case "Weather":
                             columnOfInterest = "weather";

@@ -15,10 +15,15 @@
          <AnchorPane fx:id="pieChartPane" layoutX="339.0" layoutY="131.0" prefHeight="451.0" prefWidth="539.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
                <PieChart fx:id="pieChartMade" layoutX="36.0" layoutY="26.0" prefHeight="400.0" prefWidth="467.0" />
-               <Label fx:id="holidayInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="250.0" style="-fx-text-fill: white;" text="*Holiday only includes Christmas/New Year, Easter, Queen's Birthday and Labour Weekend holiday period. " wrapText="true">
+               <Label fx:id="holidayInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="250.0" style="-fx-text-fill: white;" text="*Holiday only includes Christmas/New Year, Easter, Queen's Birthday and Labour Weekend holiday period. " visible="false" wrapText="true">
                   <font>
                      <Font size="10.0" />
                   </font></Label>
+               <Label fx:id="vehiclesInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="310.0" style="-fx-text-fill: white;" text="*Data shows percentage out of total number of vehicles &amp; pedestrians involved in crashes, not out of the total number of crashes." wrapText="true">
+                  <font>
+                     <Font size="10.0" />
+                  </font>
+               </Label>
             </children>
          </AnchorPane>
           <AnchorPane layoutX="897.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="180.0" prefHeight="83.0" prefWidth="180.0" styleClass="sideBarColor" stylesheets="@style.css">
