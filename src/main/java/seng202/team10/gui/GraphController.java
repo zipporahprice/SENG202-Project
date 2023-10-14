@@ -18,10 +18,10 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.App;
-import seng202.team10.business.FilterManager;
-import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 import seng202.team10.business.GraphManager;
+
+
 
 
 /**
@@ -129,7 +129,7 @@ public class GraphController implements Initializable, MenuController {
     }
 
     private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
-        List<HashMap<Object, Object>> vehicleList;
+        List<?> vehicleList;
 
         columnOfInterest = columnWanted;
 
@@ -137,14 +137,15 @@ public class GraphController implements Initializable, MenuController {
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
                 .groupBy(columnOfInterest)
-                .build();
+                .buildGetter();
 
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
-        for (HashMap<Object, Object> hash : vehicleList) {
-            Object column = hash.get(columnOfInterest);
-            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+        for (Object hash : vehicleList) {
+            HashMap<Object, Object> vehicleHashMap = (HashMap<Object, Object>) hash;
+            Object column = vehicleHashMap.get(columnOfInterest);
+            double count = ((Number) vehicleHashMap.get("COUNT(*)")).doubleValue();
             sliceNames.add(column.toString());
             sliceCounts.add(count);
         }
@@ -195,7 +196,7 @@ public class GraphController implements Initializable, MenuController {
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
-        List<HashMap<Object, Object>> dbList;
+        List<?> dbList;
 
         if (columnOfInterest.equals("truck_involved")) {
             //because truck is the last data item to be set and
@@ -204,7 +205,7 @@ public class GraphController implements Initializable, MenuController {
             return result;
         }
 
-        List<HashMap<String, Object>> dbList = SqliteQueryBuilder.create()
+        dbList = SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
                 .groupBy(columnOfInterest)
@@ -213,9 +214,10 @@ public class GraphController implements Initializable, MenuController {
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
-        for (HashMap<Object, Object> hash : dbList) {
-            Object column = hash.get(columnOfInterest);
-            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+        for (Object hash : dbList) {
+            HashMap<Object, Object> hashMap = (HashMap<Object, Object>) hash;
+            Object column = hashMap.get(columnOfInterest);
+            double count = ((Number) hashMap.get("COUNT(*)")).doubleValue();
 
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {

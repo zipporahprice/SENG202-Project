@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.GraphController">
+<StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.GraphController">
    <AnchorPane prefHeight="751.0" prefWidth="1336.0" StackPane.alignment="CENTER">
       <children>
          <AnchorPane fx:id="pieChartPane" layoutX="339.0" layoutY="131.0" prefHeight="451.0" prefWidth="539.0" styleClass="sideBarColor" stylesheets="@style.css">
