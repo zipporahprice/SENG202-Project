@@ -26,22 +26,21 @@ import seng202.team10.business.GraphManager;
 
 /**
  * This class manages actions and views related to graphical representations of data.
- * It includes methods for initializing the window and handling navigation back to the main window.
+ * It includes methods for showing the pie graph and changing the data shown.
  */
 public class GraphController implements Initializable, MenuController {
 
+    private ObservableList<PieChart.Data> pieChartSqlTestData;
+    private static String columnOfInterest = "region";
+    private static String currentChartData = "Region";
+    private String currentChart = "Pie Graph"; //for initial state of the graph
     private static final Logger log = LogManager.getLogger(App.class);
     @FXML
     private PieChart pieChartMade;
-    ObservableList<PieChart.Data> pieChartSqlTestData;
-
-    private static String columnOfInterest = "region";
     @FXML
     private ChoiceBox chartChoiceBox;
-    private String currentChart = "Pie Graph";
     @FXML
     private ComboBox chartDataComboBox;
-    private static String currentChartData = "Region";
     @FXML
     private AnchorPane graphsDataPane;
     @FXML
@@ -51,7 +50,7 @@ public class GraphController implements Initializable, MenuController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setChartOptions();
+//        setChartOptions();  todo look at deleting
         setPieChartDataOptions();
         pieChartSqlTestData = newPieChartData(columnOfInterest);
         setPieGraph(pieChartMade, pieChartSqlTestData);
@@ -65,7 +64,6 @@ public class GraphController implements Initializable, MenuController {
         GraphManager graphingManager = GraphManager.getInstance();
         graphingManager.setCurrentColumnData(currentChartData);
         graphingManager.setCurrentColOfInterest(columnOfInterest);
-
     }
 
     /**
@@ -84,16 +82,17 @@ public class GraphController implements Initializable, MenuController {
     }
 
     private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
-        if (pieGraph.getData().size() != 0) {
+        if (pieGraph.getData().size() != 0) { //removing any old data from the pie graph
             pieGraph.getData().clear();
         }
 
         for (PieChart.Data data : pieData) {
             pieGraph.getData().add(data);
-        }
+        } //adding new data to the pie graph
 
         pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
 
+        //basic settings for the pie graph
         pieGraph.setLegendVisible(false);
         pieGraph.setLabelsVisible(true);
         pieGraph.setLabelLineLength(15);
@@ -103,21 +102,23 @@ public class GraphController implements Initializable, MenuController {
         vehiclesInfoLabel.setVisible(false);
 
         if (currentChartData.equals("Weather")) {
-            pieGraph.setLegendVisible(true);
+            pieGraph.setLegendVisible(true); //because a couple of slices too small to see
         } else if (currentChartData.equals("Holiday")) {
             holidayInfoLabel.setVisible(true);
         } else if (currentChartData.equals("Vehicle Type")) {
             vehiclesInfoLabel.setVisible(true);
         }
 
-        setTooltipInfo(pieGraph);
+        setTooltipInfo(pieGraph); //sets informative tooltips for each slice
 
     }
 
     private void setTooltipInfo(PieChart pieGraph) {
+        //getting the total number of points of interest to calculate percentage
         int totalValue = pieGraph.getData()
                 .stream().mapToInt(data -> (int) data.getPieValue()).sum();
 
+        //creating the tooltip in the format "*percentage*, *number of points*, *slice name*"
         pieGraph.getData().forEach(data -> {
             String percentage = String.format("%.2f%%", (data.getPieValue() / totalValue * 100));
             String count = String.valueOf((int) data.getPieValue());
@@ -129,7 +130,8 @@ public class GraphController implements Initializable, MenuController {
     }
 
     private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
-        List<?> vehicleList;
+
+        List<?> vehicleList; //to hold the result of the sql query
 
         columnOfInterest = columnWanted;
 
@@ -142,6 +144,7 @@ public class GraphController implements Initializable, MenuController {
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
+        //extracting slice value and count
         for (Object hash : vehicleList) {
             HashMap<Object, Object> vehicleHashMap = (HashMap<Object, Object>) hash;
             Object column = vehicleHashMap.get(columnOfInterest);
@@ -150,6 +153,7 @@ public class GraphController implements Initializable, MenuController {
             sliceCounts.add(count);
         }
 
+        //adding pie chart data only if the vehicle was involved i.e. sliceName = 1
         for (int i = 0; i < sliceNames.size(); i++) {
             String sliceName = sliceNames.get(i);
             if (sliceName.equals("1")) {
@@ -161,6 +165,7 @@ public class GraphController implements Initializable, MenuController {
         }
 
         log.error("Invalid vehicle type!");
+        //because it should have returned in the previous loop
 
         return null;
     }
@@ -168,6 +173,7 @@ public class GraphController implements Initializable, MenuController {
     private ObservableList<PieChart.Data> newPieChartVehicleData() {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
+        //avoid complex SQL query by creating PieChart.Data elements by vehicle type to add to result
         PieChart.Data bikeData =  createVehiclePieData("Bicycle", "bicycle_involved");
         PieChart.Data busData =  createVehiclePieData("Bus", "bus_involved");
         PieChart.Data carData =  createVehiclePieData("Car", "car_involved");
@@ -205,6 +211,7 @@ public class GraphController implements Initializable, MenuController {
             return result;
         }
 
+        //querying the database for the column and count
         dbList = SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
@@ -214,11 +221,13 @@ public class GraphController implements Initializable, MenuController {
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
+        //looping through to extract slice name and corresponding count
         for (Object hash : dbList) {
             HashMap<Object, Object> hashMap = (HashMap<Object, Object>) hash;
             Object column = hashMap.get(columnOfInterest);
             double count = ((Number) hashMap.get("COUNT(*)")).doubleValue();
 
+            //creating more informative slice names
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {
                     case 1 -> column = "Non-injury";
@@ -240,8 +249,10 @@ public class GraphController implements Initializable, MenuController {
 
         }
 
+        //adding sliceName and sliceCount to result
         for (int i = 0; i < sliceNames.size(); i++) {
             String sliceName = sliceNames.get(i);
+            //handling edge cases
             if (sliceName.equals("Manawatū-Whanganui")) {
                 sliceName = "Manawatu-Whanganui"; //todo figure out macron
             } else if (sliceName.equals("Null")) {
@@ -254,50 +265,52 @@ public class GraphController implements Initializable, MenuController {
         return result;
     }
 
-    /**
-     * method to set chart options for dropdown, can only select 1 graph.
-     */
-    public void setChartOptions() {
-        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
-        chartChoiceBox.setValue(currentChart);
-        if (currentChart.equals("Pie Graph")) {
-            graphsDataPane.setVisible(true);
-            //todo set line graph pane visibility false
-        } else {
-            graphsDataPane.setVisible(false);
-            //TODO set line graph data options
-        }
-        chartChoiceBox.getSelectionModel()
-                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        currentChart = (String) newValue;
-                    }
-                    // Adjusted for the new option.
-                    switch (currentChart) {
-                        case "Pie Graph":
-                            // Code to show the Pie Graph.
-                            //TODO refactor newPieChartData into here.
-                            graphsDataPane.setVisible(true);
-                            //todo set line graph pane visibility false
-                            break;
-                        case "Line Graph":
-                            // Code to show Line Graph.
-                            graphsDataPane.setVisible(false);
-                            //todo set line graph pane visibility true
-
-                            break;
-                        default:
-                            // Other cases.
-                            log.error("uh oh wrong choiceBox option");
-                            break;
-                    }
-                });
-    }
+    //todo look at deleting
+//    /**
+//     * Method to set chart options for dropdown, can only select 1 graph.
+//     */
+//    public void setChartOptions() {
+//        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
+//        chartChoiceBox.setValue(currentChart);
+//        if (currentChart.equals("Pie Graph")) {
+//            graphsDataPane.setVisible(true);
+//            //todo set line graph pane visibility false
+//        } else {
+//            graphsDataPane.setVisible(false);
+//            //TODO set line graph data options
+//        }
+//        chartChoiceBox.getSelectionModel()
+//                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//                    if (newValue != null) {
+//                        currentChart = (String) newValue;
+//                    }
+//                    // Adjusted for the new option.
+//                    switch (currentChart) {
+//                        case "Pie Graph":
+//                            // Code to show the Pie Graph.
+//                            //TODO refactor newPieChartData into here.
+//                            graphsDataPane.setVisible(true);
+//                            //todo set line graph pane visibility false
+//                            break;
+//                        case "Line Graph":
+//                            // Code to show Line Graph.
+//                            graphsDataPane.setVisible(false);
+//                            //todo set line graph pane visibility true
+//
+//                            break;
+//                        default:
+//                            // Other cases.
+//                            log.error("uh oh wrong choiceBox option");
+//                            break;
+//                    }
+//                });
+//    }
 
     /**
      * Dropdown choosing the data for pie graph.
      */
     public void setPieChartDataOptions() {
+        //setting up the comboBox for chartData
         chartDataComboBox.getItems().addAll(
                 "Region", "Holiday", "Severity", "Vehicle Type", "Weather", "Year");
         chartDataComboBox.setValue(currentChartData);
@@ -307,7 +320,7 @@ public class GraphController implements Initializable, MenuController {
                     if (newValue != null) {
                         currentChartData = (String) newValue;
                     }
-                    // Adjusted for the new option using enhanced switch.
+                    // Adjusted for the newly selected option using enhanced switch.
                     switch (currentChartData) {
                         case "Region" -> columnOfInterest = "region";
                         case "Holiday" -> columnOfInterest = "holiday";
@@ -321,9 +334,9 @@ public class GraphController implements Initializable, MenuController {
                     }
 
                     ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
-                    pieChartMade.getData().removeAll();
+                    pieChartMade.getData().removeAll(); //clearing the old data
                     pieChartMade.setVisible(false);
-                    setPieGraph(pieChartMade, newPieData);
+                    setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data
                     pieChartMade.setVisible(true);
                 });
     }
