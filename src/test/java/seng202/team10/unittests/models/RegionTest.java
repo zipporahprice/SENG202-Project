@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import seng202.team10.models.Region;
 
 /**
- * Testing Region class.
+ * Testing Region enum.
  */
 
 public class RegionTest {
