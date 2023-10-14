@@ -1,5 +1,7 @@
 package seng202.team10.unittests.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +10,8 @@ import seng202.team10.models.Favourite;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
-
 /**
- * Test class for SQLiteQueryBuilder class
+ * Testing SQLiteQueryBuilder class.
  *
  * @author Neil Alombro
  *
@@ -33,7 +30,7 @@ public class SqliteQueryBuilderTest {
     }
 
     /**
-     * Tests insert function
+     * Tests insert function.
      */
     @Test
     void testInsert() {
@@ -86,13 +83,15 @@ public class SqliteQueryBuilderTest {
         // Reset to make sure nothing in database
         DatabaseManager.getInstance().resetDb();
 
-        Favourite favourite = new Favourite("40 Little Oaks Drive", "University of Canterbury",
-                143.657, 34.534,141.657, 33.534, "", "bike");
+        Favourite favourite = new Favourite("40 Little Oaks Drive",
+                "University of Canterbury", 143.657, 34.534,
+                141.657, 33.534, "", "bike");
         List<Favourite> favourites = new ArrayList<>();
         favourites.add(favourite);
 
         builder.insert("favourites").buildSetter(favourites);
-        Assertions.assertTrue(SqliteQueryBuilder.create().select("*").from("favourites").buildGetter().size() > 0);
+        Assertions.assertTrue(SqliteQueryBuilder.create().select("*")
+                .from("favourites").buildGetter().size() > 0);
     }
 
 
@@ -104,7 +103,8 @@ public class SqliteQueryBuilderTest {
         // Reset to make sure nothing in database
         DatabaseManager.getInstance().resetDb();
 
-        List<?> crashes = builder.select("object_id, longitude, latitude").from("crashes").buildGetter();
+        List<?> crashes = builder.select("object_id, longitude, latitude")
+                .from("crashes").buildGetter();
 
         Assertions.assertEquals(0, crashes.size());
     }

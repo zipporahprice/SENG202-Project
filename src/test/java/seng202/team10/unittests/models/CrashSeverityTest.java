@@ -18,7 +18,8 @@ public class CrashSeverityTest {
      * @param stringSeverity severity string to test
      */
     @ParameterizedTest
-    @ValueSource(strings = {"Non-Injury Crash", "Minor Crash", "Serious Crash", "Fatal Crash", "None"})
+    @ValueSource(strings = {"Non-Injury Crash", "Minor Crash",
+                            "Serious Crash", "Fatal Crash", "None"})
     void testStringToCrashSeverity(String stringSeverity) {
         CrashSeverity result = CrashSeverity.stringToCrashSeverity(stringSeverity);
         switch (stringSeverity) {
@@ -42,10 +43,11 @@ public class CrashSeverityTest {
 
     /**
      * Parameterized tests for intToString method.
+     *
      * @param intSeverity severity int to test
      */
     @ParameterizedTest
-    @ValueSource(ints = {1,2,4,8,9})
+    @ValueSource(ints = {1, 2, 4, 8, 9})
     void testIntToString(int intSeverity) {
         String result = CrashSeverity.intToString(intSeverity);
         switch (intSeverity) {

@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng202.team10.business.SettingsManager;
 
+/**
+ * Testing SettingsManager class.
+ */
+
 public class SettingsManagerTest {
 
     @Test
