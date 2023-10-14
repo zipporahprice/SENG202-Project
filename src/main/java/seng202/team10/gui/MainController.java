@@ -39,6 +39,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private static final Logger log = LogManager.getLogger(MainController.class);
     public StackPane loadingScreen;
     public Label loadingPercentageLabel;
+
     @FXML
     private WebView webView;
     @FXML

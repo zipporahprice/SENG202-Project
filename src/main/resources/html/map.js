@@ -35,7 +35,9 @@ let jsConnector = {
     drawingModeOn: drawingModeOn,
     drawingModeOff: drawingModeOff,
     changeDrawingColourToRating: changeDrawingColourToRating,
-    updateView: updateView
+    updateView: updateView,
+    updateReviewContent: updateReviewContent
+
 };
 
 /**
@@ -64,6 +66,28 @@ function initMap() {
         maxZoom: maxZoomLevel
     };
     map = new L.map('map', mapOptions);
+
+    L.CustomItineraryBuilder = L.Routing.ItineraryBuilder.extend({
+        createContainer: function(className) {
+            // Create a container div.
+            var container = L.DomUtil.create('div', className);
+
+            // Create the default table using the base class method.
+            var table = L.DomUtil.create('table', 'leaflet-routing-container-table', container);
+
+            // Create the review tab div.
+            var reviewTab = L.DomUtil.create('div', 'custom-review-tab', container);
+
+            L.DomUtil.create('br', 'break-styling', container);
+
+            reviewTab.innerHTML = `
+            <h3>Review:</h3>
+            <p class="reviewContent">Hello</p>
+        `;
+
+            return container;
+        }
+    });
 
     // Adding zoom control to bottom right
     L.control.zoom({
@@ -275,6 +299,15 @@ function addMarker(title, lat, lng) {
     markers.push(m)
 }
 
+function updateReviewContent(dataFromJava) {
+    const reviewContentElements = document.querySelectorAll('.reviewContent');
+    reviewContentElements.forEach(paragraph => {
+        paragraph.textContent = dataFromJava;
+    })
+}
+
+
+
 /**
  * Displays a route with two or more waypoints for cars (e.g. roads and ferries) and displays it on the map
  * @param waypointsIn a string representation of an array of lat lng json objects [("lat": -42.0, "lng": 173.0), ...]
@@ -286,6 +319,8 @@ function displayRoute(routesIn, transportMode) {
     var currentRouteIndex = 0; // Starting index at 0
     var routeIndexMap = new Map();
     var mode = getMode(transportMode);
+
+
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
         //var routeColor = getColorForSafetyScore(safetyScore);
@@ -293,20 +328,27 @@ function displayRoute(routesIn, transportMode) {
         waypointsIn.forEach(element => waypoints.push(new L.latLng(element.lat, element.lng)));
 
         var newRoute = L.Routing.control({
+            addWaypoints: false,
             waypoints: waypoints,
             routeWhileDragging: true,
             showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            // lineOptions: {
-            //     styles: [
-            //         {color: routeColor, opacity: 0.8, weight: 6} // color from safety Score
-            //     ]
-            // }
+            itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
         }).addTo(map);
+
 
         newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
+            var instructions = route.instructions;
+            var instructionRoads = [];
+            var instructionDistance = [];
+            for (var i = 0; i < instructions.length; i++) {
+                var instruction = instructions[i];
+                instructionRoads.push(instruction.road);
+                instructionDistance.push(instruction.distance)
+            }
+
 
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
@@ -326,7 +368,9 @@ function displayRoute(routesIn, transportMode) {
             // Prepare and send the coordinates
             var coordinatesJson = JSON.stringify({
                 routeId: indexToSend, // Use the index retrieved from the map
-                coordinates: coordinates
+                coordinates: coordinates,
+                instructionRoads: instructionRoads,
+                instructionDistance: instructionDistance
             });
             javaScriptBridge.sendCoordinates(coordinatesJson);
         });

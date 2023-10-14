@@ -3,6 +3,9 @@ package seng202.team10.gui;
 
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -23,6 +26,7 @@ public class MapController {
 
     @FXML
     private WebView webView;
+
 
 
 
@@ -59,14 +63,11 @@ public class MapController {
         this.stage = stage;
         javaScriptBridge = new JavaScriptBridge();
         geolocator = new GeoLocator();
-
-        //TextFields.bindAutoCompletion(startLocation
-        // .getEditor(),t -> getSuggestions(t.getUserText()));
         initMap();
         stage.sizeToScene();
 
-
     }
+
 
     public JavaScriptBridge getJavaScriptBridge() {
         return javaScriptBridge;

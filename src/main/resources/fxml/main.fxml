@@ -20,7 +20,9 @@
       <WebView fx:id="webView" prefHeight="-1.0" prefWidth="-1.0">
          <StackPane.margin>
             <Insets />
-         </StackPane.margin></WebView>
+         </StackPane.margin>
+      </WebView>
+
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>

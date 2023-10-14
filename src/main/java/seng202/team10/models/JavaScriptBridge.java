@@ -36,6 +36,8 @@ public class JavaScriptBridge {
     private CrashManager crashData = new CrashManager();
     private String currentView;
     private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
+    private static Map<Long, List<Double>> distancesMap = new ConcurrentHashMap<>();
+    private static Map<Long, List<String>> roadsMap = new ConcurrentHashMap<>();
     private static long index;
 
     private JavaScriptListener listener;
@@ -127,40 +129,58 @@ public class JavaScriptBridge {
         try {
             // Parse the JSON string to a JSONObject
             JSONObject routeObj = (JSONObject) parser.parse(coordinatesJson);
+            List<String> roads = new ArrayList<>();
+
 
             // Extract routeId and coordinates
             long routeId = (long) routeObj.get("routeId");
             JSONArray jsonArray = (JSONArray) routeObj.get("coordinates");
+            JSONArray jsonArray1 = (JSONArray) routeObj.get("instructionRoads");
+            JSONArray jsonArray2 = (JSONArray) routeObj.get("instructionDistance");
+
+
+
 
             // Create a List to hold Coordinate objects
             List<Location> coordinates = new ArrayList<>();
-
-            // Iterate over the items in the JSONArray
-            for (Object array : jsonArray) {
+            for (Object ajsonArray : jsonArray) {
                 // Cast each item in the array to a JSONObject
-                JSONObject coordJson = (JSONObject) array;
-
+                JSONObject coordJson = (JSONObject) ajsonArray;
                 // Extract latitude and longitude from the JSONObject
                 double lat = (double) coordJson.get("lat");
                 double lng = (double) coordJson.get("lng");
-
                 // Add a new Coordinate object to the list
-                // Ensure you have a Coordinate class with a
-                // constructor that accepts lat and lng
                 coordinates.add(new Location(lat, lng));
             }
+            List<Double> distances = new ArrayList<>();
+
+            for (int i = 0; i < jsonArray2.size(); i++) {
+                double output;
+                Object distance = jsonArray2.get(i);
+                if (distance instanceof Long distanceLong) {
+                    output = distanceLong.doubleValue();
+                } else if (distance instanceof Double distanceDouble) {
+                    output = distanceDouble;
+                } else {
+                    throw new IllegalArgumentException("Valoue is not a long");
+                }
+                String road = (String) jsonArray1.get(i);
+                roads.add(road);
+                distances.add(output);
+            }
+
             index = routeId;
+            processRoads(routeId, roads);
             processRoute(routeId, coordinates);
+            processDistances(routeId, distances);
             RoutingMenuController.ratingUpdate();
 
             // Now you have a List of Coordinates in Java
             // Do something with the coordinates...
 
-        } catch (ParseException e) {
+        } catch (Throwable e) {
             // Handle JSON parsing exceptions
-            e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
     }
 
@@ -170,13 +190,30 @@ public class JavaScriptBridge {
 
 
     private void processRoute(long routeId, List<Location> coordinates) {
-        // Example: You might store the coordinates in a Map where the key is the routeId
         routeMap.put(routeId, coordinates);
 
     }
 
-    public static Map<Long, List<Location>> getRouteMap() {
+    private void processDistances(long routeId, List<Double> coordinates) {
+        distancesMap.put(routeId, coordinates);
+    }
+
+    private void processRoads(long routeId, List<String> coordinates) {
+        roadsMap.put(routeId, coordinates);
+    }
+
+    public static Map<Long, List<Location>> getRouteMap() throws SQLException {
         return routeMap;
+    }
+
+
+
+    public static Map<Long, List<Double>> getDistancesMap() {
+        return distancesMap;
+    }
+
+    public static Map<Long, List<String>> getRoadsMap() {
+        return roadsMap;
     }
 
     /**
@@ -237,7 +274,7 @@ public class JavaScriptBridge {
         void mapLoaded();
     }
 
-    public void printTime(double time) {
+    public void printTime(String time) {
         System.out.println(time);
     }
 
