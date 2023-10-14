@@ -11,7 +11,7 @@ package seng202.team10.models;
  * @author Zipporah Price
  */
 public enum CrashSeverity {
-    NONINJURY(1), MINOR(2), SERIOUS(4), FATAL(8);
+    NONINJURY(1), MINOR(4), SERIOUS(16), FATAL(64);
     private final int value;
 
     CrashSeverity(int value) {
@@ -43,9 +43,9 @@ public enum CrashSeverity {
     public static String intToString(int intSeverity) {
         return switch (intSeverity) {
             case 1 -> "Non-Injury Crash";
-            case 2 -> "Minor Crash";
-            case 4 -> "Serious Crash";
-            case 8 -> "Fatal Crash";
+            case 4 -> "Minor Crash";
+            case 16 -> "Serious Crash";
+            case 64 -> "Fatal Crash";
             default -> null;
         };
     }

@@ -82,6 +82,8 @@ function initMap() {
 
             // Create the review tab div.
             var reviewTab = L.DomUtil.create('div', 'custom-review-tab', container);
+            L.DomEvent.on(reviewTab, 'click', L.DomEvent.stopPropagation);
+            L.DomEvent.on(reviewTab, 'click', L.DomEvent.preventDefault);
 
             L.DomUtil.create('br', 'break-styling', container);
 
@@ -441,11 +443,11 @@ function getSeverityStringFromValue(severity) {
     switch (severity) {
         case 1:
             return "Non-Injury";
-        case 2:
-            return "Minor Crash";
         case 4:
+            return "Minor Crash";
+        case 16:
             return "Major Crash";
-        case 8:
+        case 64:
             return "Death";
         default:
             return "Invalid";
@@ -459,13 +461,13 @@ function getMarkerIcon(severity) {
         case 1: // Non-Injury
             iconUrl = 'crash_markers/non_injury.png';
             break;
-        case 2: // Minor Crash
+        case 4: // Minor Crash
             iconUrl = 'crash_markers/minor_crash.png';
             break;
-        case 4: // Major Crash
+        case 16: // Major Crash
             iconUrl = 'crash_markers/major_crash.png';
             break;
-        case 8: // Death
+        case 64: // Death
             iconUrl = 'crash_markers/death_crash.png';
             break;
         default: // Default icon
