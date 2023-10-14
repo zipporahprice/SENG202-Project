@@ -2,6 +2,7 @@ package seng202.team10.gui;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -20,6 +22,7 @@ import seng202.team10.App;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.GraphManager;
 import seng202.team10.repository.SqliteQueryBuilder;
+
 
 /**
  * This class manages actions and views related to graphical representations of data.
@@ -44,6 +47,10 @@ public class GraphController implements Initializable, MenuController {
     private Label holidayInfoLabel;
     @FXML
     private Label vehiclesInfoLabel;
+    @FXML
+    private CheckBox filtersCheckBox;
+    @FXML
+    private CheckBox mapBoundsCheckBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -107,7 +114,6 @@ public class GraphController implements Initializable, MenuController {
         }
 
         setTooltipInfo(pieGraph); //sets informative tooltips for each slice
-
     }
 
     private void setTooltipInfo(PieChart pieGraph) {
@@ -128,13 +134,45 @@ public class GraphController implements Initializable, MenuController {
 
     private List<?> getPieChartData() {
         String where = FilterManager.getInstance().toString();
+        String[] filterList = where.split(" AND ");
 
-        return SqliteQueryBuilder.create()
-                .select(columnOfInterest + ", COUNT(*)")
-                .from("crashes")
-                .where(where)
-                .groupBy(columnOfInterest)
-                .buildGetter();
+        // Takes away the 4 ANDS that make up the viewport
+        // bounds we do not want in our query.
+        String filtersWithoutViewport = String.join(" AND ",
+                Arrays.copyOf(filterList, filterList.length - 4));
+
+        // Gets the filtering string with just the viewport
+        String viewportWithoutFilters = String.join(" AND ",
+                Arrays.copyOfRange(filterList, filterList.length - 4, filterList.length));
+
+        String finalWhere = "";
+
+        if (filtersCheckBox.isSelected()) {
+            finalWhere += filtersWithoutViewport;
+        }
+
+        if (mapBoundsCheckBox.isSelected()) {
+            if (finalWhere.equals("")) {
+                finalWhere += viewportWithoutFilters;
+            } else {
+                finalWhere += " AND " + viewportWithoutFilters;
+            }
+        }
+
+        if (finalWhere.isEmpty()) {
+            return SqliteQueryBuilder.create()
+                    .select(columnOfInterest + ", COUNT(*)")
+                    .from("crashes")
+                    .groupBy(columnOfInterest)
+                    .buildGetter();
+        } else {
+            return SqliteQueryBuilder.create()
+                    .select(columnOfInterest + ", COUNT(*)")
+                    .from("crashes")
+                    .where(finalWhere)
+                    .groupBy(columnOfInterest)
+                    .buildGetter();
+        }
     }
 
     private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
@@ -331,12 +369,16 @@ public class GraphController implements Initializable, MenuController {
                                 log.error("Invalid comboBox option: " + currentChartData);
                     }
 
-                    ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
-                    pieChartMade.getData().removeAll(); //clearing the old data
-                    pieChartMade.setVisible(false);
-                    setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data
-                    pieChartMade.setVisible(true);
+                    updateGraph();
                 });
     }
 
+    @FXML
+    private void updateGraph() {
+        ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
+        pieChartMade.getData().removeAll(); //clearing the old data
+        pieChartMade.setVisible(false);
+        setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data
+        pieChartMade.setVisible(true);
+    }
 }

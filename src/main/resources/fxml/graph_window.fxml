@@ -2,12 +2,14 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.GraphController">
    <AnchorPane prefHeight="751.0" prefWidth="900.0" StackPane.alignment="CENTER">
@@ -26,9 +28,9 @@
                </Label>
             </children>
          </AnchorPane>
-          <AnchorPane layoutX="595.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="83.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
+          <AnchorPane layoutX="741.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="99.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
-                  <Label layoutX="11.0" layoutY="5.0" prefHeight="74.0" prefWidth="116.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." textAlignment="CENTER" wrapText="true" />
+                  <Label layoutX="11.0" layoutY="13.0" prefHeight="74.0" prefWidth="116.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." textAlignment="CENTER" wrapText="true" />
             </children>
           </AnchorPane>
          <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
@@ -46,7 +48,7 @@
                </Label>
             </children>
          </AnchorPane>
-         <AnchorPane fx:id="graphsDataPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <AnchorPane fx:id="graphsDataPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="99.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
                <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css" visible="false">
                   <styleClass>
@@ -54,17 +56,19 @@
                      <String fx:value="choice-box" />
                   </styleClass>
                </ChoiceBox>
-               <Label layoutX="88.0" layoutY="14.0" text="Chart data" textFill="WHITE">
+               <Label layoutX="88.0" layoutY="21.0" text="Chart data" textFill="WHITE">
                   <font>
                      <Font name="System Bold" size="15.0" />
                   </font>
                </Label>
-               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" promptText="Choose data" styleClass="filterButtonColor" stylesheets="@style.css" />
+               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="52.0" prefWidth="150.0" promptText="Choose data" styleClass="filterButtonColor" stylesheets="@style.css" />
             </children>
          </AnchorPane>
-         <AnchorPane layoutX="741.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="83.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
+         <AnchorPane layoutX="597.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="99.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
-               <Label layoutX="15.0" layoutY="5.0" prefHeight="74.0" prefWidth="107.0" style="-fx-text-fill: white;" text="Data is filtered by filter options and map view bounds." textAlignment="CENTER" wrapText="true" />
+               <CheckBox fx:id="filtersCheckBox" layoutX="23.0" layoutY="36.0" mnemonicParsing="false" onAction="#updateGraph" selected="true" text="Filters" textFill="WHITE" />
+               <CheckBox fx:id="mapBoundsCheckBox" layoutX="23.0" layoutY="66.0" mnemonicParsing="false" onAction="#updateGraph" selected="true" text="Map Bounds" textFill="WHITE" />
+               <Text fill="WHITE" layoutX="53.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apply" />
             </children>
          </AnchorPane>
       </children>
