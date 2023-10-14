@@ -390,7 +390,6 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     public static Result getOverlappingPoints(List<Location> coordinates) {
         double totalValue = 0;
-        double totalDistance = 0;
         double maxSegmentSeverity = Double.MIN_VALUE;
         Location startOfMostDangerousSegment = null;
         Location endOfMostDangerousSegment = null;
@@ -408,7 +407,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         for (int i = 0; i < coordinates.size()-1; i+=1) {
             Location segmentStart = coordinates.get(i);
             Location segmentEnd = coordinates.get(i+1);
-            double distance = haversineDistance(segmentStart, segmentEnd);
 
             List crashList = crossProductQuery(segmentStart, segmentEnd);
 
@@ -441,7 +439,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             double segmentSeverity = 0;
 
             if (total > 0) {
-                segmentSeverity = totalSeverity / total;
+                segmentSeverity = totalSeverity;
             }
 
             if (segmentSeverity > maxSegmentSeverity) {
@@ -450,8 +448,7 @@ public class RoutingMenuController implements Initializable, MenuController {
                 endOfMostDangerousSegment = segmentEnd;
             }
 
-            totalDistance += distance;
-            totalValue += segmentSeverity / totalDistance;
+            totalValue += segmentSeverity;
         }
 
         double maxWeatherSeverity = Double.MIN_VALUE;
@@ -465,10 +462,12 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         }
 
-        double dangerRatingOutOf10 = (totalValue); // Adjust the formula as necessary
+        System.out.println(objectIdSet);
+
+        double dangerRatingOutOf10 = (((totalValue/totalNumPoints) - 1.0) / 7.0) * 10.0; // Adjust the formula as necessary
         //if (dangerRatingOutOf10 > 10) dangerRatingOutOf10 = 10; // Cap at 10
 
-        return new Result(dangerRatingOutOf10, startOfMostDangerousSegment, endOfMostDangerousSegment, maxSegmentSeverity, maxWeather, startYear, endYear, totalNumPoints);
+        return new Result(dangerRatingOutOf10, startOfMostDangerousSegment, endOfMostDangerousSegment, maxSegmentSeverity, maxWeather, startYear, endYear, objectIdSet.size());
     }
 
     // A helper class to hold the results
@@ -560,7 +559,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         // One kilometre in degrees
         double oneKilometreInDegrees = 0.008;
-        double distance = 100;
+        double distance = 0.01;
 
         String tableName = "locations";
         String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
