@@ -5,14 +5,14 @@ junit:
 
 #added checkstyle pipeline tests here
 checkstyle_main:
-  stage: style
+  stage: .pre
   script:
     - ./gradlew checkstyleMain
     - if grep -q '<td>warning</td>' build/reports/checkstyle/main.html; then exit 1; fi
     - if grep -q '<td>error</td>' build/reports/checkstyle/main.html; then exit 1; fi
 
 checkstyle_test:
-  stage: style
+  stage: .pre
   script:
     - ./gradlew checkstyleTest
     - if grep -q '<td>warning</td>' build/reports/checkstyle/main.html; then exit 1; fi
