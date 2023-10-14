@@ -338,6 +338,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     public void updateDataWithFilters() {
         MainController.javaScriptConnector.call("updateDataShown");
+        RoutingMenuController.ratingUpdate();
         notClickableApplyFiltersButton();
     }
 

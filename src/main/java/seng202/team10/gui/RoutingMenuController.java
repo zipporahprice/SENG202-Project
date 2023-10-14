@@ -26,9 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RouteManager;
+import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.GeoLocator;
@@ -51,6 +54,8 @@ import seng202.team10.repository.SqliteQueryBuilder;
  * @author Team 10
  */
 public class RoutingMenuController implements Initializable, MenuController {
+
+    private static final Logger log = LogManager.getLogger(RoutingMenuController.class);
 
     @FXML
     private ComboBox<String> startLocation;
@@ -627,19 +632,22 @@ public class RoutingMenuController implements Initializable, MenuController {
     /**
      * Takes the list of coordinates stored in JavaScriptBridge and updates the rating shown
      * on the GUI's ratingText label through getting the overlapping points of each segment.
-     * @throws SQLException
      */
-    public static void ratingUpdate() throws SQLException {
-        List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
-        List<String> roads = JavaScriptBridge.getRoadsMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
-        List<Double> distances = JavaScriptBridge.getDistancesMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
-        if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
-            Result review = getOverlappingPoints(coordinates, roads, distances); // Calculate rating based on coordinates
-            String reviewString = String.format("This route has a %.2f/10 danger rating, there have been %d crashes since %d up till %d. The worst crashes occur during %s conditions, the most dangerous segment is on %s with a danger rating of %.2f.", review.dangerRating, review.totalNumPoints, review.startYear, review.endYear, review.maxWeather, review.finalRoad,review.maxSegmentSeverity);
-            MainController.javaScriptConnector.call("updateReviewContent", reviewString);
+    public static void ratingUpdate() {
+        try {
+            List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+            List<String> roads = JavaScriptBridge.getRoadsMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+            List<Double> distances = JavaScriptBridge.getDistancesMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+            if (coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
+                Result review = getOverlappingPoints(coordinates, roads, distances); // Calculate rating based on coordinates
+                String reviewString = String.format("This route has a %.2f/10 danger rating, there have been %d crashes since %d up till %d. The worst crashes occur during %s conditions, the most dangerous segment is on %s with a danger rating of %.2f.", review.dangerRating, review.totalNumPoints, review.startYear, review.endYear, review.maxWeather, review.finalRoad, review.maxSegmentSeverity);
+                MainController.javaScriptConnector.call("updateReviewContent", reviewString);
 
-        } else {
-            System.out.println("No coordinates available for routeId: 0");
+            } else {
+                System.out.println("No coordinates available for routeId: 0");
+            }
+        } catch (SQLException e) {
+            log.error(e);
         }
     }
 
