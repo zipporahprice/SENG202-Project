@@ -531,68 +531,33 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @return double of average severity
      */
     public static List crossProductQuery(Location startLocation, Location endLocation) {
-        double start_long_rad = Math.toRadians(startLocation.getLongitude());
-        double start_lat_rad = Math.toRadians(startLocation.getLatitude());
-        double end_long_rad = Math.toRadians(endLocation.getLongitude());
-        double end_lat_rad = Math.toRadians(endLocation.getLatitude());
-
-        double start_x = Math.cos(start_lat_rad) * Math.cos(start_long_rad);
-        double start_y = Math.cos(start_lat_rad) * Math.sin(start_long_rad);
-        double start_z = Math.sin(start_lat_rad);
-
-        double end_x = Math.cos(end_lat_rad) * Math.cos(end_long_rad);
-        double end_y = Math.cos(end_lat_rad) * Math.sin(end_long_rad);
-        double end_z = Math.sin(end_lat_rad);
-
-        Map<String, Number> constantsTable = new LinkedHashMap<>();
-        constantsTable.put("start_x", start_x);
-        constantsTable.put("start_y", start_y);
-        constantsTable.put("start_z", start_z);
-        constantsTable.put("end_x", end_x);
-        constantsTable.put("end_y", end_y);
-        constantsTable.put("end_z", end_z);
-
-        double minLon = Math.min(startLocation.getLongitude(), endLocation.getLongitude());
-        double maxLon = Math.max(startLocation.getLongitude(), endLocation.getLongitude());
-        double minLat = Math.min(startLocation.getLatitude(), endLocation.getLatitude());
-        double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude());
-
-        // One kilometre in degrees
+        // 100 metres away
         double oneKilometreInDegrees = 0.008;
-        double distance = 0.01;
+        double distance = oneKilometreInDegrees * 0.1;
 
-        String tableName = "locations";
-        String crossProductMagnitude = "SQRT(POWER((COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
-                + tableName + ".start_y) * (" + tableName + ".end_z - " + tableName + ".start_z) - (SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_y - " + tableName + ".start_y), 2) + POWER((SIN(RADIANS(latitude)) - "
-                + tableName + ".start_z) * (" + tableName + ".end_x - " + tableName + ".start_x) - (COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
-                + tableName + ".start_x) * (" + tableName + ".end_z - " + tableName + ".start_z), 2) + POWER((COS(RADIANS(latitude)) * COS(RADIANS(longitude)) - "
-                + tableName + ".start_x) * (" + tableName + ".end_y - " + tableName + ".start_y) - (COS(RADIANS(latitude)) * SIN(RADIANS(longitude)) - "
-                + tableName + ".start_y) * (" + tableName + ".end_x - " + tableName + ".start_x), 2))";
-        String lineMagnitude = "SQRT(POWER(" + tableName + ".end_x - " + tableName + ".start_x, 2) + POWER("
-                + tableName + ".end_y - " + tableName + ".start_y, 2) + POWER("
-                + tableName + ".end_z - " + tableName + ".start_z, 2))";
-        String aSinTheta = "(ASIN(" + crossProductMagnitude + "/" + lineMagnitude + ")";
-        String worldDistance = aSinTheta + " * 6371.0) <= " + distance;
+        double minLat = Math.min(startLocation.getLatitude(), endLocation.getLatitude()) - distance;
+        double minLong = Math.min(startLocation.getLongitude(), endLocation.getLongitude()) - distance;
+        double maxLat = Math.max(startLocation.getLatitude(), endLocation.getLatitude()) + distance;
+        double maxLong = Math.max(startLocation.getLongitude(), endLocation.getLongitude()) + distance;
 
         FilterManager filterManager = FilterManager.getInstance();
-        Location previousMin = filterManager.getViewPortMin();
-        Location previousMax = filterManager.getViewPortMax();
-
-        filterManager.setViewPortMin(minLat - oneKilometreInDegrees, minLon - oneKilometreInDegrees);
-        filterManager.setViewPortMax(maxLat + oneKilometreInDegrees, maxLon + oneKilometreInDegrees);
-
         String filterWhere = filterManager.toString();
+        String[] filterList = filterWhere.split(" AND ");
 
-        filterManager.setViewPortMin(previousMin.getLatitude(), previousMin.getLongitude());
-        filterManager.setViewPortMax(previousMax.getLatitude(), previousMax.getLongitude());
+        // 4 ANDS to take away to get rid of the viewport
+        String filterWhereWithoutViewport = String.join(" AND ",
+                Arrays.copyOf(filterList, filterList.length - 4));
 
         String select = "object_id, severity, weather";
-        String from = "crashes, locations";
-        String where = filterWhere + " AND " + worldDistance;
+        String from = "crashes";
+        String where = filterWhereWithoutViewport + " AND " + "object_id IN (SELECT id FROM rtree_index WHERE minX >= " + minLong
+                + " AND maxX <= " + maxLong
+                + " AND minY >= " + minLat
+                + " AND maxY <= " + maxLat + ")";
 
-        List severityList = SqliteQueryBuilder.create()
-                .with(tableName, constantsTable)
+
+        List<?> severityList = SqliteQueryBuilder
+                .create()
                 .select(select)
                 .from(from)
                 .where(where)
