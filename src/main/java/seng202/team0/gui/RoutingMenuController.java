@@ -225,6 +225,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = startLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         startLocation.setItems(addressOptions);
+        startLocation.getEditor().setText(address);
     }
 
     /**
@@ -255,6 +256,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = endLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         endLocation.setItems(addressOptions);
+        endLocation.getEditor().setText(address);
+
     }
 
     @FXML
@@ -280,6 +283,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         String address = stopLocation.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
         stopLocation.setItems(addressOptions);
+        stopLocation.getEditor().setText(address);
+
     }
 
     /**

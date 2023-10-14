@@ -100,12 +100,17 @@ public class GeoLocator {
         address = address.replaceAll("[ ,/]", "+");
         address = address.replaceAll("\\++", " "); // Replace one or more + with a single space
         address = address.replaceAll(" +", "+");
+        String[] addressParts = address.split("\\+");
+        StringBuilder finalAddress = new StringBuilder(addressParts[0]);
+        for (int i = 1; i < addressParts.length - 3; i++) {
+            finalAddress.append("+").append(addressParts[i]);
+        }
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
                     URI.create("https://nominatim.openstreetmap.org/search?q="
-                            + address + ",+New+Zealand&format=json")
+                            + finalAddress + ",+New+Zealand&format=json")
             ).build();
             // Getting the response
             HttpResponse<String> response = client.send(request,
