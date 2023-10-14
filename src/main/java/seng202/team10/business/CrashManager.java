@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import seng202.team10.exceptions.DataImportException;
 import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.repository.SqliteQueryBuilder;
@@ -32,10 +33,11 @@ public class CrashManager {
      * @param importer Crash csv importer object to use
      * @param file File to be imported
      */
-    public void addAllCrashesFromFile(CrashCsvImporter importer, File file) {
+    public void addAllCrashesFromFile(CrashCsvImporter importer, File file) throws DataImportException {
         List<Crash> crashes = importer.crashListFromFile(file);
         SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
     }
+
 
     /**
      * Retrieves a Crash object by its unique identifier (ID) from the database.
