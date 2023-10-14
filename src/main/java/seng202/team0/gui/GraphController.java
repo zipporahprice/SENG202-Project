@@ -2,10 +2,8 @@ package seng202.team0.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -131,9 +129,11 @@ public class GraphController implements Initializable, MenuController {
             holidayInfoLabel.setVisible(true);
         }
 
+        int totalValue = pieGraph.getData().stream().mapToInt(data -> (int) data.getPieValue()).sum();
+
 
         pieGraph.getData().forEach(data -> {
-            String percentage = String.format("%.2f%%", (data.getPieValue() / 100));
+            String percentage = String.format("%.2f%%", (data.getPieValue() / totalValue * 100));
             String slice = data.getName();
             Tooltip toolTipPercentRegion = new Tooltip(percentage + ", " + slice);
             Tooltip.install(data.getNode(), toolTipPercentRegion);
@@ -141,30 +141,141 @@ public class GraphController implements Initializable, MenuController {
 
     }
 
+    private ObservableList<PieChart.Data> newPieChartDataVehicleType() {
+        ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
+        List<HashMap<Object, Object>> bicycleList = null;
+
+        columnOfInterest = "bicycle_involved";
+        bicycleList = SqliteQueryBuilder.create()
+                .select(columnOfInterest + ", COUNT(*)")
+                .from("crashes")
+                .groupBy(columnOfInterest)
+                .build();
+
+        ArrayList<String> sliceNames = new ArrayList<>();
+        ArrayList<Double> sliceCounts = new ArrayList<>();
+
+        System.out.println(bicycleList);
+
+        for (HashMap<Object, Object> hash : bicycleList) {
+            Object column = hash.get(columnOfInterest);
+            double count = ((Number) hash.get("COUNT(*)")).doubleValue();
+            System.out.println(column + " " + count);
+
+            sliceNames.add(column.toString());
+            sliceCounts.add(count);
+
+            System.out.println(columnOfInterest + ": " + column + "  Count: " + count);
+//            //TODO remove print statement
+        }
+
+        for (int i = 0; i < sliceNames.size(); i++) {
+            String sliceName = sliceNames.get(i);
+            if (sliceName.equals("Null")) {
+                sliceName = "Unknown";
+            }
+
+            result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
+        }
+
+
+        return result;
+    }
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
-        List<HashMap<Object, Object>> dbList;
+        List<HashMap<Object, Object>> dbList = null;
 
 
 
         if (columnOfInterest.equals("bicycle_involved")) {
-            columnOfInterest = "SUM(bicycle_involved) AS bicycleCount, "
-                    + "SUM(bus_involved) AS busCount, "
-                    + "SUM(car_involved) AS carCount, "
-                    + "SUM(moped_involved) AS mopedCount, "
-                    + "SUM(motorcycle_involved) AS motorcycleCount, "
-                    + "SUM(parked_vehicle_involved) AS pVehicleCount, "
-                    + "SUM(pedestrian_involved) AS pedestrianCount, "
-                    + "SUM(school_bus_involved) AS schoolBusCount, "
-                    + "SUM(train_involved) AS trainCount, "
-                    + "SUM(truck_involved) AS truckCount";
+            return newPieChartDataVehicleType();
+
+//            columnOfInterest = "SUM(bicycle_involved) AS bicycle_count, " +
+//                    "SUM(bus_involved) AS bus_count, " +
+//                    "SUM(car_involved) AS car_count, " +
+//                    "SUM(moped_involved) AS moped_count, " +
+//                    "SUM(motorcycle_involved) AS motorcycle_count, " +
+//                    "SUM(parked_vehicle_involved) AS parked_vehicle_count, " +
+//                    "SUM(pedestrian_involved) AS pedestrian_count, " +
+//                    "SUM(school_bus_involved) AS school_bus_count, " +
+//                    "SUM(train_involved) AS train_count, " +
+//                    "SUM(truck_involved) AS truck_count";
+
+//            String columnOfInterestGroup = "bicycle_involved, " +
+//                    "bus_involved, " +
+//                    "car_involved, " +
+//                    "moped_involved, " +
+//                    "motorcycle_involved, " +
+//                    "parked_vehicle_involved, " +
+//                    "pedestrian_involved, " +
+//                    "school_bus_involved, " +
+//                    "train_involved, " +
+//                    "truck_involved";
+
+//            columnOfInterest = "bicycle_involved AS bicycle_count, " +
+//                    "bus_involved AS bus_count, " +
+//                    "car_involved AS car_count, " +
+//                    "moped_involved AS moped_count, " +
+//                    "motorcycle_involved AS motorcycle_count, " +
+//                    "parked_vehicle_involved AS parked_vehicle_count, " +
+//                    "pedestrian_involved AS pedestrian_count, " +
+//                    "school_bus_involved AS school_bus_count, " +
+//                    "train_involved AS train_count, " +
+//                    "truck_involved AS truck_count";
+
+//            columnOfInterest = "bicycle_involved bicycle_count, " +
+//                    "bus_involved bus_count, " +
+//                    "car_involved car_count, " +
+//                    "moped_involved moped_count, " +
+//                    "motorcycle_involved motorcycle_count, " +
+//                    "parked_vehicle_involved parked_vehicle_count, " +
+//                    "pedestrian_involved pedestrian_count, " +
+//                    "school_bus_involved school_bus_count, " +
+//                    "train_involved train_count, " +
+//                    "truck_involved truck_count";
 
 
-            dbList = SqliteQueryBuilder.create()
-                    .select(columnOfInterest)
-                    .from("crashes")
-                    .build();
+
+
+//            dbList = SqliteQueryBuilder.create()
+//                    .select(columnOfInterestGroup + ", COUNT(*)")
+//                    .from("crashes")
+//                    .groupBy(columnOfInterestGroup)
+//                    .build();
+//
+//            Map<String, Integer> vehicleTypeCounts = new HashMap<>();
+//            ArrayList<String> vehicleTypes = new ArrayList<>();
+//            vehicleTypes.add("bicycle_count");
+//            vehicleTypes.add("bus_count");
+//            vehicleTypes.add("car_count");
+//            vehicleTypes.add("moped_count");
+//            vehicleTypes.add("motorcycle_count");
+//            vehicleTypes.add("parked_vehicle_count");
+//            vehicleTypes.add("pedestrian_count");
+//            vehicleTypes.add("school_bus_count");
+//            vehicleTypes.add("train_count");
+//            vehicleTypes.add("truck_count");
+//
+//            System.out.println(dbList);
+//
+//            for (HashMap<Object, Object> row : dbList) {
+//                // Iterate over the vehicle type columns and update counts
+//                for (String vehicleType : vehicleTypes) {
+//                    int count = (int) row.get(vehicleType);
+//                    vehicleTypeCounts.put(vehicleType, vehicleTypeCounts.getOrDefault(vehicleType, 0) + count);
+//                }
+//            }
+//
+//            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+//            for (String vehicleType : vehicleTypes) {
+//                int count = vehicleTypeCounts.getOrDefault(vehicleType, 0);
+//                System.out.println(vehicleType + " - vehicle type. count: " + count);
+//                pieChartData.add(new PieChart.Data(vehicleType, count));
+//            }
+//
+//            return pieChartData;
+
         } else {
             dbList = SqliteQueryBuilder.create()
                     .select(columnOfInterest + ", COUNT(*)")
@@ -180,7 +291,7 @@ public class GraphController implements Initializable, MenuController {
         for (HashMap<Object, Object> hash1 : dbList) {
             Object column1 = hash1.get(columnOfInterest);
             double count1 = ((Number) hash1.get("COUNT(*)")).doubleValue();
-            System.out.println(column1 + " " + count1);
+            System.out.println(column1 + " +! " + count1);
         }
 
         for (HashMap<Object, Object> hash : dbList) {
@@ -224,7 +335,7 @@ public class GraphController implements Initializable, MenuController {
             sliceCounts.add(count);
 
             System.out.println(columnOfInterest + ": " + column + "  Count: " + count);
-            //TODO remove print statement
+//            //TODO remove print statement
         }
 
         for (int i = 0; i < sliceNames.size(); i++) {
