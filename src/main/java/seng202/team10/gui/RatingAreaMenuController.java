@@ -101,7 +101,9 @@ public class RatingAreaMenuController implements MenuController {
                 if (total > 0) {
                     // Actual average severity will range from 1 to 8
                     // Score rating massaged to be out of 10 and in a range from 0 to 10.
-                    score = ((averageSeverity - 1.0) / 7.0) * 10;
+                    double scaleFactor = 10.0 / Math.log(11.0);
+                    score = Math.log(averageSeverity + 1) * scaleFactor;
+                    score = Math.min(10, score);
                 }
             }
 
