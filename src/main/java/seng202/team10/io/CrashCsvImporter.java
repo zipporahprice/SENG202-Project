@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.models.Crash;
+import seng202.team10.exceptions.DataImportException;
 /**
  * Class handling the importing of crash data from CSV files.
  *
@@ -29,34 +30,36 @@ public class CrashCsvImporter {
      *
      * @param file a file containing the crash data
      * @return points list of all crashes from the given file
-     * @throws IOException throws exception in case
+     * @throws DataImportException in case of CSV validation error or IO error
      */
-    public List<Crash> crashListFromFile(File file) {
-        // List to accumulate crashes.
-        List<Crash> pointList = new ArrayList<>();
+    public List<Crash> crashListFromFile(File file) throws DataImportException {
+        List<Crash> pointList = new ArrayList<Crash>();
 
-        try (FileReader reader = new FileReader(file);
-             CSVReader csvReader = new CSVReader(reader)) {
-            // Skips the header row
-            csvReader.skip(1);
-
-            // Look through until the csv is finished.
-            String[] line;
-            while ((line = csvReader.readNext()) != null) {
-                if (!Objects.equals(line[0], "")) {
-                    Crash currentPoint = crashFromString(line);
-                    if (currentPoint != null) {
-                        pointList.add(currentPoint);
+        try (FileReader reader = new FileReader(file)) {
+            try (CSVReader csvReader = new CSVReader(reader)) {
+                csvReader.skip(1);
+                String[] line;
+                while ((line = csvReader.readNext()) != null) {
+                    if (!Objects.equals(line[0], "")) {
+                        Crash currentPoint = crashFromString(line);
+                        if (currentPoint != null) {
+                            pointList.add(currentPoint);
+                        }
                     }
                 }
+                return pointList;
+            } catch (CsvValidationException e) {
+                log.error(e);
+                throw new DataImportException("Invalid CSV format.");
             }
 
             return pointList;
         } catch (IOException | CsvValidationException e) {
             log.error(e);
-            return null;
+            throw new DataImportException("Error reading the file.");
         }
     }
+
 
     private int changeEmptyToZero(String string) {
         if (string != "" && string != null) {
