@@ -155,8 +155,6 @@ public class JavaScriptBridge {
             List<Double> distances = new ArrayList<>();
 
             for (int i = 0; i < jsonArray2.size(); i++) {
-                System.out.println("hello");
-
                 double output;
                 Object distance = jsonArray2.get(i);
                 if (distance instanceof Long distanceLong) {

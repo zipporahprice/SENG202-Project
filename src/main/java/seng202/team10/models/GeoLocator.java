@@ -49,7 +49,6 @@ public class GeoLocator {
         for (int i = 1; i < addressParts.length - 3; i++) {
             finalAddress.append("+").append(addressParts[i]);
         }
-        System.out.println(finalAddress);
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
@@ -102,9 +101,14 @@ public class GeoLocator {
         address = address.replaceAll(" +", "+");
         String[] addressParts = address.split("\\+");
         StringBuilder finalAddress = new StringBuilder(addressParts[0]);
-        for (int i = 1; i < addressParts.length - 3; i++) {
-            finalAddress.append("+").append(addressParts[i]);
+        if (addressParts[addressParts.length-1].equals("Aotearoa")) {
+            for (int i = 1; i < addressParts.length - 3; i++) {
+                finalAddress.append("+").append(addressParts[i]);
+            }
+        } else {
+            finalAddress = new StringBuilder(address);
         }
+
         try {
             // Creating the http request
             HttpClient client = HttpClient.newHttpClient();
