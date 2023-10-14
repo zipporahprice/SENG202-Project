@@ -39,9 +39,12 @@ public class AngleFilter {
             while (j < coordinates.size()) {
                 Location next = coordinates.get(j);
 
-                double testAngle = calculateAngle(lastSelectedLocation, potentialNextLocation, next);
+                double testAngle = calculateAngle(lastSelectedLocation,
+                                                  potentialNextLocation,
+                                                  next);
 
-                if (Math.abs(testAngle) > angle) { //if the angle is greater than the constant add that angle
+                // If the angle is greater than the constant add that angle
+                if (Math.abs(testAngle) > angle) {
                     filteredCoordinates.add(potentialNextLocation);
                     lastSelectedLocation = potentialNextLocation;
                     i = j;
