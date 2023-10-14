@@ -2,7 +2,7 @@ let map, baseLayer, heatmapLayer, markerLayer, drawnItems, drawControl;
 var javaScriptBridge; // must be declared as var (will not be correctly assigned in java with let keyword)
 let markers = [];
 var routes = [];
-var crashes = [];
+let markersShowing, heatmapShowing;
 
 const cfg = {
     // radius should be small ONLY if scaleRadius is true (or small radius is intended)
@@ -22,6 +22,11 @@ const cfg = {
     // which field name in your data represents the data value - default "value"
     valueField: 'count'
 };
+
+var testData = {
+    max: 200,
+    data: []
+}
 
 /**
  * This object can be returned to our java code, where we can call the functions we define inside it
@@ -508,6 +513,20 @@ function calculateAverageSeverity(cluster) {
 }
 
 function resetLayers() {
+    // Set booleans for later use to see if layers should be added back
+    markersShowing = map.hasLayer(markerLayer);
+    heatmapShowing = map.hasLayer(heatmapLayer);
+
+    // Removing layers if they are showing
+    if (markersShowing) {
+        map.removeLayer(markerLayer);
+    }
+    if (heatmapShowing) {
+        map.removeLayer(heatmapLayer);
+    }
+
+    // Emptying heatmap testData data list and markerLayer's markers
+    testData.data = [];
     markerLayer.clearLayers();
 }
 
@@ -524,15 +543,26 @@ function addPoint(lat, lng, severity, year, weather) {
         "</div>"
     );
     markerLayer.addLayer(marker);
-    crashes.push({"lat": lat, "lng": lng});
+    testData.data.push({"lat": lat, "lng": lng});
 }
 
+var start, end;
+
 function setHeatmapData() {
-    const testData = {
-        max: 200,
-        data: crashes
-    }
+    start = performance.now();
     heatmapLayer.setData(testData);
+
+    // Adding layers back based on resetLayers function
+    // state with what layers were showing
+    if (markersShowing) {
+        map.addLayer(markerLayer);
+    }
+    if (heatmapShowing) {
+        map.addLayer(heatmapLayer);
+    }
+
+    end = performance.now();
+    javaScriptBridge.printTime(end - start);
 }
 
 function drawingModeOn() {
