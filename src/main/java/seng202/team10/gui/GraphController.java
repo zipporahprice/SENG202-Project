@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.App;
+import seng202.team10.business.FilterManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 import seng202.team10.business.GraphManager;
 
@@ -128,16 +129,21 @@ public class GraphController implements Initializable, MenuController {
         });
     }
 
-    private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
-        List<?> vehicleList;
+    private List<?> getPieChartData() {
+        String where = FilterManager.getInstance().toString();
 
-        columnOfInterest = columnWanted;
-
-        vehicleList = SqliteQueryBuilder.create()
+        return SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
+                .where(where)
                 .groupBy(columnOfInterest)
                 .buildGetter();
+    }
+
+    private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
+        columnOfInterest = columnWanted;
+
+        List<?> vehicleList = getPieChartData();
 
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
@@ -196,7 +202,6 @@ public class GraphController implements Initializable, MenuController {
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
-        List<?> dbList;
 
         if (columnOfInterest.equals("truck_involved")) {
             //because truck is the last data item to be set and
@@ -204,12 +209,7 @@ public class GraphController implements Initializable, MenuController {
             result = newPieChartVehicleData();
             return result;
         }
-
-        dbList = SqliteQueryBuilder.create()
-                .select(columnOfInterest + ", COUNT(*)")
-                .from("crashes")
-                .groupBy(columnOfInterest)
-                .buildGetter();
+        List<?> dbList = getPieChartData();
 
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();

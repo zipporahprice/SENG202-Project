@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.GraphController">
-   <AnchorPane prefHeight="751.0" prefWidth="1336.0" StackPane.alignment="CENTER">
+   <AnchorPane prefHeight="751.0" prefWidth="900.0" StackPane.alignment="CENTER">
       <children>
          <AnchorPane fx:id="pieChartPane" layoutX="339.0" layoutY="131.0" prefHeight="451.0" prefWidth="539.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
@@ -26,9 +26,9 @@
                </Label>
             </children>
          </AnchorPane>
-          <AnchorPane layoutX="622.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="180.0" prefHeight="83.0" prefWidth="180.0" styleClass="sideBarColor" stylesheets="@style.css">
+          <AnchorPane layoutX="595.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="83.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
             <children>
-                  <Label layoutX="29.0" layoutY="5.0" prefHeight="74.0" prefWidth="121.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." wrapText="true" />
+                  <Label layoutX="11.0" layoutY="5.0" prefHeight="74.0" prefWidth="116.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." textAlignment="CENTER" wrapText="true" />
             </children>
           </AnchorPane>
          <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
@@ -60,6 +60,11 @@
                   </font>
                </Label>
                <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" promptText="Choose data" styleClass="filterButtonColor" stylesheets="@style.css" />
+            </children>
+         </AnchorPane>
+         <AnchorPane layoutX="741.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="83.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+               <Label layoutX="15.0" layoutY="5.0" prefHeight="74.0" prefWidth="107.0" style="-fx-text-fill: white;" text="Data is filtered by filter options and map view bounds." textAlignment="CENTER" wrapText="true" />
             </children>
          </AnchorPane>
       </children>
