@@ -67,7 +67,6 @@ public class ImportMenuController implements Initializable {
         }
     }
 
-
     public void resetDatabase() {
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.resetDb();
