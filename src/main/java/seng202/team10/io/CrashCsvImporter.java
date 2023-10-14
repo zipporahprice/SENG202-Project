@@ -52,9 +52,7 @@ public class CrashCsvImporter {
                 log.error(e);
                 throw new DataImportException("Invalid CSV format.");
             }
-
-            return pointList;
-        } catch (IOException | CsvValidationException e) {
+        } catch (IOException e) {
             log.error(e);
             throw new DataImportException("Error reading the file.");
         }
