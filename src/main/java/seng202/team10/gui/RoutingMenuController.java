@@ -507,7 +507,11 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         }
 
-        double dangerRatingOutOf10 = (((totalValue / totalNumPoints) - 1.0)) * 10;
+        double averageSeverity = totalValue / totalNumPoints;
+        double scaleFactor = 10.0 / Math.log(11.0);
+        double dangerRatingOutOf10 = Math.log(averageSeverity + 1) * scaleFactor;
+        dangerRatingOutOf10 = Math.min(10, dangerRatingOutOf10);
+
         FilterManager filterManager = FilterManager.getInstance();
         int startYear = filterManager.getEarliestYear();
         int endYear = filterManager.getLatestYear();
