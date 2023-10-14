@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.business.CrashManager;
 import seng202.team10.io.CrashCsvImporter;
+import seng202.team10.exceptions.DataImportException;
 
 /**
  * Class instantiating and initialising SQLite database.
@@ -92,10 +93,11 @@ public class DatabaseManager {
                 assert stream != null;
                 Files.copy(stream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 importFile(tempFile);
-
                 executeSqlScript(getClass().getResourceAsStream("/sql/populate_rtree.sql"));
             } catch (IOException e) {
                 log.error(e);
+            } catch (DataImportException e) {
+                throw new RuntimeException(e); /// Potentially not needed (wth42)
             }
         }
 
@@ -208,7 +210,11 @@ public class DatabaseManager {
      *
      * @param file the file user chooses
      */
-    public void importFile(File file) {
+    public void importFile(File file) throws DataImportException {
+        if (file == null || !file.exists()) {
+            throw new DataImportException("File not found or invalid.");
+        }
+
         CrashManager manager = new CrashManager();
         CrashCsvImporter importer = new CrashCsvImporter();
         manager.addAllCrashesFromFile(importer, file);

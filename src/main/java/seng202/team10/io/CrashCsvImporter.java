@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.models.Crash;
+import seng202.team10.exceptions.DataImportException;
 /**
  * Class handling the importing of crash data from CSV files.
  *
@@ -33,6 +34,7 @@ public class CrashCsvImporter {
      */
     public List<Crash> crashListFromFile(File file) {
         List<Crash> pointList = new ArrayList<Crash>();
+
         try (FileReader reader = new FileReader(file)) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 csvReader.skip(1);
@@ -48,9 +50,11 @@ public class CrashCsvImporter {
                 return pointList;
             } catch (CsvValidationException e) {
                 log.error(e);
+                throw new DataImportException("Invalid CSV format.");
             }
         } catch (IOException e) {
             log.error(e);
+            throw new DataImportException("Error reading the file.");
         }
         return null;
     }
