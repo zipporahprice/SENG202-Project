@@ -74,7 +74,7 @@ public class JavaScriptBridge {
                     latitude, longitude, severity, year, weather));
         });
 
-        stringBuilder.append("}).then(function () {setHeatmapData();});");
+        stringBuilder.append("}).then(function () {showLayers();});");
 
         // TODO get rid of timing performance
         double end = System.currentTimeMillis();
