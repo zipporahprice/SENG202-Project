@@ -91,8 +91,8 @@ function initMap() {
             L.DomUtil.create('br', 'break-styling', container);
 
             reviewTab.innerHTML = `
-            <h3>Review:</h3>
-            <p class="reviewContent">Hello</p>
+            <h3 style="font-weight: bold">Review:</h3>
+            <p class="reviewContent"></p>
         `;
 
             return container;

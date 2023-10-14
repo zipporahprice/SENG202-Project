@@ -427,8 +427,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         Map<String, Integer> weatherTotals = new HashMap<>();
         double totalDistances = 0;
         double totalDistance = 0;
-        int totalNumPoints = 0;
-
         Set<Integer> objectIdSet = new HashSet<>();
 
         int j = 0;
@@ -466,8 +464,6 @@ public class RoutingMenuController implements Initializable, MenuController {
                     total += 1;
                 }
             }
-            totalNumPoints += total;
-
 
 
             double segmentSeverity = 0;
@@ -475,7 +471,6 @@ public class RoutingMenuController implements Initializable, MenuController {
             if (total > 0) {
                 segmentSeverity = totalSeverity;
             }
-
             if (segmentSeverity > maxSegmentSeverity) {
                 maxSegmentSeverity = segmentSeverity;
                 if (!Objects.equals(roads.get(j), "")) {
@@ -507,17 +502,25 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         }
 
-        double averageSeverity = totalValue / totalNumPoints;
-        double scaleFactor = 10.0 / Math.log(11.0);
-        double dangerRatingOutOf10 = Math.log(averageSeverity + 1) * scaleFactor;
-        dangerRatingOutOf10 = Math.min(10, dangerRatingOutOf10);
+        int finalSize;
+        double dangerRatingOutOf10;
+        if (objectIdSet.size() == 0) {
+            finalSize = -1;
+            dangerRatingOutOf10 = 0;
+        } else {
+            double averageSeverity = totalValue / objectIdSet.size();
+            double scaleFactor = 10.0 / Math.log(11.0);
+            dangerRatingOutOf10 = Math.log(averageSeverity + 1) * scaleFactor;
+            dangerRatingOutOf10 = Math.min(10, dangerRatingOutOf10);
+            finalSize = objectIdSet.size();
+        }
 
         FilterManager filterManager = FilterManager.getInstance();
         int startYear = filterManager.getEarliestYear();
         int endYear = filterManager.getLatestYear();
 
         return new Result(dangerRatingOutOf10, startOfDangerousSegment, endOfDangerousSegment,
-                maxSegmentSeverity, maxWeather, startYear, endYear, objectIdSet.size(), finalRoad);
+                maxSegmentSeverity, maxWeather, startYear, endYear, finalSize, finalRoad);
     }
 
 
@@ -701,12 +704,18 @@ public class RoutingMenuController implements Initializable, MenuController {
                     JavaScriptBridge.getDistancesMap().get(JavaScriptBridge.getIndex());
             if (coordinates != null && !coordinates.isEmpty()) {
                 Result review = getOverlappingPoints(coordinates, roads, distances);
-                String reviewString = String.format("This route has a %.2f/10 danger rating, "
-                        + "there have been %d crashes since %d up till %d. The worst crashes occur "
-                        + "during %s conditions, the most dangerous segment is on %s with a "
-                        + "danger rating of %.2f.", review.dangerRating, review.totalNumPoints,
-                        review.startYear, review.endYear, review.maxWeather, review.finalRoad,
-                        review.maxSegmentSeverity);
+                String reviewString;
+                if (review.totalNumPoints == -1) {
+                    reviewString = String.format("This route has zero crashes and hence is as safe"
+                            + " as can be!");
+                } else {
+                    reviewString = String.format("This route has a %.2f/10 danger rating, "
+                            + "there have been %d crashes since %d up till %d. The worst crashes occur "
+                            + "during %s conditions, the most dangerous segment is on %s with a "
+                            + "danger rating of %.2f.", review.dangerRating, review.totalNumPoints,
+                            review.startYear, review.endYear, review.maxWeather, review.finalRoad,
+                            review.maxSegmentSeverity);
+                }
                 MainController.javaScriptConnector.call("updateReviewContent", reviewString);
 
             } else {
