@@ -412,7 +412,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         Map<String, Integer> weatherSeverityTotal = new HashMap<>();
         Map<String, Integer> weatherTotals = new HashMap<>();
-        double totalDistances = distances.get(0);
+        double totalDistances = 0;
         double totalDistance = 0;
         int totalNumPoints = 0;
 
@@ -424,9 +424,9 @@ public class RoutingMenuController implements Initializable, MenuController {
             Location segmentEnd = coordinates.get(i+1);
             double distance = haversineDistance(segmentStart, segmentEnd);
             totalDistance += distance;
-            if (totalDistance > totalDistances) {
-                j++;
+            if (totalDistance > totalDistances && j < distances.size()) {
                 totalDistances += distances.get(j);
+                j++;
             }
             List<?> crashList = crossProductQuery(segmentStart, segmentEnd);
 
@@ -475,7 +475,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
         if (finalRoad.equals("")) {
             int counter = 0;
-            while (roads.get(counter).equals("")) {
+            while (counter < roads.size() && roads.get(counter).equals("")) {
                 counter++;
             }
             finalRoad = roads.get(counter);
