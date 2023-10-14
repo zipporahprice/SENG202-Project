@@ -14,16 +14,17 @@ public class RegionTest {
 
     /**
      * Parameterized tests for stringToRegion method.
+     *
      * @param input string to test.
      */
     @ParameterizedTest
     @ValueSource(strings = {
-            "Auckland Region", "Bay of Plenty Region", "Canterbury Region",
-            "Gisborne Region", "Hawke's Bay Region", "Manawatū-Whanganui Region",
-            "Marlborough Region", "Nelson Region", "Northland Region",
-            "Otago Region", "Southland Region", "Taranaki Region",
-            "Tasman Region", "Waikato Region", "Wellington Region",
-            "West Coast Region", "Unknown Region"
+        "Auckland Region", "Bay of Plenty Region", "Canterbury Region",
+        "Gisborne Region", "Hawke's Bay Region", "Manawatū-Whanganui Region",
+        "Marlborough Region", "Nelson Region", "Northland Region",
+        "Otago Region", "Southland Region", "Taranaki Region",
+        "Tasman Region", "Waikato Region", "Wellington Region",
+        "West Coast Region", "Unknown Region"
     })
     void testStringToRegion(String input) {
         Region actualRegion = Region.stringToRegion(input);

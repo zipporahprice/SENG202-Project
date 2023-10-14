@@ -19,8 +19,8 @@ public class WeatherTest {
      */
     @ParameterizedTest
     @ValueSource(strings = {
-            "Fine", "Light rain", "Heavy rain",
-            "Mist or Fog", "Snow", "Unknown Weather"
+        "Fine", "Light rain", "Heavy rain",
+        "Mist or Fog", "Snow", "Unknown Weather"
     })
     public void testStringToWeather(String weatherString) {
         Weather actualWeather = Weather.stringToWeather(weatherString);
