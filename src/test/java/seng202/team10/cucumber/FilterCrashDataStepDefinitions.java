@@ -3,12 +3,20 @@ package seng202.team10.cucumber;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import seng202.team10.business.FilterManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import java.util.List;
-
+/**
+ * Provides Cucumber step definitions for filtering crash data scenarios.
+ *
+ * This class defines steps for BDD tests, interacting with the FilterManager
+ * and SqliteQueryBuilder to validate the crash data filtering functionality
+ * of the application.
+ *
+ * @author team 10
+ */
 public class FilterCrashDataStepDefinitions {
 
     String where;
