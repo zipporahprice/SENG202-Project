@@ -134,19 +134,20 @@ public class GraphController implements Initializable, MenuController {
 
         pieGraph.getData().forEach(data -> {
             String percentage = String.format("%.2f%%", (data.getPieValue() / totalValue * 100));
+            String count = String.valueOf((int) data.getPieValue());
             String slice = data.getName();
-            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", " + slice);
+            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", count: " + count + ", \n" + slice);
             Tooltip.install(data.getNode(), toolTipPercentRegion);
         });
 
     }
 
-    private ObservableList<PieChart.Data> newPieChartDataVehicleType() {
-        ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
-        List<HashMap<Object, Object>> bicycleList = null;
+    private PieChart.Data newPieChartDataVehicleType(String vehicle, String columnWanted) {
+//        ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
+        List<HashMap<Object, Object>> vehicleList = null;
 
-        columnOfInterest = "bicycle_involved";
-        bicycleList = SqliteQueryBuilder.create()
+        columnOfInterest = columnWanted;
+        vehicleList = SqliteQueryBuilder.create()
                 .select(columnOfInterest + ", COUNT(*)")
                 .from("crashes")
                 .groupBy(columnOfInterest)
@@ -155,9 +156,9 @@ public class GraphController implements Initializable, MenuController {
         ArrayList<String> sliceNames = new ArrayList<>();
         ArrayList<Double> sliceCounts = new ArrayList<>();
 
-        System.out.println(bicycleList);
+        System.out.println(vehicleList);
 
-        for (HashMap<Object, Object> hash : bicycleList) {
+        for (HashMap<Object, Object> hash : vehicleList) {
             Object column = hash.get(columnOfInterest);
             double count = ((Number) hash.get("COUNT(*)")).doubleValue();
             System.out.println(column + " " + count);
@@ -173,13 +174,21 @@ public class GraphController implements Initializable, MenuController {
             String sliceName = sliceNames.get(i);
             if (sliceName.equals("Null")) {
                 sliceName = "Unknown";
+            } else if (sliceName.equals("1")) {
+                sliceName = vehicle;
+                PieChart.Data dataToAdd = new PieChart.Data(sliceName, sliceCounts.get(i));
+                return dataToAdd;
             }
 
-            result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
+//            result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
         }
 
+        log.error("Invalid vehicle type!");
 
-        return result;
+//        System.out.println(result + "RESULTTTHJDHTSJ");
+
+
+        return null;
     }
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
@@ -189,7 +198,32 @@ public class GraphController implements Initializable, MenuController {
 
 
         if (columnOfInterest.equals("bicycle_involved")) {
-            return newPieChartDataVehicleType();
+            PieChart.Data bikeData =  newPieChartDataVehicleType("Bicycle", "bicycle_involved");
+            PieChart.Data busData =  newPieChartDataVehicleType("Bus", "bus_involved");
+            PieChart.Data carData =  newPieChartDataVehicleType("Car", "car_involved");
+            PieChart.Data mopedData =  newPieChartDataVehicleType("Moped", "moped_involved");
+            PieChart.Data motorcycleData =  newPieChartDataVehicleType("Motorcycle", "motorcycle_involved");
+            PieChart.Data parkedData =  newPieChartDataVehicleType("Parked Vehicle", "parked_vehicle_involved");
+            PieChart.Data pedestrianData =  newPieChartDataVehicleType("Pedestrian", "pedestrian_involved");
+            PieChart.Data schoolBusData =  newPieChartDataVehicleType("School Bus", "school_bus_involved");
+            PieChart.Data trainData =  newPieChartDataVehicleType("Train", "train_involved");
+            PieChart.Data truckData =  newPieChartDataVehicleType("Truck", "truck_involved");
+
+            result.add(bikeData);
+            result.add(busData);
+            result.add(carData);
+            result.add(mopedData);
+            result.add(motorcycleData);
+            result.add(parkedData);
+            result.add(pedestrianData);
+            result.add(schoolBusData);
+            result.add(trainData);
+            result.add(truckData);
+
+            return result;
+
+
+
 
 //            columnOfInterest = "SUM(bicycle_involved) AS bicycle_count, " +
 //                    "SUM(bus_involved) AS bus_count, " +
