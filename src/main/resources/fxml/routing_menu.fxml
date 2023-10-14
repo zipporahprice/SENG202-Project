@@ -38,7 +38,7 @@
                 <Insets left="480.0" top="390.0" />
             </StackPane.margin>
         </Button>
-        <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="filterButtonColor" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
                 <Insets left="335.0" top="440.0" />
             </StackPane.margin>
@@ -137,7 +137,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
             <StackPane.margin>
-                <Insets left="335.0" top="250.0" />
+                <Insets left="335.0" top="190.0" />
             </StackPane.margin>
             <padding>
                 <Insets left="10.0" />
@@ -154,25 +154,25 @@
             <Insets left="10.0" />
          </padding>
          <StackPane.margin>
-            <Insets left="480.0" top="250.0" />
+            <Insets left="480.0" top="190.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefWidth="150.0" promptText="Start Location" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="340.0" top="110.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefWidth="150.0" promptText="End Location" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefHeight="25.0" prefWidth="260.0" promptText="End Location" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="340.0" top="160.0" />
+            <Insets left="340.0" top="150.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefWidth="150.0" promptText="Stop Location" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="340.0" top="210.0" />
+            <Insets left="340.0" top="268.0" />
          </StackPane.margin>
       </ComboBox>
-      <ListView fx:id="stopsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="CENTER_RIGHT">
+      <ListView fx:id="stopsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="259.0" stylesheets="@style.css" StackPane.alignment="CENTER_RIGHT">
          <StackPane.margin>
             <Insets right="15.0" />
          </StackPane.margin>

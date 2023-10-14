@@ -395,11 +395,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeStop() throws SQLException {
         if (stops.size() >= 1) {
-            stops.remove(stops.size() - 1);
-
             if (!stopsListView.getSelectionModel().getSelectedItem().isEmpty()) {
-                String selectedStop = stopsListView.getSelectionModel().getSelectedItem();
-                stopStrings.remove(selectedStop);
+                //stops.remove(stops.size() - 1);
+                int selectedStopIndex = stopsListView.getSelectionModel().getSelectedIndex();
+                stops.remove(selectedStopIndex);
+                stopStrings.remove(selectedStopIndex);
             } else {
                 stopStrings.remove(-1);
             }
