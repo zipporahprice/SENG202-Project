@@ -27,9 +27,10 @@ public class MainWindow extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader baseLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root = baseLoader.load();
+
+        //sets the screen size to full screen windowed.
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         double estimatedTitleBarHeight = 30;
-
         Scene scene = new Scene(root, screenBounds.getWidth(),
                 screenBounds.getHeight() - estimatedTitleBarHeight);
 

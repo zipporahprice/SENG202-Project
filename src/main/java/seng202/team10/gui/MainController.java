@@ -76,7 +76,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     void init(Stage stage) {
         this.stage = stage;
         stage.sizeToScene();
-
         loadingScreen.setVisible(true);
         webEngine = webView.getEngine();
         mapController = new MapController();
@@ -240,7 +239,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("menuButtonColor");
             chosenButton.getStyleClass().add("clickedButtonColor");
-        } else { // just selects new
+        } else { // selects new
             selectedButton = chosenButton;
             chosenButton.getStyleClass().remove("menuButtonColor");
             chosenButton.getStyleClass().add("clickedButtonColor");

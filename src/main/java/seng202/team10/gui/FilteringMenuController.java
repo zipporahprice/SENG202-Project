@@ -59,6 +59,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     @FXML
     public void sliderValueChange() {
+        // Gets the values from the slider widgets
         int startSliderValue = (int) Math.round(startDateSlider.getValue());
         int endSliderValue = (int) Math.round(endDateSlider.getValue());
 
@@ -76,9 +77,9 @@ public class FilteringMenuController implements Initializable, MenuController {
         FilterManager filters = FilterManager.getInstance();
         filters.setEarliestYear(startSliderValue);
         filters.setLatestYear(endSliderValue);
-        // TODO here is where we can set class variables
-        //  as the year instead of updating the manager every time
 
+        // Sets the Apply Filters button to clickable
+        // since a filter change has occurred.
         clickableApplyFiltersButton();
     }
 
@@ -117,7 +118,6 @@ public class FilteringMenuController implements Initializable, MenuController {
     public void handleCheckBoxEvent(ActionEvent event) {
         CheckBox checkBox = (CheckBox) event.getSource();
         AnchorPane parent = (AnchorPane) checkBox.getParent().getParent();
-
         addToFilters(checkBox, parent);
         clickableApplyFiltersButton();
     }
@@ -245,6 +245,7 @@ public class FilteringMenuController implements Initializable, MenuController {
     private List<CheckBox> getCheckBoxList(AnchorPane parent) {
         List<CheckBox> checkBoxes = new ArrayList<>();
 
+        // Loops through the children to get all the CheckBox objects within the VBox objects.
         for (Object child : parent.getChildren()) {
             if (child instanceof VBox vertBox) {
                 for (Object childCheckBox : vertBox.getChildren()) {
@@ -266,6 +267,7 @@ public class FilteringMenuController implements Initializable, MenuController {
      * @param state Boolean value to set each CheckBox to
      */
     private void setCheckBoxesToState(AnchorPane parent, Boolean state) {
+        // Loops through the children to set all them CheckBox objects within the VBox objects.
         for (Object child : parent.getChildren()) {
             if (child instanceof VBox vertBox) {
                 for (Object childCheckBox : vertBox.getChildren()) {
