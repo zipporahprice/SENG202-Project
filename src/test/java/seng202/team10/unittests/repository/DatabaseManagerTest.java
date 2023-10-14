@@ -3,10 +3,12 @@ package seng202.team10.unittests.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
+
 
 import java.io.File;
 import java.net.URL;
@@ -69,4 +71,5 @@ public class DatabaseManagerTest {
         // Look into database and make sure crashes table are empty
         Assertions.assertTrue(SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().size() == 0);
     }
+
 }

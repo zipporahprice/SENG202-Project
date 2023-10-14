@@ -1,14 +1,37 @@
 package seng202.team10.unittests.models;
 
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import seng202.team10.models.GeoLocator;
 import seng202.team10.models.Location;
 
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 public class GeoLocationTest {
+
+    @Mock
+    HttpClient client;
+
+    @Mock
+    HttpResponse<String> response;
+
+    @InjectMocks
+    GeoLocator geoLocatorInstance;
+
     String address = "30 Durey Road";
+
 
     /**
      * This test checks the functionality of the {@code getLocation} method in the {@code GeoLocator} class.
@@ -44,4 +67,5 @@ public class GeoLocationTest {
 
         assertEquals(addressGotten, "30 Durey Road Canterbury");
     }
+
 }
