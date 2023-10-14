@@ -30,9 +30,9 @@ public class CrashCsvImporter {
      *
      * @param file a file containing the crash data
      * @return points list of all crashes from the given file
-     * @throws IOException throws exception in case
+     * @throws DataImportException in case of CSV validation error or IO error
      */
-    public List<Crash> crashListFromFile(File file) {
+    public List<Crash> crashListFromFile(File file) throws DataImportException {
         List<Crash> pointList = new ArrayList<Crash>();
 
         try (FileReader reader = new FileReader(file)) {
@@ -56,8 +56,8 @@ public class CrashCsvImporter {
             log.error(e);
             throw new DataImportException("Error reading the file.");
         }
-        return null;
     }
+
 
     private int changeEmptyToZero(String string) {
         if (string != "" && string != null) {
