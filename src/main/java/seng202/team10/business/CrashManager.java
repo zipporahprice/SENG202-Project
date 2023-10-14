@@ -63,7 +63,7 @@ public class CrashManager {
         String from = "crashes";
         String where = FilterManager.getInstance().toString();
 
-        if (where.length() == 0) {
+        if (where.isEmpty()) {
             return SqliteQueryBuilder
                     .create()
                     .select(select)
