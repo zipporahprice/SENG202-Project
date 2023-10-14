@@ -27,9 +27,6 @@ public class MapController {
     @FXML
     private WebView webView;
 
-
-
-
     private Stage stage;
 
     private GeoLocator geolocator;
@@ -89,10 +86,6 @@ public class MapController {
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(getClass().getClassLoader().getResource("html/map.html").toExternalForm());
-        // Forwards console.log() output from any javascript to info log
-        // WebConsoleListener.setDefaultListener((view, message, lineNumber, sourceId) ->
-        // System.out.println(String
-        //   .format("Map WebView console log line: %d, message : %s", lineNumber, message)));
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
