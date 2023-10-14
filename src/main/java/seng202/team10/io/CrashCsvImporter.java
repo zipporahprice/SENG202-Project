@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team10.models.Crash;
 import seng202.team10.exceptions.DataImportException;
+import seng202.team10.models.Crash;
 /**
  * Class handling the importing of crash data from CSV files.
  *

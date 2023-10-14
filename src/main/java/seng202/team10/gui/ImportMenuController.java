@@ -9,8 +9,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
-import seng202.team10.repository.DatabaseManager;
+import javafx.stage.Window;
 import seng202.team10.exceptions.DataImportException;
+import seng202.team10.repository.DatabaseManager;
 
 /**
  * Class to initialize the menu controller.
@@ -29,7 +30,6 @@ public class ImportMenuController implements Initializable {
 
     /**
      * Opens the window to choose a file.
-     *
      * Has correct error handling
      *
      */
