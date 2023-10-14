@@ -1,5 +1,10 @@
 package seng202.team0.gui;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,11 +21,6 @@ import seng202.team0.App;
 import seng202.team0.business.GraphManager;
 import seng202.team0.repository.SqliteQueryBuilder;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * This class manages actions and views related to graphical representations of data.
@@ -113,13 +113,15 @@ public class GraphController implements Initializable, MenuController {
     }
 
     private void setTooltipInfo(PieChart pieGraph) {
-        int totalValue = pieGraph.getData().stream().mapToInt(data -> (int) data.getPieValue()).sum();
+        int totalValue = pieGraph.getData()
+                .stream().mapToInt(data -> (int) data.getPieValue()).sum();
 
         pieGraph.getData().forEach(data -> {
             String percentage = String.format("%.2f%%", (data.getPieValue() / totalValue * 100));
             String count = String.valueOf((int) data.getPieValue());
             String slice = data.getName();
-            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", count: " + count + ", \n" + slice);
+            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", count: "
+                    + count + ", \n" + slice);
             Tooltip.install(data.getNode(), toolTipPercentRegion);
         });
     }
@@ -168,7 +170,8 @@ public class GraphController implements Initializable, MenuController {
         PieChart.Data carData =  createVehiclePieData("Car", "car_involved");
         PieChart.Data mopedData =  createVehiclePieData("Moped", "moped_involved");
         PieChart.Data motorcycleData =  createVehiclePieData("Motorcycle", "motorcycle_involved");
-        PieChart.Data parkedData =  createVehiclePieData("Parked Vehicle", "parked_vehicle_involved");
+        PieChart.Data parkedData =  createVehiclePieData("Parked Vehicle",
+                "parked_vehicle_involved");
         PieChart.Data pedestrianData =  createVehiclePieData("Pedestrian", "pedestrian_involved");
         PieChart.Data schoolBusData =  createVehiclePieData("School Bus", "school_bus_involved");
         PieChart.Data trainData =  createVehiclePieData("Train", "train_involved");
@@ -193,7 +196,8 @@ public class GraphController implements Initializable, MenuController {
         List<HashMap<Object, Object>> dbList;
 
         if (columnOfInterest.equals("truck_involved")) {
-            //because truck is the last data item to be set and what columnOfInterest will be at the end.
+            //because truck is the last data item to be set and
+            // what columnOfInterest will be at the end.
             result = newPieChartVehicleData();
             return result;
         }
@@ -304,13 +308,11 @@ public class GraphController implements Initializable, MenuController {
                         case "Region" -> columnOfInterest = "region";
                         case "Holiday" -> columnOfInterest = "holiday";
                         case "Severity" -> columnOfInterest = "severity";
-                        case "Vehicle Type" ->
-                            //truck to trigger if statement in newPieChartData.
+                        case "Vehicle Type" -> //truck to trigger if statement in newPieChartData.
                                 columnOfInterest = "truck_involved";
                         case "Weather" -> columnOfInterest = "weather";
                         case "Year" -> columnOfInterest = "crash_year";
-                        default ->
-                            // Other cases.
+                        default -> // Other cases.
                                 log.error("Invalid comboBox option: " + currentChartData);
                     }
 
