@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import com.sun.tools.javac.Main;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +24,6 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import org.controlsfx.control.PopOver;
-import seng202.team0.business.CrashManager;
 import seng202.team0.business.FilterManager;
 import seng202.team0.business.RouteManager;
 import seng202.team0.models.Crash;
@@ -36,10 +34,7 @@ import seng202.team0.models.Route;
 import seng202.team0.repository.SqliteQueryBuilder;
 import seng202.team0.models.JavaScriptBridge;
 
-import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
-import static seng202.team0.models.AngleFilter.filterLocationsByAngle;
 
 
 /**
@@ -388,7 +383,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     }
 
 
-    public static Result getOverlappingPoints(List<Location> coordinates) {
+    public static Result getOverlappingPoints(List<Location> coordinates, List<String> roads, List<Double> distances) {
         double totalValue = 0;
         double maxSegmentSeverity = Double.MIN_VALUE;
         Location startOfMostDangerousSegment = null;
@@ -397,18 +392,27 @@ public class RoutingMenuController implements Initializable, MenuController {
         FilterManager filterManager = FilterManager.getInstance();
         int startYear = filterManager.getEarliestYear();
         int endYear = filterManager.getLatestYear();
+        String finalRoad = "";
 
         Map<String, Integer> weatherSeverityTotal = new HashMap<>();
         Map<String, Integer> weatherTotals = new HashMap<>();
+        double totalDistances = distances.get(0);
+        double totalDistance = 0;
         int totalNumPoints = 0;
 
         Set<Integer> objectIdSet = new HashSet<>();
 
+        int j = 0;
         for (int i = 0; i < coordinates.size()-1; i+=1) {
             Location segmentStart = coordinates.get(i);
             Location segmentEnd = coordinates.get(i+1);
-
-            List crashList = crossProductQuery(segmentStart, segmentEnd);
+            double distance = haversineDistance(segmentStart, segmentEnd);
+            totalDistance += distance;
+            if (totalDistance > totalDistances) {
+                j++;
+                totalDistances += distances.get(j);
+            }
+            List<?> crashList = crossProductQuery(segmentStart, segmentEnd);
 
             int totalSeverity = 0;
             double total = 0;
@@ -444,6 +448,9 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             if (segmentSeverity > maxSegmentSeverity) {
                 maxSegmentSeverity = segmentSeverity;
+                if (!Objects.equals(roads.get(j), "")) {
+                    finalRoad = roads.get(j);
+                }
                 startOfMostDangerousSegment = segmentStart;
                 endOfMostDangerousSegment = segmentEnd;
             }
@@ -462,12 +469,10 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         }
 
-        System.out.println(objectIdSet);
-
         double dangerRatingOutOf10 = (((totalValue/totalNumPoints) - 1.0) / 7.0) * 10.0; // Adjust the formula as necessary
         //if (dangerRatingOutOf10 > 10) dangerRatingOutOf10 = 10; // Cap at 10
 
-        return new Result(dangerRatingOutOf10, startOfMostDangerousSegment, endOfMostDangerousSegment, maxSegmentSeverity, maxWeather, startYear, endYear, objectIdSet.size());
+        return new Result(dangerRatingOutOf10, startOfMostDangerousSegment, endOfMostDangerousSegment, maxSegmentSeverity, maxWeather, startYear, endYear, objectIdSet.size(), finalRoad);
     }
 
     // A helper class to hold the results
@@ -482,8 +487,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         public int endYear;
 
         public int totalNumPoints;
+        public String finalRoad;
 
-        public Result(double dangerRating, Location startOfMostDangerousSegment, Location endOfMostDangerousSegment, double maxSegmentSeverity, String maxWeather, int startYear, int endYear, int totalNumPoints) {
+        public Result(double dangerRating, Location startOfMostDangerousSegment, Location endOfMostDangerousSegment, double maxSegmentSeverity, String maxWeather, int startYear, int endYear, int totalNumPoints, String finalRoad) {
             this.dangerRating = dangerRating;
             this.startOfMostDangerousSegment = startOfMostDangerousSegment;
             this.endOfMostDangerousSegment = endOfMostDangerousSegment;
@@ -492,6 +498,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             this.startYear = startYear;
             this.endYear = endYear;
             this.totalNumPoints = totalNumPoints;
+            this.finalRoad = finalRoad;
         }
     }
 
@@ -601,9 +608,11 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     public static void ratingUpdate() throws SQLException {
         List<Location> coordinates = JavaScriptBridge.getRouteMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+        List<String> roads = JavaScriptBridge.getRoadsMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
+        List<Double> distances = JavaScriptBridge.getDistancesMap().get(JavaScriptBridge.getIndex()); // Assuming '0' is the routeId you are interested in
         if(coordinates != null && !coordinates.isEmpty()) { // Null and empty check to prevent NullPointerException
-            Result review = getOverlappingPoints(coordinates); // Calculate rating based on coordinates
-            String reviewString = String.format("This route has a %.2f/10 danger rating, there have been %d crashes since %d up till %d. The majority of crashes occur during %s conditions, the most dangerous segment is from BLANK to BLANK With a danger rating of %.2f.", review.dangerRating, review.totalNumPoints, review.startYear, review.endYear, review.maxWeather, review.maxSegmentSeverity);
+            Result review = getOverlappingPoints(coordinates, roads, distances); // Calculate rating based on coordinates
+            String reviewString = String.format("This route has a %.2f/10 danger rating, there have been %d crashes since %d up till %d. The majority of crashes occur during %s conditions, the most dangerous segment is on %s with a danger rating of %.2f.", review.dangerRating, review.totalNumPoints, review.startYear, review.endYear, review.maxWeather, review.finalRoad,review.maxSegmentSeverity);
             MainController.javaScriptConnector.call("updateReviewContent", reviewString);
 
         } else {

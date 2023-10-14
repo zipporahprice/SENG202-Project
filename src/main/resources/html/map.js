@@ -70,7 +70,7 @@ function initMap() {
 
             reviewTab.innerHTML = `
             <h3>Review:</h3>
-            <p id="reviewContent">Hello</p>
+            <p class="reviewContent">Hello</p>
         `;
 
             return container;
@@ -288,12 +288,12 @@ function addMarker(title, lat, lng) {
 }
 
 function updateReviewContent(dataFromJava) {
-    var reviewContentElement = document.getElementById('reviewContent');
-    if (reviewContentElement) {
-        reviewContentElement.textContent = dataFromJava;
-    }
-
+    const reviewContentElements = document.querySelectorAll('.reviewContent');
+    reviewContentElements.forEach(paragraph => {
+        paragraph.textContent = dataFromJava;
+    })
 }
+
 
 
 /**
@@ -308,6 +308,7 @@ function displayRoute(routesIn, transportMode) {
     var routeIndexMap = new Map();
     var mode = getMode(transportMode);
 
+
     routesArray.forEach(waypointsIn => {
         var waypoints = [];
         //var routeColor = getColorForSafetyScore(safetyScore);
@@ -317,6 +318,7 @@ function displayRoute(routesIn, transportMode) {
 
 
         var newRoute = L.Routing.control({
+            addWaypoints: false,
             waypoints: waypoints,
             routeWhileDragging: true,
             showAlternatives: true,
@@ -324,9 +326,19 @@ function displayRoute(routesIn, transportMode) {
             itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
         }).addTo(map);
 
+
         newRoute.on('routeselected', (e) => {
             var route = e.route;
             var coordinates = route.coordinates;
+            var instructions = route.instructions;
+            var instructionRoads = [];
+            var instructionDistance = [];
+            for (var i = 0; i < instructions.length; i++) {
+                var instruction = instructions[i];
+                instructionRoads.push(instruction.road);
+                instructionDistance.push(instruction.distance)
+            }
+
 
             // Generating or retrieving a unique identifier for the route.
             // You need to replace 'getRouteIdentifier(route)' with your actual logic of getting or generating an identifier.
@@ -347,6 +359,8 @@ function displayRoute(routesIn, transportMode) {
             var coordinatesJson = JSON.stringify({
                 routeId: indexToSend, // Use the index retrieved from the map
                 coordinates: coordinates,
+                instructionRoads: instructionRoads,
+                instructionDistance: instructionDistance
             });
             // var reviewData = javaScriptBridge.getReviewDataForRoute(routeId);
             // updateReviewContent(reviewData);
