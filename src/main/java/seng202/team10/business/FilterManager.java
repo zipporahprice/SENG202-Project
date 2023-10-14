@@ -35,14 +35,14 @@ public class FilterManager {
     private final String closeParenthesis = ")";
     private final String equalOne = " = 1";
     private final HashMap<String, String> startOfClauses = new HashMap<>() {{
-        put("severity", "severity IN (");
-        put("transport_mode", "(");
-        put("crash_year", "crash_year BETWEEN ");
-        put("weather", "weather IN (");
-        put("region", "region IN (");
-        put("holiday", "holiday IN (");
-        put("viewport", "object_id IN (");
-    }};
+            put("severity", "severity IN (");
+            put("transport_mode", "(");
+            put("crash_year", "crash_year BETWEEN ");
+            put("weather", "weather IN (");
+            put("region", "region IN (");
+            put("holiday", "holiday IN (");
+            put("viewport", "object_id IN (");
+        }};
     private final String falseQuery = "1 = 0";
 
     // Singleton instance of FilterManager
