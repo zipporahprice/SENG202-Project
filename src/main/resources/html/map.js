@@ -41,7 +41,8 @@ let jsConnector = {
     drawingModeOff: drawingModeOff,
     changeDrawingColourToRating: changeDrawingColourToRating,
     updateView: updateView,
-    updateReviewContent: updateReviewContent
+    updateReviewContent: updateReviewContent,
+    runDataUpdate: runDataUpdate
 
 };
 
@@ -140,7 +141,8 @@ function initMap() {
     });
 
     // Initialise layers and setup callbacks
-    updateDataShown();
+    setFilteringViewport();
+    updateView();
     map.on('zoomend', updateEnabled);
     map.on('moveend', updateEnabled);
     window.addEventListener('resize', newHeatmap);
@@ -165,8 +167,12 @@ function newHeatmap() {
 
 function updateDataShown() {
     setFilteringViewport();
-    eval(javaScriptBridge.setCrashes());
+    javaScriptBridge.setCrashes();
     updateView();
+}
+
+function runDataUpdate(script) {
+    eval(script);
 }
 
 function mapIsReady() {
@@ -221,16 +227,6 @@ function automaticViewChange() {
             layerGroup.addLayer(heatmapLayer);
         }
     }
-}
-
-function showCrashesWithEventCallbacks() {
-    map.on('zoomend', updateDataShown);
-    map.on('moveend', updateDataShown);
-}
-
-function hideCrashesWithEventCallbacks() {
-    map.off('zoomend', updateDataShown);
-    map.off('moveend', updateDataShown);
 }
 
 /**

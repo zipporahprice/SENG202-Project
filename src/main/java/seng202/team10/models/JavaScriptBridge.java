@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.sun.tools.javac.Main;
 import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,7 +37,6 @@ import seng202.team10.gui.SettingsMenuController;
  *
  */
 public class JavaScriptBridge {
-    private CrashManager crashData = new CrashManager();
     private String currentView;
     private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
     private static Map<Long, List<Double>> distancesMap = new ConcurrentHashMap<>();
@@ -58,19 +58,13 @@ public class JavaScriptBridge {
      * @return A JSON representation of crash data containing latitude and longitude information.
      * @throws SQLException If there is an error while retrieving crash data from the database.
      */
-    public String setCrashes() {
-        // TODO get rid of timing performance
-        final double start = System.currentTimeMillis();
-        String currentView = SettingsManager.getInstance().getCurrentView();
-
+    public static void setCrashes() {
+        CrashManager crashData = new CrashManager();
         List<?> crashList = crashData.getCrashLocations();
+        updateCrashesByJavascript(crashList);
+    }
 
-        boolean crashLocationsShowing = currentView.equals("Crash Locations")
-                || currentView.equals("Automatic") || currentView.equals("Heatmap & Crash Locations");
-        int maxCrashesShown = 80000;
-
-        System.out.println(crashList.size());
-
+    public static void updateCrashesByJavascript(List<?> crashList) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Promise.resolve().then(function () {resetLayers();}).then(function () {");
 
@@ -87,13 +81,7 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {showLayers();});");
-
-        // TODO get rid of timing performance
-        double end = System.currentTimeMillis();
-        System.out.println(end - start);
-
-        return stringBuilder.toString();
-
+        MainController.javaScriptConnector.call("runDataUpdate", stringBuilder.toString());
     }
 
     /**
