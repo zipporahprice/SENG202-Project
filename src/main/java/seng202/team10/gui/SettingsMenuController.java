@@ -40,6 +40,7 @@ public class SettingsMenuController implements Initializable, MenuController {
                 .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         currentView = (String) newValue;
+                        SettingsManager.getInstance().setCurrentView(currentView);
                         MainController.javaScriptConnector.call("updateView");
                     } //updates the view based on the option selected
                 });
