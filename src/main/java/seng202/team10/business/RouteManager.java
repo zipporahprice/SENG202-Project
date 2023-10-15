@@ -113,7 +113,7 @@ public class RouteManager {
     /**
      * Setter method for stopLocation.
      *
-     * @param location String object of stop location
+     * @param removeRouteDisabled boolean of whether the route remove button is disabled.
      */
     public void setRemoveRouteDisabled(boolean removeRouteDisabled) {
         this.removeRouteDisabled = removeRouteDisabled;
@@ -135,15 +135,6 @@ public class RouteManager {
                                             .buildGetter();
 
         return favourites;
-    }
-
-    /**
-     * Clears the route.
-     */
-    public void clearRoute() {
-        startLocation = null;
-        endLocation = null;
-        stopLocation = null;
     }
 
     public void setTransportMode(String mode) {
@@ -187,60 +178,59 @@ public class RouteManager {
                 totalDistances += distances.get(j);
                 j++;
             }
-            List<?> crashList = boundingBoxSegmentSearch(segmentStart, segmentEnd);
-            int totalSeverity = 0;
-            double total = 0;
 
-            for (Object severityMap : crashList) {
-                HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
-                int objectId = (int) map.get("object_id");
-                if (!objectIdSet.contains(objectId)) {
-                    // Adds to the set of unique points
-                    objectIdSet.add(objectId);
-                    crashes.add(map);
+            Pair<Double, List<HashMap<String, Object>>> segmentInfo =
+                    calculateSegmentInfo(segmentStart, segmentEnd, objectIdSet);
 
-                    int currentSeverity = (int) map.get("severity");
-                    totalSeverity += currentSeverity;
-                    String weather = (String) map.get("weather");
-                    if (weatherSeverityTotal.containsKey(map.get("weather"))) {
-                        weatherSeverityTotal.put(weather, weatherSeverityTotal.get(weather)
-                                + currentSeverity);
-                        weatherTotals.put(weather, weatherTotals.get(weather) + 1);
-                    } else {
-                        weatherSeverityTotal.put(weather, currentSeverity);
-                        weatherTotals.put(weather, 1);
-                    }
+            double segmentSeverity = segmentInfo.getKey();
+            crashes.addAll(segmentInfo.getValue());
 
-                    total += 1;
-                }
-            }
+            // Updating the weather maps
+            updateWeatherMaps(segmentInfo.getValue(), weatherSeverityTotal, weatherTotals);
 
-
-            double segmentSeverity = 0;
-
-            if (total > 0) {
-                segmentSeverity = totalSeverity;
-            }
             if (segmentSeverity > maxSegmentSeverity) {
                 maxSegmentSeverity = segmentSeverity;
                 if (!Objects.equals(roads.get(j), "")) {
                     finalRoad = roads.get(j);
                 }
             }
-
             totalValue += segmentSeverity;
         }
-        if (finalRoad.equals("")) {
-            int counter = 0;
-            while (counter < roads.size() && roads.get(counter).equals("")) {
-                counter++;
-            }
-            finalRoad = roads.get(counter);
-        }
 
+        String maxWeather = getMaxSeverityWeather(weatherSeverityTotal, weatherTotals);
+
+        Pair<Integer, Double> danger = calculateDanger(objectIdSet.size(), totalValue);
+        FilterManager filterManager = FilterManager.getInstance();
+        int startYear = filterManager.getEarliestYear();
+        int endYear = filterManager.getLatestYear();
+
+        return new Review(danger.getValue(), maxSegmentSeverity, maxWeather, startYear,
+                endYear, danger.getKey(), finalRoad, crashes);
+    }
+
+    private static Pair<Double, List<HashMap<String, Object>>> calculateSegmentInfo(
+            Location segmentStart, Location segmentEnd, Set<Integer> objectIdSet) {
+        List<?> crashList = boundingBoxSegmentSearch(segmentStart, segmentEnd);
+        double segmentSeverity = 0;
+        List<HashMap<String, Object>> crashes = new ArrayList<>();
+        for (Object severityMap : crashList) {
+            HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
+            int objectId = (int) map.get("object_id");
+            if (!objectIdSet.contains(objectId)) {
+                objectIdSet.add(objectId);
+                crashes.add(map);
+                int currentSeverity = (int) map.get("severity");
+                segmentSeverity += currentSeverity;
+            }
+        }
+        return new Pair<>(segmentSeverity, crashes);
+    }
+
+
+    public static String getMaxSeverityWeather(Map<String, Integer> weatherSeverityTotal,
+                                               Map<String, Integer> weatherTotals) {
         double maxWeatherSeverity = Double.MIN_VALUE;
         String maxWeather = "";
-
         for (String weather : weatherSeverityTotal.keySet()) {
             double currentWeatherSeverity = (double) weatherSeverityTotal.get(weather)
                     / weatherTotals.get(weather);
@@ -249,17 +239,22 @@ public class RouteManager {
                 maxWeather = weather;
             }
         }
-
-        int finalSize = calculateDanger(objectIdSet.size(), totalValue).getKey();
-        double dangerRatingOutOf10 = calculateDanger(objectIdSet.size(), totalValue).getValue();
-        calculateDanger(objectIdSet.size(), totalValue);
-        FilterManager filterManager = FilterManager.getInstance();
-        int startYear = filterManager.getEarliestYear();
-        int endYear = filterManager.getLatestYear();
-
-        return new Review(dangerRatingOutOf10, maxSegmentSeverity, maxWeather, startYear,
-                endYear, finalSize, finalRoad, crashes);
+        return maxWeather;
     }
+
+    private static void updateWeatherMaps(List<HashMap<String, Object>> crashes,
+                                          Map<String, Integer> weatherSeverityTotal,
+                                          Map<String, Integer> weatherTotals) {
+        for (HashMap<String, Object> crash : crashes) {
+            String weather = (String) crash.get("weather");
+            int currentSeverity = (int) crash.get("severity");
+            weatherSeverityTotal.put(weather,
+                    weatherSeverityTotal.getOrDefault(weather, 0) + currentSeverity);
+            weatherTotals.put(weather,
+                    weatherTotals.getOrDefault(weather, 0) + 1);
+        }
+    }
+
 
     /**
      * Calculates the Haversine distance between two geographic
