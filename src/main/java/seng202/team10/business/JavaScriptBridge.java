@@ -53,16 +53,7 @@ public class JavaScriptBridge {
     public void setCrashes() {
         CrashManager crashData = new CrashManager();
         List<?> crashList = crashData.getCrashLocations();
-        String jsCode = updateCrashesByJavascript(crashList);
-
-        if(MainController.javaScriptConnector != null) {
-            MainController.javaScriptConnector.call("runDataUpdate",jsCode);
-        } else {
-            // Log the issue or handle the error as per your use case.
-            System.err.println("Error: javaScriptConnector is null. Method updateCrashesByJavascript in JavaScriptBridge was not executed fully.");
-            // Or throw a custom exception, if appropriate.
-            throw new IllegalStateException("javaScriptConnector is null");
-        }
+        updateCrashesByJavascript(crashList);
     }
 
 
@@ -82,7 +73,7 @@ public class JavaScriptBridge {
     *                   provided by the 'MainController' class.
     *
     */
-    public static String updateCrashesByJavascript(List<?> crashList) {
+    public static void updateCrashesByJavascript(List<?> crashList) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Promise.resolve().then(function () "
                 + "{resetLayers();}).then(function () {");
@@ -100,8 +91,7 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {showLayers();});");
-
-        return stringBuilder.toString();
+        MainController.javaScriptConnector.call("runDataUpdate",stringBuilder.toString());
     }
 
     /**
