@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="100.0" prefWidth="586.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team0.gui.ImportMenuController">
+<StackPane prefHeight="100.0" prefWidth="586.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.ImportMenuController">
 
 <AnchorPane fx:id="importPane" maxHeight="117.0" maxWidth="250.0" prefHeight="92.0" prefWidth="256.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="BOTTOM_RIGHT">
     <children>
