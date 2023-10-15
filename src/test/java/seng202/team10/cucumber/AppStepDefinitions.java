@@ -4,7 +4,6 @@ import io.cucumber.java.en.Given;
 
 /**
  * Step definitions for Cucumber BDD testing related to the app loading.
- *
  * Manages testing scenarios pertaining to the initialization and
  * loading of the app, ensuring the app begins its lifecycle as expected.
  *

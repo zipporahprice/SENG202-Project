@@ -3,18 +3,18 @@ package seng202.team10.cucumber;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-import seng202.team10.App;
 import seng202.team10.exceptions.DataImportException;
 import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
-import java.io.File;
-import java.net.URL;
-import java.util.List;
+
 
 /**
  * Step definitions for Cucumber BDD testing related to viewing crash data.
@@ -42,7 +42,8 @@ public class ViewCrashDataStepDefinitions {
             // Database setup
             DatabaseManager.getInstance().resetDb();
             CrashCsvImporter importer = new CrashCsvImporter();
-            URL newUrl = Thread.currentThread().getContextClassLoader().getResource("files/random_5_crashes.csv");
+            URL newUrl = Thread.currentThread().getContextClassLoader()
+                    .getResource("files/random_5_crashes.csv");
             File testFile = new File(newUrl.getPath());
             List<Crash> crashes = importer.crashListFromFile(testFile);
             SqliteQueryBuilder.create().insert("crashes").buildSetter(crashes);
@@ -56,7 +57,8 @@ public class ViewCrashDataStepDefinitions {
      */
     @When("The user selects crash")
     public void userSelectsCrash() {
-        crashSelected = (Crash) SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().get(0);
+        crashSelected = (Crash) SqliteQueryBuilder.create()
+                .select("*").from("crashes").buildGetter().get(0);
     }
 
     /**

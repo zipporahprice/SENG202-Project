@@ -7,7 +7,6 @@ import seng202.team10.models.JavaScriptBridge;
 
 /**
  * Step definitions for testing map display features via Cucumber BDD tests.
- *
  * These steps validate that the landing page displays a map and that crashes
  * from the database are shown on this map, using the JavaScriptBridge to
  * interact with map functionalities.
