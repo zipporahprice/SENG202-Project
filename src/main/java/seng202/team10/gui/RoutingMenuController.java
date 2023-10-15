@@ -325,7 +325,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         if (routeName == null || routeName.trim().isEmpty() || favouriteNames.contains(routeName)) {
             // Show error dialog
-            showErrorDialog("Invalid name", "Please provide a valid name for the route.");
+            showErrorDialog();
             return;
         }
 
@@ -349,10 +349,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         return result.orElse(null);
     }
 
-    private void showErrorDialog(String title, String content) {
+    private void showErrorDialog() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
+        alert.setTitle("Invalid name");
+        alert.setContentText("Please provide a valid name for the route.");
         alert.showAndWait();
     }
 
