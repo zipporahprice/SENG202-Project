@@ -98,7 +98,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         transportButtons.add(carButton);
         transportButtons.add(bikeButton);
         transportButtons.add(walkingButton);
-        selectedButton = carButton;
         removeRoute.setDisable(true);
         stopsListView.setItems(stopStrings);
         stopsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -436,10 +435,13 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void deleteRoute() {
         if (favouritesListView.getSelectionModel().getSelectedItem() != null) {
             int selectedStopIndex = favouritesListView.getSelectionModel().getSelectedIndex();
+            String name = favouritesListView.getSelectionModel().getSelectedItem();
+            SqliteQueryBuilder.create().delete("favourites").where("route_name = " + name).buildDeleter();
             // stops.remove(selectedStopIndex);
             favouriteStrings.remove(selectedStopIndex);
         } else {
             // stops.remove(stopStrings.size() - 1);
+            // TODO disable button
             favouriteStrings.remove(stopStrings.size() - 1);
         }
     }
@@ -594,8 +596,8 @@ public class RoutingMenuController implements Initializable, MenuController {
                 selectedButton.getStyleClass().add("hamburgerStyle");
             }
             selectedButton = chosenButton;
-            chosenButton.getStyleClass().remove("hamburgerStyle");
-            chosenButton.getStyleClass().add("clickedButtonColor");
+            selectedButton.getStyleClass().remove("hamburgerStyle");
+            selectedButton.getStyleClass().add("clickedButtonColor");
             modeChoice = (String) chosenButton.getUserData();
         }
     }
