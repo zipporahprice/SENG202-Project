@@ -21,6 +21,7 @@ public class RouteManager {
     private String endLocation;
     private String stopLocation;
     private String transportMode;
+    private boolean removeRouteDisabled;
 
     /**
      * Initializer of the RouteManager class that sets default null values for
@@ -31,6 +32,7 @@ public class RouteManager {
         endLocation = null;
         stopLocation = null;
         transportMode = "car";
+        removeRouteDisabled = true;
     }
 
     /**
@@ -97,6 +99,24 @@ public class RouteManager {
      */
     public void setStopLocation(String location) {
         stopLocation = location;
+    }
+
+    /**
+     * Getter method for removeRouteDisabled.
+     *
+     * @return Boolean object of removeRouteButton.
+     */
+    public boolean getRemoveRouteDisabled() {
+        return removeRouteDisabled;
+    }
+
+    /**
+     * Setter method for stopLocation.
+     *
+     * @param location String object of stop location
+     */
+    public void setRemoveRouteDisabled(boolean removeRouteDisabled) {
+        this.removeRouteDisabled = removeRouteDisabled;
     }
 
     /**
