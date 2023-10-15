@@ -44,7 +44,8 @@ public class DatabaseManagerTest {
     @Test
     void testInitialiseDatabase() {
         manager.initialiseDatabase("files/random_5_crashes.csv");
-        List<?> crashesFromDatabase = SqliteQueryBuilder.create().select("*").from("crashes").buildGetter();
+        List<?> crashesFromDatabase = SqliteQueryBuilder.create().
+                select("*").from("crashes").buildGetter();
         Assertions.assertEquals(5, crashesFromDatabase.size());
     }
 
