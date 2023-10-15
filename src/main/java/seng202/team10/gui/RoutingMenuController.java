@@ -659,6 +659,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
+            removeRoute.setDisable(false);
         }
     }
 
@@ -742,11 +743,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
         MainController.javaScriptConnector.call("removeRoute");
-        modeChoice = null;
-        if (selectedButton != null) {
-            selectedButton.getStyleClass().remove("clickedButtonColor");
-            selectedButton.getStyleClass().add("hamburgerStyle");
-        }
 
         removeRoute.setDisable(true);
 
