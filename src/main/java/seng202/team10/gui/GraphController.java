@@ -220,10 +220,7 @@ public class GraphController implements Initializable, MenuController {
 
         }
 
-        log.error("Invalid vehicle type!");
-        //because it should have returned in the previous loop
-
-        return null;
+        return new PieChart.Data("", 0); //in case there is no vehicle involved
     }
 
     private ObservableList<PieChart.Data> newPieChartVehicleData() {
