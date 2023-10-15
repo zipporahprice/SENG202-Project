@@ -1,4 +1,4 @@
-package seng202.team10.models;
+package seng202.team10.business;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +15,7 @@ import seng202.team10.business.RatingAreaManager;
 import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
-
-
+import seng202.team10.models.Location;
 
 
 /**
@@ -54,7 +53,16 @@ public class JavaScriptBridge {
     public void setCrashes() {
         CrashManager crashData = new CrashManager();
         List<?> crashList = crashData.getCrashLocations();
-        updateCrashesByJavascript(crashList);
+        String jsCode = updateCrashesByJavascript(crashList);
+
+        if(MainController.javaScriptConnector != null) {
+            MainController.javaScriptConnector.call("runDataUpdate",jsCode);
+        } else {
+            // Log the issue or handle the error as per your use case.
+            System.err.println("Error: javaScriptConnector is null. Method updateCrashesByJavascript in JavaScriptBridge was not executed fully.");
+            // Or throw a custom exception, if appropriate.
+            throw new IllegalStateException("javaScriptConnector is null");
+        }
     }
 
 
@@ -74,7 +82,7 @@ public class JavaScriptBridge {
     *                   provided by the 'MainController' class.
     *
     */
-    public static void updateCrashesByJavascript(List<?> crashList) {
+    public static String updateCrashesByJavascript(List<?> crashList) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Promise.resolve().then(function () "
                 + "{resetLayers();}).then(function () {");
@@ -92,7 +100,8 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {showLayers();});");
-        MainController.javaScriptConnector.call("runDataUpdate", stringBuilder.toString());
+
+        return stringBuilder.toString();
     }
 
     /**

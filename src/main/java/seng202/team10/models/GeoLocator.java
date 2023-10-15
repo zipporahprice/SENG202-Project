@@ -34,6 +34,7 @@ public class GeoLocator {
 
     private PopOver popOver;
 
+
     /**
      * Takes user input and searches for the address using Nominatim Geolocation API.
      * Returns the location.
