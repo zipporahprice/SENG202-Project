@@ -2,8 +2,17 @@ package seng202.team10.gui;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +20,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -28,6 +43,8 @@ import seng202.team10.models.JavaScriptBridge;
 import seng202.team10.models.Location;
 import seng202.team10.models.Route;
 import seng202.team10.repository.SqliteQueryBuilder;
+
+
 
 /**
  * The `RoutingMenuController` class manages user
@@ -84,7 +101,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
 
-    private static boolean isRoutePresent ;
+    private static boolean isRoutePresent;
 
 
     /**
@@ -122,7 +139,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         controller = this;
         loadManager();
 
-        if(!isRoutePresent){
+        if (!isRoutePresent) {
             removeRoute.setDisable(true);
         }
 
@@ -568,10 +585,6 @@ public class RoutingMenuController implements Initializable, MenuController {
             finalSize = objectIdSet.size();
         }
 
-        FilterManager filterManager = FilterManager.getInstance();
-        int startYear = filterManager.getEarliestYear();
-        int endYear = filterManager.getLatestYear();
-
         // Shows crashes on map
         JavaScriptBridge.updateCrashesByJavascript(crashes);
         if (SettingsManager.getInstance().getCurrentView().equals("None")) {
@@ -579,6 +592,10 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
         MainController.javaScriptConnector.call("updateView");
 
+        FilterManager filterManager = FilterManager.getInstance();
+
+        int startYear = filterManager.getEarliestYear();
+        int endYear = filterManager.getLatestYear();
 
         return new Result(dangerRatingOutOf10, startOfDangerousSegment, endOfDangerousSegment,
                 maxSegmentSeverity, maxWeather, startYear, endYear, finalSize, finalRoad);

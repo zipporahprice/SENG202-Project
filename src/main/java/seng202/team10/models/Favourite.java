@@ -36,7 +36,8 @@ public class Favourite {
      * @param filters      Route filters.
      */
     public Favourite(String startAddress, String endAddress, double startLat, double startLong,
-                     double endLat, double endLong, String filters, String transportMode, String name) {
+                     double endLat, double endLong,
+                     String filters, String transportMode, String name) {
         this.startAddress = startAddress;
         this.endAddress = endAddress;
         this.startLat = startLat;
