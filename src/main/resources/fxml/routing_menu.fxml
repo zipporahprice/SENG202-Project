@@ -124,17 +124,17 @@
             <Insets left="480.0" top="210.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="startLocationComboBox" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="340.0" top="110.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefHeight="25.0" prefWidth="260.0" promptText="End Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
+      <ComboBox fx:id="endLocationComboBox" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefHeight="25.0" prefWidth="260.0" promptText="End Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
             <Insets right="14.0" top="160.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="stopLocationComboBox" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="340.0" top="275.0" />
          </StackPane.margin>

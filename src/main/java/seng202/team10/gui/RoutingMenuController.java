@@ -44,13 +44,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     private static final Logger log = LogManager.getLogger(RoutingMenuController.class);
 
     @FXML
-    private ComboBox<String> startLocation;
+    private ComboBox<String> startLocationComboBox;
     @FXML
-    private ComboBox<String> endLocation;
+    private ComboBox<String> endLocationComboBox;
     @FXML
-    private ComboBox<String> stopLocation;
-    @FXML
-    private Label numCrashesLabel;
+    private ComboBox<String> stopLocationComboBox;
     @FXML
     private Button carButton;
     @FXML
@@ -66,7 +64,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     ListView<String> favouritesListView = new ListView<>();
 
-    private static List<Location> matchedPoints;
     public static RoutingMenuController controller;
     private GeoLocator geolocator;
     private List<Location> stops = new ArrayList<>();
@@ -194,7 +191,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location startMarker = startResult.getKey();
         String errorMessageStart = startResult.getValue();
         if (errorMessageStart != null) {
-            showPopOver(errorMessageStart, startLocation, 5);
+            showPopOver(errorMessageStart, startLocationComboBox, 5);
             return null;
         }
 
@@ -203,7 +200,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void setStart() {
-        String selectedItem = startLocation.getSelectionModel().getSelectedItem();
+        String selectedItem = startLocationComboBox.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             startAddress = selectedItem;
         }
@@ -211,10 +208,10 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void loadStartOptions() {
-        String address = startLocation.getEditor().getText().trim();
+        String address = startLocationComboBox.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
-        startLocation.setItems(addressOptions);
-        startLocation.getEditor().setText(address);
+        startLocationComboBox.setItems(addressOptions);
+        startLocationComboBox.getEditor().setText(address);
     }
 
     /**
@@ -234,7 +231,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location endMarker = endResult.getKey();
         String errorEndMessage = endResult.getValue();
         if (errorEndMessage != null) {
-            showPopOver(errorEndMessage, endLocation, 5);
+            showPopOver(errorEndMessage, endLocationComboBox, 5);
             return null;
         }
         return endMarker;
@@ -243,7 +240,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void setEnd() {
-        String selectedItem = endLocation.getSelectionModel().getSelectedItem();
+        String selectedItem = endLocationComboBox.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             endAddress = selectedItem;
         }
@@ -251,10 +248,10 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void loadEndOptions() {
-        String address = endLocation.getEditor().getText().trim();
+        String address = endLocationComboBox.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
-        endLocation.setItems(addressOptions);
-        endLocation.getEditor().setText(address);
+        endLocationComboBox.setItems(addressOptions);
+        endLocationComboBox.getEditor().setText(address);
 
     }
 
@@ -269,7 +266,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location stopMarker = stopResult.getKey();
         String errorStopMessage = stopResult.getValue();
         if (errorStopMessage != null) {
-            showPopOver(errorStopMessage, stopLocation, 5);
+            showPopOver(errorStopMessage, stopLocationComboBox, 5);
             return null;
         }
 
@@ -278,7 +275,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void setStop() {
-        String selectedItem = stopLocation.getSelectionModel().getSelectedItem();
+        String selectedItem = stopLocationComboBox.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             stopAddress = selectedItem;
         }
@@ -286,10 +283,10 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private void loadStopOptions() {
-        String address = stopLocation.getEditor().getText().trim();
+        String address = stopLocationComboBox.getEditor().getText().trim();
         ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
-        stopLocation.setItems(addressOptions);
-        stopLocation.getEditor().setText(address);
+        stopLocationComboBox.setItems(addressOptions);
+        stopLocationComboBox.getEditor().setText(address);
 
     }
 
@@ -373,8 +370,8 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             // Generates a route and makes sure stops are cleared
 
-            startLocation.getEditor().setText(favourite.getStartAddress());
-            endLocation.getEditor().setText(favourite.getEndAddress());
+            startLocationComboBox.getEditor().setText(favourite.getStartAddress());
+            endLocationComboBox.getEditor().setText(favourite.getEndAddress());
             startAddress = favourite.getStartAddress();
             endAddress = favourite.getEndAddress();
             for (Button button : transportButtons) {
@@ -414,8 +411,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location stop = getStop();
         if (stop != null) {
             stops.add(stop);
-            stopStrings.add(stopLocation.getValue());
-            stopLocation.getEditor().setText(null);
+            stopStrings.add(stopLocationComboBox.getValue());
+            stopLocationComboBox.getEditor().setText(null);
         }
         generateRouteAction();
     }
@@ -577,9 +574,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         String mode = route.getTransportMode();
 
         // update textFields according to data
-        startLocation.getEditor().setText(startLoc);
-        endLocation.getEditor().setText(endLoc);
-        stopLocation.getEditor().setText(stopLoc);
+        startLocationComboBox.getEditor().setText(startLoc);
+        endLocationComboBox.getEditor().setText(endLoc);
+        stopLocationComboBox.getEditor().setText(stopLoc);
         startAddress = startLoc;
         stopAddress = stopLoc;
         endAddress = endLoc;
@@ -599,9 +596,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void updateManager() {
         RouteManager route = RouteManager.getInstance();
-        route.setStartLocation(startLocation.getEditor().getText());
-        route.setEndLocation(endLocation.getEditor().getText());
-        route.setStopLocation(stopLocation.getEditor().getText());
+        route.setStartLocation(startLocationComboBox.getEditor().getText());
+        route.setEndLocation(endLocationComboBox.getEditor().getText());
+        route.setStopLocation(stopLocationComboBox.getEditor().getText());
         route.setTransportMode(modeChoice);
         route.setRemoveRouteDisabled(removeRoute.isDisabled());
     }
