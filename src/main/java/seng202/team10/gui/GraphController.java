@@ -379,6 +379,9 @@ public class GraphController implements Initializable, MenuController {
                 });
     }
 
+    /**
+     * Updates the graph showing with the selected columnOfInterest.
+     */
     @FXML
     public void updateGraph() {
         ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);

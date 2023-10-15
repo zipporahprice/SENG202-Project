@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
+<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
 
     <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
@@ -50,7 +50,7 @@
     </AnchorPane>
     <AnchorPane fx:id="severityPane" maxHeight="183.0" maxWidth="250.0" prefHeight="175.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" translateY="40.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="86.0" layoutY="14.0" prefHeight="21.0" prefWidth="78.0" text="Severity" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="222.0" text="Severity" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
@@ -78,7 +78,7 @@
     </AnchorPane>
     <AnchorPane fx:id="datePane" maxHeight="184.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="75.0" layoutY="14.0" prefHeight="21.0" prefWidth="99.0" text="Date Range" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="18.0" layoutY="14.0" prefHeight="21.0" prefWidth="216.0" text="Date Range" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
@@ -118,7 +118,7 @@
     </AnchorPane>
     <AnchorPane fx:id="regionsPane" maxHeight="395.0" maxWidth="250.0" prefHeight="390.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateY="53.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="90.0" layoutY="14.0" prefHeight="21.0" prefWidth="70.0" text="Region" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="15.0" layoutY="14.0" prefHeight="21.0" prefWidth="216.0" text="Region" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
@@ -174,7 +174,7 @@
     </Button>
     <AnchorPane fx:id="holidayPane" maxHeight="127.0" maxWidth="250.0" prefHeight="127.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateY="93.0" visible="true" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="67.0" layoutY="14.0" prefHeight="21.0" prefWidth="115.0" text="Public Holiday" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="222.0" text="Public Holiday" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
@@ -200,7 +200,7 @@
     </AnchorPane>
     <AnchorPane fx:id="weatherPane" maxHeight="-Infinity" maxWidth="250.0" prefHeight="247.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="83.0" layoutY="14.0" prefHeight="21.0" prefWidth="83.0" text="Weather" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="22.0" layoutY="14.0" prefHeight="21.0" prefWidth="207.0" text="Weather" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
