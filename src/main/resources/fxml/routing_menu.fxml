@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -11,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="739.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RoutingMenuController">
+<StackPane prefHeight="769.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RoutingMenuController">
 
     <children>
         <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="121.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
@@ -38,7 +37,7 @@
         </Button>
         <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="485.0" />
+                <Insets left="335.0" top="680.0" />
             </StackPane.margin>
             <tooltip>
                 <Tooltip styleClass="custom-tool-tip" text="Save a Route" />
@@ -52,21 +51,6 @@
             </font>
             <textFill>#FFFFFF</textFill>
         </Button>
-        <ComboBox fx:id="loadRoutesComboBox" onShowing="#displayRoutes" prefWidth="280.0" promptText="Select Saved Route" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-            <tooltip>
-                <Tooltip styleClass="custom-tool-tip" text="Select a Saved Route" />
-            </tooltip>
-            <StackPane.margin>
-                <Insets left="335.0" top="535.0" />
-            </StackPane.margin>
-            <prefWidth>280.0</prefWidth>
-            <prefHeight>43.0</prefHeight>
-            <minHeight>43.0</minHeight>
-         <styleClass>
-            <String fx:value="address-button-style" />
-            <String fx:value="combo-box" />
-         </styleClass>
-        </ComboBox>
       <Button id="carButton" fx:id="carButton" mnemonicParsing="false" onAction="#toggleModeButton" prefHeight="85.0" prefWidth="89.0" styleClass="hamburgerStyle" stylesheets="@style.css" textFill="WHITE" StackPane.alignment="TOP_LEFT">
           <tooltip>
               <Tooltip styleClass="custom-tool-tip" text="Journey by Car" />
@@ -152,13 +136,40 @@
       </ComboBox>
       <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="340.0" top="268.0" />
+            <Insets left="340.0" top="275.0" />
          </StackPane.margin>
       </ComboBox>
-      <ListView fx:id="stopsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="259.0" stylesheets="@style.css" StackPane.alignment="CENTER_RIGHT">
+      <ListView fx:id="stopsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="259.0" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets right="15.0" />
+            <Insets left="340.0" right="15.0" top="330.0" />
          </StackPane.margin>
       </ListView>
+      <ListView fx:id="favouritesListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="259.0" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="340.0" top="525.0" />
+         </StackPane.margin>
+      </ListView>
+      <Button fx:id="loadRouteButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#loadRoute" prefHeight="43" prefWidth="121.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Load Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <tooltip>
+            <Tooltip styleClass="custom-tool-tip" text="Add the Stop" />
+         </tooltip>
+         <StackPane.margin>
+            <Insets left="335.0" top="620.0" />
+         </StackPane.margin>
+      </Button>
+      <Button fx:id="deleteRouteButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteRoute" prefHeight="43" prefWidth="122.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Delete Route" textFill="WHITE" StackPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <tooltip>
+            <Tooltip styleClass="custom-tool-tip" text="Remove a Stop" />
+         </tooltip>
+         <StackPane.margin>
+            <Insets left="480.0" top="620.0" />
+         </StackPane.margin>
+      </Button>
     </children>
 </StackPane>

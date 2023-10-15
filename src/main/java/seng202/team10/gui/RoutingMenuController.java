@@ -52,8 +52,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Label numCrashesLabel;
     @FXML
-    private ComboBox<String> loadRoutesComboBox;
-    @FXML
     private Button carButton;
     @FXML
     private Button bikeButton;
@@ -65,6 +63,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     private Button removeRoute;
     @FXML
     ListView<String> stopsListView = new ListView<>();
+    @FXML
+    ListView<String> favouritesListView = new ListView<>();
 
     private static List<Location> matchedPoints;
     public static RoutingMenuController controller;
@@ -78,6 +78,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private PopOver popOver;
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
+    private ObservableList<String> favouriteStrings = FXCollections.observableArrayList();
 
 
     /**
@@ -101,20 +102,25 @@ public class RoutingMenuController implements Initializable, MenuController {
         removeRoute.setDisable(true);
         stopsListView.setItems(stopStrings);
         stopsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        favouritesListView.setItems(favouriteStrings);
+        favouritesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        loadRoutesComboBox.setOnAction((ActionEvent event) -> {
-            Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                try {
-                    loadRoute();  // Assuming this method uses the selected item
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        // TODO remove this
+//        loadRoutesComboBox.setOnAction((ActionEvent event) -> {
+//            Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
+//            if (selectedItem != null) {
+//                try {
+//                    loadRoute();  // Assuming this method uses the selected item
+//                } catch (SQLException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
         controller = this;
         loadManager();
     }
+
+
 
 
     /**
@@ -338,7 +344,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         SqliteQueryBuilder.create().insert("favourites").buildSetter(favourites);
 
-
+        favouriteStrings.add(favourite.getName());
     }
 
     private String showRouteNameInputDialog() {
@@ -359,58 +365,85 @@ public class RoutingMenuController implements Initializable, MenuController {
     /**
      * Populates the ComboBox with a list of saved routes or favorite locations.
      */
-    @FXML
-    private void displayRoutes() {
-        List<?> favouritesList = SqliteQueryBuilder.create()
-                .select("*")
-                .from("favourites")
-                .buildGetter();
-        ObservableList<String> items = FXCollections.observableArrayList(favouritesList
-                .stream().map(favourite -> {
-                    Favourite favouriteCasted = (Favourite) favourite;
-                    return favouriteCasted.getName();
-                }).toList());
-        loadRoutesComboBox.setItems(items);
-    }
+//    @FXML
+//    private void displayRoutes() {
+//        List<?> favouritesList = SqliteQueryBuilder.create()
+//                .select("*")
+//                .from("favourites")
+//                .buildGetter();
+//        ObservableList<String> items = FXCollections.observableArrayList(favouritesList
+//                .stream().map(favourite -> {
+//                    Favourite favouriteCasted = (Favourite) favourite;
+//                    return favouriteCasted.getName();
+//                }).toList());
+//        loadRoutesComboBox.setItems(items);
+//    }
+
+    // TODO observable array list for favourites
 
     /**
      * Loads a selected route or favorite location from the ComboBox.
      *
      * @throws SQLException If a database error occurs during the loading operation.
      */
+    //@FXML
+    //private void loadRoute() throws SQLException {
+        // TODO redo this
+//        int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
+//        if (favouriteId != 0 && favouriteId != -1) {
+//            List<?> favouriteList = SqliteQueryBuilder.create()
+//                    .select("*")
+//                    .from("favourites")
+//                    .where("id = " + favouriteId)
+//                    .buildGetter();
+//
+//            Favourite favourite = (Favourite) favouriteList.get(0);
+//
+//            // Update FilterManager class with the filters associated with the favourite route
+//            FilterManager filters = FilterManager.getInstance();
+//            filters.updateFiltersWithQueryString(favourite.getFilters());
+//
+//            // Generates a route and makes sure stops are cleared
+//
+//
+//            startLocation.getEditor().setText(favourite.getStartAddress());
+//            endLocation.getEditor().setText(favourite.getEndAddress());
+//            for (Button button : transportButtons) {
+//                if (button.getUserData().equals(favourite.getTransportMode())) {
+//                    selectButton(button);
+//                }
+//            }
+//            stops.clear();
+//            generateRouteAction(favourite);
+//
+//            loadRoutesComboBox.getSelectionModel().clearSelection();
+//            loadRoutesComboBox.setPromptText("Select Saved Route");
+//        }
+//    }
+
     @FXML
-    private void loadRoute() throws SQLException {
-        int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
-        if (favouriteId != 0 && favouriteId != -1) {
-            List<?> favouriteList = SqliteQueryBuilder.create()
-                    .select("*")
-                    .from("favourites")
-                    .where("id = " + favouriteId)
-                    .buildGetter();
+    private void loadRoute() {
+        Location stop = getStop();
+        if (stop != null) {
+            stops.add(stop);
+            stopStrings.add(stopLocation.getValue());
+            stopLocation.getEditor().setText(null);
+        }
+        generateRouteAction();
+    }
 
-            Favourite favourite = (Favourite) favouriteList.get(0);
-
-            // Update FilterManager class with the filters associated with the favourite route
-            FilterManager filters = FilterManager.getInstance();
-            filters.updateFiltersWithQueryString(favourite.getFilters());
-
-            // Generates a route and makes sure stops are cleared
-
-
-            startLocation.getEditor().setText(favourite.getStartAddress());
-            endLocation.getEditor().setText(favourite.getEndAddress());
-            for (Button button : transportButtons) {
-                if (button.getUserData().equals(favourite.getTransportMode())) {
-                    selectButton(button);
-                }
-            }
-            stops.clear();
-            generateRouteAction(favourite);
-
-            loadRoutesComboBox.getSelectionModel().clearSelection();
-            loadRoutesComboBox.setPromptText("Select Saved Route");
+    @FXML
+    private void deleteRoute() {
+        if (favouritesListView.getSelectionModel().getSelectedItem() != null) {
+            int selectedStopIndex = favouritesListView.getSelectionModel().getSelectedIndex();
+            // stops.remove(selectedStopIndex);
+            favouriteStrings.remove(selectedStopIndex);
+        } else {
+            // stops.remove(stopStrings.size() - 1);
+            favouriteStrings.remove(stopStrings.size() - 1);
         }
     }
+
 
     /**
      * Adds a stop location to the collection and generates a route action.
