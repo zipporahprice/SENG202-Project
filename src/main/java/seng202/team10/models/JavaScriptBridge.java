@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import seng202.team10.business.CrashManager;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RatingAreaManager;
+import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
 import seng202.team10.gui.SettingsMenuController;
@@ -58,11 +61,20 @@ public class JavaScriptBridge {
     public String setCrashes() {
         // TODO get rid of timing performance
         final double start = System.currentTimeMillis();
+        String currentView = SettingsManager.getInstance().getCurrentView();
+
+        List<?> crashList = crashData.getCrashLocations();
+
+        boolean crashLocationsShowing = currentView.equals("Crash Locations")
+                || currentView.equals("Automatic") || currentView.equals("Heatmap & Crash Locations");
+        int maxCrashesShown = 80000;
+
+        System.out.println(crashList.size());
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("resetLayers();Promise.resolve().then(function () {");
+        stringBuilder.append("Promise.resolve().then(function () {resetLayers();}).then(function () {");
 
-        crashData.getCrashLocations().stream().forEach(crash -> {
+        crashList.stream().forEach(crash -> {
             HashMap crash1 = (HashMap) crash;
             double latitude = (double) crash1.get("latitude");
             double longitude = (double) crash1.get("longitude");
@@ -81,6 +93,7 @@ public class JavaScriptBridge {
         System.out.println(end - start);
 
         return stringBuilder.toString();
+
     }
 
     /**

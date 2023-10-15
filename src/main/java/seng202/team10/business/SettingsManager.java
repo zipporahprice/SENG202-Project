@@ -15,7 +15,7 @@ public class SettingsManager {
      * for String currentView.
      */
     private SettingsManager() {
-        currentView = "Automatic";
+        currentView = "None";
     }
 
     /**
