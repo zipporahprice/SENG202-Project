@@ -72,6 +72,10 @@ function initMap() {
         maxZoom: maxZoomLevel
     };
     map = new L.map('map', mapOptions);
+    //disables right clicks
+    map.on('contextmenu', function (e){
+        e.preventDefault();
+    });
 
     // LayerGroup to store the heatmap and crash locations
     layerGroup = L.layerGroup().addTo(map);
