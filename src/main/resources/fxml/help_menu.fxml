@@ -22,7 +22,7 @@
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label alignment="CENTER" layoutX="25.0" layoutY="452.0" prefHeight="27.0" prefWidth="287.0" text="Data Importing:" textFill="WHITE">
+         <Label alignment="CENTER" layoutX="25.0" layoutY="456.0" prefHeight="27.0" prefWidth="287.0" text="Data Importing:" textFill="WHITE">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
@@ -40,8 +40,8 @@
             </font>
          </Label>
          <Label alignment="CENTER" layoutX="27.0" layoutY="301.0" prefHeight="42.0" prefWidth="287.0" text="• 'Heatmap' view uses colours to visualise the density of crashes in different areas." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="343.0" prefHeight="42.0" prefWidth="287.0" text="• 'Crash Locations' view shows crash events as individual or clustered points." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-         <Label alignment="CENTER" layoutX="27.0" layoutY="385.0" prefHeight="55.0" prefWidth="287.0" text="• 'Automatic' uses the heatmap view when zoomed out and the crash locations view when zoomed in." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="12.0" layoutY="343.0" prefHeight="55.0" prefWidth="317.0" text="• 'Crash Locations' shows crashes as single or clustered points, coloured by average cluster crash severity." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         <Label alignment="CENTER" layoutX="27.0" layoutY="390.0" prefHeight="55.0" prefWidth="287.0" text="• 'Automatic' uses the heatmap view when zoomed out and the crash locations view when zoomed in." textAlignment="CENTER" textFill="WHITE" wrapText="true" />
       </children>
     </AnchorPane>
 

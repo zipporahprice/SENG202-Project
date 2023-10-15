@@ -18,7 +18,7 @@ public class GraphManager {
      * with the default state as pie graph of regions.
      */
     private GraphManager() {
-        currentColumnData = "Regions";
+        currentColumnData = "Region";
         currentColOfInterest = "region";
         currentAreFiltersTicked = true;
         currentAreMapBoundsTicked = true;
