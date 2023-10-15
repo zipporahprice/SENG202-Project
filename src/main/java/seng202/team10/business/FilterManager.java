@@ -380,6 +380,10 @@ public class FilterManager {
      */
     @Override
     public String toString() {
+        // NOTE: Missing 53645 due to transport mode having none of the subset we chose
+        // and Chatham Islands. We are ok with this but to note when looking at
+        // full database numbers and all crashes displayed since they will be different.
+
         List<String> where = new ArrayList<>();
 
         // If any severity selected, add to where clause
@@ -446,6 +450,7 @@ public class FilterManager {
                 || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
             return falseQuery;
         } else {
+            System.out.println(String.join(and, where));
             return String.join(and, where);
         }
     }

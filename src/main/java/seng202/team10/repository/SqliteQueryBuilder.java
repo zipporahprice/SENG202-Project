@@ -14,6 +14,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import seng202.team10.models.Crash;
 import seng202.team10.models.CrashSeverity;
 import seng202.team10.models.Favourite;
@@ -296,7 +297,9 @@ public class SqliteQueryBuilder {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query.toString())) {
             // Loop through the results until no result is left
+            int counter = 0;
             while (rs.next()) {
+                counter += 1;
                 Object temp = null;
                 if (allColumnsFromTable) {
                     if (table.equals("crashes")) {
@@ -309,6 +312,8 @@ public class SqliteQueryBuilder {
                 }
                 data.add(temp);
             }
+            System.out.println(data.size());
+            System.out.println(counter);
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }

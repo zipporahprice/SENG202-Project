@@ -82,7 +82,6 @@ public class DatabaseManager {
      * Initialises database and checks if populated.
      */
     public void initialiseDatabase(String fileName) {
-        double start = System.currentTimeMillis();
         CrashManager manager = new CrashManager();
         List<?> crashes = manager.getCrashLocations();
         if (crashes.size() == 0) {
@@ -100,9 +99,6 @@ public class DatabaseManager {
                 throw new RuntimeException(e); /// Potentially not needed (wth42)
             }
         }
-
-        double end = System.currentTimeMillis();
-        System.out.println(end - start);
     }
 
     /**

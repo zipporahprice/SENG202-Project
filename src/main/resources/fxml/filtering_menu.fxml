@@ -57,9 +57,9 @@
             <VBox layoutX="38.0" layoutY="42.0" spacing="15.0">
                 <children>
                     <CheckBox fx:id="nonInjuryCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Non Injury" textFill="WHITE" userData="1" />
-                    <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" userData="2" />
-                    <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" userData="4" />
-                    <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Death" textFill="WHITE" userData="8" />
+                    <CheckBox fx:id="minorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Minor Crash" textFill="WHITE" userData="4" />
+                    <CheckBox fx:id="majorCrashCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Major Crash" textFill="WHITE" userData="16" />
+                    <CheckBox fx:id="deathCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Death" textFill="WHITE" userData="64" />
                 </children>
             </VBox>
             <VBox layoutX="156.0" layoutY="42.0" spacing="5.0" />
