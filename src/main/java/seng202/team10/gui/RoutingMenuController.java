@@ -84,6 +84,8 @@ public class RoutingMenuController implements Initializable, MenuController {
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
 
+    private static boolean isRoutePresent ;
+
 
     /**
      * Initializes the JavaFX controller when the associated FXML file is loaded.
@@ -103,7 +105,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         transportButtons.add(bikeButton);
         transportButtons.add(walkingButton);
         selectedButton = carButton;
-        removeRoute.setDisable(true);
+
         stopsListView.setItems(stopStrings);
         stopsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -119,6 +121,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         });
         controller = this;
         loadManager();
+
+        if(!isRoutePresent){
+            removeRoute.setDisable(true);
+        }
+
     }
 
 
@@ -166,6 +173,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         } else {
             MainController.javaScriptConnector.call("displayRoute", Route
                     .routesToJsonArray(routesList), modeChoice);
+            isRoutePresent = true;
         }
     }
 
@@ -795,7 +803,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
         MainController.javaScriptConnector.call("removeRoute");
-
+        isRoutePresent = false;
+        startLocation.setPromptText("Start Location");
+        startLocation.getEditor().setText("");
+        endLocation.getEditor().setText("");
+        endLocation.setPromptText("End Location");
         removeRoute.setDisable(true);
 
     }

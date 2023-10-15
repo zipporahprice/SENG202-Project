@@ -387,6 +387,10 @@ function displayRoute(routesIn, transportMode) {
     });
 }
 
+function isRoutesPresent(routes) {
+    return Array.isArray(routes) && routes.length !== 0;
+}
+
 /**
  * Removes the current route being displayed (will not do anything if there is no route currently displayed)
  */
@@ -394,6 +398,7 @@ function removeRoute() {
     routes.forEach((r) => {
         r.remove();
     });
+    map.removeLayer(markerLayer);
     routes = [];
 }
 
