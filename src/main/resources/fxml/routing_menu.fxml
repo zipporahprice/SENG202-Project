@@ -4,16 +4,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="689.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RoutingMenuController">
+<StackPane prefHeight="739.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RoutingMenuController">
 
     <children>
         <Button fx:id="addStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addStop" prefHeight="43" prefWidth="121.0" styleClass="address-button-add-style" stylesheets="@style.css" text="Add Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
@@ -24,7 +22,7 @@
                 <Tooltip styleClass="custom-tool-tip" text="Add the Stop" />
             </tooltip>
             <StackPane.margin>
-                <Insets left="335.0" top="390.0" />
+                <Insets left="335.0" top="430.0" />
             </StackPane.margin>
         </Button>
         <Button fx:id="removeStopButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#removeStop" prefHeight="43" prefWidth="122.0" styleClass="address-button-remove-style" stylesheets="@style.css" text="Remove Stop" textFill="WHITE" StackPane.alignment="TOP_LEFT">
@@ -35,12 +33,12 @@
                 <Tooltip styleClass="custom-tool-tip" text="Remove a Stop" />
             </tooltip>
             <StackPane.margin>
-                <Insets left="480.0" top="390.0" />
+                <Insets left="480.0" top="430.0" />
             </StackPane.margin>
         </Button>
         <Button fx:id="saveRouteButton" mnemonicParsing="false" onAction="#saveRoute" styleClass="address-button-style" stylesheets="@style.css" text="Save Route" StackPane.alignment="TOP_LEFT">
             <StackPane.margin>
-                <Insets left="335.0" top="440.0" />
+                <Insets left="335.0" top="485.0" />
             </StackPane.margin>
             <tooltip>
                 <Tooltip styleClass="custom-tool-tip" text="Save a Route" />
@@ -59,7 +57,7 @@
                 <Tooltip styleClass="custom-tool-tip" text="Select a Saved Route" />
             </tooltip>
             <StackPane.margin>
-                <Insets left="335.0" top="490.0" />
+                <Insets left="335.0" top="535.0" />
             </StackPane.margin>
             <prefWidth>280.0</prefWidth>
             <prefHeight>43.0</prefHeight>
@@ -122,7 +120,7 @@
                 <Font name="System Bold" size="15.0" />
             </font>
             <StackPane.margin>
-                <Insets left="335.0" top="190.0" />
+                <Insets left="335.0" top="210.0" />
             </StackPane.margin>
             <padding>
                 <Insets left="10.0" />
@@ -139,20 +137,20 @@
             <Insets left="10.0" />
          </padding>
          <StackPane.margin>
-            <Insets left="480.0" top="190.0" />
+            <Insets left="480.0" top="210.0" />
          </StackPane.margin>
       </Button>
-      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="340.0" top="110.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefHeight="25.0" prefWidth="260.0" promptText="End Location" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="endLocation" editable="true" onAction="#setEnd" onShowing="#loadEndOptions" prefHeight="25.0" prefWidth="260.0" promptText="End Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_RIGHT">
          <StackPane.margin>
-            <Insets left="340.0" top="150.0" />
+            <Insets right="14.0" top="160.0" />
          </StackPane.margin>
       </ComboBox>
-      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" StackPane.alignment="TOP_LEFT">
+      <ComboBox fx:id="stopLocation" editable="true" onAction="#setStop" onShowing="#loadStopOptions" prefHeight="25.0" prefWidth="260.0" promptText="Stop Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="340.0" top="268.0" />
          </StackPane.margin>
