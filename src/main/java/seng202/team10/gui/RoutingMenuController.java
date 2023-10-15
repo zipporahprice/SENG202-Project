@@ -565,6 +565,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
         MainController.javaScriptConnector.call("removeRoute");
+        MainController.javaScriptConnector.call("resetLayers");
         removeRoute.setDisable(true);
 
     }
@@ -619,11 +620,17 @@ public class RoutingMenuController implements Initializable, MenuController {
         startLocation.getEditor().setText(startLoc);
         endLocation.getEditor().setText(endLoc);
         stopLocation.getEditor().setText(stopLoc);
+        startAddress = startLoc;
+        stopAddress = stopLoc;
+        endAddress = endLoc;
         for (Button button : transportButtons) {
             if (button.getUserData().equals(mode)) {
                 selectButton(button);
             }
         }
+
+        // update clear button based on manager
+        removeRoute.setDisable(route.getRemoveRouteDisabled());
     }
 
     /**
@@ -636,6 +643,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setEndLocation(endLocation.getEditor().getText());
         route.setStopLocation(stopLocation.getEditor().getText());
         route.setTransportMode(modeChoice);
+        route.setRemoveRouteDisabled(removeRoute.isDisabled());
     }
 
 }

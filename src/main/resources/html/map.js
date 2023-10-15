@@ -42,8 +42,8 @@ let jsConnector = {
     changeDrawingColourToRating: changeDrawingColourToRating,
     updateView: updateView,
     updateReviewContent: updateReviewContent,
-    runDataUpdate: runDataUpdate
-
+    runDataUpdate: runDataUpdate,
+    resetLayers: resetLayers
 };
 
 /**
@@ -527,6 +527,7 @@ function resetLayers() {
 
     // Emptying heatmap testData data list and markerLayer's markers
     testData.data = [];
+    heatmapLayer.setData(testData);
     markerLayer.clearLayers();
 }
 
