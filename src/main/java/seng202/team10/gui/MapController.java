@@ -1,14 +1,13 @@
 package seng202.team10.gui;
 
-
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import seng202.team10.models.GeoLocator;
 import seng202.team10.business.JavaScriptBridge;
+import seng202.team10.models.GeoLocator;
 
 
 /**

@@ -48,3 +48,11 @@
 
 
 }
+.markers-style.extra-large-number .cluster-text {
+    font-size: 10px; /* Adjust font size for extra large numbers */
+}
+
+/* CSS for reducing font size when the number is greater than 10,000 */
+.markers-style.large-number .cluster-text {
+    font-size: 12px; /* Adjust font size for large numbers */
+}

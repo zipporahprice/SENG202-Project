@@ -1,16 +1,24 @@
 package seng202.team10.unittests.models;
 
-import org.junit.jupiter.api.Test;
-import seng202.team10.models.Review;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.junit.jupiter.api.Test;
+import seng202.team10.models.Review;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+
+/**
+ * JUnit test class for testing the 'toString' method of the 'Review' class.
+ */
 public class ReviewTest {
 
+    /**
+     * Tests the 'toString' method of the 'Review' class when there are crashes.
+     */
     @Test
     public void testToStringWithCrashes() {
         List<HashMap<String, Object>> crashes = new ArrayList<>();
@@ -24,6 +32,9 @@ public class ReviewTest {
         assertEquals(expected, review.toString());
     }
 
+    /**
+     * Tests the 'toString' method of the 'Review' class when there are no crashes.
+     */
     @Test
     public void testToStringWithoutCrashes() {
         List<HashMap<String, Object>> crashes = new ArrayList<>();

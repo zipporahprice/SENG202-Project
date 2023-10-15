@@ -3,11 +3,16 @@ package seng202.team10.gui;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.util.Pair;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RatingAreaManager;
+import seng202.team10.models.GeoLocator;
 import seng202.team10.models.Location;
 import seng202.team10.repository.SqliteQueryBuilder;
 
@@ -22,6 +27,21 @@ public class RatingAreaMenuController implements MenuController {
     public Label ratingAreaText;
     @FXML
     public Label numCrashesAreaLabel;
+
+    @FXML
+    private Label radiusText;
+
+    @FXML
+    private Slider radiusSlider;
+
+    @FXML
+    private ComboBox startLocation;
+
+    private String startRadius;
+    GeoLocator geolocator = new GeoLocator();
+
+
+
 
     @Override
     public void updateManager() {
@@ -61,4 +81,59 @@ public class RatingAreaMenuController implements MenuController {
             alert.showAndWait();
         }
     }
+
+    /**
+     * This public method updates the slider value and displays it in the radiusText component.
+     */
+    @FXML
+    public void updateSlider() {
+
+        int startSliderValue = (int) Math.round(radiusSlider.getValue());
+
+
+        radiusText.setText("Radius: " + Integer.toString(startSliderValue) + " km");
+
+    }
+
+    /**
+     * This private method loads start location options into the
+     * startLocation combo box based on user input.
+     */
+    @FXML
+    private void loadStartOptions() {
+        String address = startLocation.getEditor().getText().trim();
+
+        ObservableList<String> addressOptions = geolocator.getAddressOptions(address);
+        startLocation.setItems(addressOptions);
+        startLocation.getEditor().setText(address);
+    }
+
+    /**
+     * This private method sets the startRadius variable based
+     * on the selected item in the startLocation combo box.
+     */
+    @FXML
+    private void setStart() {
+        String selectedItem = (String) startLocation.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            startRadius = selectedItem;
+        }
+    }
+
+    /**
+     * This method takes the user to their entered location.
+     */
+    @FXML
+    public void panToLocation() {
+        String address = startRadius;
+        Pair<Location, String> startResult = geolocator.getLocation(address);
+
+        Location startMarker = startResult.getKey();
+
+        MainController.javaScriptConnector
+                .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
+
+
+    }
+
 }

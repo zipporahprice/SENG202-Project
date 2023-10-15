@@ -34,7 +34,8 @@ public class Review {
      * @param crashes Map of Lists of all of the crashes for the segments.
      */
     public Review(double dangerRating, double maxSegmentSeverity, String maxWeather, int startYear,
-                  int endYear, int totalNumPoints, String finalRoad, List<HashMap<String, Object>> crashes) {
+                  int endYear, int totalNumPoints, String finalRoad,
+                  List<HashMap<String, Object>> crashes) {
         this.dangerRating = dangerRating;
         this.maxSegmentSeverity = maxSegmentSeverity;
         this.maxWeather = maxWeather;

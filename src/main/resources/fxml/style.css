@@ -38,6 +38,12 @@
     -fx-background-color: #2c2c2c;
     -fx-background-radius: 40px;
 }
+.quitButton {
+    -fx-background-color: red;
+    -fx-background-radius: 40px;
+    -fx-opacity: 75%;
+}
+
 .filterButtonColor{
     -fx-background-color: #3c3c3c;
     -fx-background-radius: 40px;

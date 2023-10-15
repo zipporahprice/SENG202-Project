@@ -43,6 +43,8 @@ let jsConnector = {
     updateView: updateView,
     updateReviewContent: updateReviewContent,
     runDataUpdate: runDataUpdate,
+    panToLocation: panToLocation,
+    runDataUpdate: runDataUpdate,
     resetLayers: resetLayers
 };
 
@@ -54,6 +56,7 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
+
     const nzBounds = [
         [-47, 166], // Southwest coordinates of nz
         [-34, 179]  // Northeast coordinates of nz
@@ -63,8 +66,8 @@ function initMap() {
     const maxZoomLevel = 18;
     // Setup map
     let mapOptions = {
-        center: [-43.5, 172.5],
-        zoom: 11,
+        center: [-41.0, 172.0],
+        zoom: 5.5,
         layers:[baseLayer],
         zoomControl: false,
         maxBounds: nzBounds,
@@ -109,6 +112,7 @@ function initMap() {
         position: 'topright'
     }).addTo(map);
 
+
     // Setup potential layers for views
     heatmapLayer = new HeatmapOverlay(cfg);
     markerLayer = L.markerClusterGroup({
@@ -118,10 +122,15 @@ function initMap() {
 
 
             return L.divIcon({
-                html: '<div class="markers-style ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
+                html: '<div class="markers-style ' + clusterColor +
+                    (cluster.getChildCount() > 100000 ? ' extra-large-number' : cluster.getChildCount() > 10000 ? ' large-number' : '') +
+                    '">' +
+                    '<span class="cluster-text">' + cluster.getChildCount() + '</span>' +
+                    '</div>',
                 className: 'marker-style',
                 iconSize: L.point(32, 32)
             });
+
 
         }
     });
@@ -394,9 +403,7 @@ function displayRoute(routesIn, transportMode) {
     });
 }
 
-function isRoutesPresent(routes) {
-    return Array.isArray(routes) && routes.length !== 0;
-}
+
 
 /**
  * Removes the current route being displayed (will not do anything if there is no route currently displayed)
@@ -623,3 +630,8 @@ function changeDrawingColourToRating(rating) {
         })
     })
 }
+
+function panToLocation(lat, lng) {
+    map.setView([lat, lng], 15);
+}
+

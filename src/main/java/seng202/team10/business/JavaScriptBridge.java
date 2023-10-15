@@ -91,7 +91,7 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {showLayers();});");
-        MainController.javaScriptConnector.call("runDataUpdate",stringBuilder.toString());
+        MainController.javaScriptConnector.call("runDataUpdate", stringBuilder.toString());
     }
 
     /**
@@ -313,5 +313,6 @@ public class JavaScriptBridge {
     public void enableRefreshButton() {
         mainController.enableRefresh();
     }
+
 }
 

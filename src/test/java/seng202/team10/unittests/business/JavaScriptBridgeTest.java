@@ -1,26 +1,24 @@
 package seng202.team10.unittests.business;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import seng202.team10.business.CrashManager;
 import seng202.team10.business.JavaScriptBridge;
-import seng202.team10.gui.MainController;
 import seng202.team10.business.SettingsManager;
+import seng202.team10.gui.MainController;
+
 
 class JavaScriptBridgeTest {
 
@@ -61,12 +59,12 @@ class JavaScriptBridgeTest {
 
     @Test
     void testSendCoordinates() {
-        String jsonInput = "{" +
-                "\"routeId\":1," +
-                "\"coordinates\":[{\"lat\":10,\"lng\":20}]," +
-                "\"instructionRoads\":[\"Road1\"]," +
-                "\"instructionDistance\":[10]" +
-                "}";
+        String jsonInput = "{"
+                + "\"routeId\":1,"
+                + "\"coordinates\":[{\"lat\":10,\"lng\":20}],"
+                + "\"instructionRoads\":[\"Road1\"],"
+                + "\"instructionDistance\":[10]"
+                + "}";
 
         javaScriptBridge.sendCoordinates(jsonInput);
         //not asserted yet
