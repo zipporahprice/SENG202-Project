@@ -73,6 +73,17 @@
     -fx-alignment: center-left;
 }
 
+.location-combo-box {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
+    -fx-font: 12 arail; -fx-font-style: normal;
+    -fx-text-fill: white;
+}
+
+.list-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 5, 5);
+    -fx-font: 15 arail; -fx-font-style: normal;
+}
+
 .combo-box > .list-cell {
     -fx-text-fill: white;
 }

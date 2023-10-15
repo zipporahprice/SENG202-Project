@@ -19,9 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -79,6 +77,8 @@ public class RoutingMenuController implements Initializable, MenuController {
 
     @FXML
     private Button removeRoute;
+    @FXML
+    ListView<String> stopsListView = new ListView<>();
 
 
     private static List<Location> matchedPoints;
@@ -93,7 +93,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     private String stopAddress;
 
     private PopOver popOver;
-    private List<Button> transportButtons = new ArrayList<>();
+    private final List<Button> transportButtons = new ArrayList<>();
+    private ObservableList<String> stopStrings = FXCollections.observableArrayList();
+
 
 
     /**
@@ -114,10 +116,9 @@ public class RoutingMenuController implements Initializable, MenuController {
         transportButtons.add(bikeButton);
         transportButtons.add(walkingButton);
         selectedButton = carButton;
-
         removeRoute.setDisable(true);
-
-
+        stopsListView.setItems(stopStrings);
+        stopsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         loadRoutesComboBox.setOnAction((ActionEvent event) -> {
             Object selectedItem = loadRoutesComboBox.getSelectionModel().getSelectedItem();
@@ -408,6 +409,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location stop = getStop();
         if (stop != null) {
             stops.add(stop);
+            stopStrings.add(stopLocation.getValue());
+            stopLocation.getEditor().setText(null);
         }
         generateRouteAction();
     }
@@ -420,11 +423,17 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeStop() throws SQLException {
         if (stops.size() >= 1) {
-            stops.remove(stops.size() - 1);
+            if (!stopsListView.getSelectionModel().getSelectedItem().isEmpty()) {
+                int selectedStopIndex = stopsListView.getSelectionModel().getSelectedIndex();
+                stops.remove(selectedStopIndex);
+                stopStrings.remove(selectedStopIndex);
+            } else {
+                stopStrings.remove(-1);
+            }
+
             generateRouteAction();
         }
     }
-
 
     /**
      * Calculates and returns a type Result that contains information on points along a route.
@@ -768,7 +777,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
-
     /**
      * Calls the JS function, removeRoute.
      * When the corresponding button is pressed in the
@@ -807,9 +815,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
         return total;
     }
-
-
-
 
     /**
      * Enacts the selection of a given button when a click event occurs.
@@ -878,7 +883,5 @@ public class RoutingMenuController implements Initializable, MenuController {
         route.setStopLocation(stopLocation.getEditor().getText());
         route.setTransportMode(modeChoice);
     }
-
-
 
 }
