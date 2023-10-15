@@ -3,7 +3,7 @@ package seng202.team10.oldcucumber;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
-import seng202.team10.models.JavaScriptBridge;
+import seng202.team10.business.JavaScriptBridge;
 
 /**
  * Step definitions for testing map display features via Cucumber BDD tests.
