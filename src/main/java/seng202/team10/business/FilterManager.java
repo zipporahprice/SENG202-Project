@@ -450,7 +450,6 @@ public class FilterManager {
                 || regionsSelected.isEmpty() || holidaysSelected.isEmpty()) {
             return falseQuery;
         } else {
-            System.out.println(String.join(and, where));
             return String.join(and, where);
         }
     }

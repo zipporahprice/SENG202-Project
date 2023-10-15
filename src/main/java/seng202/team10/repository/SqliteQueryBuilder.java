@@ -337,8 +337,6 @@ public class SqliteQueryBuilder {
                 }
                 data.add(temp);
             }
-            System.out.println(data.size());
-            System.out.println(counter);
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
