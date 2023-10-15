@@ -129,4 +129,36 @@ public class RatingAreaManager {
         boundingBoxMax = null;
         boundingBoxMin = null;
     }
+
+    public String rateAreaHelper() {
+        // Gets the bounding boxes and bounding circle information
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        Location boxMin = ratingAreaManager.getBoundingBoxMin();
+        Location boxMax = ratingAreaManager.getBoundingBoxMax();
+        Location circleCentre = ratingAreaManager.getBoundingCircleCentre();
+        double circleRadius = ratingAreaManager.getBoundingCircleRadius();
+
+        // Gets the boundingWhere string according to
+        // what bounding information is not null.
+        String boundingWhere = null;
+        if (boxMin != null || boxMax != null) {
+            boundingWhere = "minX >= " + boxMin.getLongitude()
+                    + " AND maxX <= " + boxMax.getLongitude()
+                    + " AND minY >= " + boxMin.getLatitude()
+                    + " AND maxY <= " + boxMax.getLatitude() + ")";
+
+        } else if (circleCentre != null) {
+            // Bounding box to lessen the load
+            boundingWhere = "minX >= " + (circleCentre.getLongitude() - circleRadius)
+                    + " AND maxX <= " + (circleCentre.getLongitude() + circleRadius)
+                    + " AND minY >= " + (circleCentre.getLatitude() - circleRadius)
+                    + " AND maxY <= " + (circleCentre.getLatitude() + circleRadius) + ")";
+
+            // Pythagoras theorem calculation compared to circle radius
+            boundingWhere += " AND (SQRT(POW(" + circleCentre.getLongitude()
+                    + " - longitude, 2) + POW(" + circleCentre.getLatitude()
+                    + " - latitude, 2)) <= " + circleRadius + ")";
+        }
+        return boundingWhere;
+    }
 }
