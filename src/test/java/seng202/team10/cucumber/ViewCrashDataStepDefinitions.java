@@ -12,14 +12,13 @@ import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 
 /**
  * Step definitions for Cucumber BDD testing related to viewing crash data.
- *
+ * <p>
  * Handles scenarios related to selecting, viewing, and asserting crash information,
  * utilizing CrashCsvImporter for data import, and interacting with the database
  * to validate UI operations. Also manages setup and assertions for test scenarios
@@ -72,8 +71,8 @@ public class ViewCrashDataStepDefinitions {
         double minLng = crashSelected.getLongitude() - range;
         double maxLng = crashSelected.getLongitude() + range;
 
-        String whereClause = "latitude BETWEEN " + minLat + " AND " + maxLat +
-                " AND longitude BETWEEN " + minLng + " AND " + maxLng;
+        String whereClause = "latitude BETWEEN " + minLat + " AND " + maxLat
+                + "\n AND longitude BETWEEN " + minLng + " AND " + maxLng;
 
         List crashesFromDatabase = SqliteQueryBuilder.create()
                 .select("object_id").from("crashes")
