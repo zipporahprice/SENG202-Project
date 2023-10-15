@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.util.Pair;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team10.business.RouteManager;
+import seng202.team10.models.Favourite;
 import seng202.team10.models.Location;
 import seng202.team10.models.Route;
+import seng202.team10.repository.DatabaseManager;
+import seng202.team10.repository.SqliteQueryBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,6 +61,25 @@ public class RouteManagerTest {
         assertNotNull(result);
         assertEquals(5, result.getKey());
         assertTrue(result.getValue() >= 0 && result.getValue() <= 10);
+    }
+
+    @Test
+    void testFavouriteNames() {
+        // Setup to make sure database is empty
+        DatabaseManager.getInstance().resetDb();
+
+        // Adding a favourite
+        String favouriteName = "Home";
+        Favourite favourite = new Favourite("start", "end", 20.0,
+                30.0, 40.0, 50.0, "", "", favouriteName);
+        SqliteQueryBuilder.create().insert("favourites").buildSetter(List.of(favourite));
+
+        // Check names has the new favourite's name
+        List<?> favouriteNames = RouteManager.getFavouriteNames();
+        Assertions.assertEquals(((HashMap<?, ?>)favouriteNames.get(0)).get("route_name"), favouriteName);
+
+        // Tear down to make sure database is fresh without this favourite
+        DatabaseManager.getInstance().resetDb();
     }
 
     @Test
