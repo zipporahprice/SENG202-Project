@@ -302,9 +302,6 @@ public class JavaScriptBridge {
         void mapLoaded();
     }
 
-    public void printTime(String time) {
-        System.out.println(time);
-    }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;

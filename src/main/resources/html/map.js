@@ -66,8 +66,8 @@ function initMap() {
     const maxZoomLevel = 18;
     // Setup map
     let mapOptions = {
-        center: [-41.0, 172.0],
-        zoom: 5.5,
+        center: [-43.5, 172.5],
+        zoom: 11,
         layers:[baseLayer],
         zoomControl: false,
         maxBounds: nzBounds,
