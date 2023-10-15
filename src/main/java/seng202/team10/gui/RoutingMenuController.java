@@ -22,7 +22,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -31,7 +30,6 @@ import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RouteManager;
-import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.GeoLocator;
@@ -189,7 +187,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @param textField The TextField near which the popover should be displayed.
      * @param time      The duration (in seconds) for the fade-out animation.
      */
-    private void showPopOver(String message, TextField textField, double time) {
+    private void showPopOver(String message, ComboBox<String> textField, double time) {
         Label label = new Label(message);
         popOver = new PopOver(label);
         popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
@@ -219,7 +217,15 @@ public class RoutingMenuController implements Initializable, MenuController {
             return null;
         }
         Pair<Location, String> startResult = geolocator.getLocation(address);
-        return startResult.getKey();
+
+        Location startMarker = startResult.getKey();
+        String errorMessageStart = startResult.getValue();
+        if (errorMessageStart != null) {
+            showPopOver(errorMessageStart, startLocation, 5);
+            return null;
+        }
+
+        return startMarker;
     }
 
     @FXML
@@ -250,7 +256,15 @@ public class RoutingMenuController implements Initializable, MenuController {
             return null;
         }
         Pair<Location, String> endResult = geolocator.getLocation(address);
-        return endResult.getKey();
+
+        Location endMarker = endResult.getKey();
+        String errorEndMessage = endResult.getValue();
+        if (errorEndMessage != null) {
+            showPopOver(errorEndMessage, endLocation, 5);
+            return null;
+        }
+        return endMarker;
+
     }
 
     @FXML
@@ -277,7 +291,15 @@ public class RoutingMenuController implements Initializable, MenuController {
             return null;
         }
         Pair<Location, String> stopResult = geolocator.getLocation(address);
-        return stopResult.getKey();
+
+        Location stopMarker = stopResult.getKey();
+        String errorStopMessage = stopResult.getValue();
+        if (errorStopMessage != null) {
+            showPopOver(errorStopMessage, stopLocation, 5);
+            return null;
+        }
+
+        return stopMarker;
     }
 
     @FXML
