@@ -280,9 +280,9 @@ public class GraphController implements Initializable, MenuController {
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {
                     case 1 -> column = "Non-injury";
-                    case 2 -> column = "Minor";
-                    case 4 -> column = "Serious";
-                    case 8 -> column = "Fatal";
+                    case 4 -> column = "Minor";
+                    case 16 -> column = "Serious";
+                    case 64 -> column = "Fatal";
                     default -> log.error("Invalid severity type");
                 }
             } else if (columnOfInterest.equals("holiday")) {
