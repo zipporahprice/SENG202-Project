@@ -395,8 +395,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             filters.updateFiltersWithQueryString(favourite.getFilters());
 
             // Generates a route and makes sure stops are cleared
-            stops.clear();
-            generateRouteAction(favourite);
+
 
             startLocation.getEditor().setText(favourite.getStartAddress());
             endLocation.getEditor().setText(favourite.getEndAddress());
@@ -405,6 +404,11 @@ public class RoutingMenuController implements Initializable, MenuController {
                     selectButton(button);
                 }
             }
+            stops.clear();
+            generateRouteAction(favourite);
+
+            loadRoutesComboBox.getSelectionModel().clearSelection();
+            loadRoutesComboBox.setPromptText("Select Saved Route");
         }
     }
 
@@ -540,9 +544,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      */
     public void toggleModeButton(ActionEvent event) {
         Button chosenButton = (Button) event.getSource();
-        if (!Objects.equals(chosenButton, selectedButton)) {
-            selectButton(chosenButton);
-        }
+        selectButton(chosenButton);
     }
 
     /**
@@ -553,14 +555,16 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @param chosenButton Button to be selected.
      */
     public void selectButton(Button chosenButton) {
-        if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) {
-            selectedButton.getStyleClass().remove("clickedButtonColor");
-            selectedButton.getStyleClass().add("hamburgerStyle");
+        if (!Objects.equals(chosenButton, selectedButton)) {
+            if (!Objects.equals(chosenButton, selectedButton) && selectedButton != null) {
+                selectedButton.getStyleClass().remove("clickedButtonColor");
+                selectedButton.getStyleClass().add("hamburgerStyle");
+            }
+            selectedButton = chosenButton;
+            chosenButton.getStyleClass().remove("hamburgerStyle");
+            chosenButton.getStyleClass().add("clickedButtonColor");
+            modeChoice = (String) chosenButton.getUserData();
         }
-        selectedButton = chosenButton;
-        chosenButton.getStyleClass().remove("hamburgerStyle");
-        chosenButton.getStyleClass().add("clickedButtonColor");
-        modeChoice = (String) chosenButton.getUserData();
     }
 
     /**
