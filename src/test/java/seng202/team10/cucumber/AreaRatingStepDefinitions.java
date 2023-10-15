@@ -75,7 +75,7 @@ public class AreaRatingStepDefinitions {
      */
     @Then("the rated area is calculated for the area")
     public void ratedArea() {
-        Pair<Double, Integer> result = RatingAreaManager.queryHelper(boundingWhere);
+        Pair<Double, Integer> result = RatingAreaManager.getInstance().queryHelper(boundingWhere);
         assertTrue(result.getFirst() >= 0 && result.getFirst() <= 10);
         assertTrue(result.getSecond() >= 0);
     }
