@@ -5,11 +5,11 @@ Feature: Favourite
     Then the "route1" route is saved in the database
 
   Scenario: User wants to load a favourite route
-    Given there is a route saved called "route2"
+    Given there is a route saved called "route2" with starting location "Uni-Cycle Cycleway Canterbury"
     When the user selects route "route2" and clicks "load" route
     Then the location "route2" has a start location matching "Uni-Cycle Cycleway Canterbury"
 
   Scenario: User wants to delete a favourite route
-    Given there is a route saved called "route3"
+    Given there is a route saved called "route3" with starting location "Uni-Cycle Cycleway Canterbury"
     When the user selects route "route3" and clicks "delete" route
     Then the route "route3" is deleted from the database
