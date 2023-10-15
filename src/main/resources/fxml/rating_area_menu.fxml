@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<StackPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RatingAreaMenuController">
+<StackPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.RatingAreaMenuController">
 
 
    <AnchorPane fx:id="outputPane" maxHeight="144.0" maxWidth="280.0" prefHeight="144.0" prefWidth="280.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
@@ -35,56 +39,20 @@
          <Font name="System Bold" size="15.0" />
       </font>
    </Button>
-   <AnchorPane fx:id="radiusPane" maxHeight="70.0" maxWidth="280.0" prefHeight="70.0" prefWidth="280.0" styleClass="sideBarColor" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
-      <children>
-         <HBox layoutX="80.0" layoutY="20.0" prefHeight="17.0" prefWidth="100.0" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
-
-            <Label fx:id="radiusText" alignment="CENTER" layoutX="90.0" layoutY="112.0" prefHeight="17.0" prefWidth="110.0" text="Radius: 0 km" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="2.0" />
-               </HBox.margin>
-            </Label>
-
-
-         </HBox>
-
-         <Slider fx:id="radiusSlider" blockIncrement="1.0" layoutX="14.0" layoutY="3.0" maxWidth="-Infinity" minWidth="-Infinity" onMouseReleased="#updateSlider" prefWidth="40.0" value="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" StackPane.alignment="CENTER_RIGHT">
-            <padding>
-               <Insets left="40.0" right="40.0" />
-            </padding></Slider>
-
-      </children>
-      <StackPane.margin>
-         <Insets left="335.0" top="280.0" />
-      </StackPane.margin>
-   </AnchorPane>
 
    <ComboBox fx:id="startLocation" editable="true" onAction="#setStart" onShowing="#loadStartOptions" prefHeight="25.0" prefWidth="260.0" promptText="Start Location" styleClass="location-combo-box" stylesheets="@style.css" StackPane.alignment="TOP_LEFT">
       <StackPane.margin>
          <Insets left="340.0" top="230.0" />
       </StackPane.margin>
    </ComboBox>
-<!--   <Button mnemonicParsing="false" onMouseClicked="#getStart" text="Click to confirm Location">-->
-<!--      <StackPane.margin>-->
-<!--         <Insets left="335.0" top="300.0" />-->
-<!--      </StackPane.margin>-->
-<!--   </Button>-->
-   <Button mnemonicParsing="false" onMouseClicked="#createCircle" prefHeight="43" prefWidth="100.0" styleClass="buttonColor" stylesheets="@style.css" text="Circle" textFill="WHITE">
-      <StackPane.margin>
-         <Insets left="180.0" top="200.0" />
-      </StackPane.margin>
-   </Button>
 
-   <Button mnemonicParsing="false" onMouseClicked="#createRectangle" prefHeight="43" prefWidth="100.0" styleClass="buttonColor" stylesheets="@style.css" text="Rectangle" textFill="WHITE">
+   <Button mnemonicParsing="false" onMouseClicked="#panToLocation" prefHeight="43" prefWidth="260.0" styleClass="buttonColor" stylesheets="@style.css" text="Go to Location" textFill="WHITE" StackPane.alignment="TOP_LEFT">
       <StackPane.margin>
-         <Insets left="480.0" top="200.0" />
+         <Insets left="335.0" top="300.0" />
       </StackPane.margin>
-   </Button>
-
-   <Button mnemonicParsing="false" onMouseClicked="#clearLayers" prefHeight="43" prefWidth="260.0" styleClass="buttonColor" stylesheets="@style.css" text="Clear Layers" textFill="WHITE">
-      <StackPane.margin>
-         <Insets left="335.0" top="400.0" />
-      </StackPane.margin>
+      <font>
+         <Font name="System Bold" size="15.0" />
+      </font>
    </Button>
 
 

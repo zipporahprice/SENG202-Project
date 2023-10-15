@@ -43,9 +43,7 @@ let jsConnector = {
     updateView: updateView,
     updateReviewContent: updateReviewContent,
     runDataUpdate: runDataUpdate,
-    drawCircle: drawCircle,
-    drawRectangle: drawRectangle,
-    clearDrawing: clearDrawing
+    panToLocation: panToLocation,
     runDataUpdate: runDataUpdate,
     resetLayers: resetLayers
 };
@@ -58,8 +56,6 @@ function initMap() {
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
 
-    circleLayer = L.circle([0,0], {radius : 0});
-    rectangleLayer = L.rectangle([[0,0],[0,0]]);
 
     const nzBounds = [
         [-47, 166], // Southwest coordinates of nz
@@ -72,7 +68,7 @@ function initMap() {
     let mapOptions = {
         center: [-43.5, 172.5],
         zoom: 11,
-        layers:[baseLayer, circleLayer, rectangleLayer],
+        layers:[baseLayer],
         zoomControl: false,
         maxBounds: nzBounds,
         minZoom: minZoomLevel,
@@ -635,51 +631,7 @@ function changeDrawingColourToRating(rating) {
     })
 }
 
-function drawCircle(lat, lng, radius) {
-    if(map.hasLayer(rectangleLayer)) {
-        map.removeLayer(rectangleLayer);
-    }
-    circleLayer.setLatLng([lat, lng]);
-    circleLayer.setRadius(radius*1000);
-    if(!map.hasLayer(circleLayer)) {
-        circleLayer.addTo(map);
-    }
-
-
-    map.panTo([lat,lng]);
-
-}
-
-function drawRectangle(lat,lng,radius) {
-    if(map.hasLayer(circleLayer)) {
-        map.removeLayer(circleLayer);
-    }
-    var radiusLat = radius / 111;
-    var radiusLong = radius/ (111 * Math.cos(lat * Math.PI/180));
-
-    var minLat = lat - radiusLat;
-    var maxLat = lat + radiusLat;
-    var minLong = lng - radiusLong;
-    var maxLong = lng + radiusLong;
-
-    rectangleLayer.setBounds([[minLat, minLong], [maxLat, maxLong]]);
-    if(!map.hasLayer(rectangleLayer)) {
-        rectangleLayer.addTo(map);
-    }
-
-
-    map.panTo([lat,lng]);
-
-
-}
-
-function clearDrawing() {
-    if(map.hasLayer(circleLayer)) {
-        map.removeLayer(circleLayer);
-    }
-    if(map.hasLayer(rectangleLayer)) {
-        map.removeLayer(rectangleLayer);
-    }
-
+function panToLocation(lat, lng) {
+    map.setView([lat, lng], 15);
 }
 
