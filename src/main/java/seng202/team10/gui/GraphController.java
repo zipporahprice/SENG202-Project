@@ -150,7 +150,8 @@ public class GraphController implements Initializable, MenuController {
 
         setTooltipInfo(pieGraph); //sets informative tooltips for each slice
 
-        if (pieGraph.getData().size() == 0 || (noCrashes == true && currentChartData.equals("Vehicle Type"))) {
+        if (pieGraph.getData().size() == 0
+                || (noCrashes == true && currentChartData.equals("Vehicle Type"))) {
             toggleNoPieGraph();
 
         }
@@ -428,7 +429,8 @@ public class GraphController implements Initializable, MenuController {
 //        }
 //    }
 //
-//    private ObservableList<PieChart.Data> applyFiltersIfNeeded(ObservableList<PieChart.Data> data) {
+//    private ObservableList<PieChart.Data> applyFiltersIfNeeded(
+//          ObservableList<PieChart.Data> data) {
 //        if (areFiltersTicked || areMapBoundsTicked) {
 //            pieChartMade.setVisible(false);
 //            List<?> filteredData = getPieChartData();
@@ -442,7 +444,8 @@ public class GraphController implements Initializable, MenuController {
 //        return data;
 //    }
 //
-//    private ObservableList<PieChart.Data> processFilteredData(ObservableList<PieChart.Data> data, List<?> filteredData) {
+//    private ObservableList<PieChart.Data> processFilteredData(
+//          ObservableList<PieChart.Data> data, List<?> filteredData) {
 //        // Process the filtered data and return the updated data
 //        // Implement your logic to apply filters here
 //        // This depends on your specific requirements and database structure
