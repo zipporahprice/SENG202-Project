@@ -147,10 +147,23 @@ public class JavaScriptBridge {
                 // Cast each item in the array to a JSONObject
                 JSONObject coordJson = (JSONObject) ajsonArray;
                 // Extract latitude and longitude from the JSONObject
-                double lat = (double) coordJson.get("lat");
-                double lng = (double) coordJson.get("lng");
+                Object lat = (Object) coordJson.get("lat");
+                Object lng = (Object) coordJson.get("lng");
+                double finallat = 0;
+                double finallng = 0;
+                if (lat instanceof Long latLong) {
+                    finallat = (latLong).doubleValue();
+                } else if (lat instanceof Double latDouble) {
+                    finallat = latDouble;
+                }
+                if (lng instanceof Long lngLong) {
+                    finallng = lngLong.doubleValue();
+                } else if (lng instanceof Double lngDouble) {
+                    finallng = lngDouble;
+                }
+
                 // Add a new Coordinate object to the list
-                coordinates.add(new Location(lat, lng));
+                coordinates.add(new Location(finallat, finallng));
             }
 
 
