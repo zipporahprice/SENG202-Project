@@ -76,6 +76,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
     private ObservableList<String> favouriteStrings = FXCollections.observableArrayList();
+    private Favourite loadedFavourite;
 
 
     /**
@@ -201,6 +202,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void setStart() {
         String selectedItem = startLocationComboBox.getSelectionModel().getSelectedItem();
+        loadedFavourite = null;
         if (selectedItem != null) {
             startAddress = selectedItem;
         }
@@ -241,6 +243,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void setEnd() {
         String selectedItem = endLocationComboBox.getSelectionModel().getSelectedItem();
+        loadedFavourite = null;
         if (selectedItem != null) {
             endAddress = selectedItem;
         }
@@ -363,6 +366,7 @@ public class RoutingMenuController implements Initializable, MenuController {
             System.out.println("hello");
             System.out.println(favouriteList.size());
             Favourite favourite = (Favourite) favouriteList.get(0);
+            loadedFavourite = favourite;
 
             // Update FilterManager class with the filters associated with the favourite route
             FilterManager filters = FilterManager.getInstance();
@@ -453,7 +457,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     private void generateRouteAction() {
         Location start = getStart();
         Location end = getEnd();
-        if (start != null && end != null) {
+        if (loadedFavourite != null) {
+            generateRouteAction(loadedFavourite);
+        } else if (start != null && end != null) {
             routeLocations(start, end);
             removeRoute.setDisable(false);
         }
