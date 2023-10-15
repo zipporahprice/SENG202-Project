@@ -26,6 +26,11 @@
                      <Font size="10.0" />
                   </font>
                </Label>
+               <Label fx:id="noPieGraphLabel" layoutX="104.0" layoutY="184.0" prefHeight="83.0" prefWidth="332.0" style="-fx-text-fill: white;" text="There is no data matching the options selected. Please change your selection/s to view a pie graph." textAlignment="CENTER" wrapText="true">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Label>
             </children>
          </AnchorPane>
           <AnchorPane layoutX="741.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="99.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">

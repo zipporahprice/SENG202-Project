@@ -286,6 +286,10 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     public void refreshData() {
         showLoadingSpinner();
         MainController.javaScriptConnector.call("updateDataShown");
+        GraphController graphController = GraphController.graphController;
+        if (graphController != null) {
+            graphController.updateGraph();
+        }
         disableRefresh();
         hideLoadingSpinner();
     }

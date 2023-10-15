@@ -39,6 +39,8 @@ public class GraphController implements Initializable, MenuController {
     private boolean areFiltersTicked = true;
     private boolean areMapBoundsTicked = true;
     private String currentChart = "Pie Graph"; //for initial state of the graph
+    public static GraphController graphController;
+    private boolean noCrashes = true;
     @FXML
     private PieChart pieChartMade;
     @FXML
@@ -53,15 +55,17 @@ public class GraphController implements Initializable, MenuController {
     private CheckBox filtersCheckBox;
     @FXML
     private CheckBox mapBoundsCheckBox;
+    @FXML
+    private Label noPieGraphLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadManager();
-        //setChartOptions();  todo look at deleting
 
         setPieChartDataOptions();
         pieChartSqlTestData = newPieChartData(columnOfInterest);
         setPieGraph(pieChartMade, pieChartSqlTestData);
+        graphController = this;
     }
 
     /**
@@ -102,16 +106,21 @@ public class GraphController implements Initializable, MenuController {
         mapBoundsCheckBox.setSelected(areMapBoundsTicked);
     }
 
+    private void toggleNoPieGraph() {
+        pieChartMade.setVisible(false);
+        pieChartMade.setLabelsVisible(false);
+        pieChartMade.setLabelLineLength(0);
+        pieChartMade.setTitle("");
+        noPieGraphLabel.setVisible(true);
+
+    }
+
     private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
+
+
         if (pieGraph.getData().size() != 0) { //removing any old data from the pie graph
             pieGraph.getData().clear();
         }
-
-        for (PieChart.Data data : pieData) {
-            pieGraph.getData().add(data);
-        } //adding new data to the pie graph
-
-        pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
 
         //basic settings for the pie graph
         pieGraph.setLegendVisible(false);
@@ -121,6 +130,15 @@ public class GraphController implements Initializable, MenuController {
         pieGraph.setStartAngle(87);
         holidayInfoLabel.setVisible(false);
         vehiclesInfoLabel.setVisible(false);
+        noPieGraphLabel.setVisible(false);
+
+
+        for (PieChart.Data data : pieData) {
+            pieGraph.getData().add(data);
+        } //adding new data to the pie graph
+
+        pieGraph.setTitle("Crashes in Aotearoa by " + currentChartData);
+
 
         if (currentChartData.equals("Weather")) {
             pieGraph.setLegendVisible(true); //because a couple of slices too small to see
@@ -131,6 +149,12 @@ public class GraphController implements Initializable, MenuController {
         }
 
         setTooltipInfo(pieGraph); //sets informative tooltips for each slice
+
+        if (pieGraph.getData().size() == 0
+                || (noCrashes == true && currentChartData.equals("Vehicle Type"))) {
+            toggleNoPieGraph();
+
+        }
     }
 
     private void setTooltipInfo(PieChart pieGraph) {
@@ -207,6 +231,9 @@ public class GraphController implements Initializable, MenuController {
             double count = ((Number) vehicleHashMap.get("COUNT(*)")).doubleValue();
             sliceNames.add(column.toString());
             sliceCounts.add(count);
+            if (count > 0) {
+                noCrashes = false;
+            }
         }
 
         //adding pie chart data only if the vehicle was involved i.e. sliceName = 1
@@ -220,14 +247,12 @@ public class GraphController implements Initializable, MenuController {
 
         }
 
-        log.error("Invalid vehicle type!");
-        //because it should have returned in the previous loop
-
-        return null;
+        return new PieChart.Data("", 0); //in case there is no vehicle involved
     }
 
     private ObservableList<PieChart.Data> newPieChartVehicleData() {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
+        noCrashes = true;
 
         //avoid complex SQL query by creating PieChart.Data elements
         // by vehicle type to add to result
@@ -254,15 +279,17 @@ public class GraphController implements Initializable, MenuController {
         result.add(trainData);
         result.add(truckData);
 
+        if (result.size() == 0 || noCrashes == true) {
+            toggleNoPieGraph();
+        }
+
         return result;
     }
 
     private ObservableList<PieChart.Data> newPieChartData(String columnOfInterest) {
         ObservableList<PieChart.Data> result = FXCollections.observableArrayList();
 
-        if (columnOfInterest.equals("truck_involved")) {
-            //because truck is the last data item to be set and
-            // what columnOfInterest will be at the end.
+        if (currentChartData.equals("Vehicle Type")) {
             result = newPieChartVehicleData();
             return result;
         }
@@ -283,9 +310,9 @@ public class GraphController implements Initializable, MenuController {
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {
                     case 1 -> column = "Non-injury";
-                    case 2 -> column = "Minor";
-                    case 4 -> column = "Serious";
-                    case 8 -> column = "Fatal";
+                    case 4 -> column = "Minor";
+                    case 16 -> column = "Serious";
+                    case 64 -> column = "Fatal";
                     default -> log.error("Invalid severity type");
                 }
             } else if (columnOfInterest.equals("holiday")) {
@@ -314,49 +341,12 @@ public class GraphController implements Initializable, MenuController {
             result.add(new PieChart.Data(sliceName, sliceCounts.get(i)));
         }
 
+        if (result.size() == 0) {
+            toggleNoPieGraph();
+        }
+
         return result;
     }
-
-
-    //    /** //todo look at deleting
-    //     * Method to set chart options for dropdown, can only select 1 graph.
-    //     */
-    //    public void setChartOptions() {
-    //        chartChoiceBox.getItems().addAll("Pie Graph", "Line Graph");
-    //        chartChoiceBox.setValue(currentChart);
-    //        if (currentChart.equals("Pie Graph")) {
-    //            graphsDataPane.setVisible(true);
-    //            //todo set line graph pane visibility false
-    //        } else {
-    //            graphsDataPane.setVisible(false);
-    //            //TODO set line graph data options
-    //        }
-    //        chartChoiceBox.getSelectionModel()
-    //                .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-    //                    if (newValue != null) {
-    //                        currentChart = (String) newValue;
-    //                    }
-    //                    // Adjusted for the new option.
-    //                    switch (currentChart) {
-    //                        case "Pie Graph":
-    //                            // Code to show the Pie Graph.
-    //                            //TODO refactor newPieChartData into here.
-    //                            graphsDataPane.setVisible(true);
-    //                            //todo set line graph pane visibility false
-    //                            break;
-    //                        case "Line Graph":
-    //                            // Code to show Line Graph.
-    //                            graphsDataPane.setVisible(false);
-    //                            //todo set line graph pane visibility true
-    //
-    //                            break;
-    //                        default:
-    //                            // Other cases.
-    //                            log.error("uh oh wrong choiceBox option");
-    //                            break;
-    //                    }
-    //                });
-    //  }
 
 
     /**
@@ -390,12 +380,75 @@ public class GraphController implements Initializable, MenuController {
                 });
     }
 
+    /**
+     * Updates the graph showing with the selected columnOfInterest.
+     */
     @FXML
-    private void updateGraph() {
+    public void updateGraph() {
         ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
-        pieChartMade.getData().removeAll(); //clearing the old data
+
+        currentChartData = (String) chartDataComboBox.getValue();
+
+
         pieChartMade.setVisible(false);
         setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data
-        pieChartMade.setVisible(true);
+        if (newPieData.size() == 0) {
+            toggleNoPieGraph();
+            pieChartMade.setVisible(false);
+        } else {
+            pieChartMade.setVisible(true);
+        }
     }
 }
+
+//todo continue bug fixing
+
+//    @FXML
+//    public void updateGraph() {
+//        ObservableList<PieChart.Data> newPieData;
+//        currentChartData = (String) chartDataComboBox.getValue();
+//        System.out.println("CURRENT CHART DATA : " + currentChartData);
+//
+//        if (currentChartData.equals("Vehicle Type")) {
+//            // When "Vehicle Type" is selected, use the special handling
+//            System.out.println("VEHICLE TYPE  SELECTED");
+//            newPieData = newPieChartVehicleData();
+//        } else {
+//            // For other options, apply filters if necessary
+//            newPieData = applyFiltersIfNeeded(newPieChartData(columnOfInterest));
+//        }
+//
+//        pieChartMade.getData().clear(); // Clear the old data
+//        pieChartMade.setVisible(false);
+//        setPieGraph(pieChartMade, newPieData); // Update the pie graph with new data
+//        if (newPieData.size() == 0) {
+//            toggleNoPieGraph();
+//            pieChartMade.setVisible(false);
+//        } else {
+//            pieChartMade.setVisible(true);
+//        }
+//    }
+//
+//    private ObservableList<PieChart.Data> applyFiltersIfNeeded(
+//          ObservableList<PieChart.Data> data) {
+//        if (areFiltersTicked || areMapBoundsTicked) {
+//            pieChartMade.setVisible(false);
+//            List<?> filteredData = getPieChartData();
+//
+//            // Process filteredData if needed
+//
+//            // Return the processed data
+//            return processFilteredData(data, filteredData);
+//        }
+//
+//        return data;
+//    }
+//
+//    private ObservableList<PieChart.Data> processFilteredData(
+//          ObservableList<PieChart.Data> data, List<?> filteredData) {
+//        // Process the filtered data and return the updated data
+//        // Implement your logic to apply filters here
+//        // This depends on your specific requirements and database structure
+//        return data;
+//    }
+//}
