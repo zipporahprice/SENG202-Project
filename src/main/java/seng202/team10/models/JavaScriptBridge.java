@@ -56,9 +56,8 @@ public class JavaScriptBridge {
      * Retrieves a list of crash data and converts it to a JSON format.
      *
      * @return A JSON representation of crash data containing latitude and longitude information.
-     * @throws SQLException If there is an error while retrieving crash data from the database.
      */
-    public static void setCrashes() {
+    public void setCrashes() {
         CrashManager crashData = new CrashManager();
         List<?> crashList = crashData.getCrashLocations();
         updateCrashesByJavascript(crashList);

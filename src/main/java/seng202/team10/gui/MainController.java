@@ -112,7 +112,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 javaScriptConnector = (JSObject) webEngine.executeScript("jsConnector");
-                JavaScriptBridge.setCrashes();
+                javaScriptBridge.setCrashes();
                 progressBarTimeline.stop();
                 animateProgressBarToFull(progressBar);
             }
