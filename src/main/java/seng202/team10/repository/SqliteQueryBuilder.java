@@ -23,7 +23,6 @@ import seng202.team10.models.Favourite;
 /**
  * Builder class of SQL queries for the SQLite database.
  * Functions to chain include create, select, from, where, and build.
- * Future developments look to create functions for delete, insert, update, group by.
  *
  * @author Angelica Silva
  * @author Christopher Wareing
@@ -120,6 +119,18 @@ public class SqliteQueryBuilder {
     }
 
     /**
+     * Takes a table to delete to and appends to current query.
+     * @param table table to delete from
+     * @return SQLiteQueryBuilder instance to chain methods
+     */
+    public SqliteQueryBuilder delete(String table) {
+        query.append("DELETE FROM ").append(table).append(" ");
+        this.table = table;
+
+        return this;
+    }
+
+    /**
      * Takes a comma separated string of columns and appends to current query.
      *
      * @param columns Comma separated string of columns or "*" denoting all columns of table
@@ -195,6 +206,19 @@ public class SqliteQueryBuilder {
     public SqliteQueryBuilder where(String conditions) {
         query.append("WHERE ").append(conditions).append(" ");
         return this;
+    }
+
+    /**
+     * Takes the query in the builder object and a list of objects
+     * and deletes it to the given table in the query.
+     */
+    public void buildDeleter() {
+        try (Connection conn = databaseManager.connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(query.toString());
+        } catch (SQLException sqlException) {
+            log.error(sqlException);
+        }
     }
 
     /**
