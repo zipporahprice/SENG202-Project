@@ -41,45 +41,9 @@ public class RatingAreaMenuController implements MenuController {
 
         // If a bounding area exists, then query in to get rating
         if (boundingWhere != null) {
-            String select = "AVG(severity), COUNT()";
-            String from = "crashes";
 
-            FilterManager filterManager = FilterManager.getInstance();
-            String filterWhere = filterManager.toString();
-            String[] filterList = filterWhere.split(" AND ");
-
-            // Takes away the 4 ANDS that make up the viewport
-            // bounds we do not want in our query.
-            String filterWhereWithoutViewport = String.join(" AND ",
-                    Arrays.copyOf(filterList, filterList.length - 4));
-
-            String rtreeFind = "object_id IN (SELECT id FROM rtree_index WHERE " + boundingWhere;
-
-            List severityList = SqliteQueryBuilder
-                    .create()
-                    .select(select)
-                    .from(from)
-                    .where(filterWhereWithoutViewport + " AND " + rtreeFind)
-                    .buildGetter();
-
-            HashMap<String, Object> resultHashMap = (HashMap) severityList.get(0);
-
-            // Calculates the score based on the query result
-            double score = 0.0;
-            int total = 0;
-            if (resultHashMap.get("AVG(severity)") != null) {
-                double averageSeverity = (double) resultHashMap.get("AVG(severity)");
-                total = (int) resultHashMap.get("COUNT()");
-
-                if (total > 0) {
-                    // Actual average severity will range from 1 to 8
-                    // Score rating massaged to be out of 10 and in a range from 0 to 10.
-                    double scaleFactor = 10.0 / Math.log(11.0);
-                    score = Math.log(averageSeverity + 1) * scaleFactor;
-                    score = Math.min(10, score);
-                }
-            }
-
+            double score = RatingAreaManager.queryHelper(boundingWhere).getFirst();
+            int total = RatingAreaManager.queryHelper(boundingWhere).getSecond();
             // Changes the visual cues with colour of area on map and text within info box.
             MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
             ratingAreaText.setText("Danger: "
