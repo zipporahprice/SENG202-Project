@@ -389,6 +389,12 @@ public class GraphController implements Initializable, MenuController {
                 });
     }
 
+    /**
+     * Refreshes and updates a Pie Chart graph with new data.
+     * Clears the old data, sets the new data, and makes the graph visible.
+     * Example usage:
+     * updateGraph();
+     */
     @FXML
     public void updateGraph() {
         ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);

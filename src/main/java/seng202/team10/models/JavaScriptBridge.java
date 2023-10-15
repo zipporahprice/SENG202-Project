@@ -314,5 +314,6 @@ public class JavaScriptBridge {
     public void enableRefreshButton() {
         mainController.enableRefresh();
     }
+
 }
 

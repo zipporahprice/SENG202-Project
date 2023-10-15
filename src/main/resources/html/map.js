@@ -42,7 +42,10 @@ let jsConnector = {
     changeDrawingColourToRating: changeDrawingColourToRating,
     updateView: updateView,
     updateReviewContent: updateReviewContent,
-    runDataUpdate: runDataUpdate
+    runDataUpdate: runDataUpdate,
+    drawCircle: drawCircle,
+    drawRectangle: drawRectangle,
+    clearDrawing: clearDrawing
 
 };
 
@@ -53,6 +56,9 @@ function initMap() {
     baseLayer= new L.TileLayer('https://tile.csse.canterbury.ac.nz/hot/{z}/{x}/{y}.png', { // UCs tilemap server
         attribution: '© OpenStreetMap contributors<br>Served by University of Canterbury'
     });
+
+    circleLayer = L.circle([0,0], {radius : 0});
+    rectangleLayer = L.rectangle([[0,0],[0,0]]);
 
     const nzBounds = [
         [-47, 166], // Southwest coordinates of nz
@@ -65,7 +71,7 @@ function initMap() {
     let mapOptions = {
         center: [-43.5, 172.5],
         zoom: 11,
-        layers:[baseLayer],
+        layers:[baseLayer, circleLayer, rectangleLayer],
         zoomControl: false,
         maxBounds: nzBounds,
         minZoom: minZoomLevel,
@@ -109,6 +115,7 @@ function initMap() {
         position: 'topright'
     }).addTo(map);
 
+
     // Setup potential layers for views
     heatmapLayer = new HeatmapOverlay(cfg);
     markerLayer = L.markerClusterGroup({
@@ -118,10 +125,15 @@ function initMap() {
 
 
             return L.divIcon({
-                html: '<div class="markers-style ' + clusterColor + '">' + cluster.getChildCount() + '</div>',
+                html: '<div class="markers-style ' + clusterColor +
+                    (cluster.getChildCount() > 100000 ? ' extra-large-number' : cluster.getChildCount() > 10000 ? ' large-number' : '') +
+                    '">' +
+                    '<span class="cluster-text">' + cluster.getChildCount() + '</span>' +
+                    '</div>',
                 className: 'marker-style',
                 iconSize: L.point(32, 32)
             });
+
 
         }
     });
@@ -387,9 +399,7 @@ function displayRoute(routesIn, transportMode) {
     });
 }
 
-function isRoutesPresent(routes) {
-    return Array.isArray(routes) && routes.length !== 0;
-}
+
 
 /**
  * Removes the current route being displayed (will not do anything if there is no route currently displayed)
@@ -615,3 +625,52 @@ function changeDrawingColourToRating(rating) {
         })
     })
 }
+
+function drawCircle(lat, lng, radius) {
+    if(map.hasLayer(rectangleLayer)) {
+        map.removeLayer(rectangleLayer);
+    }
+    circleLayer.setLatLng([lat, lng]);
+    circleLayer.setRadius(radius*1000);
+    if(!map.hasLayer(circleLayer)) {
+        circleLayer.addTo(map);
+    }
+
+
+    map.panTo([lat,lng]);
+
+}
+
+function drawRectangle(lat,lng,radius) {
+    if(map.hasLayer(circleLayer)) {
+        map.removeLayer(circleLayer);
+    }
+    var radiusLat = radius / 111;
+    var radiusLong = radius/ (111 * Math.cos(lat * Math.PI/180));
+
+    var minLat = lat - radiusLat;
+    var maxLat = lat + radiusLat;
+    var minLong = lng - radiusLong;
+    var maxLong = lng + radiusLong;
+
+    rectangleLayer.setBounds([[minLat, minLong], [maxLat, maxLong]]);
+    if(!map.hasLayer(rectangleLayer)) {
+        rectangleLayer.addTo(map);
+    }
+
+
+    map.panTo([lat,lng]);
+
+
+}
+
+function clearDrawing() {
+    if(map.hasLayer(circleLayer)) {
+        map.removeLayer(circleLayer);
+    }
+    if(map.hasLayer(rectangleLayer)) {
+        map.removeLayer(rectangleLayer);
+    }
+
+}
+
