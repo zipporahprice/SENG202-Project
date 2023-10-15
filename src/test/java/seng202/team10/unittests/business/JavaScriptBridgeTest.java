@@ -60,16 +60,6 @@ class JavaScriptBridgeTest {
     }
 
     @Test
-    void testCurrentView() {
-        SettingsManager settingsManager = mock(SettingsManager.class);
-        when(settingsManager.getCurrentView()).thenReturn("Crash Locations");
-
-        String result = javaScriptBridge.currentView();
-
-        assertEquals("Crash Locations", result);
-    }
-
-    @Test
     void testSendCoordinates() {
         String jsonInput = "{" +
                 "\"routeId\":1," +

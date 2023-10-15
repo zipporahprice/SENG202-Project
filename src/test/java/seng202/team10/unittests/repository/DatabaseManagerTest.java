@@ -34,6 +34,23 @@ public class DatabaseManagerTest {
     @BeforeEach
     void initialiseManager() {
         manager = DatabaseManager.getInstance();
+        manager.resetDb();
+    }
+
+    /**
+     * Tests the database gets initialised to the correct size.
+     */
+    @Test
+    void testInitialiseDatabase() {
+        manager.initialiseDatabase("files/random_5_crashes.csv");
+        List<?> crashesFromDatabase = SqliteQueryBuilder.create().select("*").from("crashes").buildGetter();
+        Assertions.assertEquals(5, crashesFromDatabase.size());
+    }
+
+    @Test
+    void testCreateDatabase() {
+        manager.createNewDatabase(manager.getDatabasePath());
+        Assertions.assertTrue(manager.checkDatabaseExists(manager.getDatabasePath()));
     }
 
     /**
