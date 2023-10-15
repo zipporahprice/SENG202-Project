@@ -1,11 +1,12 @@
 package seng202.team10.gui;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
@@ -33,6 +34,8 @@ public class GraphController implements Initializable, MenuController {
     private ObservableList<PieChart.Data> pieChartSqlTestData;
     private static String columnOfInterest = "region";
     private static String currentChartData = "Region";
+    private boolean areFiltersTicked = true;
+    private boolean areMapBoundsTicked = true;
     private String currentChart = "Pie Graph"; //for initial state of the graph
     @FXML
     private PieChart pieChartMade;
@@ -51,7 +54,9 @@ public class GraphController implements Initializable, MenuController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadManager();
         //setChartOptions();  todo look at deleting
+
         setPieChartDataOptions();
         pieChartSqlTestData = newPieChartData(columnOfInterest);
         setPieGraph(pieChartMade, pieChartSqlTestData);
@@ -65,6 +70,12 @@ public class GraphController implements Initializable, MenuController {
         GraphManager graphingManager = GraphManager.getInstance();
         graphingManager.setCurrentColumnData(currentChartData);
         graphingManager.setCurrentColOfInterest(columnOfInterest);
+
+        areFiltersTicked = filtersCheckBox.isSelected();
+        graphingManager.setCurrentAreFiltersTicked(areFiltersTicked);
+
+        areMapBoundsTicked = mapBoundsCheckBox.isSelected();
+        graphingManager.setCurrentAreMapBoundsTicked(areMapBoundsTicked);
     }
 
     /**
@@ -80,6 +91,13 @@ public class GraphController implements Initializable, MenuController {
         String currentColOfInterest = graphingManager.getCurrentColOfInterest();
         columnOfInterest = currentColOfInterest;
 
+        boolean currentAreFiltersTicked = graphingManager.getCurrentAreFiltersTicked();
+        areFiltersTicked = currentAreFiltersTicked;
+        filtersCheckBox.setSelected(areFiltersTicked);
+
+        boolean currentAreMapBoundsTicked = graphingManager.getCurrentAreMapBoundsTicked();
+        areMapBoundsTicked = currentAreMapBoundsTicked;
+        mapBoundsCheckBox.setSelected(areMapBoundsTicked);
     }
 
     private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
