@@ -38,7 +38,7 @@ public class CrashSeverityTest {
     void testGetValue() {
         CrashSeverity severity = CrashSeverity.stringToCrashSeverity("Minor Crash");
         int value = severity.getValue();
-        Assertions.assertEquals(2, value);
+        Assertions.assertEquals(4, value);
     }
 
     /**
@@ -47,14 +47,14 @@ public class CrashSeverityTest {
      * @param intSeverity severity int to test
      */
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 4, 8, 9})
+    @ValueSource(ints = {1, 4, 16, 64, 9})
     void testIntToString(int intSeverity) {
         String result = CrashSeverity.intToString(intSeverity);
         switch (intSeverity) {
             case 1 -> Assertions.assertEquals("Non-Injury Crash", result);
-            case 2 -> Assertions.assertEquals("Minor Crash", result);
-            case 4 -> Assertions.assertEquals("Serious Crash", result);
-            case 8 -> Assertions.assertEquals("Fatal Crash", result);
+            case 4 -> Assertions.assertEquals("Minor Crash", result);
+            case 16 -> Assertions.assertEquals("Serious Crash", result);
+            case 64 -> Assertions.assertEquals("Fatal Crash", result);
             default -> Assertions.assertNull(result);
         }
     }
