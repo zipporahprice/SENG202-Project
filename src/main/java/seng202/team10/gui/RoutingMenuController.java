@@ -710,7 +710,8 @@ public class RoutingMenuController implements Initializable, MenuController {
                             + " as can be!");
                 } else {
                     reviewString = String.format("This route has a %.2f/10 danger rating, "
-                            + "there have been %d crashes since %d up till %d. The worst crashes occur "
+                            + "there have been %d crashes since %d up till %d. "
+                            + "The worst crashes occur "
                             + "during %s conditions, the most dangerous segment is on %s with a "
                             + "danger rating of %.2f.", review.dangerRating, review.totalNumPoints,
                             review.startYear, review.endYear, review.maxWeather, review.finalRoad,
