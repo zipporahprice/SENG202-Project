@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import javafx.scene.control.CheckBox;
 import seng202.team10.models.CrashSeverity;
 import seng202.team10.models.Location;
 import seng202.team10.models.Region;
@@ -451,6 +453,93 @@ public class FilterManager {
             return falseQuery;
         } else {
             return String.join(and, where);
+        }
+    }
+
+    /**
+     * Takes a transport mode checkbox and checks if it has been selected.
+     * Either adds or removes this transport mode to the FilterManager's list of modes.
+     *
+     * @param checkBox Checkbox representing the transport mode.
+     */
+    public static void addToTransport(CheckBox checkBox) {
+        Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getModesSelected().contains((String) toAdd)) {
+                filters.addToModes((String) toAdd);
+            }
+        } else {
+            filters.removeFromModes((String) toAdd);
+        }
+    }
+
+    /**
+     * Takes a weather checkbox and checks if it has been selected.
+     * Either adds or removes this weather from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the weather type.
+     */
+    public static void addToWeather(CheckBox checkBox) {
+        Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getWeathersSelected().contains((String) toAdd)) {
+                filters.addToWeathers((String) toAdd);
+            }
+        } else {
+            filters.removeFromWeathers((String) toAdd);
+        }
+    }
+
+    /**
+     * Takes a severity checkbox and checks if it has been selected.
+     * Either adds or removes this severity from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given severity.
+     */
+    public static void addToSeverity(CheckBox checkBox) {
+        Object toAdd = checkBox.getUserData();
+        int severity = Integer.parseInt((String) toAdd);
+        if (checkBox.isSelected()) {
+            if (!filters.getSeveritiesSelected().contains(severity)) {
+                filters.addToSeverities(severity);
+            }
+        } else {
+            filters.removeFromSeverities(severity);
+        }
+    }
+
+    /**
+     * Takes a region checkbox and checks if it has been selected.
+     * Either adds or removes this region from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given region.
+     */
+    public static void addToRegion(CheckBox checkBox) {
+        Object toAdd = checkBox.getUserData();
+        if (checkBox.isSelected()) {
+            if (!filters.getRegionsSelected().contains((String) toAdd)) {
+                filters.addToRegions((String) toAdd);
+            }
+        } else {
+            filters.removeFromRegions((String) toAdd);
+        }
+    }
+
+    /**
+     * Takes a holiday checkbox and checks if it has been selected.
+     * Either adds or removes this holiday from the FilterManager's list of selections.
+     *
+     * @param checkBox Checkbox representing the given holiday.
+     */
+    public static void addToHoliday(CheckBox checkBox) {
+        Object toAdd = checkBox.getUserData();
+        int holiday = Integer.parseInt((String) toAdd);
+        if (checkBox.isSelected()) {
+            if (!filters.getHolidaysSelected().contains(holiday)) {
+                filters.addToHolidays(holiday);
+            }
+        } else {
+            filters.removeFromHolidays(holiday);
         }
     }
 }

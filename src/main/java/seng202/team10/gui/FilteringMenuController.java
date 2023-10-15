@@ -131,107 +131,15 @@ public class FilteringMenuController implements Initializable, MenuController {
      */
     private void addToFilters(CheckBox checkBox, AnchorPane parent) {
         if (parent.equals(transportModePane)) {
-            addToTransport(checkBox);
+            FilterManager.addToTransport(checkBox);
         } else if (parent.equals(weatherPane)) {
-            addToWeather(checkBox);
+            FilterManager.addToWeather(checkBox);
         } else if (parent.equals(severityPane)) {
-            addToSeverity(checkBox);
+            FilterManager.addToSeverity(checkBox);
         } else if (parent.equals(regionsPane)) {
-            addToRegion(checkBox);
+            FilterManager.addToRegion(checkBox);
         } else if (parent.equals(holidayPane)) {
-            addToHoliday(checkBox);
-        }
-    }
-
-    /**
-     * Takes a transport mode checkbox and checks if it has been selected.
-     * Either adds or removes this transport mode to the FilterManager's list of modes.
-     *
-     * @param checkBox Checkbox representing the transport mode.
-     */
-    private void addToTransport(CheckBox checkBox) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
-        if (checkBox.isSelected()) {
-            if (!filters.getModesSelected().contains((String) toAdd)) {
-                filters.addToModes((String) toAdd);
-            }
-        } else {
-            filters.removeFromModes((String) toAdd);
-        }
-    }
-
-    /**
-     * Takes a weather checkbox and checks if it has been selected.
-     * Either adds or removes this weather from the FilterManager's list of selections.
-     *
-     * @param checkBox Checkbox representing the weather type.
-     */
-    private void addToWeather(CheckBox checkBox) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
-        if (checkBox.isSelected()) {
-            if (!filters.getWeathersSelected().contains((String) toAdd)) {
-                filters.addToWeathers((String) toAdd);
-            }
-        } else {
-            filters.removeFromWeathers((String) toAdd);
-        }
-    }
-
-    /**
-     * Takes a severity checkbox and checks if it has been selected.
-     * Either adds or removes this severity from the FilterManager's list of selections.
-     *
-     * @param checkBox Checkbox representing the given severity.
-     */
-    private void addToSeverity(CheckBox checkBox) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
-        int severity = Integer.parseInt((String) toAdd);
-        if (checkBox.isSelected()) {
-            if (!filters.getSeveritiesSelected().contains(severity)) {
-                filters.addToSeverities(severity);
-            }
-        } else {
-            filters.removeFromSeverities(severity);
-        }
-    }
-
-    /**
-     * Takes a region checkbox and checks if it has been selected.
-     * Either adds or removes this region from the FilterManager's list of selections.
-     *
-     * @param checkBox Checkbox representing the given region.
-     */
-    private void addToRegion(CheckBox checkBox) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
-        if (checkBox.isSelected()) {
-            if (!filters.getRegionsSelected().contains((String) toAdd)) {
-                filters.addToRegions((String) toAdd);
-            }
-        } else {
-            filters.removeFromRegions((String) toAdd);
-        }
-    }
-
-    /**
-     * Takes a holiday checkbox and checks if it has been selected.
-     * Either adds or removes this holiday from the FilterManager's list of selections.
-     *
-     * @param checkBox Checkbox representing the given holiday.
-     */
-    private void addToHoliday(CheckBox checkBox) {
-        FilterManager filters = FilterManager.getInstance();
-        Object toAdd = checkBox.getUserData();
-        int holiday = Integer.parseInt((String) toAdd);
-        if (checkBox.isSelected()) {
-            if (!filters.getHolidaysSelected().contains(holiday)) {
-                filters.addToHolidays(holiday);
-            }
-        } else {
-            filters.removeFromHolidays(holiday);
+            FilterManager.addToHoliday(checkBox);
         }
     }
 

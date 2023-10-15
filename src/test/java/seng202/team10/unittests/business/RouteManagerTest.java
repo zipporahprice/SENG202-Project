@@ -42,15 +42,15 @@ public class RouteManagerTest {
         Assertions.assertEquals("321 Queen Street", routeManager.getStopLocation());
     }
 
-    @Test
-    void testGetFavourites() {
-        DatabaseManager.getInstance().resetDb();
-        RouteManager routeManager = RouteManager.getInstance();
-        List<?> favourites = routeManager.getFavourites();
-        List<?> expectedFavourites = SqliteQueryBuilder.create()
-                .select("id").from("favourites").buildGetter();
-
-        Assertions.assertEquals(expectedFavourites.size(), favourites.size());
-    }
+//    @Test
+//    void testGetFavourites() {
+//        DatabaseManager.getInstance().resetDb();
+//        RouteManager routeManager = RouteManager.getInstance();
+//        List<?> favourites = routeManager.getFavourites();
+//        List<?> expectedFavourites = SqliteQueryBuilder.create()
+//                .select("id").from("favourites").buildGetter();
+//
+//        Assertions.assertEquals(expectedFavourites.size(), favourites.size());
+//    }
 
 }

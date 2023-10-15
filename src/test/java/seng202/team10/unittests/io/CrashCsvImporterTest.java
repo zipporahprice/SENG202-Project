@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import seng202.team10.cucumber.ViewCrashDataStepDefinitions;
 import seng202.team10.exceptions.DataImportException;
 import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Crash;
