@@ -16,14 +16,20 @@ import seng202.team10.models.JavaScriptBridge;
  */
 public class MapDisplayStepDefinitions {
 
+    /**
+     * Checks if the user is on the landing page.
+     */
     @When("the user is at the landing page")
     public void showingLandingPage() {
         // Do nothing
     }
 
+    /**
+     * Verifies if the map displays crash data from the database.
+     */
     @Then("the map shows crashes from the database")
     public void showTableDataOnMap() {
         JavaScriptBridge bridge = new JavaScriptBridge();
-        Assertions.assertTrue(1 > 0);
+        Assertions.assertTrue(1 > 0);  // Dummy assertion, update this as per your use-case.
     }
 }

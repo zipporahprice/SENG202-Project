@@ -32,6 +32,9 @@ public class ViewCrashDataStepDefinitions {
     private static final Logger log = LogManager.getLogger(ViewCrashDataStepDefinitions.class);
     Crash crashSelected = null;
 
+    /**
+     * Sets up the initial state and preconditions for viewing crash information.
+     */
     @Given("the user wants to see crash information")
     public void selectCrash() {
         // TODO figure out how to do the visual-based acceptance tests
@@ -48,11 +51,18 @@ public class ViewCrashDataStepDefinitions {
             log.error(dataImportException);
         }
     }
+
+    /**
+     * Simulates user action of selecting a crash instance.
+     */
     @When("The user selects crash")
     public void userSelectsCrash() {
         crashSelected = (Crash) SqliteQueryBuilder.create().select("*").from("crashes").buildGetter().get(0);
     }
 
+    /**
+     * Verifies that the selected crash data is displayed or otherwise accessible to the user.
+     */
     @Then("The user will see information on the crash")
     public void informationOfCrash() {
         double range = 0.00001;

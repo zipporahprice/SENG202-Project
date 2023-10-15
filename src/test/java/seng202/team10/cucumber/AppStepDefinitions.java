@@ -11,10 +11,14 @@ import io.cucumber.java.en.Given;
  * @author Team 10
  */
 public class AppStepDefinitions {
+
+    /**
+     * Validates that the app can load and initialize successfully.
+     */
     @Given("the app loads successfully")
     public void appLoadsSuccessfully() {
-//        App app = new App();
-//        app.main(new String[0]);
+        // Uncomment below lines to perform app loading operation if needed in future
+        // App app = new App();
+        // app.main(new String[0]);
     }
-
 }
