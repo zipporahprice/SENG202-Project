@@ -39,6 +39,7 @@ public class GraphController implements Initializable, MenuController {
     private boolean areFiltersTicked = true;
     private boolean areMapBoundsTicked = true;
     private String currentChart = "Pie Graph"; //for initial state of the graph
+    public static GraphController graphController;
     @FXML
     private PieChart pieChartMade;
     @FXML
@@ -62,6 +63,7 @@ public class GraphController implements Initializable, MenuController {
         setPieChartDataOptions();
         pieChartSqlTestData = newPieChartData(columnOfInterest);
         setPieGraph(pieChartMade, pieChartSqlTestData);
+        graphController = this;
     }
 
     /**
@@ -280,9 +282,9 @@ public class GraphController implements Initializable, MenuController {
             if (columnOfInterest.equals("severity")) {
                 switch ((int) column) {
                     case 1 -> column = "Non-injury";
-                    case 2 -> column = "Minor";
-                    case 4 -> column = "Serious";
-                    case 8 -> column = "Fatal";
+                    case 4 -> column = "Minor";
+                    case 16 -> column = "Serious";
+                    case 64 -> column = "Fatal";
                     default -> log.error("Invalid severity type");
                 }
             } else if (columnOfInterest.equals("holiday")) {
@@ -388,7 +390,7 @@ public class GraphController implements Initializable, MenuController {
     }
 
     @FXML
-    private void updateGraph() {
+    public void updateGraph() {
         ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
         pieChartMade.getData().removeAll(); //clearing the old data
         pieChartMade.setVisible(false);
