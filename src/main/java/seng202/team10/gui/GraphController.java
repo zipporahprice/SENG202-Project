@@ -40,6 +40,7 @@ public class GraphController implements Initializable, MenuController {
     private boolean areMapBoundsTicked = true;
     private String currentChart = "Pie Graph"; //for initial state of the graph
     public static GraphController graphController;
+    private GraphManager currentGraphManager = GraphManager.getInstance();
     private boolean noCrashes = true;
     @FXML
     private PieChart pieChartMade;
@@ -73,15 +74,17 @@ public class GraphController implements Initializable, MenuController {
      */
     @Override
     public void updateManager() {
-        GraphManager graphingManager = GraphManager.getInstance();
-        graphingManager.setCurrentColumnData(currentChartData);
-        graphingManager.setCurrentColOfInterest(columnOfInterest);
+//        GraphManager graphingManager = GraphManager.getInstance();
+        currentGraphManager.setCurrentColumnData(currentChartData);
+        currentGraphManager.setCurrentColOfInterest(columnOfInterest);
 
         areFiltersTicked = filtersCheckBox.isSelected();
-        graphingManager.setCurrentAreFiltersTicked(areFiltersTicked);
+        currentGraphManager.setCurrentAreFiltersTicked(areFiltersTicked);
 
         areMapBoundsTicked = mapBoundsCheckBox.isSelected();
-        graphingManager.setCurrentAreMapBoundsTicked(areMapBoundsTicked);
+        currentGraphManager.setCurrentAreMapBoundsTicked(areMapBoundsTicked);
+
+        currentGraphManager.setCurrentNoCrashes(noCrashes);
     }
 
     /**
@@ -89,21 +92,25 @@ public class GraphController implements Initializable, MenuController {
      */
     @Override
     public void loadManager() {
-        GraphManager graphingManager = GraphManager.getInstance();
+//        GraphManager graphingManager = GraphManager.getInstance();
 
-        String currentColumnData = graphingManager.getCurrentColumnData();
+        String currentColumnData = currentGraphManager.getCurrentColumnData();
         currentChartData = currentColumnData;
 
-        String currentColOfInterest = graphingManager.getCurrentColOfInterest();
+        String currentColOfInterest = currentGraphManager.getCurrentColOfInterest();
         columnOfInterest = currentColOfInterest;
 
-        boolean currentAreFiltersTicked = graphingManager.getCurrentAreFiltersTicked();
+        boolean currentAreFiltersTicked = currentGraphManager.getCurrentAreFiltersTicked();
         areFiltersTicked = currentAreFiltersTicked;
         filtersCheckBox.setSelected(areFiltersTicked);
 
-        boolean currentAreMapBoundsTicked = graphingManager.getCurrentAreMapBoundsTicked();
+        boolean currentAreMapBoundsTicked = currentGraphManager.getCurrentAreMapBoundsTicked();
         areMapBoundsTicked = currentAreMapBoundsTicked;
         mapBoundsCheckBox.setSelected(areMapBoundsTicked);
+
+        boolean currentNoCrashes = currentGraphManager.getCurrentNoCrashes();
+        noCrashes = currentNoCrashes;
+
     }
 
     private void toggleNoPieGraph() {
@@ -112,15 +119,11 @@ public class GraphController implements Initializable, MenuController {
         pieChartMade.setLabelLineLength(0);
         pieChartMade.setTitle("");
         noPieGraphLabel.setVisible(true);
-
     }
 
     private void setPieGraph(PieChart pieGraph, ObservableList<PieChart.Data> pieData) {
 
-
-        if (pieGraph.getData().size() != 0) { //removing any old data from the pie graph
-            pieGraph.getData().clear();
-        }
+        pieGraph.getData().clear();
 
         //basic settings for the pie graph
         pieGraph.setLegendVisible(false);
@@ -148,7 +151,7 @@ public class GraphController implements Initializable, MenuController {
             vehiclesInfoLabel.setVisible(true);
         }
 
-        setTooltipInfo(pieGraph); //sets informative tooltips for each slice
+        pieGraph = currentGraphManager.setTooltipInfo(pieGraph); //sets informative tooltips for each slice
 
         if (pieGraph.getData().size() == 0
                 || (noCrashes == true && currentChartData.equals("Vehicle Type"))) {
@@ -157,34 +160,16 @@ public class GraphController implements Initializable, MenuController {
         }
     }
 
-    private void setTooltipInfo(PieChart pieGraph) {
-        //getting the total number of points of interest to calculate percentage
-        int totalValue = pieGraph.getData()
-                .stream().mapToInt(data -> (int) data.getPieValue()).sum();
-
-        //creating the tooltip in the format "*percentage*, *number of points*, *slice name*"
-        pieGraph.getData().forEach(data -> {
-            String percentage = String.format("%.2f%%", (data.getPieValue() / totalValue * 100));
-            String count = String.valueOf((int) data.getPieValue());
-            String slice = data.getName();
-            Tooltip toolTipPercentRegion = new Tooltip(percentage + ", count: "
-                    + count + ", \n" + slice);
-            Tooltip.install(data.getNode(), toolTipPercentRegion);
-        });
-    }
-
     private List<?> getPieChartData() {
         String where = FilterManager.getInstance().toString();
         String[] filterList = where.split(" AND ");
 
         // Takes away the 4 ANDS that make up the viewport
         // bounds we do not want in our query.
-        String filtersWithoutViewport = String.join(" AND ",
-                Arrays.copyOf(filterList, filterList.length - 4));
+        String filtersWithoutViewport = currentGraphManager.getFiltersWithoutViewport(filterList);
 
         // Gets the filtering string with just the viewport
-        String viewportWithoutFilters = String.join(" AND ",
-                Arrays.copyOfRange(filterList, filterList.length - 4, filterList.length));
+        String viewportWithoutFilters = currentGraphManager.getViewportWithoutFilters(filterList);
 
         String finalWhere = "";
 
@@ -219,6 +204,7 @@ public class GraphController implements Initializable, MenuController {
     private PieChart.Data createVehiclePieData(String vehicle, String columnWanted) {
         columnOfInterest = columnWanted;
 
+        //todo keep
         List<?> vehicleList = getPieChartData(); //to hold the result of the sql query
 
         ArrayList<String> sliceNames = new ArrayList<>();
@@ -237,17 +223,11 @@ public class GraphController implements Initializable, MenuController {
         }
 
         //adding pie chart data only if the vehicle was involved i.e. sliceName = 1
-        for (int i = 0; i < sliceNames.size(); i++) {
-            String sliceName = sliceNames.get(i);
-            if (sliceName.equals("1")) {
-                sliceName = vehicle;
-                PieChart.Data dataToAdd = new PieChart.Data(sliceName, sliceCounts.get(i));
-                return dataToAdd;
-            }
 
-        }
+        PieChart.Data newData = currentGraphManager.addRelevantPieChartData(
+                sliceNames, sliceCounts, vehicle);
 
-        return new PieChart.Data("", 0); //in case there is no vehicle involved
+        return newData;
     }
 
     private ObservableList<PieChart.Data> newPieChartVehicleData() {
@@ -280,7 +260,7 @@ public class GraphController implements Initializable, MenuController {
         result.add(truckData);
 
         if (result.size() == 0 || noCrashes == true) {
-            toggleNoPieGraph();
+            toggleNoPieGraph(); //TODO keep
         }
 
         return result;
@@ -389,7 +369,6 @@ public class GraphController implements Initializable, MenuController {
 
         currentChartData = (String) chartDataComboBox.getValue();
 
-
         pieChartMade.setVisible(false);
         setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data
         if (newPieData.size() == 0) {
@@ -399,7 +378,41 @@ public class GraphController implements Initializable, MenuController {
             pieChartMade.setVisible(true);
         }
     }
+
 }
+
+//    @FXML
+//    public void updateGraph() {
+//        ObservableList<PieChart.Data> newPieData = newPieChartData(columnOfInterest);
+//
+//        currentChartData = (String) chartDataComboBox.getValue();
+//
+//        pieChartMade.setVisible(false);
+//        // Remove the old PieChart
+//        graphsDataPane.getChildren().remove(pieChartMade);
+//
+//        // Create a new PieChart
+//        PieChart newPieChart = new PieChart();
+//        newPieChart.setId("pieChartMade");  // Make sure to set the same ID as before
+////        newPieChart.setLayoutX(pieChartMade.getLayoutX());
+////        newPieChart.setLayoutY(pieChartMade.getLayoutY());
+////        newPieChart.setMinSize(pieChartMade.getMinWidth(), pieChartMade.getMinHeight());
+////        newPieChart.setMaxSize(pieChartMade.getMaxWidth(), pieChartMade.getMaxHeight());
+//
+//        // Add the new PieChart to the parent pane
+//        graphsDataPane.getChildren().add(newPieChart);
+//
+//        setPieGraph(newPieChart, newPieData);
+//
+//        if (newPieData.size() == 0) {
+//            toggleNoPieGraph();
+//            newPieChart.setVisible(false);
+//        } else {
+//            newPieChart.setVisible(true);
+//        }
+//    }
+
+
 
 //todo continue bug fixing
 
