@@ -68,10 +68,6 @@ public class DatabaseManager {
      */
     public static DatabaseManager getInstance() {
         if (manager == null) {
-            // todo find a way to actually get db within jar
-            // The following line can be used to reach a db file within the jar,
-            // however this will not be modifiable
-            // instance = new DatabaseManager("jdbc:sqlite:./src/main/resources/database.db");
             manager = new DatabaseManager(null);
         }
 
@@ -133,7 +129,7 @@ public class DatabaseManager {
      *
      * @return jdbc encoded url location of database
      */
-    private String getDatabasePath() {
+    public String getDatabasePath() {
         String path = DatabaseManager.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath();
         path = URLDecoder.decode(path, StandardCharsets.UTF_8);
@@ -147,7 +143,7 @@ public class DatabaseManager {
      * @param url expected location to check for database
      * @return True if database exists else false
      */
-    private boolean checkDatabaseExists(String url) {
+    public boolean checkDatabaseExists(String url) {
         File f = new File(url.substring(12));
         return f.exists();
     }
@@ -157,7 +153,7 @@ public class DatabaseManager {
      *
      * @param url url to create database at
      */
-    private void createNewDatabase(String url) {
+    public void createNewDatabase(String url) {
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();

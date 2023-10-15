@@ -1,6 +1,7 @@
 package seng202.team10.unittests.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,35 @@ public class SqliteQueryBuilderTest {
     @BeforeEach
     void testCreate() {
         builder = SqliteQueryBuilder.create();
+    }
+
+
+    /**
+     * Tests building a deleter query.
+     */
+    @Test
+    void testDeleteBuilder() {
+        SqliteQueryBuilder.create().delete("crashes").where("object_id = 80").buildDeleter();
+    }
+
+    /**
+     * Tests delete function.
+     */
+    @Test
+    void testDelete() {
+        builder.delete("crashes");
+        String expectedQuery = "DELETE FROM crashes ";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
+    }
+
+    /**
+     * Tests the groupBy function.
+     */
+    @Test
+    void testGroupBy() {
+        builder.groupBy("region");
+        String expectedQuery = "GROUP BY region ";
+        Assertions.assertEquals(expectedQuery, builder.getQuery());
     }
 
     /**

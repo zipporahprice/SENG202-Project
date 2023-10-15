@@ -22,7 +22,8 @@ import seng202.team10.models.Favourite;
 
 /**
  * Builder class of SQL queries for the SQLite database.
- * Functions to chain include create, select, from, where, and build.
+ * Functions to chain include create, insert, delete, select,
+ * groupBy, from, where, and build.
  *
  * @author Angelica Silva
  * @author Christopher Wareing
@@ -60,34 +61,6 @@ public class SqliteQueryBuilder {
     public static SqliteQueryBuilder create() {
         return new SqliteQueryBuilder();
     }
-
-    /**
-     * Takes a table name and a mapping from variable name to variable and appends
-     * a 'WITH' statement to the current query.
-     *
-     * @param tableName name of the Common Table Expression
-     * @param valuesMap Map object mapping from variable name and to variable value.
-     *
-     * @return SQLiteQueryBuilder instance to chain methods
-     */
-    public SqliteQueryBuilder with(String tableName, Map<String, Number> valuesMap) {
-        StringJoiner variableNames = new StringJoiner(", ");
-        StringJoiner variableValues = new StringJoiner(", ");
-
-        // Maps the valuesMap with key and value pairs to their respective StringJoiner
-        for (Map.Entry<String, Number> entry : valuesMap.entrySet()) {
-            variableNames.add(entry.getKey());
-            variableValues.add(String.valueOf(entry.getValue()));
-        }
-
-        query.append("WITH ").append(tableName).append(" AS (SELECT ")
-                .append(String.join(", ", valuesMap.entrySet().stream()
-                        .map(e -> e.getValue().toString() + " AS " + e.getKey())
-                        .collect(Collectors.toList())))
-                .append(") ");
-        return this;
-    }
-
 
     /**
      * Takes a table to append to and appends to current query.

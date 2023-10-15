@@ -19,7 +19,8 @@ import seng202.team10.unittests.io.CrashCsvImporterTest;
  * Test class for DatabaseManager class.
  *
  * @author Neil Alombro
- *
+ * @author Zipporah Price
+ * @author Angelica Silva
  */
 
 public class DatabaseManagerTest {
@@ -34,6 +35,26 @@ public class DatabaseManagerTest {
     @BeforeEach
     void initialiseManager() {
         manager = DatabaseManager.getInstance();
+        manager.resetDb();
+    }
+
+    /**
+     * Tests the database gets initialised to the correct size.
+     */
+    @Test
+    void testInitialiseDatabase() {
+        manager.initialiseDatabase("files/random_5_crashes.csv");
+        List<?> crashesFromDatabase = SqliteQueryBuilder.create().select("*").from("crashes").buildGetter();
+        Assertions.assertEquals(5, crashesFromDatabase.size());
+    }
+
+    /**
+     * Tests the database gets created.
+     */
+    @Test
+    void testCreateDatabase() {
+        manager.createNewDatabase(manager.getDatabasePath());
+        Assertions.assertTrue(manager.checkDatabaseExists(manager.getDatabasePath()));
     }
 
     /**
