@@ -659,6 +659,7 @@ public class RoutingMenuController implements Initializable, MenuController {
 
             Route route = new Route(List.of(routeLocations.toArray(new Location[0])));
             displayRoute(route);
+            removeRoute.setDisable(false);
         }
     }
 
@@ -709,13 +710,18 @@ public class RoutingMenuController implements Initializable, MenuController {
                     reviewString = String.format("This route has zero crashes and hence is as safe"
                             + " as can be!");
                 } else {
-                    reviewString = String.format("This route has a %.2f/10 danger rating, "
-                            + "there have been %d crashes since %d up till %d. "
-                            + "The worst crashes occur "
-                            + "during %s conditions, the most dangerous segment is on %s with a "
-                            + "danger rating of %.2f.", review.dangerRating, review.totalNumPoints,
-                            review.startYear, review.endYear, review.maxWeather, review.finalRoad,
-                            review.maxSegmentSeverity);
+                    String baseFormat = "This route has a %.2f/10 danger rating, "
+                            + "there have been %d crashes since %d up till %d.";
+                    String conditionFormat = "The worst crashes occur during %s conditions, "
+                            + "the most dangerous segment is on %s with a danger rating of %.2f.";
+                    String format = baseFormat + " " + conditionFormat;
+
+                    reviewString = String.format(
+                            format,
+                            review.dangerRating, review.totalNumPoints,
+                            review.startYear, review.endYear,
+                            review.maxWeather, review.finalRoad, review.maxSegmentSeverity
+                    );
                 }
                 MainController.javaScriptConnector.call("updateReviewContent", reviewString);
 
@@ -737,11 +743,6 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void removeRoute() {
         MainController.javaScriptConnector.call("removeRoute");
-        modeChoice = null;
-        if (selectedButton != null) {
-            selectedButton.getStyleClass().remove("clickedButtonColor");
-            selectedButton.getStyleClass().add("hamburgerStyle");
-        }
 
         removeRoute.setDisable(true);
 

@@ -340,7 +340,7 @@ function displayRoute(routesIn, transportMode) {
             routeWhileDragging: true,
             showAlternatives: true,
             router: L.Routing.mapbox('pk.eyJ1IjoiemlwcG9yYWhwcmljZSIsImEiOiJjbG45cWI3OGYwOTh4MnFyMWsya3FpbjF2In0.RM37Ev9aUxEwKS5nMxpCpg', { profile: mode }),
-            itineraryBuilder: new L.CustomItineraryBuilder() // Use the custom itinerary builder here
+            itineraryBuilder: new L.CustomItineraryBuilder(),
         }).addTo(map);
 
 
@@ -355,6 +355,7 @@ function displayRoute(routesIn, transportMode) {
                 instructionRoads.push(instruction.road);
                 instructionDistance.push(instruction.distance)
             }
+
 
 
             // Generating or retrieving a unique identifier for the route.
