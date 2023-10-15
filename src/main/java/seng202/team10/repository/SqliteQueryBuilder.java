@@ -102,7 +102,8 @@ public class SqliteQueryBuilder {
         // Checks if the table is either of the existing favourites or crashes table
         if (table.equals("favourites")) {
             columns = " (start_address, end_address, start_lat, start_lng, "
-                    + "end_lat, end_lng, filters, transport_mode, route_name) values (?,?,?,?,?,?,?,?,?)";
+                    + "end_lat, end_lng, filters, transport_mode, route_name) "
+                    + "values (?,?,?,?,?,?,?,?,?)";
         } else if (table.equals("crashes")) {
             columns = " (speed_limit, crash_year, "
                     + "crash_location1, crash_location2, severity, region, weather, "

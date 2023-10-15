@@ -6,20 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.sun.tools.javac.Main;
-import javafx.scene.control.Alert;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import seng202.team10.business.CrashManager;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RatingAreaManager;
 import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
-import seng202.team10.gui.SettingsMenuController;
+
 
 
 
@@ -53,9 +49,7 @@ public class JavaScriptBridge {
     }
 
     /**
-     * Retrieves a list of crash data and converts it to a JSON format.
-     *
-     * @return A JSON representation of crash data containing latitude and longitude information.
+     * Updates the crash data.
      */
     public void setCrashes() {
         CrashManager crashData = new CrashManager();
@@ -63,9 +57,27 @@ public class JavaScriptBridge {
         updateCrashesByJavascript(crashList);
     }
 
+
+    /**
+    * Updates crash data in a web application using JavaScript.
+    *
+    * @param crashList A list of crash data, each element is a HashMap with the following keys:
+    *                  - "latitude" (double): Latitude of the crash location.
+    *                  - "longitude" (double): Longitude of the crash location.
+    *                  - "severity" (int): Severity of the crash.
+    *                  - "crash_year" (int): Year of the crash.
+    *                  - "weather" (String): Weather conditions at the time of the crash.
+    *
+    *                   The method generates a JavaScript script to update
+    *                   the client-side crash data representation
+    *                   and executes it using a JavaScript connector
+    *                   provided by the 'MainController' class.
+    *
+    */
     public static void updateCrashesByJavascript(List<?> crashList) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Promise.resolve().then(function () {resetLayers();}).then(function () {");
+        stringBuilder.append("Promise.resolve().then(function () "
+                + "{resetLayers();}).then(function () {");
 
         crashList.stream().forEach(crash -> {
             HashMap crash1 = (HashMap) crash;
