@@ -77,6 +77,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
+    private String routeName;
 
     private String startAddress;
     private String endAddress;
@@ -303,26 +304,29 @@ public class RoutingMenuController implements Initializable, MenuController {
         String startAddress = geolocator.getAddress(start.getLatitude(),
                 start.getLongitude(), "Start");
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude(), "End");
-        Favourite favourite = new Favourite(startAddress, endAddress,
-                start.getLatitude(), start.getLongitude(), end.getLatitude(),
-                end.getLongitude(), filters, modeChoice);
-
-        List<Favourite> favourites = new ArrayList<>();
-        favourites.add(favourite);
-
-        SqliteQueryBuilder.create().insert("favourites").buildSetter(favourites);
-
-        String routeName = showRouteNameInputDialog();
+////
+        routeName = showRouteNameInputDialog();
 
         if (routeName == null || routeName.trim().isEmpty()) {
             // Show error dialog
             showErrorDialog("Invalid name", "Please provide a valid name for the route.");
             return;
         }
-
+////
         // Save routeName and Favourite in lists
         routeNames.add(routeName);
+        //favourites.add(favourite);
+
+        Favourite favourite = new Favourite(startAddress, endAddress,
+                start.getLatitude(), start.getLongitude(), end.getLatitude(),
+                end.getLongitude(), filters, modeChoice, routeName);
+
+        List<Favourite> favourites = new ArrayList<>();
         favourites.add(favourite);
+
+        SqliteQueryBuilder.create().insert("favourites").buildSetter(favourites);
+
+
     }
 
     private String showRouteNameInputDialog() {
@@ -356,27 +360,78 @@ public class RoutingMenuController implements Initializable, MenuController {
 //                        + " to " + favouriteCasted.getEndAddress(); }).toList());
 //        loadRoutesComboBox.setItems(items);
 //    }
-
     @FXML
     private void displayRoutes() {
-        ObservableList<String> items = FXCollections.observableArrayList(routeNames);
+        List<?> favouritesList = SqliteQueryBuilder.create()
+                .select("*")
+                .from("favourites")
+                .buildGetter();
+        ObservableList<String> items = FXCollections.observableArrayList(favouritesList
+                .stream().map(favourite -> {
+                    Favourite favouriteCasted = (Favourite) favourite;
+                    return favouriteCasted.getName();
+                }).toList());
         loadRoutesComboBox.setItems(items);
     }
+
+//    @FXML
+//    private void displayRoutes() {
+//        ObservableList<String> items = FXCollections.observableArrayList(routeNames);
+//        loadRoutesComboBox.setItems(items);
+//    }
 
     /**
      * Loads a selected route or favorite location from the ComboBox.
      *
      * @throws SQLException If a database error occurs during the loading operation.
      */
+//    @FXML
+//    private void loadRoute() throws SQLException {
+//        String selectedRouteName = loadRoutesComboBox.getSelectionModel().getSelectedItem();
+//
+//        // Find the index of selected routeName in routeNames list
+//        int index = routeNames.indexOf(selectedRouteName);
+//
+//        // Get the Favourite object from favourites list using the found index
+//        Favourite favouriteFromList = favourites.get(index);
+//
+//        int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
+//        if (favouriteId != 0 && favouriteId != -1) {
+//            List<?> favouriteList = SqliteQueryBuilder.create()
+//                    .select("*")
+//                    .from("favourites")
+//                    .where("id = " + favouriteId)
+//                    .buildGetter();
+//
+//            Favourite favouriteFromDB = (Favourite) favouriteList.get(0);
+//
+//            // Update FilterManager class with the filters associated with the favourite route
+//            FilterManager filters = FilterManager.getInstance();
+//            filters.updateFiltersWithQueryString(favouriteFromDB.getFilters());
+//
+//            // Generates a route and makes sure stops are cleared
+//            stops.clear();
+//            generateRouteAction(favouriteFromDB);
+//
+//            startLocation.getEditor().setText(favouriteFromDB.getStartAddress());
+//            endLocation.getEditor().setText(favouriteFromDB.getEndAddress());
+//            for (Button button : transportButtons) {
+//                if (button.getUserData().equals(favouriteFromDB.getTransportMode())) {
+//                    selectButton(button);
+//                }
+//            }
+//        }
+//    }
+
     @FXML
     private void loadRoute() throws SQLException {
-        String selectedRouteName = loadRoutesComboBox.getSelectionModel().getSelectedItem();
+//        String selectedRouteName = loadRoutesComboBox.getSelectionModel().getSelectedItem();
 
         // Find the index of selected routeName in routeNames list
-        int index = routeNames.indexOf(selectedRouteName);
+//        int index = routeNames.indexOf(selectedRouteName);
 
         // Get the Favourite object from favourites list using the found index
-        Favourite favouriteFromList = favourites.get(index);
+//        Favourite favouriteFromList = favourites.get(index);
 
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
         if (favouriteId != 0 && favouriteId != -1) {
@@ -386,20 +441,20 @@ public class RoutingMenuController implements Initializable, MenuController {
                     .where("id = " + favouriteId)
                     .buildGetter();
 
-            Favourite favouriteFromDB = (Favourite) favouriteList.get(0);
+            Favourite favourite = (Favourite) favouriteList.get(0);
 
             // Update FilterManager class with the filters associated with the favourite route
             FilterManager filters = FilterManager.getInstance();
-            filters.updateFiltersWithQueryString(favouriteFromDB.getFilters());
+            filters.updateFiltersWithQueryString(favourite.getFilters());
 
             // Generates a route and makes sure stops are cleared
             stops.clear();
-            generateRouteAction(favouriteFromDB);
+            generateRouteAction(favourite);
 
-            startLocation.getEditor().setText(favouriteFromDB.getStartAddress());
-            endLocation.getEditor().setText(favouriteFromDB.getEndAddress());
+            startLocation.getEditor().setText(favourite.getStartAddress());
+            endLocation.getEditor().setText(favourite.getEndAddress());
             for (Button button : transportButtons) {
-                if (button.getUserData().equals(favouriteFromDB.getTransportMode())) {
+                if (button.getUserData().equals(favourite.getTransportMode())) {
                     selectButton(button);
                 }
             }

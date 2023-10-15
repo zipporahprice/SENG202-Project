@@ -42,4 +42,5 @@ CREATE TABLE IF NOT EXISTS favourites (
      end_lat DOUBLE,
      end_lng DOUBLE,
      filters TEXT,
-     transport_mode TEXT);
+     transport_mode TEXT,
+     route_name TEXT);
