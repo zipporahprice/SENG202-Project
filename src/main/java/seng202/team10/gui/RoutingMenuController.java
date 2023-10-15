@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RouteManager;
+import seng202.team10.business.SettingsManager;
 import seng202.team10.models.Crash;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.GeoLocator;
@@ -524,6 +525,11 @@ public class RoutingMenuController implements Initializable, MenuController {
 
         // Shows crashes on map
         JavaScriptBridge.updateCrashesByJavascript(crashes);
+        if (SettingsManager.getInstance().getCurrentView().equals("None")) {
+            SettingsManager.getInstance().setCurrentView("Crash Locations");
+        }
+        MainController.javaScriptConnector.call("updateView");
+
 
         return new Result(dangerRatingOutOf10, startOfDangerousSegment, endOfDangerousSegment,
                 maxSegmentSeverity, maxWeather, startYear, endYear, finalSize, finalRoad);

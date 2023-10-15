@@ -238,6 +238,7 @@ function automaticViewChange() {
  */
 function updateView() {
     var currentView = javaScriptBridge.currentView();
+    javaScriptBridge.printTime(currentView);
 
     if (currentView === "Automatic") {
         automaticViewChange();

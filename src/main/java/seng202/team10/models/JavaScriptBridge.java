@@ -90,7 +90,7 @@ public class JavaScriptBridge {
      * @return The name of the current view.
      */
     public String currentView() {
-        return SettingsMenuController.currentView;
+        return SettingsManager.getInstance().getCurrentView();
     }
 
 
