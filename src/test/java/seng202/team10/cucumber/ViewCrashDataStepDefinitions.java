@@ -18,8 +18,8 @@ import java.util.List;
 
 /**
  * Step definitions for Cucumber BDD testing related to viewing crash data.
- * <p>
- * Handles scenarios related to selecting, viewing, and asserting crash information,
+ *
+ * <p>Handles scenarios related to selecting, viewing, and asserting crash information,
  * utilizing CrashCsvImporter for data import, and interacting with the database
  * to validate UI operations. Also manages setup and assertions for test scenarios
  * where crash data is visualized or queried.
