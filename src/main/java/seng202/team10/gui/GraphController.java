@@ -387,7 +387,8 @@ public class GraphController implements Initializable, MenuController {
      * @param list2 second list of pie chart data
      * @return boolean of if the lists are identical
      */
-    private boolean arePieChartDataListsIdentical(ObservableList<PieChart.Data> list1, ObservableList<PieChart.Data> list2) {
+    private boolean arePieChartDataListsIdentical(ObservableList<PieChart.Data> list1,
+                                                  ObservableList<PieChart.Data> list2) {
         if (list1.size() != list2.size()) {
             return false; // Different sizes, not identical.
         }
@@ -396,7 +397,8 @@ public class GraphController implements Initializable, MenuController {
             PieChart.Data data1 = list1.get(i);
             PieChart.Data data2 = list2.get(i);
 
-            if (!data1.getName().equals(data2.getName()) || Math.abs(data1.getPieValue() - data2.getPieValue()) > 0.001) {
+            if (!data1.getName().equals(data2.getName())
+                    || Math.abs(data1.getPieValue() - data2.getPieValue()) > 0.001) {
                 return false; // Found a difference, not identical.
             }
         }
@@ -413,7 +415,8 @@ public class GraphController implements Initializable, MenuController {
 
         currentChartData = (String) chartDataComboBox.getValue();
 
-        ObservableList<PieChart.Data> pieChartDataInController = graphController.pieChartMade.getData();
+        ObservableList<PieChart.Data> pieChartDataInController = graphController
+                .pieChartMade.getData();
         if (!arePieChartDataListsIdentical(newPieData, pieChartDataInController)) {
             pieChartMade.setVisible(false);
             setPieGraph(pieChartMade, newPieData); //updating the pie graph w new data

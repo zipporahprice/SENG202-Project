@@ -1,13 +1,21 @@
 package seng202.team10.business;
 
-import java.util.*;
+import static seng202.team10.gui.RoutingMenuController.updateCrashes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import javafx.util.Pair;
 import seng202.team10.models.Location;
 import seng202.team10.models.Review;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import static seng202.team10.gui.RoutingMenuController.updateCrashes;
+
 
 /**
  * Singleton class for storing routing options from the FXML controller class.
@@ -208,6 +216,22 @@ public class RouteManager {
                 endYear, danger.getKey(), finalRoad, crashes);
     }
 
+
+    /**
+     * Calculates segment information within a given geographic
+     * segment defined by its start and end locations.
+     * This method performs a bounding box search for crashes
+     * within the segment and calculates the total severity
+     * of those crashes while ensuring that duplicate crashes
+     * with the same object ID are not included.
+     *
+     * @param segmentStart The start location of the geographic segment.
+     * @param segmentEnd   The end location of the geographic segment.
+     * @param objectIdSet  A set containing unique object IDs to prevent duplicate crash entries.
+     * @return A Pair containing the total severity within the segment
+     *          (as a Double) and a list of crash data
+     *          within the segment (as a List of HashMaps).
+     */
     private static Pair<Double, List<HashMap<String, Object>>> calculateSegmentInfo(
             Location segmentStart, Location segmentEnd, Set<Integer> objectIdSet) {
         List<?> crashList = boundingBoxSegmentSearch(segmentStart, segmentEnd);
@@ -227,6 +251,14 @@ public class RouteManager {
     }
 
 
+    /**
+     * Finds the weather type with the highest severity ratio.
+     *
+     * @param weatherSeverityTotal Map of total severity for each weather type.
+     * @param weatherTotals Map of total occurrences of each weather type.
+     * @return Weather type with the highest severity ratio.
+     *          Returns an empty string if input is invalid or all ratios are zero.
+     */
     public static String getMaxSeverityWeather(Map<String, Integer> weatherSeverityTotal,
                                                Map<String, Integer> weatherTotals) {
         double maxWeatherSeverity = Double.MIN_VALUE;
@@ -329,6 +361,13 @@ public class RouteManager {
         return severityList;
     }
 
+    /**
+     * Calculates danger rating and final size based on set size and total value.
+     *
+     * @param setSize The set size.
+     * @param totalValue The total value associated with the set.
+     * @return A Pair with the final size and danger rating out of 10.
+     */
     public static Pair<Integer, Double> calculateDanger(int setSize, double totalValue) {
         int finalSize;
         double dangerRatingOutOf10;

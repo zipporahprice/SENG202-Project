@@ -3,15 +3,15 @@ package seng202.team10.cucumber;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import seng202.team10.business.RouteManager;
 import seng202.team10.models.Favourite;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Contains step definitions for testing favourite routes using Cucumber.
@@ -68,7 +68,8 @@ public class FavouriteStepDefinitions {
         favourite = new Favourite(start, end,
                 0, 0, 0,
                 0, null, "car", routeName);
-        SqliteQueryBuilder.create().insert("favourites").buildSetter(new ArrayList<>(Arrays.asList(favourite)));
+        SqliteQueryBuilder.create().insert("favourites")
+                .buildSetter(new ArrayList<>(Arrays.asList(favourite)));
     }
 
 
@@ -90,7 +91,7 @@ public class FavouriteStepDefinitions {
      */
     @When("the user selects route {string} and clicks {string} route")
     public void routeDeleteAction(String routeName, String action) {
-       this.routeName = routeName;
+        this.routeName = routeName;
     }
 
 
@@ -107,10 +108,12 @@ public class FavouriteStepDefinitions {
         favourite = new Favourite(start, end,
                 0, 0, 0,
                 0, null, "car", routeName);
-        SqliteQueryBuilder.create().insert("favourites").buildSetter(new ArrayList<>(Arrays.asList(favourite)));
+        SqliteQueryBuilder.create().insert("favourites")
+                .buildSetter(new ArrayList<>(Arrays.asList(favourite)));
 
         // query for route in database
-        Favourite savedRoute = (Favourite) SqliteQueryBuilder.create().select("*").from("favourites")
+        Favourite savedRoute = (Favourite) SqliteQueryBuilder.create()
+                .select("*").from("favourites")
                 .where("route_name = \"" + routeName + "\"").buildGetter().get(0);
         Assertions.assertEquals(savedRoute.getName(), routeName);
     }
@@ -126,7 +129,8 @@ public class FavouriteStepDefinitions {
     @Then("the location {string} has a start location matching {string}")
     public void routeLoaded(String routeName, String start) {
         // query for route's start address in database and check if equals start
-        Favourite savedRoute = (Favourite) SqliteQueryBuilder.create().select("*").from("favourites")
+        Favourite savedRoute = (Favourite) SqliteQueryBuilder.create()
+                .select("*").from("favourites")
                 .where("route_name = \"" + routeName + "\"").buildGetter().get(0);
         Assertions.assertEquals(savedRoute.getName(), routeName);
     }
@@ -140,7 +144,8 @@ public class FavouriteStepDefinitions {
     @Then("the route {string} is deleted from the database")
     public void routeDeleted(String routeName) {
         // delete from database
-        SqliteQueryBuilder.create().delete("favourites").where("route_name = \"" + routeName + "\"").buildDeleter();
+        SqliteQueryBuilder.create().delete("favourites")
+                .where("route_name = \"" + routeName + "\"").buildDeleter();
         // query for route name and show it is not in database
         List<?> favouriteList = SqliteQueryBuilder.create()
                 .select("*")

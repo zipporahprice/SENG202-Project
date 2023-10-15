@@ -1,9 +1,16 @@
 package seng202.team10.gui;
 
+import static seng202.team10.business.RouteManager.getOverlappingPoints;
+
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +18,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -22,10 +35,15 @@ import seng202.team10.business.FilterManager;
 import seng202.team10.business.JavaScriptBridge;
 import seng202.team10.business.RouteManager;
 import seng202.team10.business.SettingsManager;
-import seng202.team10.models.*;
+import seng202.team10.models.Favourite;
+import seng202.team10.models.GeoLocator;
+import seng202.team10.models.Location;
+import seng202.team10.models.Review;
+import seng202.team10.models.Route;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import static seng202.team10.business.RouteManager.getOverlappingPoints;
+
+
 
 /**
  * The `RoutingMenuController` class manages user
@@ -397,7 +415,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         if (favouritesListView.getSelectionModel().getSelectedItem() != null) {
             int selectedStopIndex = favouritesListView.getSelectionModel().getSelectedIndex();
             String name = favouritesListView.getSelectionModel().getSelectedItem();
-            SqliteQueryBuilder.create().delete("favourites").where("route_name = \"" + name + "\"").buildDeleter();
+            SqliteQueryBuilder.create().delete("favourites")
+                    .where("route_name = \"" + name + "\"").buildDeleter();
             favouriteStrings.remove(selectedStopIndex);
         } else {
             favouriteStrings.remove(stopStrings.size() - 1);
@@ -442,6 +461,11 @@ public class RoutingMenuController implements Initializable, MenuController {
         }
     }
 
+    /**
+     * Updates crash data and changes the current view if needed.
+     *
+     * @param crashes A list of crash data to update.
+     */
     public static void updateCrashes(List<?> crashes) {
         JavaScriptBridge.updateCrashesByJavascript(crashes);
         if (SettingsManager.getInstance().getCurrentView().equals("None")) {
@@ -565,10 +589,11 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void loadManager() {
         //List<String>
-        favouriteStrings = FXCollections.observableArrayList(RouteManager.getFavouriteNames().stream().map((favourite) -> {
-            HashMap<String, Object> favouriteHashmap = (HashMap<String, Object>) favourite;
-            return (String) favouriteHashmap.get("route_name");
-        }).toList());
+        favouriteStrings = FXCollections.observableArrayList(RouteManager
+                .getFavouriteNames().stream().map((favourite) -> {
+                    HashMap<String, Object> favouriteHashmap = (HashMap<String, Object>) favourite;
+                    return (String) favouriteHashmap.get("route_name");
+                }).toList());
 
         favouritesListView.getItems().addAll(favouriteStrings);
 

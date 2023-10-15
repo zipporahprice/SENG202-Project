@@ -1,12 +1,13 @@
 package seng202.team10.unittests.business;
 
-import java.io.File;
-import java.net.URL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,15 +15,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seng202.team10.business.RouteManager;
-import seng202.team10.exceptions.DataImportException;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.Location;
 import seng202.team10.models.Review;
-import seng202.team10.models.Route;
 import seng202.team10.repository.DatabaseManager;
 import seng202.team10.repository.SqliteQueryBuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+
 
 /**
  * Testing RouteManager class.
@@ -84,7 +84,8 @@ public class RouteManagerTest {
 
         // Check names has the new favourite's name
         List<?> favouriteNames = RouteManager.getFavouriteNames();
-        Assertions.assertEquals(((HashMap<?, ?>)favouriteNames.get(0)).get("route_name"), favouriteName);
+        Assertions.assertEquals(((HashMap<?, ?> ) favouriteNames.get(0))
+                .get("route_name"), favouriteName);
 
         // Tear down to make sure database is fresh without this favourite
         DatabaseManager.getInstance().resetDb();
@@ -130,7 +131,8 @@ public class RouteManagerTest {
         );
 
         List<String> roadsList = Arrays.asList(
-                "Cathedral Square", "Cathedral Square", "Cathedral Square", "Saint Asaph Street; St Asaph Street",
+                "Cathedral Square", "Cathedral Square", "Cathedral Square",
+                "Saint Asaph Street; St Asaph Street",
                 "Durham Street South", "Brougham Street", "Elizabeth Avenue", "Elizabeth Avenue",
                 "Elizabeth Avenue", "Hall Street", "Main Street", "Main Street"
         );
@@ -140,7 +142,8 @@ public class RouteManagerTest {
                 158.019, 107.24, 37194.621, 110.901, 167.973, 0.0
         );
 
-        Review review = RouteManager.getOverlappingPoints(coordinatesList, roadsList, distancesList);
+        Review review = RouteManager.getOverlappingPoints(coordinatesList,
+                roadsList, distancesList);
         Assertions.assertTrue(review.getDangerRating() >= 0 && review.getDangerRating() <= 10);
     }
 

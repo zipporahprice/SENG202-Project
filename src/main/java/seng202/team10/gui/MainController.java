@@ -24,8 +24,9 @@ import javafx.util.Duration;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team10.business.RatingAreaManager;
 import seng202.team10.business.JavaScriptBridge;
+import seng202.team10.business.RatingAreaManager;
+
 
 
 /**

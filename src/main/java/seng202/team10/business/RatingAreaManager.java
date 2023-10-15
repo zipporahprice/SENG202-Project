@@ -135,6 +135,16 @@ public class RatingAreaManager {
         boundingBoxMin = null;
     }
 
+
+    /**
+     * Constructs a SQL WHERE clause condition based on bounding
+     * information to filter geographic data.
+     * This method calculates the condition based on either
+     * bounding boxes or a bounding circle,
+     * whichever is available.
+     *
+     * @return A SQL WHERE clause condition as a String.
+     */
     public String rateAreaHelper() {
         // Gets the bounding boxes and bounding circle information
         RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
@@ -167,6 +177,15 @@ public class RatingAreaManager {
         return boundingWhere;
     }
 
+    /**
+    * Executes a database query to calculate the average severity and
+    * count of records from a table named "crashes."
+    * The query is filtered based on the provided bounding condition.
+    *
+    * @param boundingWhere The SQL WHERE clause condition for bounding.
+    * @return A Pair containing the calculated score (as a Double) and the
+    *       total record count (as an Integer).
+    */
     public Pair<Double, Integer> queryHelper(String boundingWhere) {
         String select = "AVG(severity), COUNT()";
         String from = "crashes";

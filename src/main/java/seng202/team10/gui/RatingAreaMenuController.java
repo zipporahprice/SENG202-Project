@@ -130,7 +130,8 @@ public class RatingAreaMenuController implements MenuController {
 
         Location startMarker = startResult.getKey();
 
-        MainController.javaScriptConnector.call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
+        MainController.javaScriptConnector
+                .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
 
 
     }
