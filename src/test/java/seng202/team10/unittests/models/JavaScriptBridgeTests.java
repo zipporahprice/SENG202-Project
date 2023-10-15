@@ -99,13 +99,13 @@ public class JavaScriptBridgeTests {
         List<HashMap<String, Object>> mockCrashData = new ArrayList<>();
         mockCrashData.add(crashEntry);
 
-//        String result = javaScriptBridge.setCrashes();
-//        System.out.println("This is : " + result);
-//        assertTrue(result.contains("addPoint(45.000000,90.000000,2,2020,'Clear');"),
-//                "String does not match expected pattern.");
-//        assertTrue(result.startsWith("resetLayers();Promise.resolve().then(function () {"),
-//                "String does not start as expected.");
-//        assertTrue(result.endsWith("}).then(function () {setHeatmapData();});"),
-//                "String does not end as expected.");
+        // String result = javaScriptBridge.setCrashes();
+        // System.out.println("This is : " + result);
+        // assertTrue(result.contains("addPoint(45.000000,90.000000,2,2020,'Clear');"),
+        //        "String does not match expected pattern.");
+        // assertTrue(result.startsWith("resetLayers();Promise.resolve().then(function () {"),
+        //         "String does not start as expected.");
+        // assertTrue(result.endsWith("}).then(function () {setHeatmapData();});"),
+        //         "String does not end as expected.");
     }
 }
