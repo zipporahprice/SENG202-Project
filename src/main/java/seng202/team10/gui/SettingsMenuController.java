@@ -20,11 +20,13 @@ public class SettingsMenuController implements Initializable, MenuController {
 
     @FXML
     private ChoiceBox viewChoiceBox;
-    public static String currentView = "None";
+    public static String currentView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setViewOptions();
+        currentView = SettingsManager.getInstance().getCurrentView();
+        viewChoiceBox.setValue(currentView);
     }
 
     /**
@@ -45,7 +47,6 @@ public class SettingsMenuController implements Initializable, MenuController {
                     } //updates the view based on the option selected
                 });
     }
-
 
     @Override
     public void updateManager() {

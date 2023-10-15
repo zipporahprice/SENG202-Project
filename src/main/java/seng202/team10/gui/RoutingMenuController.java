@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RouteManager;
+import seng202.team10.business.SettingsManager;
 import seng202.team10.models.Crash;
 import seng202.team10.models.Favourite;
 import seng202.team10.models.GeoLocator;
@@ -450,6 +451,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         double totalDistances = 0;
         double totalDistance = 0;
         Set<Integer> objectIdSet = new HashSet<>();
+        List<HashMap<String, Object>> crashes = new ArrayList<>();
 
         int j = 0;
         for (int i = 0; i < coordinates.size() - 1; i += 1) {
@@ -461,7 +463,7 @@ public class RoutingMenuController implements Initializable, MenuController {
                 totalDistances += distances.get(j);
                 j++;
             }
-            List<?> crashList = crossProductQuery(segmentStart, segmentEnd);
+            List<?> crashList = boundingBoxSegmentSearch(segmentStart, segmentEnd);
 
             int totalSeverity = 0;
             double total = 0;
@@ -470,7 +472,10 @@ public class RoutingMenuController implements Initializable, MenuController {
                 HashMap<String, Object> map = (HashMap<String, Object>) severityMap;
                 int objectId = (int) map.get("object_id");
                 if (!objectIdSet.contains(objectId)) {
+                    // Adds to the set of unique points
                     objectIdSet.add(objectId);
+                    crashes.add(map);
+
                     int currentSeverity = (int) map.get("severity");
                     totalSeverity += currentSeverity;
                     String weather = (String) map.get("weather");
@@ -540,6 +545,14 @@ public class RoutingMenuController implements Initializable, MenuController {
         FilterManager filterManager = FilterManager.getInstance();
         int startYear = filterManager.getEarliestYear();
         int endYear = filterManager.getLatestYear();
+
+        // Shows crashes on map
+        JavaScriptBridge.updateCrashesByJavascript(crashes);
+        if (SettingsManager.getInstance().getCurrentView().equals("None")) {
+            SettingsManager.getInstance().setCurrentView("Crash Locations");
+        }
+        MainController.javaScriptConnector.call("updateView");
+
 
         return new Result(dangerRatingOutOf10, startOfDangerousSegment, endOfDangerousSegment,
                 maxSegmentSeverity, maxWeather, startYear, endYear, finalSize, finalRoad);
@@ -628,7 +641,7 @@ public class RoutingMenuController implements Initializable, MenuController {
      * @param endLocation location the route segment ends at
      * @return double of average severity
      */
-    public static List crossProductQuery(Location startLocation, Location endLocation) {
+    public static List boundingBoxSegmentSearch(Location startLocation, Location endLocation) {
         // 100 metres away
         double oneKilometreInDegrees = 0.008;
         double dist = oneKilometreInDegrees * 0.1;
@@ -646,7 +659,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         String filterWhereWithoutViewport = String.join(" AND ",
                 Arrays.copyOf(filterList, filterList.length - 4));
 
-        String select = "object_id, severity, weather";
+        String select = "object_id, longitude, latitude, severity, crash_year, weather";
         String from = "crashes";
         String where = filterWhereWithoutViewport + " AND "
                 + "object_id IN (SELECT id FROM rtree_index WHERE minX >= " + minLong
