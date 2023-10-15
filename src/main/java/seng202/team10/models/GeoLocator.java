@@ -30,7 +30,7 @@ import seng202.team10.App;
  * @author Zipporah Price
  */
 public class GeoLocator {
-    private static final Logger log = LogManager.getLogger(App.class);
+    private static final Logger log = LogManager.getLogger(GeoLocator.class);
 
     private PopOver popOver;
 

@@ -10,6 +10,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import seng202.team10.business.FilterManager;
 import seng202.team10.business.RatingAreaManager;
 import seng202.team10.models.GeoLocator;
@@ -23,6 +25,7 @@ import seng202.team10.repository.SqliteQueryBuilder;
  * Implements the MenuController interface.
  */
 public class RatingAreaMenuController implements MenuController {
+    private static final Logger log = LogManager.getLogger(RatingAreaMenuController.class);
     @FXML
     public Label ratingAreaText;
     @FXML
@@ -126,13 +129,16 @@ public class RatingAreaMenuController implements MenuController {
     @FXML
     public void panToLocation() {
         String address = startRadius;
-        Pair<Location, String> startResult = geolocator.getLocation(address);
+        if (address != null) {
+            Pair<Location, String> startResult = geolocator.getLocation(address);
 
-        Location startMarker = startResult.getKey();
+            Location startMarker = startResult.getKey();
 
-        MainController.javaScriptConnector
-                .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
-
+            MainController.javaScriptConnector
+                    .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
+        } else {
+            log.error("No address found for rating area!");
+        }
 
     }
 
