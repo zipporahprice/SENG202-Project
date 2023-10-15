@@ -1,12 +1,11 @@
 package seng202.team10.business;
 
-import kotlin.Pair;
-import seng202.team10.models.Location;
-import seng202.team10.repository.SqliteQueryBuilder;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import kotlin.Pair;
+import seng202.team10.models.Location;
+import seng202.team10.repository.SqliteQueryBuilder;
 
 /**
  * The RatingAreaManager class is responsible for managing the bounding box
@@ -168,7 +167,7 @@ public class RatingAreaManager {
         return boundingWhere;
     }
 
-    public static Pair<Double, Integer> queryHelper(String boundingWhere) {
+    public Pair<Double, Integer> queryHelper(String boundingWhere) {
         String select = "AVG(severity), COUNT()";
         String from = "crashes";
 

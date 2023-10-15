@@ -1,4 +1,4 @@
-package seng202.team10.models;
+package seng202.team10.business;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +15,7 @@ import seng202.team10.business.RatingAreaManager;
 import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
-
-
+import seng202.team10.models.Location;
 
 
 /**
@@ -92,7 +91,7 @@ public class JavaScriptBridge {
         });
 
         stringBuilder.append("}).then(function () {showLayers();});");
-        MainController.javaScriptConnector.call("runDataUpdate", stringBuilder.toString());
+        MainController.javaScriptConnector.call("runDataUpdate",stringBuilder.toString());
     }
 
     /**

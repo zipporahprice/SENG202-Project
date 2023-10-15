@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import javafx.scene.control.CheckBox;
 import seng202.team10.models.CrashSeverity;
 import seng202.team10.models.Location;

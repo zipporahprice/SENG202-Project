@@ -121,6 +121,7 @@ public class SqliteQueryBuilder {
 
     /**
      * Takes a table to delete to and appends to current query.
+     *
      * @param table table to delete from
      * @return SQLiteQueryBuilder instance to chain methods
      */

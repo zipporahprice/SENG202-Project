@@ -37,13 +37,14 @@ public class RatingAreaMenuController implements MenuController {
      * rates the area based on severity and crashes.
      */
     public void rateArea() {
-        String boundingWhere = RatingAreaManager.getInstance().rateAreaHelper();
+        RatingAreaManager ratingAreaManager = RatingAreaManager.getInstance();
+        String boundingWhere = ratingAreaManager.rateAreaHelper();
 
         // If a bounding area exists, then query in to get rating
         if (boundingWhere != null) {
 
-            double score = RatingAreaManager.queryHelper(boundingWhere).getFirst();
-            int total = RatingAreaManager.queryHelper(boundingWhere).getSecond();
+            double score = ratingAreaManager.queryHelper(boundingWhere).getFirst();
+            int total = ratingAreaManager.queryHelper(boundingWhere).getSecond();
             // Changes the visual cues with colour of area on map and text within info box.
             MainController.javaScriptConnector.call("changeDrawingColourToRating", score);
             ratingAreaText.setText("Danger: "

@@ -11,7 +11,6 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -26,7 +25,7 @@ import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.business.RatingAreaManager;
-import seng202.team10.models.JavaScriptBridge;
+import seng202.team10.business.JavaScriptBridge;
 
 
 /**

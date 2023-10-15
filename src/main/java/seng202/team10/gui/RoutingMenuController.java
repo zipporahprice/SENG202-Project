@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.PopOver;
 import seng202.team10.business.FilterManager;
+import seng202.team10.business.JavaScriptBridge;
 import seng202.team10.business.RouteManager;
 import seng202.team10.business.SettingsManager;
 import seng202.team10.models.*;
