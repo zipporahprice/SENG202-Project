@@ -2,16 +2,8 @@ package seng202.team10.gui;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
+
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,14 +64,12 @@ public class RoutingMenuController implements Initializable, MenuController {
     private Button bikeButton;
     @FXML
     private Button walkingButton;
-
-    @FXML Button generateRoute;
-
+    @FXML
+    Button generateRoute;
     @FXML
     private Button removeRoute;
     @FXML
     ListView<String> stopsListView = new ListView<>();
-
 
     private static List<Location> matchedPoints;
     public static RoutingMenuController controller;
@@ -87,15 +77,12 @@ public class RoutingMenuController implements Initializable, MenuController {
     private List<Location> stops = new ArrayList<>();
     private Button selectedButton = null;
     private String modeChoice;
-
     private String startAddress;
     private String endAddress;
     private String stopAddress;
-
     private PopOver popOver;
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
-
 
 
     /**
@@ -334,16 +321,40 @@ public class RoutingMenuController implements Initializable, MenuController {
         String startAddress = geolocator.getAddress(start.getLatitude(),
                 start.getLongitude(), "Start");
         String endAddress = geolocator.getAddress(end.getLatitude(), end.getLongitude(), "End");
+        String routeName = showRouteNameInputDialog();
+
+        if (routeName == null || routeName.trim().isEmpty()) {
+            // Show error dialog
+            showErrorDialog("Invalid name", "Please provide a valid name for the route.");
+            return;
+        }
+
         Favourite favourite = new Favourite(startAddress, endAddress,
                 start.getLatitude(), start.getLongitude(), end.getLatitude(),
-                end.getLongitude(), filters, modeChoice);
+                end.getLongitude(), filters, modeChoice, routeName);
 
         List<Favourite> favourites = new ArrayList<>();
         favourites.add(favourite);
 
         SqliteQueryBuilder.create().insert("favourites").buildSetter(favourites);
+
+
     }
 
+    private String showRouteNameInputDialog() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Save Route");
+        dialog.setHeaderText("Enter a name for the route:");
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse(null);
+    }
+
+    private void showErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
     /**
      * Populates the ComboBox with a list of saved routes or favorite locations.
@@ -351,14 +362,14 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private void displayRoutes() {
         List<?> favouritesList = SqliteQueryBuilder.create()
-                                                    .select("*")
-                                                    .from("favourites")
-                                                    .buildGetter();
+                .select("*")
+                .from("favourites")
+                .buildGetter();
         ObservableList<String> items = FXCollections.observableArrayList(favouritesList
                 .stream().map(favourite -> {
                     Favourite favouriteCasted = (Favourite) favourite;
-                    return favouriteCasted.getStartAddress()
-                        + " to " + favouriteCasted.getEndAddress(); }).toList());
+                    return favouriteCasted.getName();
+                }).toList());
         loadRoutesComboBox.setItems(items);
     }
 
@@ -372,18 +383,18 @@ public class RoutingMenuController implements Initializable, MenuController {
         int favouriteId = loadRoutesComboBox.getSelectionModel().getSelectedIndex() + 1;
         if (favouriteId != 0 && favouriteId != -1) {
             List<?> favouriteList = SqliteQueryBuilder.create()
-                                                        .select("*")
-                                                        .from("favourites")
-                                                        .where("id = " + favouriteId)
-                                                        .buildGetter();
+                    .select("*")
+                    .from("favourites")
+                    .where("id = " + favouriteId)
+                    .buildGetter();
 
             Favourite favourite = (Favourite) favouriteList.get(0);
 
-            // Update FilterManager class with the filters associated to the favourite route
+            // Update FilterManager class with the filters associated with the favourite route
             FilterManager filters = FilterManager.getInstance();
             filters.updateFiltersWithQueryString(favourite.getFilters());
 
-            // Generates a route and makes sure stops is cleared
+            // Generates a route and makes sure stops are cleared
             stops.clear();
             generateRouteAction(favourite);
 
@@ -396,8 +407,6 @@ public class RoutingMenuController implements Initializable, MenuController {
             }
         }
     }
-
-
 
     /**
      * Adds a stop location to the collection and generates a route action.

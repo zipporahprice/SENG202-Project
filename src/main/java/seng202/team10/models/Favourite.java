@@ -22,6 +22,7 @@ public class Favourite {
 
     private String endAddress;
     private String transportMode;
+    private String name;
 
     /**
      * Constructs a Favourite object with relevant favourite route information.
@@ -35,7 +36,7 @@ public class Favourite {
      * @param filters      Route filters.
      */
     public Favourite(String startAddress, String endAddress, double startLat, double startLong,
-                     double endLat, double endLong, String filters, String transportMode) {
+                     double endLat, double endLong, String filters, String transportMode, String name) {
         this.startAddress = startAddress;
         this.endAddress = endAddress;
         this.startLat = startLat;
@@ -44,6 +45,7 @@ public class Favourite {
         this.endLong = endLong;
         this.filters = filters;
         this.transportMode = transportMode;
+        this.name = name;
     }
 
     /**
@@ -117,6 +119,15 @@ public class Favourite {
      */
     public String getTransportMode() {
         return transportMode;
+    }
+
+    /**
+     * Gets the name of the favourite chosen by the user.
+     *
+     * @return String name associated with the route.
+     */
+    public String getName() {
+        return name;
     }
 
 }

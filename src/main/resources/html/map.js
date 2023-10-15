@@ -72,6 +72,10 @@ function initMap() {
         maxZoom: maxZoomLevel
     };
     map = new L.map('map', mapOptions);
+    //disables right clicks
+    map.on('contextmenu', function (e){
+        e.preventDefault();
+    });
 
     // LayerGroup to store the heatmap and crash locations
     layerGroup = L.layerGroup().addTo(map);
@@ -93,7 +97,7 @@ function initMap() {
 
             reviewTab.innerHTML = `
             <h3 style="font-weight: bold">Review:</h3>
-            <p class="reviewContent"></p>
+            <p class="reviewContent">If you are seeing this there was an error on the java side</p>
         `;
 
             return container;
@@ -238,7 +242,6 @@ function automaticViewChange() {
  */
 function updateView() {
     var currentView = javaScriptBridge.currentView();
-    javaScriptBridge.printTime(currentView);
 
     if (currentView === "Automatic") {
         automaticViewChange();
@@ -543,10 +546,7 @@ function addPoint(lat, lng, severity, year, weather) {
     testData.data.push({"lat": lat, "lng": lng});
 }
 
-var start, end;
-
 function showLayers() {
-    start = performance.now();
     heatmapLayer.setData(testData);
 
     // Adding layers back based on resetLayers function
@@ -557,9 +557,6 @@ function showLayers() {
     if (heatmapShowing) {
         layerGroup.addLayer(heatmapLayer);
     }
-
-    end = performance.now();
-    javaScriptBridge.printTime(end - start);
 }
 
 function drawingModeOn() {

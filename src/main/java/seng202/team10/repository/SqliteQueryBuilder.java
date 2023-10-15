@@ -14,6 +14,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import seng202.team10.models.Crash;
 import seng202.team10.models.CrashSeverity;
 import seng202.team10.models.Favourite;
@@ -101,7 +102,7 @@ public class SqliteQueryBuilder {
         // Checks if the table is either of the existing favourites or crashes table
         if (table.equals("favourites")) {
             columns = " (start_address, end_address, start_lat, start_lng, "
-                    + "end_lat, end_lng, filters, transport_mode) values (?,?,?,?,?,?,?,?)";
+                    + "end_lat, end_lng, filters, transport_mode, route_name) values (?,?,?,?,?,?,?,?,?)";
         } else if (table.equals("crashes")) {
             columns = " (speed_limit, crash_year, "
                     + "crash_location1, crash_location2, severity, region, weather, "
@@ -280,6 +281,7 @@ public class SqliteQueryBuilder {
             ps.setDouble(6, toAdd.getEndLong());
             ps.setString(7, toAdd.getFilters());
             ps.setString(8, toAdd.getTransportMode());
+            ps.setString(9, toAdd.getName());
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
@@ -296,7 +298,9 @@ public class SqliteQueryBuilder {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query.toString())) {
             // Loop through the results until no result is left
+            int counter = 0;
             while (rs.next()) {
+                counter += 1;
                 Object temp = null;
                 if (allColumnsFromTable) {
                     if (table.equals("crashes")) {
@@ -309,6 +313,8 @@ public class SqliteQueryBuilder {
                 }
                 data.add(temp);
             }
+            System.out.println(data.size());
+            System.out.println(counter);
         } catch (SQLException sqlException) {
             log.error(sqlException);
         }
@@ -375,7 +381,8 @@ public class SqliteQueryBuilder {
                     rs.getFloat("end_lat"),
                     rs.getFloat("end_lng"),
                     rs.getString("filters"),
-                    rs.getString("transport_mode"));
+                    rs.getString("transport_mode"),
+                    rs.getString("route_name"));
         } catch (SQLException sqlException) {
             log.error(sqlException);
             return null;
