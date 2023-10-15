@@ -149,6 +149,8 @@ function initMap() {
     updateView();
     map.on('zoomend', updateEnabled);
     map.on('moveend', updateEnabled);
+    map.on('zoomend', setFilteringViewport);
+    map.on('moveend', setFilteringViewport);
     window.addEventListener('resize', newHeatmap);
 
     mapIsReady();
@@ -233,6 +235,11 @@ function automaticViewChange() {
     }
 }
 
+function radiusChangeOnMapInteraction() {
+    adjustHeatmapRadiusBasedOnZoom();
+    map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
+}
+
 /**
  * Updates the view according to the user selection
  * Three views available:
@@ -245,11 +252,11 @@ function updateView() {
 
     if (currentView === "Automatic") {
         automaticViewChange();
+        radiusChangeOnMapInteraction();
         map.on('zoomend', automaticViewChange);
-        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
     } else if (currentView === "Heatmap") {
+        radiusChangeOnMapInteraction();
         map.off('zoomend', automaticViewChange);
-        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
         if (layerGroup.hasLayer(markerLayer)) {
             layerGroup.removeLayer(markerLayer);
@@ -268,8 +275,8 @@ function updateView() {
             layerGroup.addLayer(markerLayer);
         }
     } else if (currentView === "Heatmap & Crash Locations") {
+        radiusChangeOnMapInteraction();
         map.off('zoomend', automaticViewChange);
-        map.on('zoomend', adjustHeatmapRadiusBasedOnZoom);
 
         if (!layerGroup.hasLayer(heatmapLayer)) {
             layerGroup.addLayer(heatmapLayer);
