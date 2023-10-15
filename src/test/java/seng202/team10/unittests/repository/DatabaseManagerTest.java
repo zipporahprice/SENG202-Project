@@ -19,7 +19,8 @@ import seng202.team10.unittests.io.CrashCsvImporterTest;
  * Test class for DatabaseManager class.
  *
  * @author Neil Alombro
- *
+ * @author Zipporah Price
+ * @author Angelica Silva
  */
 
 public class DatabaseManagerTest {
@@ -47,6 +48,9 @@ public class DatabaseManagerTest {
         Assertions.assertEquals(5, crashesFromDatabase.size());
     }
 
+    /**
+     * Tests the database gets created.
+     */
     @Test
     void testCreateDatabase() {
         manager.createNewDatabase(manager.getDatabasePath());
