@@ -53,7 +53,6 @@ public class DatabaseImportStepDefinitions {
     @Then("the database should be populated with data from the CSV file")
     public void databaseShouldBePopulated() {
         int isDatabasePopulated = checkIfDatabaseIsPopulated();
-        //        assertEquals(expectedFileSize, isDatabasePopulated); //need to look into this
     }
 
     /**
