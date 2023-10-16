@@ -49,6 +49,17 @@
     -fx-background-radius: 40px;
     -fx-font-weight: bold;
 }
+
+.favouriteColor{
+    -fx-background-color:  linear-gradient(to right, rgba(0,77,182,1) 0%, rgba(9,112,202,1) 27%, rgba(23,163,231,1) 67%, rgba(34,205,255,1) 100%);
+    -fx-background-radius: 30px;
+    -fx-background-position: left;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
+}
+
 .feathered-border-pane {
     -fx-background-color: transparent;
     -fx-border-width: 5px;
