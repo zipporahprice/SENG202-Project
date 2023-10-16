@@ -144,7 +144,7 @@
                     <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" userData="Waikato" />
                     <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" userData="Wellington" />
                     <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" userData="West Coast" />
-                    <CheckBox fx:id="regionNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" userData="Null" />
+                    <CheckBox fx:id="regionNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Unknown" textFill="WHITE" userData="Null" />
                 </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0" />
@@ -211,7 +211,7 @@
                     <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Heavy Rain" textFill="WHITE" userData="Heavy Rain" />
                     <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Mist or Fog" textFill="WHITE" userData="Mist or Fog" />
                     <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Snow" textFill="WHITE" userData="Snow" />
-                    <CheckBox fx:id="weatherNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" userData="Null" />
+                    <CheckBox fx:id="weatherNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Unknown" textFill="WHITE" userData="Null" />
                 </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0" />
