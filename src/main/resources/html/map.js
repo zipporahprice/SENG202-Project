@@ -535,6 +535,7 @@ function calculateAverageSeverity(cluster) {
 }
 
 function resetLayers() {
+
     // Set booleans for later use to see if layers should be added back
     markersShowing = layerGroup.hasLayer(markerLayer);
     heatmapShowing = layerGroup.hasLayer(heatmapLayer);

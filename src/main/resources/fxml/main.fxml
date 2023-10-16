@@ -23,6 +23,11 @@
          </StackPane.margin>
       </WebView>
 
+      <ImageView fx:id="mySpinner" fitHeight="60.0"  layoutX="275.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@images/loading.png" />
+         </image>
+      </ImageView>
 
       <AnchorPane fx:id="menuDisplayPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" StackPane.alignment="TOP_LEFT">
       </AnchorPane>

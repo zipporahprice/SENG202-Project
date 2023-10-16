@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -44,6 +45,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private StackPane mainWindow;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private ImageView mySpinner;
     private Stage stage;
     private WebEngine webEngine;
     public static JSObject javaScriptConnector;
@@ -119,19 +122,6 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
         }); //finishes the progress bar animation when the map is loaded.
     }
 
-    /**
-     * Makes the loading spinner visible while data is loading.
-     */
-    public void showLoadingSpinner() {
-        loadingSpinner.setVisible(true);
-    }
-
-    /**
-     * Hides the loading spinner after data has finished loading.
-     */
-    public void hideLoadingSpinner() {
-        loadingSpinner.setVisible(false);
-    }
 
     /**
      * Animates a JavaFX ProgressBar to reach full (100%) progress.
@@ -284,14 +274,20 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
      * to Javascript to update the data shown on Leaflet map.
      */
     public void refreshData() {
-        showLoadingSpinner();
-        MainController.javaScriptConnector.call("updateDataShown");
-        GraphController graphController = GraphController.graphController;
-        if (graphController != null) {
-            graphController.updateGraph();
-        }
-        disableRefresh();
-        hideLoadingSpinner();
+        showSpinner();
+        new Thread(() -> {
+            // Handle non-UI tasks here if any
+
+            Platform.runLater(() -> {
+                MainController.javaScriptConnector.call("updateDataShown");
+                GraphController graphController = GraphController.graphController;
+                if (graphController != null) {
+                    graphController.updateGraph();
+                }
+                disableRefresh();
+                hideSpinner();
+            });
+        }).start();
     }
 
     /**
@@ -309,4 +305,22 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     public void mapLoaded() {
         fadeOutLoadingScreen();
     }
+
+    /**
+     * This method shows the loading icon
+     * when called
+     */
+    public void showSpinner() {
+        Platform.runLater(() -> mySpinner.setVisible(true));
+    }
+
+    /**
+     * When the task has finished loading
+     * this method hides the loading icon
+     */
+    public void hideSpinner() {
+        Platform.runLater(() -> mySpinner.setVisible(false));
+    }
+
+
 }
