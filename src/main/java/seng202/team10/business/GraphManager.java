@@ -1,16 +1,14 @@
 package seng202.team10.business;
 
-
-
-import javafx.scene.chart.PieChart;
-import javafx.scene.control.Tooltip;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Tooltip;
 
 /**
  * Responsible for storing graph settings to be persistent.
  *
+ * @Author Team 10
  */
 public class GraphManager {
     private static GraphManager graphingManager;
@@ -194,8 +192,8 @@ public class GraphManager {
      * @param vehicle     the vehicle of interest.
      * @return a PieChart.Data object containing relevant data.
      */
-    public PieChart.Data addRelevantPieChartData(ArrayList<String> sliceNames
-            , ArrayList<Double> sliceCounts, String vehicle) {
+    public PieChart.Data addRelevantPieChartData(ArrayList<String> sliceNames,
+            ArrayList<Double> sliceCounts, String vehicle) {
         for (int i = 0; i < sliceNames.size(); i++) {
             String sliceName = sliceNames.get(i);
             if (sliceName.equals("1")) {
