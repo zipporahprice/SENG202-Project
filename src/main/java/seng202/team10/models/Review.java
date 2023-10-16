@@ -114,7 +114,7 @@ public class Review {
             String baseFormat = "This route has a %.2f/10 danger rating, "
                     + "there have been %d crashes since %d up till %d.";
             String conditionFormat = "The worst crashes occur during %s conditions, "
-                    + "the most dangerous segment is on %s with a danger rating of %.2f.";
+                    + "the most dangerous segment is on %s with a total severity of %.2f.";
             String format = baseFormat + " " + conditionFormat;
 
             reviewString = String.format(
