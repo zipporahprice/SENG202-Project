@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
+<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
 
     <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="54.0" layoutY="14.0" prefHeight="21.0" prefWidth="141.0" text="Transport Mode" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="54.0" layoutY="14.0" prefHeight="21.0" prefWidth="141.0" text="Vehicle Type" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
