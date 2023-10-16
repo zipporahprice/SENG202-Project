@@ -3,12 +3,13 @@ plugins {
     id 'java'
     id "org.openjfx.javafxplugin" version "0.0.14"
     id 'jacoco'
+    id 'checkstyle'
 }
 
 archivesBaseName = 'seng202_teamX'
-group = 'seng202.team0'
+group = 'seng202.team10'
 version = '1.0-SNAPSHOT'
-mainClassName = 'seng202.team0.App'
+mainClassName = 'seng202.team10.App'
 
 def javaVersion = '17'
 def javafxVersion = '21-ea+17'
@@ -45,6 +46,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
 
+
+    //https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation 'org.controlsfx:controlsfx:11.1.0'
+
+
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 
@@ -57,11 +63,17 @@ dependencies {
     // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit-platform-engine
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.11.1'
 
+
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation 'org.controlsfx:controlsfx:11.1.0'
+
+
     // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
     testImplementation 'io.cucumber:cucumber-java:7.11.1'
 
     // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
     testImplementation 'io.cucumber:cucumber-junit:7.11.1'
+
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     testImplementation 'com.google.code.gson:gson:2.10.1'
@@ -98,6 +110,20 @@ application {
     mainClass = "${mainClassName}"
 }
 
+checkstyle {
+    toolVersion '10.12.4'
+    configFile file("config/checkstyle/google_checks.xml")
+    ignoreFailures = false
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
 javafx {
     version = "${javafxVersion}"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
@@ -107,7 +133,7 @@ test {
     useJUnitPlatform()
 
     filter {
-        includeTestsMatching "seng202.team0.unittests.*"
+        includeTestsMatching "seng202.team10.unittests.*"
     }
 
     finalizedBy jacocoTestReport
@@ -120,7 +146,7 @@ tasks.register("cucumber", Test)  {
     useJUnitPlatform()
 
     filter {
-        includeTestsMatching "seng202.team0.cucumber.*"
+        includeTestsMatching "seng202.team10.cucumber.*"
     }
 
     testLogging {
@@ -135,6 +161,14 @@ tasks.named("check") {
     dependsOn test, cucumber
 
     finalizedBy jacocoTestReport
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        html.required = true
+        xml.required = false
+        html.stylesheet resources.text.fromFile('config/checkstyle/checkstyle-noframes-severity-sorted.xsl')
+    }
 }
 
 jar {

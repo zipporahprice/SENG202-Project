@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="GraphWindow" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.GraphController">
+   <AnchorPane prefHeight="600.0" prefWidth="900.0" StackPane.alignment="CENTER">
+      <children>
+         <AnchorPane fx:id="pieChartPane" layoutX="339.0" layoutY="131.0" prefHeight="451.0" prefWidth="539.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+               <PieChart fx:id="pieChartMade" layoutX="36.0" layoutY="26.0" prefHeight="400.0" prefWidth="467.0" />
+               <Label fx:id="holidayInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="250.0" style="-fx-text-fill: white;" text="*Holiday only includes Christmas/New Year, Easter, Queen's Birthday and Labour Weekend holiday period. " visible="false" wrapText="true">
+                  <font>
+                     <Font size="10.0" />
+                  </font></Label>
+               <Label fx:id="vehiclesInfoLabel" layoutX="30.0" layoutY="412.0" prefHeight="37.0" prefWidth="310.0" style="-fx-text-fill: white;" text="*Data shows percentage out of total number of vehicles &amp; pedestrians involved in crashes, not out of the total number of crashes." wrapText="true">
+                  <font>
+                     <Font size="10.0" />
+                  </font>
+               </Label>
+               <Label fx:id="noPieGraphLabel" layoutX="104.0" layoutY="184.0" prefHeight="83.0" prefWidth="332.0" style="-fx-text-fill: white;" text="There is no data matching the options selected. Please change your selection/s to view a pie graph." textAlignment="CENTER" wrapText="true">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+          <AnchorPane layoutX="741.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="99.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+                  <Label layoutX="11.0" layoutY="13.0" prefHeight="74.0" prefWidth="116.0" style="-fx-text-fill: white;" text="Select the data you would like to see displayed in a graph." textAlignment="CENTER" wrapText="true" />
+            </children>
+          </AnchorPane>
+         <AnchorPane fx:id="graphsPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="83.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" visible="false">
+            <children>
+               <ChoiceBox fx:id="chartChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css">
+                  <styleClass>
+                     <String fx:value="filterButtonColor" />
+                     <String fx:value="choice-box" />
+                  </styleClass>
+               </ChoiceBox>
+               <Label layoutX="88.0" layoutY="14.0" text="Chart type" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+         <AnchorPane fx:id="graphsDataPane" layoutX="339.0" layoutY="14.0" maxHeight="117.0" maxWidth="250.0" prefHeight="99.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+               <ChoiceBox fx:id="chartDataChoiceBox" layoutX="50.0" layoutY="45.0" prefWidth="150.0" stylesheets="@style.css" visible="false">
+                  <styleClass>
+                     <String fx:value="filterButtonColor" />
+                     <String fx:value="choice-box" />
+                  </styleClass>
+               </ChoiceBox>
+               <Label layoutX="88.0" layoutY="21.0" text="Chart data" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="15.0" />
+                  </font>
+               </Label>
+               <ComboBox fx:id="chartDataComboBox" layoutX="50.0" layoutY="52.0" prefWidth="150.0" promptText="Choose data" styleClass="filterButtonColor" stylesheets="@style.css" />
+            </children>
+         </AnchorPane>
+         <AnchorPane layoutX="597.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="83.0" minWidth="137.0" prefHeight="99.0" prefWidth="137.0" styleClass="sideBarColor" stylesheets="@style.css">
+            <children>
+               <CheckBox fx:id="filtersCheckBox" layoutX="23.0" layoutY="36.0" mnemonicParsing="false" onAction="#updateGraph" selected="true" text="Filters" textFill="WHITE" />
+               <CheckBox fx:id="mapBoundsCheckBox" layoutX="23.0" layoutY="66.0" mnemonicParsing="false" onAction="#updateGraph" selected="true" text="Map Bounds" textFill="WHITE" />
+               <Text fill="WHITE" layoutX="53.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apply" />
+            </children>
+         </AnchorPane>
+      </children>
+   </AnchorPane>
+
+
+</StackPane>

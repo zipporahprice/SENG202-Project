@@ -1,0 +1,58 @@
+/* Default cluster icon style */
+.custom-cluster-icon {
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Define styles for different severity levels */
+.green {
+    background-color: green; /* Low severity, green color */
+    color: white;
+
+}
+
+.yellow {
+    background-color: yellow; /* Moderate severity, yellow color */
+    color: black;
+
+
+}
+
+.orange {
+    background-color: orange; /* High severity, orange color */
+    color: white;
+
+}
+
+.red {
+    background-color: red; /* Very high severity, red color */
+    color: white;
+
+}
+
+.markers-style {
+    border-radius: 50%;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-weight: bold;
+    font-size: 14px;
+
+
+}
+.markers-style.extra-large-number .cluster-text {
+    font-size: 8px; /* Adjust font size for extra large numbers */
+}
+
+/* CSS for reducing font size when the number is greater than 10,000 */
+.markers-style.large-number .cluster-text {
+    font-size: 10px; /* Adjust font size for large numbers */
+}

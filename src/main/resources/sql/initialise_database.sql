@@ -23,6 +23,14 @@ CREATE TABLE IF NOT EXISTS crashes (
      train_involved BOOLEAN,
      truck_involved BOOLEAN);
 --SPLIT
+DROP TABLE IF EXISTS rtree_index;
+--SPLIT
+CREATE VIRTUAL TABLE rtree_index USING rtree(
+    id,
+    minX, maxX,
+    minY, maxY
+);
+--SPLIT
 DROP TABLE IF EXISTS favourites;
 --SPLIT
 CREATE TABLE IF NOT EXISTS favourites (
@@ -33,13 +41,6 @@ CREATE TABLE IF NOT EXISTS favourites (
      start_lng DOUBLE,
      end_lat DOUBLE,
      end_lng DOUBLE,
-     filters TEXT);
---SPLIT
-DROP TABLE IF EXISTS users;
---SPLIT
-CREATE TABLE IF NOT EXISTS users (
-     id INTEGER PRIMARY KEY AUTOINCREMENT,
-     username TEXT,
-     password TEXT);
---SPLIT
-INSERT INTO users (username, password) VALUES ('admin', '12345');
+     filters TEXT,
+     transport_mode TEXT,
+     route_name TEXT);
