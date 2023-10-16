@@ -38,10 +38,10 @@ IntelliJ has built-in support for Gradle. To import your project:
 **Note:** *If you run into dependency issues when running the app or the Gradle pop up doesn't appear then open the Gradle sidebar and click the Refresh icon.*
 
 ## Build Project 
-1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. The file is located at `build/libs/seng202_teamX-1.0-SNAPSHOT.jar
+1. Open a command line interface inside the project directory and run `./gradlew jar` to build a .jar file. The file is located at `build/libs/safetrip-2.0.jar
 
 ## Run App (Linux users)
 - open a terminal and move to the directory with the jar file
-- run the command <java -jar safetrip.jar>
+- run the command java -jar safetrip-2.0.jar
 - enjoy
 

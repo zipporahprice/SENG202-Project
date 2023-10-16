@@ -6,9 +6,9 @@ plugins {
     id 'checkstyle'
 }
 
-archivesBaseName = 'seng202_teamX'
-group = 'seng202.team10'
-version = '1.0-SNAPSHOT'
+archivesBaseName = 'safetrip'
+group = 'safetrip'
+version = '2.0'
 mainClassName = 'seng202.team10.App'
 
 def javaVersion = '17'
