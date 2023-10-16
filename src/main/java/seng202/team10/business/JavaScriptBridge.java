@@ -6,19 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import seng202.team10.business.CrashManager;
-import seng202.team10.business.FilterManager;
-import seng202.team10.business.RatingAreaManager;
-import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
-import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Location;
 
 

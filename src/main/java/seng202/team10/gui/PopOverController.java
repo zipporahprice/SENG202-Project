@@ -9,6 +9,10 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 
+/**
+ * The PopOverController class is responsible for managing and displaying
+ * popovers and notification messages in a JavaFX application.
+ */
 public class PopOverController {
 
     private PopOver popOver;

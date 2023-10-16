@@ -60,6 +60,11 @@ public class ImportMenuController implements Initializable {
             popOver.showNotificationOnButtonPress(resetDataButton, String.valueOf(e));
         }
     }
+
+    /**
+     * Resets the database by calling the appropriate method in the DatabaseManager class.
+     * This method should be used with caution, as it will delete or reset the database data.
+     */
     public void resetDatabase() {
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.resetDb();

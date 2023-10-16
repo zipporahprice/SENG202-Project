@@ -140,7 +140,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         if (modeChoice == null) {
-            popOver.showNotificationOnButtonPress(generateRoute, "Please select a transport option");
+            popOver.showNotificationOnButtonPress(generateRoute,
+                    "Please select a transport option");
         } else {
             MainController.javaScriptConnector.call("displayRoute", Route
                     .routesToJsonArray(routesList), modeChoice);

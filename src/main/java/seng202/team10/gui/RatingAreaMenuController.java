@@ -2,15 +2,16 @@ package seng202.team10.gui;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import seng202.team10.business.RatingAreaManager;
 import seng202.team10.models.GeoLocator;
 import seng202.team10.models.Location;
+
 
 /**
  * The RatingAreaMenuController class is a controller responsible for managing
@@ -114,7 +115,8 @@ public class RatingAreaMenuController implements MenuController {
                 Location startMarker = startResult.getKey();
 
                 MainController.javaScriptConnector
-                        .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
+                        .call("panToLocation", startMarker.getLatitude(),
+                                startMarker.getLongitude());
             }
 
         }

@@ -169,7 +169,7 @@ public class GeoLocator {
             JSONObject result = (JSONObject) parser.parse(response.body());
 
             if (result.isEmpty()) {
-                return("Invalid " + location + " Address");
+                return ("Invalid " + location + " Address");
             }
 
             JSONObject address = (JSONObject) result.get("address");
