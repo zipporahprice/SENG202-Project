@@ -36,7 +36,6 @@ public class ViewCrashDataStepDefinitions {
      */
     @Given("the user wants to see crash information")
     public void selectCrash() {
-        // TODO figure out how to do the visual-based acceptance tests
 
         try {
             // Database setup
