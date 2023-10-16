@@ -202,7 +202,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Location getStart() {
         String address = startAddress;
-        System.out.println(startAddress);
+        log.info(startAddress);
         if (address == null) {
             return null;
         }
@@ -243,7 +243,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @FXML
     private Location getEnd() {
         String address = endAddress;
-        System.out.println(endAddress);
+        log.info(endAddress);
         if (address == null) {
             return null;
         }
@@ -382,8 +382,7 @@ public class RoutingMenuController implements Initializable, MenuController {
                     .from("favourites")
                     .where("route_name = \"" + routeName + "\"")
                     .buildGetter();
-            System.out.println("hello");
-            System.out.println(favouriteList.size());
+            log.info(favouriteList.size());
             Favourite favourite = (Favourite) favouriteList.get(0);
             loadedFavourite = favourite;
 
@@ -529,7 +528,7 @@ public class RoutingMenuController implements Initializable, MenuController {
                 MainController.javaScriptConnector.call("updateReviewContent", review.toString());
 
             } else {
-                System.out.println("No coordinates available for routeId: 0");
+                log.info("No coordinates available for routeId: " + JavaScriptBridge.getIndex());
             }
         } catch (SQLException e) {
             log.error(e);

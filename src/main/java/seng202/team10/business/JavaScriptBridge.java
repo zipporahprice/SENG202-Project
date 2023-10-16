@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,6 +18,7 @@ import seng202.team10.business.RatingAreaManager;
 import seng202.team10.business.SettingsManager;
 import seng202.team10.gui.MainController;
 import seng202.team10.gui.RoutingMenuController;
+import seng202.team10.io.CrashCsvImporter;
 import seng202.team10.models.Location;
 
 
@@ -32,6 +36,8 @@ import seng202.team10.models.Location;
  *
  */
 public class JavaScriptBridge {
+
+    private static final Logger log = LogManager.getLogger(JavaScriptBridge.class);
     private String currentView;
     private static Map<Long, List<Location>> routeMap = new ConcurrentHashMap<>();
     private static Map<Long, List<Double>> distancesMap = new ConcurrentHashMap<>();
@@ -121,7 +127,7 @@ public class JavaScriptBridge {
     }
 
     public void printOutput(Object string1) {
-        System.out.println(string1);
+        log.info(string1);
     }
 
     /**
@@ -208,7 +214,7 @@ public class JavaScriptBridge {
 
         } catch (Throwable e) {
             // Handle JSON parsing exceptions
-            System.out.println(e);
+            log.error(e);
         }
     }
 
