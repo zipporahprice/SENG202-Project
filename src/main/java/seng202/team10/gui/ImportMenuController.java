@@ -5,11 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import seng202.team10.exceptions.DataImportException;
 import seng202.team10.repository.DatabaseManager;
 
@@ -22,6 +19,13 @@ public class ImportMenuController implements Initializable {
 
     @FXML
     private Button importDataButton;
+
+    @FXML
+    private Button resetDataButton;
+
+    private PopOverController popOver = new PopOverController();
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,32 +47,19 @@ public class ImportMenuController implements Initializable {
         }
 
         if (!file.getName().endsWith(".csv")) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Import Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid file format. Please import a CSV file.");
-            alert.showAndWait();
+            popOver.showNotificationOnButtonPress(importDataButton, "Needs to be a CSV File");
             return;
         }
 
         try {
             DatabaseManager.getInstance().importFile(file);
         } catch (DataImportException e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Import Error");
-            alert.setHeaderText(null);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            popOver.showNotificationOnButtonPress(importDataButton, "Import Error");
         } catch (Exception e) {
             // Catching other unexpected exceptions and notifying the user.
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Import Error");
-            alert.setHeaderText(null);
-            alert.setContentText("An unexpected error occurred while importing the file.");
-            alert.showAndWait();
+            popOver.showNotificationOnButtonPress(resetDataButton, String.valueOf(e));
         }
     }
-
     public void resetDatabase() {
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.resetDb();

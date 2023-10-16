@@ -244,7 +244,7 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     private void fadeOutLoadingScreen() {
         FadeTransition fadeTransition = new FadeTransition();
         fadeTransition.setNode(loadingScreen);
-        fadeTransition.setDuration(Duration.millis(1000)); // 1 second, adjust as needed
+        fadeTransition.setDuration(Duration.millis(1000));
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
         fadeTransition.setDelay(Duration.millis(1500));

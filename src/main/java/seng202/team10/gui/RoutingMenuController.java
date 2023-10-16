@@ -78,6 +78,9 @@ public class RoutingMenuController implements Initializable, MenuController {
     Button generateRoute;
     @FXML
     private Button removeRoute;
+
+    @FXML
+    private Button saveRouteButton;
     @FXML
     ListView<String> stopsListView = new ListView<>();
     @FXML
@@ -91,11 +94,12 @@ public class RoutingMenuController implements Initializable, MenuController {
     private String startAddress;
     private String endAddress;
     private String stopAddress;
-    private PopOver popOver;
     private final List<Button> transportButtons = new ArrayList<>();
     private ObservableList<String> stopStrings = FXCollections.observableArrayList();
     private ObservableList<String> favouriteStrings = FXCollections.observableArrayList();
     private Favourite loadedFavourite;
+
+    private PopOverController popOver;
 
 
     /**
@@ -109,6 +113,7 @@ public class RoutingMenuController implements Initializable, MenuController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         geolocator = new GeoLocator();
+        popOver = new PopOverController();
         carButton.setUserData("car");
         bikeButton.setUserData("bike");
         walkingButton.setUserData("walking");
@@ -127,33 +132,6 @@ public class RoutingMenuController implements Initializable, MenuController {
 
 
     /**
-     * Displays a notification message near the specified button when it is pressed.
-     *
-     * @param btn     The button for which the notification is displayed.
-     * @param message The message to be displayed in the notification.
-     */
-    private void showNotificationOnButtonPress(Button btn, String message) {
-        if (popOver != null && popOver.isShowing()) {
-            popOver.hide();
-        }
-        Label label = new Label(message);
-        label.setFont(new Font(20.0));
-        label.setPadding(new Insets(5));
-        popOver = new PopOver(label);
-        popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
-        popOver.show(walkingButton);
-
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5),
-                popOver.getSkin().getNode());
-
-        fadeOut.setDelay(Duration.millis(1500));
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> popOver.hide());
-        fadeOut.play();
-    }
-
-    /**
      * Displays a route or routes based on safety score, mode choice, and an array of routes.
      *
      * @param routes      An array of Route objects to display.
@@ -162,36 +140,14 @@ public class RoutingMenuController implements Initializable, MenuController {
         List<Route> routesList = new ArrayList<>();
         Collections.addAll(routesList, routes);
         if (modeChoice == null) {
-            showNotificationOnButtonPress(generateRoute, "Please select a transport option");
+            popOver.showNotificationOnButtonPress(generateRoute, "Please select a transport option");
         } else {
             MainController.javaScriptConnector.call("displayRoute", Route
                     .routesToJsonArray(routesList), modeChoice);
         }
     }
 
-    /**
-     * Displays a popover near a TextField with a specified message and fade-out duration.
-     *
-     * @param message   The message to be displayed in the popover.
-     * @param textField The TextField near which the popover should be displayed.
-     * @param time      The duration (in seconds) for the fade-out animation.
-     */
-    private void showPopOver(String message, ComboBox<String> textField, double time) {
-        Label label = new Label(message);
-        popOver = new PopOver(label);
-        popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
-        popOver.show(textField);
 
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(time),
-                popOver.getSkin().getNode());
-
-        fadeOut.setDelay(Duration.millis(1500));
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> popOver.hide());
-        fadeOut.play();
-
-    }
 
 
     /**
@@ -211,7 +167,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location startMarker = startResult.getKey();
         String errorMessageStart = startResult.getValue();
         if (errorMessageStart != null) {
-            showPopOver(errorMessageStart, startLocationComboBox, 5);
+            popOver.showPopOver(errorMessageStart, startLocationComboBox, 5);
             return null;
         }
 
@@ -252,7 +208,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location endMarker = endResult.getKey();
         String errorEndMessage = endResult.getValue();
         if (errorEndMessage != null) {
-            showPopOver(errorEndMessage, endLocationComboBox, 5);
+            popOver.showPopOver(errorEndMessage, endLocationComboBox, 5);
             return null;
         }
         return endMarker;
@@ -288,7 +244,7 @@ public class RoutingMenuController implements Initializable, MenuController {
         Location stopMarker = stopResult.getKey();
         String errorStopMessage = stopResult.getValue();
         if (errorStopMessage != null) {
-            showPopOver(errorStopMessage, stopLocationComboBox, 5);
+            popOver.showPopOver(errorStopMessage, stopLocationComboBox, 5);
             return null;
         }
 
@@ -336,7 +292,8 @@ public class RoutingMenuController implements Initializable, MenuController {
         // Checks null, empty, and it is unique
         if (routeName == null || routeName.trim().isEmpty() || favouriteNames.contains(routeName)) {
             // Show error dialog
-            showErrorDialog();
+
+            popOver.showNotificationOnButtonPress(saveRouteButton, "Not a valid route!");
             return;
         }
 
@@ -361,12 +318,6 @@ public class RoutingMenuController implements Initializable, MenuController {
         return result.orElse(null);
     }
 
-    private void showErrorDialog() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Invalid name");
-        alert.setContentText("Please provide a valid name for the route.");
-        alert.showAndWait();
-    }
 
     /**
      * Loads a selected route or favorite location from the ComboBox.

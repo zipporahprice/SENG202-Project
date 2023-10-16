@@ -1,22 +1,16 @@
 package seng202.team10.gui;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.Button;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import seng202.team10.business.FilterManager;
 import seng202.team10.business.RatingAreaManager;
 import seng202.team10.models.GeoLocator;
 import seng202.team10.models.Location;
-import seng202.team10.repository.SqliteQueryBuilder;
 
 /**
  * The RatingAreaMenuController class is a controller responsible for managing
@@ -32,10 +26,7 @@ public class RatingAreaMenuController implements MenuController {
     public Label numCrashesAreaLabel;
 
     @FXML
-    private Label radiusText;
-
-    @FXML
-    private Slider radiusSlider;
+    private Button rateAreaButton;
 
     @FXML
     private ComboBox startLocation;
@@ -43,7 +34,7 @@ public class RatingAreaMenuController implements MenuController {
     private String startRadius;
     GeoLocator geolocator = new GeoLocator();
 
-
+    private PopOverController popOverController = new PopOverController();
 
 
     @Override
@@ -74,29 +65,14 @@ public class RatingAreaMenuController implements MenuController {
                     + String.format("%.2f", score) + " / 10");
             numCrashesAreaLabel.setText("Number of crashes in area: " + total);
         } else {
-            // Shows alert if bounding area does not exist.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("No bounding area drawn!"
-                    + "\nPlease draw area before rating area.");
+            popOverController.showNotificationOnButtonPress(rateAreaButton,
+                    "No bounding area drawn!"
+                            + "\nPlease draw area before rating area.");
 
-            alert.showAndWait();
+
         }
     }
 
-    /**
-     * This public method updates the slider value and displays it in the radiusText component.
-     */
-    @FXML
-    public void updateSlider() {
-
-        int startSliderValue = (int) Math.round(radiusSlider.getValue());
-
-
-        radiusText.setText("Radius: " + Integer.toString(startSliderValue) + " km");
-
-    }
 
     /**
      * This private method loads start location options into the
@@ -130,16 +106,18 @@ public class RatingAreaMenuController implements MenuController {
     public void panToLocation() {
         String address = startRadius;
         if (address != null) {
+
             Pair<Location, String> startResult = geolocator.getLocation(address);
+            if (startResult.getKey() == null) {
+                popOverController.showPopOver("Please Enter a Valid Location", startLocation, 5);
+            } else {
+                Location startMarker = startResult.getKey();
 
-            Location startMarker = startResult.getKey();
+                MainController.javaScriptConnector
+                        .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
+            }
 
-            MainController.javaScriptConnector
-                    .call("panToLocation", startMarker.getLatitude(), startMarker.getLongitude());
-        } else {
-            log.error("No address found for rating area!");
         }
 
     }
-
 }

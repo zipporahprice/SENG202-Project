@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,13 +89,7 @@ public class GeoLocator {
         return new Pair<>(new Location(0d, 0d), null);
     }
 
-    private void showErrorAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 
     /**
      * Fetches and parses possible address options from the Nominatim API using a query string.
@@ -176,10 +169,7 @@ public class GeoLocator {
             JSONObject result = (JSONObject) parser.parse(response.body());
 
             if (result.isEmpty()) {
-                showErrorAlert("Invalid " + location + " Address",
-                        "The " + location.toLowerCase()
-                                + " provided is invalid or couldn't be found.");
-                return null; // or return a default location, depending on your use-case
+                return("Invalid " + location + " Address");
             }
 
             JSONObject address = (JSONObject) result.get("address");
