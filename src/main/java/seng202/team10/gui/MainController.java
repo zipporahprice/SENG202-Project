@@ -307,16 +307,16 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
     }
 
     /**
-     * This method shows the loading icon
-     * when called
+     * This method shows the loading icon.
+     * when called.
      */
     public void showSpinner() {
         Platform.runLater(() -> mySpinner.setVisible(true));
     }
 
     /**
-     * When the task has finished loading
-     * this method hides the loading icon
+     * When the task has finished loading.
+     * this method hides the loading icon.
      */
     public void hideSpinner() {
         Platform.runLater(() -> mySpinner.setVisible(false));
