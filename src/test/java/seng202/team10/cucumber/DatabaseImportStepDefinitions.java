@@ -31,8 +31,7 @@ public class DatabaseImportStepDefinitions {
     public void userCsvFileSaved() {
         expectedFileSize = 5;
         csvFile = new File(getClass().getResource("/files/random_5_crashes.csv").getFile());
-        System.out.println(csvFile.getName());
-
+        log.info(csvFile.getName());
     }
 
     /**

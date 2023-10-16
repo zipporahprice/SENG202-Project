@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
+<StackPane prefHeight="858.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng202.team10.gui.FilteringMenuController">
 
     <AnchorPane fx:id="transportModePane" maxHeight="276.0" maxWidth="250.0" prefHeight="276.0" prefWidth="250.0" styleClass="sideBarColor" stylesheets="@style.css" translateX="-5.0" StackPane.alignment="TOP_LEFT">
         <children>
-            <Label alignment="CENTER" layoutX="54.0" layoutY="14.0" prefHeight="21.0" prefWidth="141.0" text="Transport Mode" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="54.0" layoutY="14.0" prefHeight="21.0" prefWidth="141.0" text="Vehicle Type" textFill="WHITE">
             <font>
                <Font name="System Bold" size="15.0" />
             </font></Label>
@@ -144,7 +144,7 @@
                     <CheckBox fx:id="waikatoCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Waikato" textFill="WHITE" userData="Waikato" />
                     <CheckBox fx:id="wellingtonCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Wellington" textFill="WHITE" userData="Wellington" />
                     <CheckBox fx:id="westCoastCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="West Coast" textFill="WHITE" userData="West Coast" />
-                    <CheckBox fx:id="regionNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" userData="Null" />
+                    <CheckBox fx:id="regionNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Unknown" textFill="WHITE" userData="Null" />
                 </children>
             </VBox>
             <VBox layoutX="107.0" layoutY="43.0" spacing="5.0" />
@@ -211,7 +211,7 @@
                     <CheckBox fx:id="heavyRainCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Heavy Rain" textFill="WHITE" userData="Heavy Rain" />
                     <CheckBox fx:id="mistOrFogCheckBox" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Mist or Fog" textFill="WHITE" userData="Mist or Fog" />
                     <CheckBox fx:id="snowCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Snow" textFill="WHITE" userData="Snow" />
-                    <CheckBox fx:id="weatherNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Null" textFill="WHITE" userData="Null" />
+                    <CheckBox fx:id="weatherNullCheckBox" mnemonicParsing="false" onAction="#handleCheckBoxEvent" selected="true" text="Unknown" textFill="WHITE" userData="Null" />
                 </children>
             </VBox>
             <VBox layoutX="150.0" layoutY="42.0" spacing="5.0" />

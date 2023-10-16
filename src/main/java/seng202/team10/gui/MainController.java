@@ -78,6 +78,8 @@ public class MainController implements JavaScriptBridge.JavaScriptListener {
      */
     void init(Stage stage) {
         this.stage = stage;
+        stage.setMinWidth(1280);
+        stage.setMinHeight(800);
         stage.sizeToScene();
         loadingScreen.setVisible(true);
         webEngine = webView.getEngine();
