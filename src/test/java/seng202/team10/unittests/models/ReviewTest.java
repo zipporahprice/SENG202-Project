@@ -27,7 +27,7 @@ public class ReviewTest {
         String expected = "This route has a 7.50/10 danger rating, "
                 + "there have been 10 crashes since 1999 up till 2023. "
                 + "The worst crashes occur during Snowy conditions, "
-                + "the most dangerous segment is on Elm St with a danger rating of 8.00.";
+                + "the most dangerous segment is on Elm St with a total severity of 8.00.";
 
         assertEquals(expected, review.toString());
     }
