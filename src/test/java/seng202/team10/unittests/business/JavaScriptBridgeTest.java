@@ -40,6 +40,7 @@ class JavaScriptBridgeTest {
 
     @Test
     void testUpdateCrashesByJavascript() {
+        //wont be completed for submission but other tests are related.
         List<Map<String, Object>> crashList = Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("latitude", 10.0);
@@ -49,12 +50,6 @@ class JavaScriptBridgeTest {
                     put("weather", "Clear");
                 }}
         );
-
-        System.out.println(crashList.get(0).getClass());
-
-        //String result = JavaScriptBridge.updateCrashesByJavascript(crashList);
-
-        //assertTrue(result.contains("addPoint(10.000000,20.000000,1,2022,'Clear');"));
     }
 
     @Test

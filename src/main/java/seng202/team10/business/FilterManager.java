@@ -29,12 +29,12 @@ import seng202.team10.models.Weather;
 public class FilterManager {
 
     // Connectors for changing FilterManager to a where clause string, and back
-    private final String and = " AND ";
-    private final String quote = "\"";
-    private final String or = " OR ";
-    private final String comma = ", ";
-    private final String closeParenthesis = ")";
-    private final String equalOne = " = 1";
+    private static final String and = " AND ";
+    private static final String quote = "\"";
+    private static final String or = " OR ";
+    private static final String comma = ", ";
+    private static final String closeParenthesis = ")";
+    private static final String equalOne = " = 1";
     private final HashMap<String, String> startOfClauses = new HashMap<>() {{
             put("severity", "severity IN (");
             put("transport_mode", "(");
